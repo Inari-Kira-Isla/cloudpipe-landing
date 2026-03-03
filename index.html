@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" prefix="og: https://ogp.me/ns#">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CloudPipe — AI 自動化平台 | 澳門智能客服 · 多平台整合 · MCP Server</title>
+  <meta name="description" content="CloudPipe 是澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服，AI 智能回覆，24/7 自動運行，從 MOP$500/月起。">
+  <meta name="keywords" content="CloudPipe, AI自動化, 澳門客服, Facebook自動化, Telegram Bot, MCP Server, 智能客服, SaaS, 澳門AI">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+  <link rel="canonical" href="https://cloudpipe-landing.vercel.app/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="CloudPipe — AI 自動化平台">
+  <meta property="og:description" content="整合 Facebook Messenger、Telegram Bot 及多平台，AI 驅動客服自動化。澳門商家首選 SaaS 方案。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cloudpipe-landing.vercel.app/">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:site_name" content="CloudPipe">
+
+  <!-- Schema.org SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CloudPipe",
+    "alternateName": "CloudPipe AI Automation Platform",
+    "description": "一站式 AI 自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台，為澳門及大灣區商家提供智能客服與行銷自動化。",
+    "url": "https://cloudpipe-landing.vercel.app",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "macOS, Linux",
+    "offers": [
+      { "@type": "Offer", "name": "基本方案", "price": "500", "priceCurrency": "MOP", "description": "單一平台整合，Claude Haiku 客服引擎，每月 5,000 則訊息" },
+      { "@type": "Offer", "name": "專業方案", "price": "1500", "priceCurrency": "MOP", "description": "多平台整合，Claude Sonnet 進階分析，自動接單，每月 30,000 則訊息" },
+      { "@type": "Offer", "name": "企業方案", "price": "3000", "priceCurrency": "MOP", "description": "全平台整合，AI 銷售員，CRM，多語言，無限訊息" }
+    ],
+    "featureList": [
+      "Facebook Messenger 多品牌自動化客服",
+      "Telegram Bot 系統管理介面",
+      "MCP Server 工具箱（Model Context Protocol）",
+      "OpenAI 相容 API Proxy 多模型調度",
+      "Core 路由引擎（中央調度）",
+      "n8n Cloud 工作流整合",
+      "Cloudflare Workers 邊緣運算"
+    ],
+    "author": {
+      "@type": "Organization",
+      "name": "CloudPipe",
+      "address": { "@type": "PostalAddress", "addressLocality": "Macau", "addressRegion": "Macau SAR" }
+    }
+  }
+  </script>
+
+  <!-- Schema.org FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "CloudPipe 是什麼？", "acceptedAnswer": { "@type": "Answer", "text": "CloudPipe 是一站式 AI 自動化平台，整合 MCP Server、API Proxy、Telegram Bot 及 Facebook 粉專自動化，幫助商家用 AI 自動處理客服、接單及行銷任務，24/7 無間斷運行。" } },
+      { "@type": "Question", "name": "CloudPipe 支援哪些平台？", "acceptedAnswer": { "@type": "Answer", "text": "目前支援 Facebook Messenger（多品牌粉專）及 Telegram Bot。Instagram DM 和 WhatsApp Business 即將推出。" } },
+      { "@type": "Question", "name": "CloudPipe 使用什麼 AI 模型？", "acceptedAnswer": { "@type": "Answer", "text": "透過 API Proxy 智能調度多模型：Claude Haiku（日常客服）、Claude Sonnet（進階分析）、Gemini Flash（工具雜務），按任務自動選擇最具成本效益的模型。" } },
+      { "@type": "Question", "name": "CloudPipe 如何保障資料安全？", "acceptedAnswer": { "@type": "Answer", "text": "所有服務透過 Tailscale 加密網路連接，資料儲存在本地 SQLite，不依賴第三方雲端儲存。SaaS 架構以 tenant_id 嚴格隔離各商家資料。" } },
+      { "@type": "Question", "name": "CloudPipe 的定價是多少？", "acceptedAnswer": { "@type": "Answer", "text": "基本方案 MOP$500/月、專業方案 MOP$1,500/月、企業方案 MOP$3,000/月。詳細功能比較請參閱定價頁面。" } }
+    ]
+  }
+  </script>
+
+  <link rel="alternate" type="application/json" href="/api/info.json" title="CloudPipe API Endpoint">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ══════════════════════════════════════════════
+       TOKENS
+    ══════════════════════════════════════════════ */
+    :root {
+      --bg:          #080810;
+      --bg-alt:      #0d0d1a;
+      --bg-card:     #111120;
+      --bg-card-h:   #16162a;
+      --cyan:        #00e5ff;
+      --cyan-dim:    rgba(0,229,255,0.10);
+      --cyan-border: rgba(0,229,255,0.20);
+      --magenta:     #ff2d7b;
+      --magenta-dim: rgba(255,45,123,0.08);
+      --amber:       #ffab00;
+      --text:        #e6e6f0;
+      --text-2:      #7272a0;
+      --text-3:      #404060;
+      --border:      rgba(255,255,255,0.07);
+      --r:           16px;
+      --r-sm:        10px;
+    }
+
+    /* ══════════════════════════════════════════════
+       RESET / BASE
+    ══════════════════════════════════════════════ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ══════════════════════════════════════════════
+       BACKGROUND FX
+    ══════════════════════════════════════════════ */
+    .bg-ambient {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 900px 700px at 10% 15%, rgba(0,229,255,0.05), transparent 60%),
+        radial-gradient(ellipse 700px 900px at 90% 85%, rgba(255,45,123,0.04), transparent 60%);
+    }
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 72px 72px;
+    }
+
+    /* ══════════════════════════════════════════════
+       LAYOUT
+    ══════════════════════════════════════════════ */
+    .container {
+      max-width: 1140px; margin: 0 auto; padding: 0 24px;
+      position: relative; z-index: 1;
+    }
+    section { padding: 96px 0; }
+    .section-alt { background: var(--bg-alt); }
+
+    /* ══════════════════════════════════════════════
+       TYPOGRAPHY HELPERS
+    ══════════════════════════════════════════════ */
+    .eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--magenta); margin-bottom: 14px;
+    }
+    .section-title {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700; letter-spacing: -1.5px; margin-bottom: 56px;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, var(--cyan), var(--magenta));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* ══════════════════════════════════════════════
+       BUTTONS
+    ══════════════════════════════════════════════ */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Sora', sans-serif; font-weight: 600; font-size: 14px;
+      padding: 13px 28px; border-radius: 100px;
+      transition: all 0.2s; cursor: pointer; border: none;
+    }
+    .btn-primary {
+      background: var(--cyan); color: #080810;
+    }
+    .btn-primary:hover { background: #fff; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,229,255,0.25); }
+    .btn-outline {
+      background: transparent; color: var(--text-2);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+    /* ══════════════════════════════════════════════
+       NAVBAR
+    ══════════════════════════════════════════════ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      padding: 22px 0; transition: padding 0.3s, background 0.3s, border 0.3s;
+    }
+    .nav.scrolled {
+      background: rgba(8,8,16,0.88); backdrop-filter: blur(20px);
+      padding: 14px 0; border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex; align-items: center; gap: 32px;
+    }
+    .nav-logo {
+      font-family: 'Sora', sans-serif; font-weight: 800; font-size: 20px;
+      letter-spacing: -0.5px; flex-shrink: 0;
+    }
+    .nav-logo .c { color: var(--cyan); }
+    .nav-links {
+      display: flex; gap: 28px; margin: 0 auto;
+    }
+    .nav-links a {
+      font-size: 14px; color: var(--text-2); transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.5px; padding: 10px 22px; border-radius: 100px;
+      background: var(--cyan); color: #080810;
+      transition: all 0.2s; flex-shrink: 0; white-space: nowrap;
+    }
+    .nav-cta:hover { background: #fff; transform: translateY(-1px); }
+    /* Mobile hamburger */
+    .nav-burger {
+      display: none; background: none; border: none;
+      color: var(--text-2); cursor: pointer; font-size: 22px;
+      margin-left: auto; padding: 4px;
+    }
+    @media (max-width: 760px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-burger { display: block; }
+      .nav.open .nav-links {
+        display: flex; flex-direction: column; gap: 0;
+        position: absolute; top: 100%; left: 0; right: 0;
+        background: var(--bg-alt); border-bottom: 1px solid var(--border);
+        padding: 8px 0;
+      }
+      .nav.open .nav-links a {
+        padding: 14px 24px; border-bottom: 1px solid var(--border);
+      }
+    }
+
+    /* ══════════════════════════════════════════════
+       HERO
+    ══════════════════════════════════════════════ */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center;
+      padding: 140px 0 96px; position: relative;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 1px;
+      color: var(--cyan); background: var(--cyan-dim); border: 1px solid var(--cyan-border);
+      padding: 6px 16px; border-radius: 100px; margin-bottom: 36px;
+    }
+    .hero-badge .dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--cyan);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+    .hero h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(3.2rem, 6.5vw, 6rem); font-weight: 800;
+      line-height: 1.06; letter-spacing: -3px; margin-bottom: 28px;
+      animation: fade-up 0.7s 0.1s both;
+    }
+    .hero-sub {
+      font-size: 18px; color: var(--text-2); max-width: 560px;
+      line-height: 1.75; margin-bottom: 44px;
+      animation: fade-up 0.7s 0.25s both;
+    }
+    .hero-actions {
+      display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 64px;
+      animation: fade-up 0.7s 0.4s both;
+    }
+    .hero-stats {
+      display: flex; gap: 48px; flex-wrap: wrap;
+      padding-top: 40px; border-top: 1px solid var(--border);
+      animation: fade-up 0.7s 0.55s both;
+    }
+    .stat-num {
+      font-family: 'Sora', sans-serif; font-size: 30px; font-weight: 800;
+      color: var(--text); line-height: 1;
+    }
+    .stat-label { font-size: 12px; color: var(--text-2); margin-top: 4px; }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ══════════════════════════════════════════════
+       PLATFORM STRIP
+    ══════════════════════════════════════════════ */
+    .platform-strip {
+      padding: 32px 0; border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative; z-index: 1;
+    }
+    .strip-label {
+      font-family: 'Space Mono', monospace; font-size: 10px;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--text-3); text-align: center; margin-bottom: 20px;
+    }
+    .platform-list {
+      display: flex; flex-wrap: wrap;
+      justify-content: center; align-items: center; gap: 20px 40px;
+    }
+    .platform-item {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 14px; color: var(--text-2);
+    }
+    .platform-icon {
+      width: 32px; height: 32px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center; font-size: 17px;
+    }
+    .platform-item.soon { opacity: 0.4; }
+    .soon-badge {
+      font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.5px;
+      color: var(--amber); border: 1px solid rgba(255,171,0,0.3);
+      padding: 2px 7px; border-radius: 4px;
+    }
+
+    /* ══════════════════════════════════════════════
+       HOW IT WORKS
+    ══════════════════════════════════════════════ */
+    .steps-grid {
+      display: grid; grid-template-columns: 1fr 48px 1fr 48px 1fr;
+      align-items: start; gap: 0;
+    }
+    .step-card { padding: 32px 20px; text-align: center; }
+    .step-num {
+      font-family: 'Sora', sans-serif; font-size: 56px; font-weight: 800;
+      color: rgba(0,229,255,0.15); line-height: 1; margin-bottom: 20px;
+    }
+    .step-card h3 {
+      font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .step-card p { font-size: 14px; color: var(--text-2); line-height: 1.7; }
+    .step-arrow {
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-3); font-size: 20px; padding-top: 44px;
+    }
+    @media (max-width: 700px) {
+      .steps-grid { grid-template-columns: 1fr; }
+      .step-arrow { display: none; }
+    }
+
+    /* ══════════════════════════════════════════════
+       SERVICE CARDS
+    ══════════════════════════════════════════════ */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 14px;
+    }
+    .service-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 28px 28px 32px;
+      position: relative; overflow: hidden; transition: border-color 0.3s, transform 0.2s;
+    }
+    .service-card:hover { border-color: var(--cyan-border); transform: translateY(-3px); }
+    .service-card::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .service-card:hover::after { opacity: 1; }
+    .service-icon {
+      width: 46px; height: 46px; background: var(--cyan-dim);
+      border: 1px solid var(--cyan-border); border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 18px;
+    }
+    .service-port {
+      font-family: 'Space Mono', monospace; font-size: 11px; color: var(--cyan);
+      margin-bottom: 8px;
+    }
+    .service-card h3 {
+      font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .service-card p { font-size: 13px; color: var(--text-2); line-height: 1.7; }
+
+    /* ══════════════════════════════════════════════
+       PRICING CARDS
+    ══════════════════════════════════════════════ */
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px; align-items: start;
+    }
+    .pricing-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 36px 32px;
+      position: relative; transition: all 0.3s;
+    }
+    .pricing-card.popular {
+      border-color: var(--cyan-border);
+      box-shadow: 0 0 48px rgba(0,229,255,0.09), inset 0 0 48px rgba(0,229,255,0.02);
+      margin-top: -8px;
+    }
+    .popular-badge {
+      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+      font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 1px;
+      background: var(--cyan); color: #080810; font-weight: 700;
+      padding: 5px 18px; border-radius: 100px; white-space: nowrap;
+    }
+    .plan-name {
+      font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 1px;
+      color: var(--text-2); text-transform: uppercase; margin-bottom: 20px;
+    }
+    .plan-price {
+      font-family: 'Sora', sans-serif; font-size: 52px; font-weight: 800;
+      color: var(--text); line-height: 1; margin-bottom: 4px;
+    }
+    .plan-price sup { font-size: 22px; font-weight: 500; color: var(--text-2); vertical-align: super; }
+    .plan-period { font-size: 13px; color: var(--text-3); margin-bottom: 20px; }
+    .plan-desc {
+      font-size: 13px; color: var(--text-2); line-height: 1.65;
+      padding-bottom: 20px; margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .plan-features {
+      list-style: none; margin-bottom: 32px;
+    }
+    .plan-features li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 13px; color: var(--text-2); padding: 7px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .plan-features li::before {
+      content: '✓'; color: var(--cyan); font-weight: 700;
+      font-size: 11px; margin-top: 2px; flex-shrink: 0;
+    }
+    .plan-cta {
+      display: block; text-align: center;
+      padding: 13px 20px; border-radius: var(--r-sm);
+      font-family: 'Sora', sans-serif; font-weight: 600; font-size: 14px;
+      transition: all 0.2s;
+    }
+    .pricing-card.popular .plan-cta {
+      background: var(--cyan); color: #080810;
+    }
+    .pricing-card.popular .plan-cta:hover { background: #fff; }
+    .pricing-card:not(.popular) .plan-cta {
+      background: rgba(255,255,255,0.05); color: var(--text-2);
+      border: 1px solid var(--border);
+    }
+    .pricing-card:not(.popular) .plan-cta:hover {
+      background: rgba(255,255,255,0.1); color: var(--text);
+    }
+    .pricing-note {
+      text-align: center; margin-top: 32px;
+      font-size: 14px; color: var(--text-2);
+    }
+    .pricing-note a { color: var(--cyan); border-bottom: 1px solid rgba(0,229,255,0.3); }
+    .pricing-note a:hover { border-color: var(--cyan); }
+
+    /* ══════════════════════════════════════════════
+       TECH STACK
+    ══════════════════════════════════════════════ */
+    .stack-groups { display: flex; flex-direction: column; gap: 32px; }
+    .stack-group-label {
+      font-family: 'Space Mono', monospace; font-size: 10px;
+      letter-spacing: 3px; text-transform: uppercase; color: var(--text-3);
+      margin-bottom: 12px;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      font-family: 'Space Mono', monospace; font-size: 12px;
+      padding: 8px 18px; border-radius: var(--r-sm);
+      border: 1px solid var(--border); background: var(--bg-card);
+      color: var(--text-2); transition: all 0.2s; cursor: default;
+    }
+    .chip:hover { border-color: var(--cyan-border); color: var(--cyan); }
+
+    /* ══════════════════════════════════════════════
+       FAQ
+    ══════════════════════════════════════════════ */
+    .faq-wrap { max-width: 720px; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-q {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 0; cursor: pointer;
+      font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 600;
+      color: var(--text); transition: color 0.2s; user-select: none;
+    }
+    .faq-q:hover { color: var(--cyan); }
+    .faq-icon {
+      font-size: 20px; color: var(--text-3); flex-shrink: 0;
+      transition: transform 0.3s, color 0.2s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--cyan); }
+    .faq-a {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s;
+      font-size: 14px; color: var(--text-2); line-height: 1.8;
+    }
+    .faq-item.open .faq-a { max-height: 260px; padding-bottom: 20px; }
+
+    /* ══════════════════════════════════════════════
+       CTA BOX
+    ══════════════════════════════════════════════ */
+    .cta-section { padding: 96px 0; }
+    .cta-box {
+      background: linear-gradient(135deg, rgba(0,229,255,0.07), rgba(255,45,123,0.04));
+      border: 1px solid var(--cyan-border); border-radius: 24px;
+      padding: 88px 48px; text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-box::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 600px 400px at 50% 0%, rgba(0,229,255,0.06), transparent);
+      pointer-events: none;
+    }
+    .cta-box h2 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
+      letter-spacing: -1.5px; margin-bottom: 18px;
+    }
+    .cta-box p { font-size: 16px; color: var(--text-2); margin-bottom: 40px; max-width: 440px; margin-left: auto; margin-right: auto; }
+    .cta-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; position: relative; }
+
+    /* ══════════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════════ */
+    footer {
+      padding: 48px 0; border-top: 1px solid var(--border);
+      position: relative; z-index: 1;
+    }
+    .footer-inner {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 24px;
+    }
+    .footer-brand {
+      font-family: 'Sora', sans-serif; font-weight: 800; font-size: 17px;
+    }
+    .footer-brand .c { color: var(--cyan); }
+    .footer-sub { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+    .footer-links {
+      display: flex; flex-wrap: wrap; gap: 6px 24px;
+    }
+    .footer-links a { font-size: 13px; color: var(--text-2); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { font-size: 11px; color: var(--text-3); }
+
+    /* ══════════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .hero { padding: 100px 0 64px; }
+      section { padding: 64px 0; }
+      .hero-stats { gap: 28px; }
+      .cta-box { padding: 56px 24px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 28px; }
+    }
+
+    /* ══════════════════════════════════════════════
+       SCROLL REVEAL
+    ══════════════════════════════════════════════ */
+    .reveal {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+    .reveal-d4 { transition-delay: 0.4s; }
+  </style>
+</head>
+<body>
+  <div class="bg-ambient"></div>
+  <div class="bg-grid"></div>
+
+  <!-- ════════════ NAVBAR ════════════ -->
+  <nav class="nav" id="nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="/" class="nav-logo">Cloud<span class="c">Pipe</span></a>
+        <div class="nav-links" id="navLinks">
+          <a href="#services">服務</a>
+          <a href="#how-it-works">運作方式</a>
+          <a href="pricing.html">定價</a>
+          <a href="#stack">技術</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <a href="#contact" class="nav-cta">立即諮詢 →</a>
+        <button class="nav-burger" id="navBurger" aria-label="選單">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ════════════ HERO ════════════ -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-badge">
+        <span class="dot"></span>AI Automation Platform · Macau SAR
+      </div>
+      <h1>讓 AI 幫你<br><span class="gradient-text">管理商業溝通</span></h1>
+      <p class="hero-sub">
+        整合 Facebook Messenger、Telegram Bot 及多個社交平台——一個平台管理所有品牌訊息，AI 智能回覆，24/7 自動運行。
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary">立即諮詢 →</a>
+        <a href="pricing.html" class="btn btn-outline">查看方案</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">4+</div>
+          <div class="stat-label">整合平台</div>
+        </div>
+        <div>
+          <div class="stat-num">3</div>
+          <div class="stat-label">AI 模型調度</div>
+        </div>
+        <div>
+          <div class="stat-num">24/7</div>
+          <div class="stat-label">自動運行</div>
+        </div>
+        <div>
+          <div class="stat-num">$500</div>
+          <div class="stat-label">起 MOP/月</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ════════════ PLATFORM STRIP ════════════ -->
+  <div class="platform-strip">
+    <div class="container">
+      <div class="strip-label">目前支援 · 即將推出</div>
+      <div class="platform-list">
+        <div class="platform-item">
+          <div class="platform-icon" style="background:rgba(24,119,242,0.15)">📘</div>
+          <span>Facebook Messenger</span>
+        </div>
+        <div class="platform-item">
+          <div class="platform-icon" style="background:rgba(0,136,204,0.15)">✈️</div>
+          <span>Telegram Bot</span>
+        </div>
+        <div class="platform-item soon">
+          <div class="platform-icon" style="background:rgba(193,53,132,0.15)">📷</div>
+          <span>Instagram DM</span>
+          <span class="soon-badge">Phase 1</span>
+        </div>
+        <div class="platform-item soon">
+          <div class="platform-icon" style="background:rgba(37,211,102,0.15)">💬</div>
+          <span>WhatsApp Business</span>
+          <span class="soon-badge">Phase 3</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ HOW IT WORKS ════════════ -->
+  <section id="how-it-works">
+    <div class="container">
+      <p class="eyebrow reveal">// How It Works</p>
+      <h2 class="section-title reveal">三步驟啟動 AI 客服</h2>
+      <div class="steps-grid">
+        <div class="step-card reveal reveal-d1">
+          <div class="step-num">01</div>
+          <h3>整合平台</h3>
+          <p>連接你的社交平台，設定品牌 FAQ 知識庫與客服語氣，5 分鐘完成初始配置。</p>
+        </div>
+        <div class="step-arrow reveal">→</div>
+        <div class="step-card reveal reveal-d2">
+          <div class="step-num">02</div>
+          <h3>AI 智能路由</h3>
+          <p>每條訊息自動分類。高信心度問題 FAQ 直接回覆，複雜問題交 AI Agent 深度處理。</p>
+        </div>
+        <div class="step-arrow reveal">→</div>
+        <div class="step-card reveal reveal-d3">
+          <div class="step-num">03</div>
+          <h3>回覆 + 升級</h3>
+          <p>AI 以品牌語氣即時回覆；無法處理時自動推送 Telegram 通知，人工無縫接手。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ SERVICES ════════════ -->
+  <section id="services" class="section-alt">
+    <div class="container">
+      <p class="eyebrow reveal">// Services</p>
+      <h2 class="section-title reveal">五大核心服務</h2>
+      <div class="services-grid">
+        <div class="service-card reveal reveal-d1">
+          <div class="service-icon">⚡</div>
+          <div class="service-port">Port :3000</div>
+          <h3>Core 路由引擎</h3>
+          <p>所有請求的中央調度站，負責路由分發、認證鑑權及流量管理，確保每個請求到達正確服務。</p>
+        </div>
+        <div class="service-card reveal reveal-d2">
+          <div class="service-icon">🔧</div>
+          <div class="service-port">Port :3001</div>
+          <h3>MCP Server 工具箱</h3>
+          <p>Model Context Protocol 伺服器，為 AI 模型提供結構化工具介面，實現外部系統的無縫整合。</p>
+        </div>
+        <div class="service-card reveal reveal-d3">
+          <div class="service-icon">🔀</div>
+          <div class="service-port">Port :3002</div>
+          <h3>API Proxy 模型調度</h3>
+          <p>OpenAI 相容 API 代理層，智能調度 Claude、Gemini 等多模型，按任務類型自動選擇最佳模型。</p>
+        </div>
+        <div class="service-card reveal reveal-d1">
+          <div class="service-icon">📡</div>
+          <div class="service-port">Port :3003</div>
+          <h3>Telegram Bot 管理介面</h3>
+          <p>透過 Telegram 進行系統管理、監控告警與快速操作，隨時隨地掌控平台狀態。</p>
+        </div>
+        <div class="service-card reveal reveal-d2">
+          <div class="service-icon">💬</div>
+          <div class="service-port">Port :3004</div>
+          <h3>FB 多品牌自動化客服</h3>
+          <p>同時管理多個 Facebook 粉專 Messenger，AI 驅動的智能回覆、自動分流與客戶記憶。</p>
+        </div>
+        <div class="service-card reveal reveal-d3">
+          <div class="service-icon">🌐</div>
+          <div class="service-port">EDGE</div>
+          <h3>外部整合服務</h3>
+          <p>Vercel 前端部署、Cloudflare Workers 邊緣運算、n8n Cloud 工作流自動化，三層架構協同運作。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ PRICING ════════════ -->
+  <section id="pricing">
+    <div class="container">
+      <p class="eyebrow reveal">// Pricing</p>
+      <h2 class="section-title reveal">簡單透明的定價</h2>
+      <div class="pricing-grid">
+        <div class="pricing-card reveal reveal-d1">
+          <div class="plan-name">基本方案</div>
+          <div class="plan-price"><sup>$</sup>500</div>
+          <div class="plan-period">MOP / 月</div>
+          <p class="plan-desc">適合小型商家，快速啟動 AI 客服自動化</p>
+          <ul class="plan-features">
+            <li>單一平台整合（FB 或 TG）</li>
+            <li>Claude Haiku 客服引擎</li>
+            <li>基礎自動回覆 + FAQ 匹配</li>
+            <li>每月 5,000 則訊息</li>
+          </ul>
+          <a href="#contact" class="plan-cta">立即開始</a>
+        </div>
+        <div class="pricing-card popular reveal reveal-d2">
+          <div class="popular-badge">推薦方案</div>
+          <div class="plan-name">專業方案</div>
+          <div class="plan-price"><sup>$</sup>1,500</div>
+          <div class="plan-period">MOP / 月</div>
+          <p class="plan-desc">多平台整合、進階 AI 分析與自動化工作流</p>
+          <ul class="plan-features">
+            <li>多平台整合（FB + TG + IG）</li>
+            <li>Claude Sonnet 進階分析</li>
+            <li>自動接單 + 庫存管理</li>
+            <li>數據分析面板</li>
+            <li>每月 30,000 則訊息</li>
+          </ul>
+          <a href="#contact" class="plan-cta">立即開始</a>
+        </div>
+        <div class="pricing-card reveal reveal-d3">
+          <div class="plan-name">企業方案</div>
+          <div class="plan-price"><sup>$</sup>3,000</div>
+          <div class="plan-period">MOP / 月</div>
+          <p class="plan-desc">完整 SaaS 功能，CRM 整合與專屬技術支援</p>
+          <ul class="plan-features">
+            <li>全平台整合（含 WhatsApp）</li>
+            <li>AI 銷售員 + CRM 系統</li>
+            <li>多語言支援</li>
+            <li>專屬客戶經理</li>
+            <li>無限訊息量</li>
+          </ul>
+          <a href="#contact" class="plan-cta">聯繫我們</a>
+        </div>
+      </div>
+      <p class="pricing-note reveal">
+        需要詳細功能對比？<a href="pricing.html">查看完整定價說明 →</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ════════════ TECH STACK ════════════ -->
+  <section id="stack" class="section-alt">
+    <div class="container">
+      <p class="eyebrow reveal">// Tech Stack</p>
+      <h2 class="section-title reveal">技術基礎設施</h2>
+      <div class="stack-groups">
+        <div class="reveal">
+          <div class="stack-group-label">後端框架 &amp; 基礎設施</div>
+          <div class="chips">
+            <span class="chip">Node.js</span>
+            <span class="chip">Fastify</span>
+            <span class="chip">Python</span>
+            <span class="chip">PM2</span>
+            <span class="chip">Caddy</span>
+            <span class="chip">SQLite</span>
+            <span class="chip">Tailscale</span>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="stack-group-label">硬體 &amp; 雲端服務</div>
+          <div class="chips">
+            <span class="chip">Mac mini M4 — 主力 24/7</span>
+            <span class="chip">iMac × 2 — 開發測試</span>
+            <span class="chip">Vercel — 前端部署</span>
+            <span class="chip">Cloudflare Workers — 邊緣運算</span>
+            <span class="chip">n8n Cloud — 工作流整合</span>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="stack-group-label">AI 模型調度</div>
+          <div class="chips">
+            <span class="chip">Claude Haiku — 客服回覆</span>
+            <span class="chip">Claude Sonnet — 進階分析</span>
+            <span class="chip">Gemini Flash — 工具雜務</span>
+            <span class="chip">MiniMax M2.5 — 中文處理</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ FAQ ════════════ -->
+  <section id="faq">
+    <div class="container">
+      <p class="eyebrow reveal">// FAQ</p>
+      <h2 class="section-title reveal">常見問題</h2>
+      <div class="faq-wrap">
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>CloudPipe 是什麼？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">CloudPipe 是一站式 AI 自動化平台，整合 MCP Server、API Proxy、Telegram Bot 及 Facebook 粉專自動化，幫助商家用 AI 自動處理客服、接單、行銷等日常營運任務，24/7 無間斷運行。</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>支援哪些社交平台？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">目前支援 Facebook Messenger（多品牌粉專）及 Telegram Bot。Phase 1 將擴充 Instagram Direct Message，Phase 3 加入 WhatsApp Business 及多語言支援。</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>使用什麼 AI 模型？費用如何？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">透過 API Proxy 智能調度多模型：Claude Haiku 處理日常客服（約 MOP$5-15/月 API 費用）、Claude Sonnet 處理進階任務（約 MOP$5-30/月）、Gemini Flash 處理雜務（約 MOP$1-5/月）。AI 費用包含在方案月費內，按實際使用量計算。</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>資料安全如何保障？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">所有服務透過 Tailscale 加密網路連接，對話資料儲存在本地 SQLite 資料庫，不依賴第三方雲端儲存。SaaS 架構以 tenant_id 嚴格隔離各商家資料，符合 GDPR 最佳實踐。</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>如何開始？需要技術知識嗎？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">不需要！聯繫我們後，我們的技術團隊負責全程部署與整合。你只需提供品牌 Facebook 頁面管理員權限，我們處理其餘一切，通常 3-5 個工作天完成上線。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ CTA ════════════ -->
+  <section id="contact" class="cta-section">
+    <div class="container">
+      <div class="cta-box reveal">
+        <h2>準備好提升<br><span class="gradient-text">商業效率</span>了嗎？</h2>
+        <p>免費諮詢你的需求，我們在 24 小時內回覆並提供客製化方案。</p>
+        <div class="cta-actions">
+          <a href="https://m.me/cloudpipe" class="btn btn-primary" target="_blank" rel="noopener">Facebook 訊息諮詢 →</a>
+          <a href="pricing.html" class="btn btn-outline">查看詳細方案</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ FOOTER ════════════ -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand">Cloud<span class="c">Pipe</span></div>
+          <div class="footer-sub">AI Automation Platform · Macau SAR</div>
+        </div>
+        <div class="footer-links">
+          <a href="#services">服務</a>
+          <a href="#how-it-works">運作方式</a>
+          <a href="pricing.html">定價</a>
+          <a href="#stack">技術</a>
+          <a href="#faq">FAQ</a>
+          <a href="#contact">聯繫我們</a>
+          <a href="/api/info.json" target="_blank">API</a>
+        </div>
+        <div class="footer-copy">© 2026 CloudPipe · AEO Optimized</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* Navbar scroll */
+    const nav = document.getElementById('nav');
+    addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40));
+
+    /* Mobile menu */
+    document.getElementById('navBurger').addEventListener('click', () => {
+      nav.classList.toggle('open');
+    });
+
+    /* FAQ accordion */
+    function toggleFaq(el) { el.closest('.faq-item').classList.toggle('open'); }
+
+    /* Scroll reveal */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>

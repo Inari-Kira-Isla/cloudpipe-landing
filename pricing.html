@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>定價方案 — CloudPipe AI 自動化平台</title>
+  <meta name="description" content="CloudPipe 透明定價：基本方案 MOP$500/月、專業方案 MOP$1,500/月、企業方案 MOP$3,000/月。查看完整功能比較，找到最適合你商業需求的方案。">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://cloudpipe-landing.vercel.app/pricing.html">
+
+  <meta property="og:title" content="定價方案 — CloudPipe">
+  <meta property="og:description" content="透明定價，從 MOP$500/月起。三種方案適合不同規模商家，AI 客服自動化。">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ══════ TOKENS (same as index) ══════ */
+    :root {
+      --bg:          #080810;
+      --bg-alt:      #0d0d1a;
+      --bg-card:     #111120;
+      --cyan:        #00e5ff;
+      --cyan-dim:    rgba(0,229,255,0.10);
+      --cyan-border: rgba(0,229,255,0.20);
+      --magenta:     #ff2d7b;
+      --amber:       #ffab00;
+      --green:       #00e676;
+      --text:        #e6e6f0;
+      --text-2:      #7272a0;
+      --text-3:      #404060;
+      --border:      rgba(255,255,255,0.07);
+      --r:           16px;
+      --r-sm:        10px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--bg); color: var(--text);
+      line-height: 1.7; overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* BG */
+    .bg-ambient {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 900px 700px at 10% 20%, rgba(0,229,255,0.04), transparent 60%),
+        radial-gradient(ellipse 700px 900px at 90% 80%, rgba(255,45,123,0.03), transparent 60%);
+    }
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 72px 72px;
+    }
+
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+    section { padding: 80px 0; }
+    .section-alt { background: var(--bg-alt); }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--cyan), var(--magenta));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Sora', sans-serif; font-weight: 600; font-size: 14px;
+      padding: 13px 28px; border-radius: 100px; transition: all 0.2s; border: none;
+    }
+    .btn-primary { background: var(--cyan); color: #080810; }
+    .btn-primary:hover { background: #fff; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,229,255,0.25); }
+    .btn-outline { background: transparent; color: var(--text-2); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+    /* NAVBAR */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      padding: 22px 0; transition: padding 0.3s, background 0.3s, border 0.3s;
+    }
+    .nav.scrolled {
+      background: rgba(8,8,16,0.88); backdrop-filter: blur(20px);
+      padding: 14px 0; border-bottom: 1px solid var(--border);
+    }
+    .nav-inner { display: flex; align-items: center; gap: 32px; }
+    .nav-logo { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.5px; flex-shrink: 0; }
+    .nav-logo .c { color: var(--cyan); }
+    .nav-links { display: flex; gap: 28px; margin: 0 auto; }
+    .nav-links a { font-size: 14px; color: var(--text-2); transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .nav-cta {
+      font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.5px; padding: 10px 22px; border-radius: 100px;
+      background: var(--cyan); color: #080810; transition: all 0.2s; flex-shrink: 0;
+    }
+    .nav-cta:hover { background: #fff; }
+    .nav-burger { display: none; background: none; border: none; color: var(--text-2); cursor: pointer; font-size: 22px; margin-left: auto; padding: 4px; }
+    @media (max-width: 760px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-burger { display: block; }
+      .nav.open .nav-links {
+        display: flex; flex-direction: column; gap: 0;
+        position: absolute; top: 100%; left: 0; right: 0;
+        background: var(--bg-alt); border-bottom: 1px solid var(--border); padding: 8px 0;
+      }
+      .nav.open .nav-links a { padding: 14px 24px; border-bottom: 1px solid var(--border); }
+    }
+
+    /* PAGE HERO */
+    .page-hero {
+      padding: 140px 0 72px; text-align: center;
+      position: relative; z-index: 1;
+    }
+    .eyebrow {
+      font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--magenta); margin-bottom: 14px;
+    }
+    .page-hero h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem); font-weight: 800;
+      letter-spacing: -2.5px; margin-bottom: 20px;
+    }
+    .page-hero p {
+      font-size: 17px; color: var(--text-2); max-width: 520px;
+      margin: 0 auto 12px; line-height: 1.7;
+    }
+
+    /* PRICING GRID */
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; align-items: start;
+    }
+    @media (max-width: 860px) { .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; } }
+
+    .pricing-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 40px 32px;
+      position: relative; transition: all 0.3s;
+    }
+    .pricing-card.popular {
+      border-color: var(--cyan-border);
+      box-shadow: 0 0 60px rgba(0,229,255,0.08), inset 0 0 60px rgba(0,229,255,0.02);
+      margin-top: -16px;
+    }
+    .popular-badge {
+      position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+      font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 1px;
+      background: var(--cyan); color: #080810; font-weight: 700;
+      padding: 5px 18px; border-radius: 100px; white-space: nowrap;
+    }
+    .plan-name {
+      font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px;
+      color: var(--text-2); text-transform: uppercase; margin-bottom: 24px;
+    }
+    .plan-price {
+      font-family: 'Sora', sans-serif; font-size: 56px; font-weight: 800;
+      color: var(--text); line-height: 1; margin-bottom: 4px;
+    }
+    .plan-price sup { font-size: 22px; font-weight: 500; color: var(--text-2); vertical-align: super; }
+    .plan-period { font-size: 13px; color: var(--text-3); margin-bottom: 24px; }
+    .plan-tagline {
+      font-size: 14px; color: var(--text-2); line-height: 1.6;
+      padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid var(--border);
+    }
+    .feature-group { margin-bottom: 24px; }
+    .feature-group-label {
+      font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--text-3); margin-bottom: 10px;
+    }
+    .feature-list { list-style: none; }
+    .feature-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 13px; color: var(--text-2); padding: 6px 0;
+    }
+    .feature-list li .check { color: var(--green); font-size: 12px; margin-top: 2px; flex-shrink: 0; }
+    .feature-list li .dash { color: var(--text-3); font-size: 12px; margin-top: 2px; flex-shrink: 0; }
+    .plan-cta {
+      display: block; text-align: center; padding: 14px 20px;
+      border-radius: var(--r-sm); font-family: 'Sora', sans-serif;
+      font-weight: 600; font-size: 14px; transition: all 0.2s; margin-top: 8px;
+    }
+    .pricing-card.popular .plan-cta { background: var(--cyan); color: #080810; }
+    .pricing-card.popular .plan-cta:hover { background: #fff; }
+    .pricing-card:not(.popular) .plan-cta {
+      background: rgba(255,255,255,0.05); color: var(--text-2);
+      border: 1px solid var(--border);
+    }
+    .pricing-card:not(.popular) .plan-cta:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+
+    /* COMPARISON TABLE */
+    .compare-table-wrap { overflow-x: auto; }
+    .compare-table {
+      width: 100%; border-collapse: separate; border-spacing: 0;
+      font-size: 13px;
+    }
+    .compare-table th {
+      font-family: 'Sora', sans-serif; font-weight: 700; font-size: 14px;
+      padding: 20px 24px; text-align: center; color: var(--text-2);
+      border-bottom: 1px solid var(--border); background: var(--bg-card);
+      position: sticky; top: 0; z-index: 2;
+    }
+    .compare-table th:first-child { text-align: left; }
+    .compare-table th.popular-col { color: var(--cyan); border-color: var(--cyan-border); }
+    .compare-table td {
+      padding: 14px 24px; border-bottom: 1px solid rgba(255,255,255,0.04);
+      text-align: center; color: var(--text-2); vertical-align: middle;
+    }
+    .compare-table td:first-child { text-align: left; color: var(--text); font-weight: 500; }
+    .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .compare-table .group-row td {
+      background: var(--bg-alt); color: var(--text-3);
+      font-family: 'Space Mono', monospace; font-size: 10px;
+      letter-spacing: 2px; text-transform: uppercase; padding: 12px 24px;
+      text-align: left;
+    }
+    .yes { color: var(--green); font-size: 16px; }
+    .no { color: var(--text-3); font-size: 16px; }
+    .tag {
+      display: inline-block; font-family: 'Space Mono', monospace;
+      font-size: 9px; letter-spacing: 0.5px; padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .tag-cyan { background: var(--cyan-dim); color: var(--cyan); border: 1px solid var(--cyan-border); }
+    .tag-amber { background: rgba(255,171,0,0.1); color: var(--amber); border: 1px solid rgba(255,171,0,0.2); }
+    .tag-coming { background: rgba(255,255,255,0.05); color: var(--text-3); border: 1px solid var(--border); }
+
+    /* ADDONS */
+    .addons-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .addon-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 24px 28px;
+    }
+    .addon-card h4 { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .addon-price {
+      font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700;
+      color: var(--cyan); margin-bottom: 8px;
+    }
+    .addon-price span { font-size: 12px; color: var(--text-3); font-weight: 400; }
+    .addon-card p { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+
+    /* FAQ */
+    .section-title {
+      font-family: 'Sora', sans-serif; font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      font-weight: 700; letter-spacing: -1.5px; margin-bottom: 48px;
+    }
+    .faq-wrap { max-width: 720px; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-q {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 0; cursor: pointer;
+      font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 600;
+      color: var(--text); transition: color 0.2s; user-select: none;
+    }
+    .faq-q:hover { color: var(--cyan); }
+    .faq-icon { font-size: 20px; color: var(--text-3); transition: transform 0.3s, color 0.2s; flex-shrink: 0; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--cyan); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; font-size: 14px; color: var(--text-2); line-height: 1.8; }
+    .faq-item.open .faq-a { max-height: 260px; padding-bottom: 20px; }
+
+    /* CTA */
+    .cta-section { padding: 80px 0; }
+    .cta-box {
+      background: linear-gradient(135deg, rgba(0,229,255,0.07), rgba(255,45,123,0.04));
+      border: 1px solid var(--cyan-border); border-radius: 24px;
+      padding: 80px 40px; text-align: center;
+    }
+    .cta-box h2 { font-family: 'Sora', sans-serif; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -1.5px; margin-bottom: 16px; }
+    .cta-box p { font-size: 16px; color: var(--text-2); margin-bottom: 36px; max-width: 440px; margin-left: auto; margin-right: auto; }
+    .cta-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+    /* FOOTER */
+    footer { padding: 48px 0; border-top: 1px solid var(--border); position: relative; z-index: 1; }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
+    .footer-brand { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 17px; }
+    .footer-brand .c { color: var(--cyan); }
+    .footer-sub { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 6px 24px; }
+    .footer-links a { font-size: 13px; color: var(--text-2); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { font-size: 11px; color: var(--text-3); }
+
+    @media (max-width: 768px) {
+      .page-hero { padding: 100px 0 56px; }
+      section { padding: 56px 0; }
+      .cta-box { padding: 56px 24px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 28px; }
+    }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.1s; } .reveal-d2 { transition-delay: 0.2s; } .reveal-d3 { transition-delay: 0.3s; }
+  </style>
+</head>
+<body>
+  <div class="bg-ambient"></div>
+  <div class="bg-grid"></div>
+
+  <!-- NAVBAR -->
+  <nav class="nav" id="nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="/" class="nav-logo">Cloud<span class="c">Pipe</span></a>
+        <div class="nav-links" id="navLinks">
+          <a href="/#services">服務</a>
+          <a href="/#how-it-works">運作方式</a>
+          <a href="pricing.html" class="active">定價</a>
+          <a href="/#stack">技術</a>
+          <a href="/#faq">FAQ</a>
+        </div>
+        <a href="/#contact" class="nav-cta">立即諮詢 →</a>
+        <button class="nav-burger" id="navBurger" aria-label="選單">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="container">
+      <p class="eyebrow">// Pricing</p>
+      <h1><span class="gradient-text">簡單透明</span>的定價</h1>
+      <p>三種方案，適合不同規模的商家。無隱藏費用，按月計費，隨時調整。</p>
+    </div>
+  </div>
+
+  <!-- PRICING CARDS -->
+  <section style="padding-top: 0;">
+    <div class="container">
+      <div class="pricing-grid">
+
+        <!-- Basic -->
+        <div class="pricing-card reveal reveal-d1">
+          <div class="plan-name">基本方案 · Starter</div>
+          <div class="plan-price"><sup>$</sup>500</div>
+          <div class="plan-period">MOP / 月</div>
+          <p class="plan-tagline">適合初創或小型商家，快速啟動一個平台的 AI 客服</p>
+
+          <div class="feature-group">
+            <div class="feature-group-label">平台整合</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> 1 個平台（Facebook 或 Telegram）</li>
+              <li><span class="check">✓</span> 1 個品牌頁面</li>
+              <li><span class="dash">—</span> <span style="color:var(--text-3)">Instagram DM</span></li>
+              <li><span class="dash">—</span> <span style="color:var(--text-3)">WhatsApp Business</span></li>
+            </ul>
+          </div>
+
+          <div class="feature-group">
+            <div class="feature-group-label">AI 功能</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> Claude Haiku 客服引擎</li>
+              <li><span class="check">✓</span> FAQ 自動匹配回覆</li>
+              <li><span class="check">✓</span> 人工升級 Telegram 通知</li>
+              <li><span class="check">✓</span> 基礎情緒分析</li>
+              <li><span class="dash">—</span> <span style="color:var(--text-3)">Claude Sonnet 進階分析</span></li>
+              <li><span class="dash">—</span> <span style="color:var(--text-3)">品牌文案自動生成</span></li>
+            </ul>
+          </div>
+
+          <div class="feature-group">
+            <div class="feature-group-label">用量 &amp; 支援</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> 每月 5,000 則訊息</li>
+              <li><span class="check">✓</span> SQLite 客戶資料庫</li>
+              <li><span class="check">✓</span> 郵件技術支援</li>
+              <li><span class="dash">—</span> <span style="color:var(--text-3)">數據分析面板</span></li>
+            </ul>
+          </div>
+
+          <a href="/#contact" class="plan-cta">立即開始</a>
+        </div>
+
+        <!-- Professional (Popular) -->
+        <div class="pricing-card popular reveal reveal-d2">
+          <div class="popular-badge">🔥 推薦方案</div>
+          <div class="plan-name">專業方案 · Professional</div>
+          <div class="plan-price"><sup>$</sup>1,500</div>
+          <div class="plan-period">MOP / 月</div>
+          <p class="plan-tagline">多品牌多平台整合，進階 AI 分析與自動化工作流</p>
+
+          <div class="feature-group">
+            <div class="feature-group-label">平台整合</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> Facebook Messenger</li>
+              <li><span class="check">✓</span> Telegram Bot</li>
+              <li><span class="check">✓</span> Instagram DM <span class="tag tag-amber">Phase 1</span></li>
+              <li><span class="check">✓</span> 最多 4 個品牌頁面</li>
+            </ul>
+          </div>
+
+          <div class="feature-group">
+            <div class="feature-group-label">AI 功能</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> Claude Sonnet 進階分析</li>
+              <li><span class="check">✓</span> 多品牌 FAQ 匹配</li>
+              <li><span class="check">✓</span> 品牌語氣自定義</li>
+              <li><span class="check">✓</span> 每日品牌文案生成</li>
+              <li><span class="check">✓</span> 自動接單 + 庫存管理</li>
+              <li><span class="check">✓</span> 每週品牌優化報告</li>
+            </ul>
+          </div>
+
+          <div class="feature-group">
+            <div class="feature-group-label">用量 &amp; 支援</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> 每月 30,000 則訊息</li>
+              <li><span class="check">✓</span> 數據分析面板</li>
+              <li><span class="check">✓</span> VIP 客戶自動識別</li>
+              <li><span class="check">✓</span> GitHub 資料備份</li>
+              <li><span class="check">✓</span> 優先技術支援</li>
+            </ul>
+          </div>
+
+          <a href="/#contact" class="plan-cta">立即開始</a>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="pricing-card reveal reveal-d3">
+          <div class="plan-name">企業方案 · Enterprise</div>
+          <div class="plan-price"><sup>$</sup>3,000</div>
+          <div class="plan-period">MOP / 月</div>
+          <p class="plan-tagline">完整 SaaS 功能、CRM 整合與專屬技術支援</p>
+
+          <div class="feature-group">
+            <div class="feature-group-label">平台整合</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> 全平台整合</li>
+              <li><span class="check">✓</span> WhatsApp Business <span class="tag tag-amber">Phase 3</span></li>
+              <li><span class="check">✓</span> 無限品牌頁面</li>
+              <li><span class="check">✓</span> 自定義 Webhook 整合</li>
+            </ul>
+          </div>
+
+          <div class="feature-group">
+            <div class="feature-group-label">AI 功能</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> 所有專業方案功能</li>
+              <li><span class="check">✓</span> AI 銷售員模組</li>
+              <li><span class="check">✓</span> CRM 客戶管理系統</li>
+              <li><span class="check">✓</span> 多語言支援（繁/簡/英）</li>
+              <li><span class="check">✓</span> 自定義 AI 模型調度</li>
+            </ul>
+          </div>
+
+          <div class="feature-group">
+            <div class="feature-group-label">用量 &amp; 支援</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> 無限訊息量</li>
+              <li><span class="check">✓</span> Notion 資料同步</li>
+              <li><span class="check">✓</span> 專屬客戶經理</li>
+              <li><span class="check">✓</span> SLA 保障 99.5% 在線</li>
+              <li><span class="check">✓</span> 自定義開發需求</li>
+            </ul>
+          </div>
+
+          <a href="/#contact" class="plan-cta">聯繫我們</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARISON TABLE -->
+  <section class="section-alt">
+    <div class="container">
+      <p class="eyebrow reveal">// Feature Comparison</p>
+      <h2 class="section-title reveal">完整功能比較</h2>
+      <div class="compare-table-wrap reveal">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>功能</th>
+              <th>基本方案</th>
+              <th class="popular-col">專業方案</th>
+              <th>企業方案</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Platforms -->
+            <tr class="group-row"><td colspan="4">平台整合</td></tr>
+            <tr><td>Facebook Messenger</td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td></tr>
+            <tr><td>Telegram Bot</td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td></tr>
+            <tr><td>Instagram DM</td><td><span class="no">—</span></td><td><span class="tag tag-amber">Phase 1</span></td><td><span class="tag tag-amber">Phase 1</span></td></tr>
+            <tr><td>WhatsApp Business</td><td><span class="no">—</span></td><td><span class="no">—</span></td><td><span class="tag tag-amber">Phase 3</span></td></tr>
+            <tr><td>品牌頁面數量</td><td>1 個</td><td>最多 4 個</td><td>無限制</td></tr>
+
+            <!-- AI -->
+            <tr class="group-row"><td colspan="4">AI 功能</td></tr>
+            <tr><td>FAQ 自動匹配</td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td></tr>
+            <tr><td>Claude Haiku 客服</td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td></tr>
+            <tr><td>Claude Sonnet 進階</td><td><span class="no">—</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td></tr>
+            <tr><td>品牌語氣自定義</td><td><span class="no">—</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td></tr>
+            <tr><td>每日品牌文案生成</td><td><span class="no">—</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td></tr>
+            <tr><td>AI 銷售員模組</td><td><span class="no">—</span></td><td><span class="no">—</span></td><td><span class="yes">✓</span></td></tr>
+            <tr><td>多語言支援</td><td><span class="no">—</span></td><td><span class="no">—</span></td><td><span class="yes">✓</span></td></tr>
+
+            <!-- Data -->
+            <tr class="group-row"><td colspan="4">數據 &amp; 分析</td></tr>
+            <tr><td>客戶 CRM 資料庫</td><td>基本</td><td>進階</td><td>完整</td></tr>
+            <tr><td>對話記錄</td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td></tr>
+            <tr><td>數據分析面板</td><td><span class="no">—</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td></tr>
+            <tr><td>每週優化報告</td><td><span class="no">—</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td></tr>
+            <tr><td>VIP 客戶識別</td><td><span class="no">—</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td></tr>
+            <tr><td>Notion 雲端同步</td><td><span class="no">—</span></td><td><span class="no">—</span></td><td><span class="yes">✓</span></td></tr>
+
+            <!-- Volume -->
+            <tr class="group-row"><td colspan="4">訊息用量</td></tr>
+            <tr><td>每月訊息上限</td><td>5,000 則</td><td>30,000 則</td><td>無限制</td></tr>
+            <tr><td>超量計費</td><td><span class="tag tag-cyan">+$0.05/則</span></td><td><span class="tag tag-cyan">+$0.03/則</span></td><td>不適用</td></tr>
+
+            <!-- Support -->
+            <tr class="group-row"><td colspan="4">技術支援</td></tr>
+            <tr><td>初始部署設定</td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td></tr>
+            <tr><td>技術支援渠道</td><td>郵件</td><td>優先回覆</td><td>專屬客戶經理</td></tr>
+            <tr><td>SLA 在線保障</td><td>—</td><td>—</td><td>99.5%</td></tr>
+            <tr><td>自定義開發</td><td><span class="no">—</span></td><td><span class="no">—</span></td><td><span class="yes">✓</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADD-ONS -->
+  <section>
+    <div class="container">
+      <p class="eyebrow reveal">// Add-ons</p>
+      <h2 class="section-title reveal">附加功能模組</h2>
+      <div class="addons-grid">
+        <div class="addon-card reveal reveal-d1">
+          <h4>額外品牌頁面</h4>
+          <div class="addon-price">$200 <span>MOP / 個 / 月</span></div>
+          <p>在基本方案下新增額外 Facebook 或 Telegram 品牌頁面。</p>
+        </div>
+        <div class="addon-card reveal reveal-d2">
+          <h4>訊息超量包</h4>
+          <div class="addon-price">$150 <span>MOP / 5,000 則</span></div>
+          <p>預購超量訊息包，比按則計費更划算，適合旺季備用。</p>
+        </div>
+        <div class="addon-card reveal reveal-d3">
+          <h4>客製化 FAQ 建設</h4>
+          <div class="addon-price">$500 <span>MOP / 次</span></div>
+          <p>由我們團隊為你品牌整理並輸入 50 條以上 FAQ，提升 AI 回覆準確率。</p>
+        </div>
+        <div class="addon-card reveal reveal-d1">
+          <h4>月度優化諮詢</h4>
+          <div class="addon-price">$300 <span>MOP / 月</span></div>
+          <p>每月 1 小時視頻諮詢，分析數據報告，調整 AI 策略與品牌語氣。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING FAQ -->
+  <section class="section-alt">
+    <div class="container">
+      <p class="eyebrow reveal">// FAQ</p>
+      <h2 class="section-title reveal">定價常見問題</h2>
+      <div class="faq-wrap">
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>AI 模型費用包含在方案內嗎？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">是的，API 模型費用已包含在月費內。我們按實際使用量計算，Claude Haiku 客服約 MOP$5-15/月，Claude Sonnet 約 MOP$5-30/月，Gemini Flash 約 MOP$1-5/月，費用極低，完全包含在方案價格中。</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>可以隨時升降方案嗎？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">可以。升級方案立即生效，差額按剩餘天數比例計算。降級方案在下一個計費週期開始時生效，不影響當前服務。</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>有免費試用嗎？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">我們提供 14 天免費試用（基本方案功能）。聯繫我們後，技術團隊會協助完成初始設定，讓你在試用期內體驗真實效果。</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>訊息超量後如何處理？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">超量後服務不會中斷，系統會按超量費率計費（基本方案 MOP$0.05/則，專業方案 MOP$0.03/則）。你也可以預購超量包，費率更優惠。建議流量高峰期前聯繫我們升級方案。</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>如何付款？支援哪些方式？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">目前支援銀行轉帳（MOP/HKD）及 PayMe。每月初開立發票，7 天內付款。企業方案可協商季付或年付，享額外折扣。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-box reveal">
+        <h2>準備好了嗎？<br><span class="gradient-text">14 天免費試用</span></h2>
+        <p>聯繫我們，技術團隊在 24 小時內回覆並安排部署。無需信用卡。</p>
+        <div class="cta-actions">
+          <a href="/#contact" class="btn btn-primary">立即諮詢 →</a>
+          <a href="/" class="btn btn-outline">← 回首頁</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand">Cloud<span class="c">Pipe</span></div>
+          <div class="footer-sub">AI Automation Platform · Macau SAR</div>
+        </div>
+        <div class="footer-links">
+          <a href="/#services">服務</a>
+          <a href="/#how-it-works">運作方式</a>
+          <a href="pricing.html">定價</a>
+          <a href="/#stack">技術</a>
+          <a href="/#faq">FAQ</a>
+          <a href="/#contact">聯繫我們</a>
+        </div>
+        <div class="footer-copy">© 2026 CloudPipe · AEO Optimized</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40));
+    document.getElementById('navBurger').addEventListener('click', () => nav.classList.toggle('open'));
+    function toggleFaq(el) { el.closest('.faq-item').classList.toggle('open'); }
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
