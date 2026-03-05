@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEO 評分工具 — 你的網站被 AI 看見了嗎？ | CloudPipe</title>
+<meta name="description" content="免費檢測你的網站 AEO（AI 引擎優化）分數。檢查 robots.txt、llms.txt、Schema Markup、SSR 等 7 項 AI 可見度指標。">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<link rel="canonical" href="https://cloudpipe-landing.vercel.app/aeo-score.html">
+<link rel="llms-txt" href="/llms.txt">
+<meta property="og:title" content="AEO 評分工具 — AI 可見度檢測">
+<meta property="og:description" content="免費檢測你的網站 AEO 分數，了解 AI 爬蟲能否找到你">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cloudpipe-landing.vercel.app/aeo-score.html">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"CloudPipe AEO 評分工具","description":"免費網站 AI 可見度評分工具，檢測 robots.txt、llms.txt、Schema Markup 等 AEO 指標","url":"https://cloudpipe-landing.vercel.app/aeo-score.html","applicationCategory":"SEOApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"MOP"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"什麼是 AEO？","acceptedAnswer":{"@type":"Answer","text":"AEO（AI Engine Optimization）是 AI 引擎優化，讓你的網站內容能被 ChatGPT、Claude、Perplexity 等 AI 系統找到、理解、並引用。類似 SEO 對搜尋引擎的角色。"}},{"@type":"Question","name":"AEO 評分包含哪些項目？","acceptedAnswer":{"@type":"Answer","text":"包含 7 大項目：robots.txt AI 爬蟲允許、llms.txt AI 導覽文件、Schema.org 結構化數據、SSR 伺服器端渲染、Meta 標籤完整性、語義化 HTML、FAQ 結構化數據。"}},{"@type":"Question","name":"如何提升 AEO 分數？","acceptedAnswer":{"@type":"Answer","text":"最快的方法：建立 llms.txt 讓 AI 了解你的品牌、在 robots.txt 允許 AI 爬蟲、加入 Schema.org 結構化數據、確保頁面內容不依賴 JavaScript 渲染。CloudPipe 平台可一鍵完成所有設定。"}},{"@type":"Question","name":"AEO 和 SEO 有什麼不同？","acceptedAnswer":{"@type":"Answer","text":"SEO 優化傳統搜尋引擎排名，AEO 優化 AI 系統的理解與引用。AI 爬蟲不看 PageRank 或反向連結，而是看結構化數據、llms.txt、內容品質和語義結構。"}}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#06090f;--card:#0d1117;--card-2:#161b22;--border:#21262d;--text:#e6edf3;--dim:#8b949e;--blue:#58a6ff;--green:#3fb950;--purple:#bc8cff;--gold:#d29922;--red:#f85149;--cyan:#39d2c0;--orange:#f0883e}
+body{font-family:'Noto Sans TC',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.mono{font-family:'JetBrains Mono',monospace}
+.container{max-width:900px;margin:0 auto;padding:2rem 1rem}
+
+/* Hero */
+.hero{text-align:center;padding:3rem 0 2rem}
+.hero h1{font-size:2.2rem;font-weight:900;margin-bottom:.75rem;background:linear-gradient(135deg,var(--cyan),var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--dim);font-size:1.05rem;max-width:600px;margin:0 auto}
+
+/* Search Box */
+.search-box{background:var(--card);border:2px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:2rem;transition:border-color .3s}
+.search-box:focus-within{border-color:var(--cyan)}
+.search-row{display:flex;gap:.75rem}
+.search-input{flex:1;background:var(--card-2);border:1px solid var(--border);border-radius:10px;padding:.9rem 1.2rem;color:var(--text);font-size:1rem;font-family:'JetBrains Mono',monospace;outline:none;transition:border-color .2s}
+.search-input:focus{border-color:var(--cyan)}
+.search-input::placeholder{color:var(--dim)}
+.search-btn{background:linear-gradient(135deg,var(--cyan),var(--blue));color:#fff;border:none;border-radius:10px;padding:.9rem 2rem;font-size:1rem;font-weight:700;cursor:pointer;transition:opacity .2s;white-space:nowrap}
+.search-btn:hover{opacity:.9}
+.search-btn:disabled{opacity:.5;cursor:not-allowed}
+.search-hint{margin-top:.75rem;font-size:.8rem;color:var(--dim)}
+.search-hint a{color:var(--cyan);text-decoration:none;cursor:pointer}
+
+/* Score Display */
+.score-area{display:none;margin-bottom:2rem}
+.score-hero{display:flex;align-items:center;gap:2rem;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:1.5rem}
+.score-ring{position:relative;width:160px;height:160px;flex-shrink:0}
+.score-ring svg{transform:rotate(-90deg)}
+.score-ring .bg{fill:none;stroke:var(--border);stroke-width:8}
+.score-ring .fg{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.5s ease,stroke .5s}
+.score-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.score-number{font-size:2.8rem;font-weight:900;line-height:1}
+.score-max{font-size:.8rem;color:var(--dim)}
+.score-info{flex:1}
+.grade-badge{display:inline-block;font-size:2rem;font-weight:900;padding:.3rem 1rem;border-radius:12px;margin-bottom:.5rem}
+.grade-aplus{background:#3fb95020;color:var(--green);border:2px solid #3fb95040}
+.grade-a{background:#3fb95015;color:var(--green);border:2px solid #3fb95030}
+.grade-bplus{background:#58a6ff15;color:var(--blue);border:2px solid #58a6ff30}
+.grade-b{background:#d2992215;color:var(--gold);border:2px solid #d2992230}
+.grade-c{background:#f0883e15;color:var(--orange);border:2px solid #f0883e30}
+.grade-d{background:#f8514915;color:var(--red);border:2px solid #f8514930}
+.grade-f{background:#f8514920;color:var(--red);border:2px solid #f8514940}
+.score-url{font-size:.85rem;color:var(--dim);font-family:'JetBrains Mono',monospace;margin-top:.5rem;word-break:break-all}
+.score-summary{font-size:.95rem;color:var(--text);margin-top:.75rem;line-height:1.6}
+
+/* Check Items */
+.checks{display:grid;gap:.75rem;margin-bottom:1.5rem}
+.check-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;display:grid;grid-template-columns:40px 1fr 80px;gap:1rem;align-items:center}
+.check-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.check-pass{background:#3fb95015;border:1px solid #3fb95030}
+.check-warn{background:#d2992215;border:1px solid #d2992230}
+.check-fail{background:#f8514915;border:1px solid #f8514930}
+.check-name{font-weight:700;font-size:.9rem;margin-bottom:.25rem}
+.check-detail{font-size:.8rem;color:var(--dim)}
+.check-score{text-align:right}
+.check-pts{font-size:1.2rem;font-weight:700}
+.check-max{font-size:.7rem;color:var(--dim)}
+
+/* Recommendations */
+.recs{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem}
+.recs h2{font-size:.95rem;color:var(--cyan);margin-bottom:1rem}
+.rec-item{display:flex;gap:.75rem;padding:.6rem 0;border-bottom:1px solid var(--border);font-size:.88rem;align-items:flex-start}
+.rec-item:last-child{border-bottom:none}
+.rec-num{background:var(--cyan);color:var(--bg);width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:.1rem}
+.rec-text{color:var(--text)}
+
+/* CTA */
+.cta{background:linear-gradient(135deg,#39d2c010,#58a6ff10);border:1px solid var(--border);border-radius:16px;padding:2rem;text-align:center;margin-bottom:1.5rem}
+.cta h2{font-size:1.3rem;margin-bottom:.5rem;color:var(--text)}
+.cta p{color:var(--dim);margin-bottom:1.25rem;font-size:.95rem}
+.cta-btn{display:inline-block;background:linear-gradient(135deg,var(--cyan),var(--blue));color:#fff;text-decoration:none;padding:.75rem 2rem;border-radius:10px;font-weight:700;font-size:1rem;transition:opacity .2s}
+.cta-btn:hover{opacity:.9}
+
+/* Grade Scale */
+.grade-scale{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem}
+.grade-scale h2{font-size:.95rem;color:var(--cyan);margin-bottom:1rem}
+.gs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.5rem}
+.gs-item{padding:.75rem;border-radius:8px;text-align:center}
+.gs-grade{font-size:1.4rem;font-weight:900;margin-bottom:.2rem}
+.gs-range{font-size:.7rem;color:var(--dim)}
+.gs-label{font-size:.72rem;margin-top:.2rem}
+
+/* Responsive */
+@media(max-width:640px){
+  .score-hero{flex-direction:column;text-align:center}
+  .score-ring{width:130px;height:130px}
+  .score-number{font-size:2.2rem}
+  .search-row{flex-direction:column}
+  .check-item{grid-template-columns:32px 1fr 60px}
+}
+
+footer{text-align:center;padding:2rem 0 1rem;color:var(--dim);font-size:.8rem;border-top:1px solid var(--border)}
+footer a{color:var(--cyan);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- Hero -->
+  <div class="hero">
+    <h1>AEO 評分工具</h1>
+    <p>檢測你的網站是否能被 AI 找到、理解、引用。<br>7 項指標，100 分制，即時分析。</p>
+  </div>
+
+  <!-- Search -->
+  <div class="search-box">
+    <div class="search-row">
+      <input type="url" class="search-input" id="url-input" placeholder="輸入網址，例如 https://example.com" autocomplete="url">
+      <button class="search-btn" id="check-btn" onclick="runCheck()">檢測 AEO 分數</button>
+    </div>
+    <div class="search-hint">
+      試試看：
+      <a onclick="quickCheck('https://inari-kira-isla.github.io/Openclaw/')">AI 學習寶庫</a> &middot;
+      <a onclick="quickCheck('https://cloudpipe-landing.vercel.app/')">CloudPipe</a> &middot;
+      <a onclick="quickCheck('https://cloudpipe-directory.vercel.app/')">企業目錄</a>
+    </div>
+    <div id="loading" style="display:none;text-align:center;padding:1.5rem;color:var(--cyan)">
+      <div style="margin-bottom:.5rem">正在分析 7 項 AEO 指標...</div>
+      <div style="font-size:.8rem;color:var(--dim)" id="loading-step">檢查 robots.txt</div>
+    </div>
+  </div>
+
+  <!-- Score Results -->
+  <div class="score-area" id="score-area">
+    <!-- Score Hero -->
+    <div class="score-hero" id="score-hero">
+      <div class="score-ring">
+        <svg width="160" height="160" viewBox="0 0 160 160">
+          <circle class="bg" cx="80" cy="80" r="70"/>
+          <circle class="fg" id="score-arc" cx="80" cy="80" r="70"
+                  stroke-dasharray="440" stroke-dashoffset="440"/>
+        </svg>
+        <div class="score-center">
+          <div class="score-number" id="score-num">0</div>
+          <div class="score-max">/ 100</div>
+        </div>
+      </div>
+      <div class="score-info">
+        <div class="grade-badge" id="grade-badge">—</div>
+        <div class="score-url" id="score-url"></div>
+        <div class="score-summary" id="score-summary"></div>
+      </div>
+    </div>
+
+    <!-- Check Items -->
+    <div class="checks" id="checks-list"></div>
+
+    <!-- Recommendations -->
+    <div class="recs" id="recs-area" style="display:none">
+      <h2>改善建議</h2>
+      <div id="recs-list"></div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta">
+      <h2>想要 A+ 評分？</h2>
+      <p>CloudPipe AEO 平台自動處理所有優化項目 — llms.txt、Schema Markup、SSR、AI 爬蟲追蹤，一鍵搞定。</p>
+      <a href="/pricing.html" class="cta-btn">查看方案 →</a>
+    </div>
+  </div>
+
+  <!-- Grade Scale (always visible) -->
+  <div class="grade-scale">
+    <h2>AEO 評級標準</h2>
+    <div class="gs-grid">
+      <div class="gs-item" style="background:#3fb95015">
+        <div class="gs-grade" style="color:var(--green)">A+</div>
+        <div class="gs-range">90–100 分</div>
+        <div class="gs-label" style="color:var(--green)">AI 全面可見</div>
+      </div>
+      <div class="gs-item" style="background:#3fb95010">
+        <div class="gs-grade" style="color:var(--green)">A</div>
+        <div class="gs-range">80–89 分</div>
+        <div class="gs-label" style="color:var(--green)">優秀</div>
+      </div>
+      <div class="gs-item" style="background:#58a6ff10">
+        <div class="gs-grade" style="color:var(--blue)">B+</div>
+        <div class="gs-range">70–79 分</div>
+        <div class="gs-label" style="color:var(--blue)">良好</div>
+      </div>
+      <div class="gs-item" style="background:#d2992210">
+        <div class="gs-grade" style="color:var(--gold)">B</div>
+        <div class="gs-range">60–69 分</div>
+        <div class="gs-label" style="color:var(--gold)">及格</div>
+      </div>
+      <div class="gs-item" style="background:#f0883e10">
+        <div class="gs-grade" style="color:var(--orange)">C</div>
+        <div class="gs-range">50–59 分</div>
+        <div class="gs-label" style="color:var(--orange)">需要改善</div>
+      </div>
+      <div class="gs-item" style="background:#f8514910">
+        <div class="gs-grade" style="color:var(--red)">D</div>
+        <div class="gs-range">35–49 分</div>
+        <div class="gs-label" style="color:var(--red)">AI 難以發現</div>
+      </div>
+      <div class="gs-item" style="background:#f8514915">
+        <div class="gs-grade" style="color:var(--red)">F</div>
+        <div class="gs-range">0–34 分</div>
+        <div class="gs-label" style="color:var(--red)">AI 完全看不到</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What is AEO -->
+  <section style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:2rem;margin-bottom:1.5rem">
+    <h2 style="color:var(--cyan);font-size:1.1rem;margin-bottom:1rem">什麼是 AEO？</h2>
+
+    <h3 style="font-size:.95rem;margin:1rem 0 .5rem">AI 引擎優化（AI Engine Optimization）</h3>
+    <p style="color:var(--dim);font-size:.9rem;line-height:1.7;margin-bottom:1rem">
+      AEO 是讓網站內容能被 ChatGPT、Claude、Perplexity、Gemini 等 AI 系統找到、理解並引用的優化策略。當用戶向 AI 提問時，AI 會從其訓練數據和即時爬取的內容中尋找答案。如果你的網站沒有被 AI 爬蟲索引，你的品牌就不存在於 AI 的世界裡。
+    </p>
+
+    <h3 style="font-size:.95rem;margin:1rem 0 .5rem">AEO vs SEO：關鍵差異</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem">
+      <div style="background:var(--card-2);padding:1rem;border-radius:8px">
+        <div style="font-weight:700;font-size:.85rem;color:var(--blue);margin-bottom:.5rem">SEO 傳統優化</div>
+        <ul style="font-size:.8rem;color:var(--dim);list-style:none;line-height:1.8">
+          <li>PageRank 排名算法</li>
+          <li>關鍵字密度</li>
+          <li>反向連結數量</li>
+          <li>目標：搜尋結果前十名</li>
+        </ul>
+      </div>
+      <div style="background:var(--card-2);padding:1rem;border-radius:8px">
+        <div style="font-weight:700;font-size:.85rem;color:var(--cyan);margin-bottom:.5rem">AEO AI 優化</div>
+        <ul style="font-size:.8rem;color:var(--dim);list-style:none;line-height:1.8">
+          <li>結構化數據品質</li>
+          <li>llms.txt 導覽文件</li>
+          <li>內容語義理解</li>
+          <li>目標：被 AI 引用推薦</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="font-size:.95rem;margin:1rem 0 .5rem">7 項 AEO 評分指標</h3>
+    <div style="font-size:.85rem;color:var(--dim);line-height:1.8">
+      <p><strong style="color:var(--text)">1. robots.txt 開放（15 分）</strong>— 允許 AI 爬蟲進門。不允許 = AI 完全忽略你。</p>
+      <p><strong style="color:var(--text)">2. llms.txt 導覽（20 分）</strong>— AI 的品牌說明書。告訴 AI 你是誰、做什麼、什麼值得看。</p>
+      <p><strong style="color:var(--text)">3. Schema.org 結構化數據（10 分）</strong>— 讓 AI 用機器語言理解你的實體資料（企業、產品、FAQ）。</p>
+      <p><strong style="color:var(--text)">4. SSR 伺服器端渲染（10 分）</strong>— AI 不執行 JavaScript。頁面內容必須在 HTML 原始碼中可見。</p>
+      <p><strong style="color:var(--text)">5. Meta 標籤（10 分）</strong>— description、OG、canonical、llms-txt link、robots 標籤缺一不可。</p>
+      <p><strong style="color:var(--text)">6. 語義化 HTML（5 分）</strong>— 正確使用 h1/h2/h3 層級、section/article/address 標籤。</p>
+      <p><strong style="color:var(--text)">7. FAQ 結構（5 分）</strong>— FAQPage Schema 讓 AI 直接提取問答對，大幅提高被引用機率。</p>
+      <p><strong style="color:var(--text)">8. Sitemap（10 分）</strong>— 完整的 sitemap.xml 且包含 llms.txt 連結。</p>
+    </div>
+
+    <h3 style="font-size:.95rem;margin:1.5rem 0 .5rem">已驗證的成效</h3>
+    <p style="color:var(--dim);font-size:.9rem;line-height:1.7">
+      CloudPipe 旗下的 AI 學習寶庫經過完整 AEO 優化後，在 30 天內被 6 種 AI 系統主動爬取，包括 Meta AI（25 次）、OpenAI GPT、Claude、Perplexity、Google Gemini 和 Microsoft Bing AI。這證明了結構化的 AEO 策略能有效提升 AI 可見度。
+    </p>
+  </section>
+
+  <footer>
+    <address style="font-style:normal;font-size:12px;color:var(--dim)">
+      <strong>CloudPipe</strong> &middot; AI Automation Platform &middot;
+      GitHub: <a href="https://github.com/Inari-Kira-Isla/cloudpipe-landing">Inari-Kira-Isla/cloudpipe-landing</a>
+    </address>
+    <div style="margin-top:.5rem">
+      <a href="/">CloudPipe 首頁</a> &middot;
+      <a href="/aeo-monitor.html">AI 爬蟲監控</a> &middot;
+      <a href="/ai-footprint.html">CloudPipe 足跡</a>
+    </div>
+    <div style="margin-top:.5rem">&copy; 2026 CloudPipe &middot; CC BY 4.0</div>
+  </footer>
+</div>
+
+<script>
+const CHECK_META = {
+  robots:   { name: "robots.txt AI 開放", icon: "pass:🚪 warn:🚪 fail:🚪" },
+  llms:     { name: "llms.txt AI 導覽", icon: "pass:📋 warn:📋 fail:📋" },
+  schema:   { name: "Schema.org 結構化數據", icon: "pass:🏷 warn:🏷 fail:🏷" },
+  ssr:      { name: "SSR 內容可見度", icon: "pass:📄 warn:📄 fail:📄" },
+  meta:     { name: "Meta 標籤完整性", icon: "pass:🔖 warn:🔖 fail:🔖" },
+  semantic: { name: "語義化 HTML", icon: "pass:🏗 warn:🏗 fail:🏗" },
+  faq:      { name: "FAQ 結構化數據", icon: "pass:❓ warn:❓ fail:❓" },
+  sitemap:  { name: "Sitemap 完整性", icon: "pass:🗺 warn:🗺 fail:🗺" }
+};
+
+const GRADE_COLORS = {
+  "A+": { cls: "grade-aplus", color: "var(--green)" },
+  "A":  { cls: "grade-a", color: "var(--green)" },
+  "B+": { cls: "grade-bplus", color: "var(--blue)" },
+  "B":  { cls: "grade-b", color: "var(--gold)" },
+  "C":  { cls: "grade-c", color: "var(--orange)" },
+  "D":  { cls: "grade-d", color: "var(--red)" },
+  "F":  { cls: "grade-f", color: "var(--red)" }
+};
+
+const SUMMARIES = {
+  "A+": "你的網站 AEO 配置堪稱完美！所有 AI 系統都能完整找到、理解並引用你的內容。",
+  "A":  "優秀的 AEO 配置！大部分 AI 系統都能很好地理解你的網站，還有少量可以優化的空間。",
+  "B+": "不錯的基礎！AI 爬蟲能找到你的網站，但有幾項關鍵配置需要補強。",
+  "B":  "及格的 AEO 基礎。AI 爬蟲可以訪問部分內容，但你的品牌還無法被完整理解。",
+  "C":  "你的網站對 AI 來說只有部分可見。缺少關鍵的 AEO 元素，需要立即改善。",
+  "D":  "AI 爬蟲很難發現你的網站。大多數 AI 系統無法理解你的品牌和業務。",
+  "F":  "你的網站對 AI 完全不可見。當用戶向 AI 詢問相關問題時，你的品牌不會被提及。"
+};
+
+function quickCheck(url) {
+  document.getElementById("url-input").value = url;
+  runCheck();
+}
+
+async function runCheck() {
+  const input = document.getElementById("url-input");
+  let url = input.value.trim();
+  if (!url) return;
+  if (!url.startsWith("http")) url = "https://" + url;
+  input.value = url;
+
+  const btn = document.getElementById("check-btn");
+  const loading = document.getElementById("loading");
+  const scoreArea = document.getElementById("score-area");
+
+  btn.disabled = true;
+  btn.textContent = "檢測中...";
+  loading.style.display = "block";
+  scoreArea.style.display = "none";
+
+  const steps = ["robots.txt", "llms.txt", "HTML 內容與 Schema", "sitemap.xml", "計算分數"];
+  let stepIdx = 0;
+  const stepInterval = setInterval(() => {
+    stepIdx = Math.min(stepIdx + 1, steps.length - 1);
+    document.getElementById("loading-step").textContent = "檢查 " + steps[stepIdx];
+  }, 1500);
+
+  try {
+    const r = await fetch("/api/aeo-check?url=" + encodeURIComponent(url));
+    if (!r.ok) throw new Error("API error");
+    const data = await r.json();
+    if (data.error) throw new Error(data.error);
+
+    clearInterval(stepInterval);
+    loading.style.display = "none";
+    renderResults(data);
+  } catch (e) {
+    clearInterval(stepInterval);
+    loading.style.display = "none";
+    alert("檢測失敗：" + e.message + "\n\n請確認網址可以正常訪問。");
+  }
+
+  btn.disabled = false;
+  btn.textContent = "檢測 AEO 分數";
+}
+
+function renderResults(data) {
+  const scoreArea = document.getElementById("score-area");
+  scoreArea.style.display = "block";
+
+  // Animate score ring
+  const arc = document.getElementById("score-arc");
+  const circumference = 440;
+  const offset = circumference - (data.score / data.maxScore) * circumference;
+  const gc = GRADE_COLORS[data.grade] || GRADE_COLORS["F"];
+  arc.style.stroke = gc.color;
+  setTimeout(() => { arc.style.strokeDashoffset = offset; }, 100);
+
+  // Animate number
+  const numEl = document.getElementById("score-num");
+  let current = 0;
+  const step = Math.max(1, Math.floor(data.score / 30));
+  const counter = setInterval(() => {
+    current += step;
+    if (current >= data.score) { current = data.score; clearInterval(counter); }
+    numEl.textContent = current;
+    numEl.style.color = gc.color;
+  }, 40);
+
+  // Grade badge
+  const badge = document.getElementById("grade-badge");
+  badge.textContent = data.grade;
+  badge.className = "grade-badge " + gc.cls;
+
+  // URL & Summary
+  document.getElementById("score-url").textContent = data.url;
+  document.getElementById("score-summary").textContent = SUMMARIES[data.grade] || "";
+
+  // Check items
+  const order = ["robots", "llms", "schema", "ssr", "meta", "semantic", "faq", "sitemap"];
+  const checksHTML = order.filter(k => data.checks[k]).map(key => {
+    const c = data.checks[key];
+    const meta = CHECK_META[key];
+    const pct = c.score / c.maxScore;
+    const status = pct >= 0.7 ? "pass" : pct >= 0.3 ? "warn" : "fail";
+    const statusColor = status === "pass" ? "var(--green)" : status === "warn" ? "var(--gold)" : "var(--red)";
+
+    return `<div class="check-item">
+      <div class="check-icon check-${status}">${status === "pass" ? "✓" : status === "warn" ? "!" : "✗"}</div>
+      <div>
+        <div class="check-name">${meta.name}</div>
+        <div class="check-detail">${c.detail || ""}</div>
+      </div>
+      <div class="check-score">
+        <div class="check-pts" style="color:${statusColor}">${c.score}</div>
+        <div class="check-max">/ ${c.maxScore}</div>
+      </div>
+    </div>`;
+  }).join("");
+  document.getElementById("checks-list").innerHTML = checksHTML;
+
+  // Recommendations
+  const recsArea = document.getElementById("recs-area");
+  if (data.recommendations && data.recommendations.length > 0) {
+    recsArea.style.display = "block";
+    document.getElementById("recs-list").innerHTML = data.recommendations.map((r, i) =>
+      `<div class="rec-item"><div class="rec-num">${i + 1}</div><div class="rec-text">${r}</div></div>`
+    ).join("");
+  } else {
+    recsArea.style.display = "none";
+  }
+
+  // Scroll to results
+  scoreArea.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+// Enter key
+document.getElementById("url-input").addEventListener("keydown", e => {
+  if (e.key === "Enter") runCheck();
+});
+</script>
+</body>
+</html>
