@@ -8,6 +8,7 @@
   <meta name="keywords" content="CloudPipe, AI自動化, 澳門客服, Facebook自動化, Telegram Bot, MCP Server, 智能客服, SaaS, 澳門AI">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
   <link rel="canonical" href="https://cloudpipe-landing.vercel.app/">
+  <link rel="llms-txt" href="https://cloudpipe-landing.vercel.app/llms.txt">
 
   <!-- Open Graph -->
   <meta property="og:title" content="CloudPipe — AI 自動化平台">
@@ -62,6 +63,20 @@
       { "@type": "Question", "name": "CloudPipe 如何保障資料安全？", "acceptedAnswer": { "@type": "Answer", "text": "所有服務透過 Tailscale 加密網路連接，資料儲存在本地 SQLite，不依賴第三方雲端儲存。SaaS 架構以 tenant_id 嚴格隔離各商家資料。" } },
       { "@type": "Question", "name": "CloudPipe 的定價是多少？", "acceptedAnswer": { "@type": "Answer", "text": "基本方案 MOP$500/月、專業方案 MOP$1,500/月、企業方案 MOP$3,000/月。詳細功能比較請參閱定價頁面。" } }
     ]
+  }
+  </script>
+
+  <!-- Schema.org Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "CloudPipe",
+    "url": "https://cloudpipe-landing.vercel.app",
+    "description": "澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服。",
+    "alternateName": "CloudPipe AI Automation Platform",
+    "address": { "@type": "PostalAddress", "addressLocality": "Macau", "addressRegion": "Macau SAR" },
+    "sameAs": ["https://github.com/Inari-Kira-Isla/cloudpipe-landing"]
   }
   </script>
 
@@ -570,6 +585,7 @@
           <a href="#how-it-works">運作方式</a>
           <a href="pricing.html">定價</a>
           <a href="#stack">技術</a>
+          <a href="architecture.html">架構</a>
           <a href="#faq">FAQ</a>
         </div>
         <a href="#contact" class="nav-cta">立即諮詢 →</a>
@@ -878,9 +894,14 @@
           <a href="#stack">技術</a>
           <a href="#faq">FAQ</a>
           <a href="#contact">聯繫我們</a>
+          <a href="architecture.html">系統架構</a>
           <a href="/api/info.json" target="_blank">API</a>
         </div>
-        <div class="footer-copy">© 2026 CloudPipe · AEO Optimized</div>
+        <address class="footer-contact" style="font-style:normal;font-size:12px;color:var(--text-3)">
+          <strong>CloudPipe</strong> · AI Automation Platform<br>
+          GitHub：<a href="https://github.com/Inari-Kira-Isla/cloudpipe-landing" style="color:var(--text-2)">Inari-Kira-Isla/cloudpipe-landing</a>
+        </address>
+        <div class="footer-copy">© 2026 CloudPipe · CC BY 4.0</div>
       </div>
     </div>
   </footer>

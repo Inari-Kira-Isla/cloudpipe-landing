@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" prefix="og: https://ogp.me/ns#">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CloudPipe — 系統架構 | AI 自動化平台技術全覽</title>
+  <meta name="description" content="CloudPipe 多品牌 AI 自動化平台完整系統架構：5 大微服務、20+ 資料表、21 個 MCP 工具、三層 FAQ 匹配引擎。深入了解每個模組如何協同運作。">
+  <link rel="canonical" href="https://cloudpipe-landing.vercel.app/architecture.html">
+  <link rel="llms-txt" href="https://cloudpipe-landing.vercel.app/llms.txt">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://cloudpipe-landing.vercel.app","description":"澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服。","alternateName":"CloudPipe AI Automation Platform","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"},"sameAs":["https://github.com/Inari-Kira-Isla/cloudpipe-landing"]}</script>
+
+  <meta property="og:title" content="CloudPipe — 系統架構">
+  <meta property="og:description" content="深入了解 CloudPipe AI 自動化平台的技術架構：微服務、資料庫、AI 策略引擎完整解析。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cloudpipe-landing.vercel.app/architecture.html">
+  <meta property="og:locale" content="zh_TW">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:          #080810;
+      --bg-alt:      #0d0d1a;
+      --bg-card:     #111120;
+      --bg-card-h:   #16162a;
+      --cyan:        #00e5ff;
+      --cyan-dim:    rgba(0,229,255,0.10);
+      --cyan-border: rgba(0,229,255,0.20);
+      --cyan-glow:   rgba(0,229,255,0.06);
+      --magenta:     #ff2d7b;
+      --magenta-dim: rgba(255,45,123,0.08);
+      --amber:       #ffab00;
+      --green:       #00e676;
+      --green-dim:   rgba(0,230,118,0.10);
+      --green-border:rgba(0,230,118,0.20);
+      --purple:      #b388ff;
+      --purple-dim:  rgba(179,136,255,0.10);
+      --purple-border:rgba(179,136,255,0.20);
+      --text:        #e6e6f0;
+      --text-2:      #7272a0;
+      --text-3:      #404060;
+      --border:      rgba(255,255,255,0.07);
+      --r:           16px;
+      --r-sm:        10px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .bg-ambient {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 900px 700px at 10% 15%, rgba(0,229,255,0.05), transparent 60%),
+        radial-gradient(ellipse 700px 900px at 90% 85%, rgba(255,45,123,0.04), transparent 60%);
+    }
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 72px 72px;
+    }
+
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+    .container-wide { max-width: 1280px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+    section { padding: 96px 0; }
+    .section-alt { background: var(--bg-alt); }
+
+    .eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--magenta); margin-bottom: 14px;
+    }
+    .section-title {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700; letter-spacing: -1.5px; margin-bottom: 20px;
+    }
+    .section-desc {
+      font-size: 16px; color: var(--text-2); max-width: 640px; margin-bottom: 56px; line-height: 1.8;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, var(--cyan), var(--magenta));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* ── NAVBAR ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      padding: 22px 0; transition: padding 0.3s, background 0.3s;
+    }
+    .nav.scrolled {
+      background: rgba(8,8,16,0.88); backdrop-filter: blur(20px);
+      padding: 14px 0; border-bottom: 1px solid var(--border);
+    }
+    .nav-inner { display: flex; align-items: center; gap: 32px; }
+    .nav-logo {
+      font-family: 'Sora', sans-serif; font-weight: 800; font-size: 20px;
+      letter-spacing: -0.5px;
+    }
+    .nav-logo .c { color: var(--cyan); }
+    .nav-links { display: flex; gap: 28px; margin: 0 auto; }
+    .nav-links a { font-size: 14px; color: var(--text-2); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--cyan); }
+    .nav-cta {
+      font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.5px; padding: 10px 22px; border-radius: 100px;
+      background: var(--cyan); color: #080810; transition: all 0.2s;
+    }
+    .nav-cta:hover { background: #fff; }
+    .nav-burger {
+      display: none; background: none; border: none;
+      color: var(--text-2); cursor: pointer; font-size: 22px; margin-left: auto;
+    }
+    @media (max-width: 760px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-burger { display: block; }
+      .nav.open .nav-links {
+        display: flex; flex-direction: column;
+        position: absolute; top: 100%; left: 0; right: 0;
+        background: var(--bg-alt); border-bottom: 1px solid var(--border);
+      }
+      .nav.open .nav-links a { padding: 14px 24px; border-bottom: 1px solid var(--border); }
+    }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      padding: 160px 0 80px; position: relative;
+    }
+    .page-hero h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 800;
+      line-height: 1.1; letter-spacing: -2px; margin-bottom: 20px;
+      animation: fade-up 0.7s 0.1s both;
+    }
+    .page-hero .hero-sub {
+      font-size: 18px; color: var(--text-2); max-width: 620px;
+      line-height: 1.75; margin-bottom: 40px;
+      animation: fade-up 0.7s 0.25s both;
+    }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── STAT STRIP ── */
+    .stat-strip {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1px; background: var(--border); border-radius: var(--r);
+      overflow: hidden; animation: fade-up 0.7s 0.4s both;
+    }
+    .stat-item {
+      background: var(--bg-card); padding: 28px 24px; text-align: center;
+    }
+    .stat-num {
+      font-family: 'Sora', sans-serif; font-size: 32px; font-weight: 800;
+      line-height: 1;
+    }
+    .stat-num.cyan { color: var(--cyan); }
+    .stat-num.magenta { color: var(--magenta); }
+    .stat-num.green { color: var(--green); }
+    .stat-num.amber { color: var(--amber); }
+    .stat-num.purple { color: var(--purple); }
+    .stat-label { font-size: 12px; color: var(--text-2); margin-top: 6px; }
+
+    /* ── ARCHITECTURE DIAGRAM ── */
+    .arch-diagram {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 48px; position: relative;
+      overflow: hidden;
+    }
+    .arch-diagram::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--magenta), var(--cyan));
+    }
+    .arch-diagram pre {
+      font-family: 'Space Mono', monospace; font-size: 13px;
+      color: var(--text-2); line-height: 1.6; overflow-x: auto;
+      white-space: pre;
+    }
+    .arch-diagram .hl-cyan { color: var(--cyan); }
+    .arch-diagram .hl-magenta { color: var(--magenta); }
+    .arch-diagram .hl-green { color: var(--green); }
+    .arch-diagram .hl-amber { color: var(--amber); }
+    .arch-diagram .hl-purple { color: var(--purple); }
+    .arch-diagram .hl-text { color: var(--text); }
+
+    /* ── SERVICE CARDS ── */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+    }
+    .svc-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 32px;
+      transition: border-color 0.3s, transform 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .svc-card:hover { border-color: var(--cyan-border); transform: translateY(-3px); }
+    .svc-card::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .svc-card:hover::after { opacity: 1; }
+    .svc-header { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+    .svc-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .svc-icon.cyan { background: var(--cyan-dim); border: 1px solid var(--cyan-border); }
+    .svc-icon.magenta { background: var(--magenta-dim); border: 1px solid rgba(255,45,123,0.2); }
+    .svc-icon.green { background: var(--green-dim); border: 1px solid var(--green-border); }
+    .svc-icon.purple { background: var(--purple-dim); border: 1px solid var(--purple-border); }
+    .svc-meta { flex: 1; }
+    .svc-name {
+      font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 600;
+    }
+    .svc-port {
+      font-family: 'Space Mono', monospace; font-size: 11px; color: var(--cyan);
+    }
+    .svc-desc { font-size: 13px; color: var(--text-2); line-height: 1.7; margin-bottom: 16px; }
+    .svc-features { list-style: none; }
+    .svc-features li {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 12px; color: var(--text-2); padding: 4px 0;
+    }
+    .svc-features li::before {
+      content: '▸'; color: var(--cyan); font-size: 10px; margin-top: 2px; flex-shrink: 0;
+    }
+
+    /* ── BRAND CARDS ── */
+    .brands-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .brand-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 28px;
+      transition: border-color 0.3s;
+    }
+    .brand-card:hover { border-color: var(--cyan-border); }
+    .brand-name {
+      font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .brand-type {
+      font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-3);
+      margin-bottom: 12px;
+    }
+    .brand-persona {
+      font-size: 13px; color: var(--text-2); line-height: 1.6;
+      padding: 10px 14px; background: rgba(255,255,255,0.02);
+      border-radius: var(--r-sm); border-left: 2px solid var(--cyan);
+      margin-bottom: 14px;
+    }
+    .brand-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      font-family: 'Space Mono', monospace; font-size: 10px;
+      padding: 3px 10px; border-radius: 4px;
+    }
+    .tag-fb { background: rgba(24,119,242,0.15); color: #5b9cf5; }
+    .tag-th { background: rgba(179,136,255,0.15); color: var(--purple); }
+    .tag-ai { background: var(--cyan-dim); color: var(--cyan); }
+
+    /* ── FAQ MATCHING FLOW ── */
+    .flow-container {
+      display: flex; flex-direction: column; gap: 0;
+      max-width: 640px;
+    }
+    .flow-step {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 24px 28px;
+      position: relative;
+    }
+    .flow-step.active { border-color: var(--cyan-border); }
+    .flow-connector {
+      width: 2px; height: 32px; background: var(--border);
+      margin: 0 auto; position: relative;
+    }
+    .flow-connector::after {
+      content: '▼'; position: absolute; bottom: -6px; left: 50%;
+      transform: translateX(-50%); font-size: 10px; color: var(--text-3);
+    }
+    .flow-num {
+      font-family: 'Space Mono', monospace; font-size: 10px;
+      color: var(--cyan); letter-spacing: 1px; margin-bottom: 6px;
+    }
+    .flow-title {
+      font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .flow-desc { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+    .flow-badge {
+      font-family: 'Space Mono', monospace; font-size: 10px;
+      padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 8px;
+    }
+    .flow-badge.fast { background: rgba(0,230,118,0.12); color: var(--green); }
+    .flow-badge.medium { background: rgba(255,171,0,0.12); color: var(--amber); }
+    .flow-badge.deep { background: rgba(179,136,255,0.12); color: var(--purple); }
+
+    /* ── DB TABLES ── */
+    .db-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .db-group {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 24px;
+    }
+    .db-group-title {
+      font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 600;
+      margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+    }
+    .db-group-title .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .db-table-list { list-style: none; }
+    .db-table-list li {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px; padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .db-table-list li:last-child { border: none; }
+    .db-table-name {
+      font-family: 'Space Mono', monospace; font-size: 12px; color: var(--text);
+    }
+    .db-table-desc { font-size: 11px; color: var(--text-3); }
+
+    /* ── TIMELINE ── */
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before {
+      content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px;
+      width: 2px; background: var(--border);
+    }
+    .tl-item { position: relative; padding: 0 0 36px; }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-dot {
+      position: absolute; left: -32px; top: 6px;
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid var(--cyan); background: var(--bg);
+    }
+    .tl-time {
+      font-family: 'Space Mono', monospace; font-size: 11px;
+      color: var(--cyan); letter-spacing: 0.5px; margin-bottom: 4px;
+    }
+    .tl-title {
+      font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .tl-desc { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+
+    /* ── MCP TOOLS ── */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .tool-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-sm); padding: 16px;
+      transition: border-color 0.2s;
+    }
+    .tool-item:hover { border-color: var(--cyan-border); }
+    .tool-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+      background: var(--cyan-dim); border: 1px solid var(--cyan-border);
+    }
+    .tool-name {
+      font-family: 'Space Mono', monospace; font-size: 12px; color: var(--text);
+      margin-bottom: 2px;
+    }
+    .tool-desc { font-size: 11px; color: var(--text-3); line-height: 1.4; }
+
+    /* ── CTA ── */
+    .cta-box {
+      background: linear-gradient(135deg, rgba(0,229,255,0.07), rgba(255,45,123,0.04));
+      border: 1px solid var(--cyan-border); border-radius: 24px;
+      padding: 80px 48px; text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-box::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 600px 400px at 50% 0%, var(--cyan-glow), transparent);
+      pointer-events: none;
+    }
+    .cta-box h2 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
+      letter-spacing: -1.5px; margin-bottom: 18px;
+    }
+    .cta-box p { font-size: 16px; color: var(--text-2); margin-bottom: 36px; max-width: 460px; margin-inline: auto; }
+    .cta-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; position: relative; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Sora', sans-serif; font-weight: 600; font-size: 14px;
+      padding: 13px 28px; border-radius: 100px;
+      transition: all 0.2s; cursor: pointer; border: none;
+    }
+    .btn-primary { background: var(--cyan); color: #080810; }
+    .btn-primary:hover { background: #fff; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,229,255,0.25); }
+    .btn-outline { background: transparent; color: var(--text-2); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 48px 0; border-top: 1px solid var(--border);
+      position: relative; z-index: 1;
+    }
+    .footer-inner {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 24px;
+    }
+    .footer-brand { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 17px; }
+    .footer-brand .c { color: var(--cyan); }
+    .footer-sub { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 6px 24px; }
+    .footer-links a { font-size: 13px; color: var(--text-2); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { font-size: 11px; color: var(--text-3); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+    .reveal-d4 { transition-delay: 0.4s; }
+
+    @media (max-width: 768px) {
+      .page-hero { padding: 120px 0 48px; }
+      section { padding: 64px 0; }
+      .arch-diagram { padding: 24px; }
+      .arch-diagram pre { font-size: 10px; }
+      .cta-box { padding: 56px 24px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-ambient"></div>
+  <div class="bg-grid"></div>
+
+  <!-- ════════════ NAVBAR ════════════ -->
+  <nav class="nav" id="nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="/" class="nav-logo">Cloud<span class="c">Pipe</span></a>
+        <div class="nav-links" id="navLinks">
+          <a href="/">首頁</a>
+          <a href="#services">微服務</a>
+          <a href="#brands">品牌</a>
+          <a href="#faq-engine">FAQ 引擎</a>
+          <a href="#database">資料庫</a>
+          <a href="#mcp">MCP 工具</a>
+        </div>
+        <a href="#contact" class="nav-cta">立即諮詢 →</a>
+        <button class="nav-burger" id="navBurger" aria-label="選單">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ════════════ PAGE HERO ════════════ -->
+  <header class="page-hero">
+    <div class="container">
+      <p class="eyebrow" style="animation:fade-up 0.7s both">// System Architecture</p>
+      <h1>技術架構<br><span class="gradient-text">深度解析</span></h1>
+      <p class="hero-sub">5 大微服務、20+ 張資料表、21 個 MCP 工具、三層 FAQ 匹配引擎——了解 CloudPipe 如何以模組化架構驅動多品牌 AI 自動化。</p>
+
+      <div class="stat-strip">
+        <div class="stat-item">
+          <div class="stat-num cyan">5+1</div>
+          <div class="stat-label">微服務</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num magenta">6</div>
+          <div class="stat-label">營運品牌</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num green">20+</div>
+          <div class="stat-label">資料表</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num amber">21</div>
+          <div class="stat-label">MCP 工具</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num purple">15</div>
+          <div class="stat-label">Telegram 指令</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ════════════ ARCHITECTURE DIAGRAM ════════════ -->
+  <section style="padding-top:48px">
+    <div class="container">
+      <div class="arch-diagram reveal">
+        <pre>
+                      <span class="hl-text">┌─────────────────────────┐</span>
+                      <span class="hl-text">│</span>   <span class="hl-cyan">Tailscale Funnel</span>      <span class="hl-text">│</span>
+                      <span class="hl-text">│</span>   HTTPS → localhost     <span class="hl-text">│</span>
+                      <span class="hl-text">└────────────┬────────────┘</span>
+                                   │
+                      <span class="hl-text">┌────────────▼────────────┐</span>
+                      <span class="hl-text">│</span>      <span class="hl-cyan">Core Engine</span>         <span class="hl-text">│</span>
+                      <span class="hl-text">│</span>       Port 4000          <span class="hl-text">│</span>
+                      <span class="hl-text">│</span>                           <span class="hl-text">│</span>
+                      <span class="hl-text">│</span>  <span class="hl-amber">/webhook</span>  <span class="hl-green">/api</span>  <span class="hl-purple">/brands</span> <span class="hl-text">│</span>
+                      <span class="hl-text">└─────┬─────┬─────┬───────┘</span>
+                            │     │     │
+         <span class="hl-text">┌─────────────┘     │     └─────────────┐</span>
+         │                   │                   │
+<span class="hl-text">┌────────▼───────┐</span> <span class="hl-text">┌──────▼──────┐</span> <span class="hl-text">┌──────▼──────────┐</span>
+<span class="hl-text">│</span> <span class="hl-magenta">API Proxy</span>      <span class="hl-text">│</span> <span class="hl-text">│</span> <span class="hl-green">FB Autom.</span>  <span class="hl-text">│</span> <span class="hl-text">│</span> <span class="hl-purple">Threads Pub.</span>    <span class="hl-text">│</span>
+<span class="hl-text">│</span> Port 4002      <span class="hl-text">│</span> <span class="hl-text">│</span> Port 4004  <span class="hl-text">│</span> <span class="hl-text">│</span> Port 4005       <span class="hl-text">│</span>
+<span class="hl-text">│</span>                <span class="hl-text">│</span> <span class="hl-text">│</span>            <span class="hl-text">│</span> <span class="hl-text">│</span>                 <span class="hl-text">│</span>
+<span class="hl-text">│</span> Claude Max ─┐  <span class="hl-text">│</span> <span class="hl-text">│</span> Messenger  <span class="hl-text">│</span> <span class="hl-text">│</span> Queue/Autopilot <span class="hl-text">│</span>
+<span class="hl-text">│</span> MiniMax    ─┤  <span class="hl-text">│</span> <span class="hl-text">│</span> Comments   <span class="hl-text">│</span> <span class="hl-text">│</span> Auto-reply      <span class="hl-text">│</span>
+<span class="hl-text">│</span> Anthropic  ─┘  <span class="hl-text">│</span> <span class="hl-text">│</span> Posts      <span class="hl-text">│</span> <span class="hl-text">│</span> Metrics/Learn   <span class="hl-text">│</span>
+<span class="hl-text">└────────────────┘</span> <span class="hl-text">│</span> Metrics    <span class="hl-text">│</span> <span class="hl-text">│</span> Strategy        <span class="hl-text">│</span>
+                   <span class="hl-text">└────────────┘</span> <span class="hl-text">└─────────────────┘</span>
+
+<span class="hl-text">┌──────────────────────────────────────────────────┐</span>
+<span class="hl-text">│</span>           <span class="hl-amber">Telegram Bot</span> (Port 4003)               <span class="hl-text">│</span>
+<span class="hl-text">│</span>        15 Commands / Admin Management            <span class="hl-text">│</span>
+<span class="hl-text">└──────────────────────────────────────────────────┘</span>
+<span class="hl-text">┌──────────────────────────────────────────────────┐</span>
+<span class="hl-text">│</span>            <span class="hl-cyan">MCP Server</span> (stdio)                    <span class="hl-text">│</span>
+<span class="hl-text">│</span>        21 Tools / AI Agent Integration           <span class="hl-text">│</span>
+<span class="hl-text">└──────────────────────────┬───────────────────────┘</span>
+                           │
+                  <span class="hl-text">┌────────▼────────┐</span>
+                  <span class="hl-text">│</span>    <span class="hl-green">SQLite DB</span>     <span class="hl-text">│</span>
+                  <span class="hl-text">│</span>  better-sqlite3  <span class="hl-text">│</span>
+                  <span class="hl-text">│</span>  WAL Mode        <span class="hl-text">│</span>
+                  <span class="hl-text">│</span>  20+ Tables      <span class="hl-text">│</span>
+                  <span class="hl-text">└─────────────────┘</span>
+        </pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ MICROSERVICES ════════════ -->
+  <section id="services" class="section-alt">
+    <div class="container">
+      <p class="eyebrow reveal">// Microservices</p>
+      <h2 class="section-title reveal">六大微服務架構</h2>
+      <p class="section-desc reveal">每個服務獨立運行、獨立端口，透過內部 HTTP 通訊協作。共享 SQLite 資料庫，brand_slug 欄位隔離多品牌資料。</p>
+
+      <div class="services-grid">
+        <div class="svc-card reveal reveal-d1">
+          <div class="svc-header">
+            <div class="svc-icon cyan">⚡</div>
+            <div class="svc-meta">
+              <div class="svc-name">Core Engine</div>
+              <div class="svc-port">Port 4000</div>
+            </div>
+          </div>
+          <div class="svc-desc">系統入口與路由中樞，處理所有外部 Webhook 和管理後台。</div>
+          <ul class="svc-features">
+            <li>Facebook Webhook 接收與路由</li>
+            <li>品牌管理 Web UI (/brands)</li>
+            <li>FAQ 管理 Web UI (/faq)</li>
+            <li>REST API 統一入口</li>
+            <li>FAQ ↔ Google Sheets 雙向同步</li>
+            <li>FAQ ← Gmail 自動匯入</li>
+          </ul>
+        </div>
+
+        <div class="svc-card reveal reveal-d2">
+          <div class="svc-header">
+            <div class="svc-icon magenta">🔀</div>
+            <div class="svc-meta">
+              <div class="svc-name">API Proxy</div>
+              <div class="svc-port">Port 4002</div>
+            </div>
+          </div>
+          <div class="svc-desc">AI 模型統一代理層，支援多 Provider 智能切換。</div>
+          <ul class="svc-features">
+            <li>OpenAI 相容格式 /v1/chat/completions</li>
+            <li>Anthropic 格式 /v1/messages</li>
+            <li>Claude Max (本機 proxy)</li>
+            <li>MiniMax M2.5 (131K context)</li>
+            <li>Bearer Token 認證</li>
+          </ul>
+        </div>
+
+        <div class="svc-card reveal reveal-d3">
+          <div class="svc-header">
+            <div class="svc-icon green">💬</div>
+            <div class="svc-meta">
+              <div class="svc-name">FB Automation</div>
+              <div class="svc-port">Port 4004</div>
+            </div>
+          </div>
+          <div class="svc-desc">Facebook 多品牌自動化：客服、發文、評論、數據。</div>
+          <ul class="svc-features">
+            <li>Messenger 自動客服 (FAQ + AI)</li>
+            <li>評論自動回覆 (Poller)</li>
+            <li>5 時段自動發文 (Autopilot)</li>
+            <li>每 6 小時互動數據收集</li>
+            <li>每日策略優化 (23:00 HKT)</li>
+          </ul>
+        </div>
+
+        <div class="svc-card reveal reveal-d1">
+          <div class="svc-header">
+            <div class="svc-icon purple">📡</div>
+            <div class="svc-meta">
+              <div class="svc-name">Threads Publisher</div>
+              <div class="svc-port">Port 4005</div>
+            </div>
+          </div>
+          <div class="svc-desc">多品牌 Threads 自動發文引擎，含學習系統。</div>
+          <ul class="svc-features">
+            <li>發文佇列 + Autopilot 自動補充</li>
+            <li>品牌人設 × 時段 Prompt Builder</li>
+            <li>互動數據 → AI 分析 → 寫作洞察</li>
+            <li>Auto-reply 自動回覆留言</li>
+            <li>競品研究 (02:00 HKT)</li>
+          </ul>
+        </div>
+
+        <div class="svc-card reveal reveal-d2">
+          <div class="svc-header">
+            <div class="svc-icon cyan">📱</div>
+            <div class="svc-meta">
+              <div class="svc-name">Telegram Bot</div>
+              <div class="svc-port">Port 4003</div>
+            </div>
+          </div>
+          <div class="svc-desc">管理員唯一操作介面，15 個指令覆蓋所有管理需求。</div>
+          <ul class="svc-features">
+            <li>/status — 系統狀態一覽</li>
+            <li>/brands — 品牌管理</li>
+            <li>/faq — FAQ 知識庫管理</li>
+            <li>/fb — Facebook 發文管理</li>
+            <li>/threads — Threads 管理</li>
+            <li>/strategy — AI 策略報告</li>
+          </ul>
+        </div>
+
+        <div class="svc-card reveal reveal-d3">
+          <div class="svc-header">
+            <div class="svc-icon green">🔧</div>
+            <div class="svc-meta">
+              <div class="svc-name">MCP Server</div>
+              <div class="svc-port">stdio</div>
+            </div>
+          </div>
+          <div class="svc-desc">Model Context Protocol 伺服器，21 個工具供 AI Agent 調用。</div>
+          <ul class="svc-features">
+            <li>系統管理 (status, brands, chat)</li>
+            <li>Threads 操作 (12 工具)</li>
+            <li>Facebook 操作 (7 工具)</li>
+            <li>Claude Code 直接整合</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ BRAND SYSTEM ════════════ -->
+  <section id="brands">
+    <div class="container">
+      <p class="eyebrow reveal">// Multi-Brand</p>
+      <h2 class="section-title reveal">多品牌管理系統</h2>
+      <p class="section-desc reveal">資料庫驅動，5 分鐘 TTL 記憶體快取。每個品牌擁有獨立的 AI 人設、FAQ 知識庫、社群帳號和客服規範。可透過 Web UI、REST API 或 Telegram 動態管理。</p>
+
+      <div class="brands-grid">
+        <div class="brand-card reveal reveal-d1">
+          <div class="brand-name">山中田</div>
+          <div class="brand-type">AI 資訊分享平台</div>
+          <div class="brand-persona">「科技宅的鄰家朋友」— 平易近人但有深度，偶爾冷幽默，常說「試試看就知道了」</div>
+          <div class="brand-tags">
+            <span class="tag tag-fb">Facebook</span>
+            <span class="tag tag-th">Threads</span>
+            <span class="tag tag-ai">MiniMax M2.5</span>
+          </div>
+        </div>
+
+        <div class="brand-card reveal reveal-d2">
+          <div class="brand-name">海膽速遞</div>
+          <div class="brand-type">生鮮配送</div>
+          <div class="brand-persona">「吃貨達人」— 熱情洋溢，用感官描述讓人隔著螢幕都想吃</div>
+          <div class="brand-tags">
+            <span class="tag tag-fb">Facebook</span>
+            <span class="tag tag-ai">MiniMax M2.5</span>
+          </div>
+        </div>
+
+        <div class="brand-card reveal reveal-d3">
+          <div class="brand-name">After School Coffee</div>
+          <div class="brand-type">親子咖啡店</div>
+          <div class="brand-persona">「媽媽閨蜜」— 溫暖療癒，懂得父母辛苦，常說「辛苦了」</div>
+          <div class="brand-tags">
+            <span class="tag tag-fb">Facebook</span>
+            <span class="tag tag-th">Threads</span>
+            <span class="tag tag-ai">MiniMax M2.5</span>
+          </div>
+        </div>
+
+        <div class="brand-card reveal reveal-d1">
+          <div class="brand-name">稻荷環球食品</div>
+          <div class="brand-type">進口食品</div>
+          <div class="brand-persona">「環球美食探險家」— 見多識廣、專業但親切，對各國食材如數家珍</div>
+          <div class="brand-tags">
+            <span class="tag tag-fb">Facebook</span>
+            <span class="tag tag-ai">MiniMax M2.5</span>
+          </div>
+        </div>
+
+        <div class="brand-card reveal reveal-d2">
+          <div class="brand-name">Claude Max</div>
+          <div class="brand-type">AI 服務平台</div>
+          <div class="brand-persona">「AI 實踐者」— 務實、前瞻、有批判性思維，不盲目吹捧 AI</div>
+          <div class="brand-tags">
+            <span class="tag tag-fb">Facebook</span>
+            <span class="tag tag-ai">MiniMax M2.5</span>
+          </div>
+        </div>
+
+        <div class="brand-card reveal reveal-d3">
+          <div class="brand-name">OpenClaw</div>
+          <div class="brand-type">AI 自動化平台</div>
+          <div class="brand-persona">「自動化傳教士」— 從「你有沒有遇過這個問題」開始，然後展示解決方案</div>
+          <div class="brand-tags">
+            <span class="tag tag-fb">Facebook</span>
+            <span class="tag tag-ai">MiniMax M2.5</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ FAQ ENGINE ════════════ -->
+  <section id="faq-engine" class="section-alt">
+    <div class="container">
+      <p class="eyebrow reveal">// FAQ Matching Engine</p>
+      <h2 class="section-title reveal">三層智能匹配引擎</h2>
+      <p class="section-desc reveal">客戶訊息經過三層匹配，從最快的精確匹配到最深的 AI 回覆，確保回覆品質與速度的最佳平衡。</p>
+
+      <div class="flow-container reveal">
+        <div class="flow-step active">
+          <div class="flow-num">LAYER 01</div>
+          <div class="flow-title">關鍵字精確匹配</div>
+          <div class="flow-desc">比對 FAQ 條目的 keywords JSON 陣列，完全命中即直接回傳。</div>
+          <div class="flow-badge fast">FASTEST — 命中即回</div>
+        </div>
+        <div class="flow-connector"></div>
+        <div class="flow-step">
+          <div class="flow-num">LAYER 02</div>
+          <div class="flow-title">TF-IDF 餘弦相似度</div>
+          <div class="flow-desc">計算問題與 FAQ 的 TF-IDF 向量餘弦距離，分數 ≥ 0.70 視為匹配。</div>
+          <div class="flow-badge medium">SEMANTIC — 閾值 0.70</div>
+        </div>
+        <div class="flow-connector"></div>
+        <div class="flow-step">
+          <div class="flow-num">LAYER 03</div>
+          <div class="flow-title">Bigram Jaccard 係數</div>
+          <div class="flow-desc">以字元 Bigram 集合計算 Jaccard 相似係數，捕捉拼寫變體和模糊匹配。</div>
+          <div class="flow-badge medium">FUZZY — 閾值 0.70</div>
+        </div>
+        <div class="flow-connector"></div>
+        <div class="flow-step">
+          <div class="flow-num">FALLBACK</div>
+          <div class="flow-title">AI 智能回覆</div>
+          <div class="flow-desc">三層皆未命中時，載入品牌 systemPrompt + 對話歷史，呼叫 AI 生成回覆。</div>
+          <div class="flow-badge deep">AI AGENT — 品牌人設</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ DATABASE ════════════ -->
+  <section id="database">
+    <div class="container">
+      <p class="eyebrow reveal">// Database Schema</p>
+      <h2 class="section-title reveal">20+ 張資料表</h2>
+      <p class="section-desc reveal">SQLite (better-sqlite3) + WAL Mode，以 brand_slug 欄位實現多品牌資料隔離。</p>
+
+      <div class="db-grid">
+        <div class="db-group reveal reveal-d1">
+          <div class="db-group-title">
+            <span class="dot" style="background:var(--cyan)"></span>
+            核心資料
+          </div>
+          <ul class="db-table-list">
+            <li><span class="db-table-name">brands</span><span class="db-table-desc">品牌設定 (JSON config)</span></li>
+            <li><span class="db-table-name">conversations</span><span class="db-table-desc">對話記錄</span></li>
+            <li><span class="db-table-name">messages</span><span class="db-table-desc">訊息內容</span></li>
+            <li><span class="db-table-name">api_usage</span><span class="db-table-desc">API Token 用量</span></li>
+          </ul>
+        </div>
+
+        <div class="db-group reveal reveal-d2">
+          <div class="db-group-title">
+            <span class="dot" style="background:var(--purple)"></span>
+            Threads 自動化
+          </div>
+          <ul class="db-table-list">
+            <li><span class="db-table-name">threads_posts</span><span class="db-table-desc">已發佈貼文</span></li>
+            <li><span class="db-table-name">threads_metrics</span><span class="db-table-desc">互動指標時間序列</span></li>
+            <li><span class="db-table-name">threads_learnings</span><span class="db-table-desc">AI 寫作洞察</span></li>
+            <li><span class="db-table-name">threads_queue</span><span class="db-table-desc">發文佇列</span></li>
+            <li><span class="db-table-name">threads_journal</span><span class="db-table-desc">成長日誌</span></li>
+          </ul>
+        </div>
+
+        <div class="db-group reveal reveal-d3">
+          <div class="db-group-title">
+            <span class="dot" style="background:var(--green)"></span>
+            Facebook 自動化
+          </div>
+          <ul class="db-table-list">
+            <li><span class="db-table-name">fb_post_queue</span><span class="db-table-desc">發文佇列</span></li>
+            <li><span class="db-table-name">fb_posts</span><span class="db-table-desc">已發佈貼文</span></li>
+            <li><span class="db-table-name">fb_autopilot_config</span><span class="db-table-desc">自動發文設定</span></li>
+            <li><span class="db-table-name">fb_post_metrics</span><span class="db-table-desc">貼文互動指標</span></li>
+            <li><span class="db-table-name">fb_learnings</span><span class="db-table-desc">AI 學習洞察</span></li>
+          </ul>
+        </div>
+
+        <div class="db-group reveal reveal-d1">
+          <div class="db-group-title">
+            <span class="dot" style="background:var(--magenta)"></span>
+            AI 策略
+          </div>
+          <ul class="db-table-list">
+            <li><span class="db-table-name">daily_strategy</span><span class="db-table-desc">每日策略計畫</span></li>
+            <li><span class="db-table-name">competitor_research</span><span class="db-table-desc">競品研究報告</span></li>
+          </ul>
+        </div>
+
+        <div class="db-group reveal reveal-d2">
+          <div class="db-group-title">
+            <span class="dot" style="background:var(--amber)"></span>
+            FAQ 知識庫
+          </div>
+          <ul class="db-table-list">
+            <li><span class="db-table-name">faq_entries</span><span class="db-table-desc">問答條目 + 關鍵字</span></li>
+            <li><span class="db-table-name">faq_sync_log</span><span class="db-table-desc">同步日誌</span></li>
+          </ul>
+        </div>
+
+        <div class="db-group reveal reveal-d3">
+          <div class="db-group-title">
+            <span class="dot" style="background:var(--text-2)"></span>
+            監控
+          </div>
+          <ul class="db-table-list">
+            <li><span class="db-table-name">site_monitors</span><span class="db-table-desc">網站變更監控</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ MCP TOOLS ════════════ -->
+  <section id="mcp" class="section-alt">
+    <div class="container">
+      <p class="eyebrow reveal">// MCP Server</p>
+      <h2 class="section-title reveal">21 個 MCP 工具</h2>
+      <p class="section-desc reveal">透過 Model Context Protocol (stdio)，AI Agent 可直接操作 CloudPipe 所有功能。整合到 Claude Code 實現自然語言管理。</p>
+
+      <div style="margin-bottom:32px">
+        <p class="eyebrow reveal" style="color:var(--cyan);margin-bottom:16px">系統 (3)</p>
+        <div class="tools-grid reveal">
+          <div class="tool-item">
+            <div class="tool-icon">📊</div>
+            <div>
+              <div class="tool-name">cloudpipe_status</div>
+              <div class="tool-desc">各服務健康狀態</div>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon">🏷️</div>
+            <div>
+              <div class="tool-name">cloudpipe_brands</div>
+              <div class="tool-desc">品牌列表</div>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon">💬</div>
+            <div>
+              <div class="tool-name">cloudpipe_chat</div>
+              <div class="tool-desc">AI 對話</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:32px">
+        <p class="eyebrow reveal" style="color:var(--purple);margin-bottom:16px">Threads (12)</p>
+        <div class="tools-grid reveal">
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--purple-dim);border-color:var(--purple-border)">📈</div>
+            <div><div class="tool-name">threads_dashboard</div><div class="tool-desc">Threads 總覽</div></div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--purple-dim);border-color:var(--purple-border)">✍️</div>
+            <div><div class="tool-name">threads_generate</div><div class="tool-desc">AI 生成貼文</div></div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--purple-dim);border-color:var(--purple-border)">🚀</div>
+            <div><div class="tool-name">threads_publish</div><div class="tool-desc">發佈到 Threads</div></div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--purple-dim);border-color:var(--purple-border)">⚡</div>
+            <div><div class="tool-name">threads_generate_and_publish</div><div class="tool-desc">生成 + 發佈一步到位</div></div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--purple-dim);border-color:var(--purple-border)">📋</div>
+            <div><div class="tool-name">threads_queue</div><div class="tool-desc">佇列管理</div></div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--purple-dim);border-color:var(--purple-border)">➕</div>
+            <div><div class="tool-name">threads_queue_add</div><div class="tool-desc">新增到佇列</div></div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--purple-dim);border-color:var(--purple-border)">📄</div>
+            <div><div class="tool-name">threads_posts</div><div class="tool-desc">已發佈貼文列表</div></div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--purple-dim);border-color:var(--purple-border)">📊</div>
+            <div><div class="tool-name">threads_collect_metrics</div><div class="tool-desc">收集互動指標</div></div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--purple-dim);border-color:var(--purple-border)">🧠</div>
+            <div><div class="tool-name">threads_run_analysis</div><div class="tool-desc">AI 分析表現</div></div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--purple-dim);border-color:var(--purple-border)">💡</div>
+            <div><div class="tool-name">threads_learnings</div><div class="tool-desc">寫作洞察</div></div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--purple-dim);border-color:var(--purple-border)">🤖</div>
+            <div><div class="tool-name">threads_autopilot</div><div class="tool-desc">Autopilot 開關</div></div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--purple-dim);border-color:var(--purple-border)">🎯</div>
+            <div><div class="tool-name">threads_smart_status</div><div class="tool-desc">AI 智能狀態建議</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="eyebrow reveal" style="color:var(--green);margin-bottom:16px">Facebook (7)</p>
+        <div class="tools-grid reveal">
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--green-dim);border-color:var(--green-border)">💬</div>
+            <div><div class="tool-name">fb_conversations</div><div class="tool-desc">對話列表</div></div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--green-dim);border-color:var(--green-border)">📨</div>
+            <div><div class="tool-name">fb_messages</div><div class="tool-desc">訊息記錄</div></div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--green-dim);border-color:var(--green-border)">📊</div>
+            <div><div class="tool-name">fb_stats</div><div class="tool-desc">統計數據</div></div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--green-dim);border-color:var(--green-border)">💭</div>
+            <div><div class="tool-name">fb_comments</div><div class="tool-desc">評論列表</div></div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--green-dim);border-color:var(--green-border)">📈</div>
+            <div><div class="tool-name">fb_comment_stats</div><div class="tool-desc">評論統計</div></div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-icon" style="background:var(--green-dim);border-color:var(--green-border)">🔄</div>
+            <div><div class="tool-name">fb_autoreply_toggle</div><div class="tool-desc">自動回覆開關</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ AI STRATEGY ════════════ -->
+  <section id="strategy">
+    <div class="container">
+      <p class="eyebrow reveal">// AI Strategy Engine</p>
+      <h2 class="section-title reveal">AI 策略自動化</h2>
+      <p class="section-desc reveal">每日自動分析歷史數據，生成最佳內容策略。學習系統持續優化，越用越聰明。</p>
+
+      <div class="timeline reveal">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-time">每日 09:00 / 12:00 / 15:00 / 18:00 / 21:00 HKT</div>
+          <div class="tl-title">自動發文 (5 時段)</div>
+          <div class="tl-desc">Autopilot 按照每日策略，為每個品牌在最佳時段發佈 AI 生成的內容。早上勵志、中午乾貨、下午互動、傍晚深度、夜晚感性。</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-time">每 6 小時</div>
+          <div class="tl-title">數據收集</div>
+          <div class="tl-desc">收集所有品牌的 Facebook 和 Threads 貼文互動指標（views, likes, replies, shares），寫入 metrics 時間序列表。</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-time">每日 23:00 HKT</div>
+          <div class="tl-title">Nightly Optimizer</div>
+          <div class="tl-desc">AI 分析過去 7 天全品牌數據，識別最佳 hook type、topic、timing 組合，為每個品牌 × 每個時段生成明日策略。</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-time">每日 02:00 HKT</div>
+          <div class="tl-title">競品研究</div>
+          <div class="tl-desc">AI 分析同類型品牌的社群趨勢，提供主題建議和角度啟發，輸出存入 competitor_research 表供策略參考。</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-time">持續運行</div>
+          <div class="tl-title">學習閉環</div>
+          <div class="tl-desc">互動數據 → AI 分析 → 寫作洞察 (learnings 表) → 影響 Prompt → 生成更好的內容 → 更高互動 → 更多數據。自我強化的正向循環。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ TECH INTEGRATION ════════════ -->
+  <section class="section-alt">
+    <div class="container">
+      <p class="eyebrow reveal">// External Integrations</p>
+      <h2 class="section-title reveal">外部服務整合</h2>
+
+      <div class="services-grid reveal">
+        <div class="svc-card">
+          <div class="svc-header">
+            <div class="svc-icon cyan">📘</div>
+            <div class="svc-meta">
+              <div class="svc-name">Facebook Graph API</div>
+              <div class="svc-port">6 粉專</div>
+            </div>
+          </div>
+          <ul class="svc-features">
+            <li>Messenger 收發訊息</li>
+            <li>粉專發佈貼文</li>
+            <li>評論讀取/回覆</li>
+            <li>貼文互動指標</li>
+          </ul>
+        </div>
+
+        <div class="svc-card">
+          <div class="svc-header">
+            <div class="svc-icon purple">🔗</div>
+            <div class="svc-meta">
+              <div class="svc-name">Threads API</div>
+              <div class="svc-port">2 帳號</div>
+            </div>
+          </div>
+          <ul class="svc-features">
+            <li>OAuth 2.0 Long-lived Token</li>
+            <li>Container → Publish 發文流程</li>
+            <li>互動指標 Insights API</li>
+            <li>回覆列表 Replies API</li>
+          </ul>
+        </div>
+
+        <div class="svc-card">
+          <div class="svc-header">
+            <div class="svc-icon green">📊</div>
+            <div class="svc-meta">
+              <div class="svc-name">Google Sheets API</div>
+              <div class="svc-port">FAQ 同步</div>
+            </div>
+          </div>
+          <ul class="svc-features">
+            <li>每品牌一個 Sheet Tab</li>
+            <li>雙向同步 (DB ↔ Sheet)</li>
+            <li>Service Account 認證</li>
+          </ul>
+        </div>
+
+        <div class="svc-card">
+          <div class="svc-header">
+            <div class="svc-icon magenta">📧</div>
+            <div class="svc-meta">
+              <div class="svc-name">Gmail API</div>
+              <div class="svc-port">FAQ 匯入</div>
+            </div>
+          </div>
+          <ul class="svc-features">
+            <li>Label-based 過濾</li>
+            <li>自動解析 Q&A 格式</li>
+            <li>寫入 faq_entries 表</li>
+          </ul>
+        </div>
+
+        <div class="svc-card">
+          <div class="svc-header">
+            <div class="svc-icon cyan">🔒</div>
+            <div class="svc-meta">
+              <div class="svc-name">Tailscale</div>
+              <div class="svc-port">Funnel</div>
+            </div>
+          </div>
+          <ul class="svc-features">
+            <li>HTTPS 加密對外暴露</li>
+            <li>Facebook Webhook 回呼</li>
+            <li>零配置 VPN 網路</li>
+          </ul>
+        </div>
+
+        <div class="svc-card">
+          <div class="svc-header">
+            <div class="svc-icon green">🤖</div>
+            <div class="svc-meta">
+              <div class="svc-name">AI Models</div>
+              <div class="svc-port">Multi-Provider</div>
+            </div>
+          </div>
+          <ul class="svc-features">
+            <li>Claude Max (本機 proxy)</li>
+            <li>MiniMax M2.5 (131K context)</li>
+            <li>按品牌設定模型</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ CTA ════════════ -->
+  <section id="contact" style="padding:96px 0">
+    <div class="container">
+      <div class="cta-box reveal">
+        <h2>想了解更多<br><span class="gradient-text">技術細節</span>？</h2>
+        <p>我們可以為你的業務量身定制方案，免費技術諮詢。</p>
+        <div class="cta-actions">
+          <a href="/" class="btn btn-primary">返回首頁 →</a>
+          <a href="pricing.html" class="btn btn-outline">查看定價方案</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ FOOTER ════════════ -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand">Cloud<span class="c">Pipe</span></div>
+          <div class="footer-sub">AI Automation Platform · Macau SAR</div>
+        </div>
+        <div class="footer-links">
+          <a href="/">首頁</a>
+          <a href="pricing.html">定價</a>
+          <a href="architecture.html">架構</a>
+          <a href="#contact">聯繫我們</a>
+        </div>
+        <address class="footer-contact" style="font-style:normal;font-size:12px;color:var(--text-3)">
+          <strong>CloudPipe</strong> · AI Automation Platform<br>
+          GitHub：<a href="https://github.com/Inari-Kira-Isla/cloudpipe-landing" style="color:var(--text-2)">Inari-Kira-Isla/cloudpipe-landing</a>
+        </address>
+        <div class="footer-copy">© 2026 CloudPipe · CC BY 4.0</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40));
+    document.getElementById('navBurger').addEventListener('click', () => nav.classList.toggle('open'));
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
