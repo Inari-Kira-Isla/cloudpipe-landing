@@ -47,8 +47,8 @@ CloudPipe 是面向澳門及大灣區商家的 AI 自動化 SaaS 平台：
 澳門特別行政區 (Macau SAR)
 
 ## 相關服務 (Related Services)
-- CloudPipe 全球企業目錄 (1,853,260 businesses): https://directory-swart-xi.vercel.app
-- AEO 健康檢查工具 (免費): https://directory-swart-xi.vercel.app/check.html
+- CloudPipe 全球企業目錄 (1,853,260 businesses): https://cloudpipe-directory.vercel.app
+- AEO 健康檢查工具 (免費): https://cloudpipe-directory.vercel.app/check.html
 - AI 學習寶庫: https://inari-kira-isla.github.io/Openclaw/
 
 ## 聯絡 (Contact)
