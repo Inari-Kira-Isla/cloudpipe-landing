@@ -1,20 +1,59 @@
+# ==========================================
+# CloudPipe — robots.txt
+# AI-Friendly: All AI crawlers welcome
+# ==========================================
+
 User-agent: *
 Allow: /
 
-# AI Crawlers Welcome
+# OpenAI
 User-agent: GPTBot
 Allow: /
 
+# Anthropic Claude
 User-agent: ClaudeBot
 Allow: /
+User-agent: anthropic-ai
+Allow: /
 
+# Perplexity AI
 User-agent: PerplexityBot
 Allow: /
 
+# Google AI (Gemini)
+User-agent: Google-Extended
+Allow: /
 User-agent: Googlebot
 Allow: /
 
+# Microsoft Bing AI
 User-agent: Bingbot
+Allow: /
+
+# Meta AI
+User-agent: meta-externalagent
+Allow: /
+User-agent: FacebookBot
+Allow: /
+
+# Apple AI
+User-agent: Applebot-Extended
+Allow: /
+
+# Common Crawl
+User-agent: CCBot
+Allow: /
+
+# ByteDance AI
+User-agent: Bytespider
+Allow: /
+
+# You.com AI
+User-agent: YouBot
+Allow: /
+
+# Cohere AI
+User-agent: cohere-ai
 Allow: /
 
 Sitemap: https://cloudpipe-landing.vercel.app/sitemap.xml
