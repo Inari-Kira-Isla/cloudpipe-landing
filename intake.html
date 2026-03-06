@@ -665,6 +665,22 @@
           const successCard = document.getElementById('success-card');
           successCard.style.display = 'block';
           document.getElementById('success-url').textContent = result.url || `https://${data.business_name_en}.vercel.app`;
+
+          // Show stats
+          const stats = result.stats || {};
+          const pending = result.deploy_method === 'pending';
+          if (pending) {
+            document.querySelector('.success-icon').textContent = '&#9889;';
+            successCard.querySelector('h2').textContent = '網站內容已生成';
+            successCard.querySelector('p').innerHTML =
+              `AI 已生成 ${stats.faq_count || 0} 題 FAQ、${stats.topic_count || 0} 篇文章主題<br>` +
+              `Schema.org: ${result.schema_type}<br>` +
+              `系統將在數分鐘內完成部署，届時通知您。`;
+          } else {
+            successCard.querySelector('p').innerHTML =
+              `AEO 合規網站已自動部署上線<br>` +
+              `FAQ: ${stats.faq_count || 0} 題 · 主題池: ${stats.topic_count || 0} 篇 · Schema: ${result.schema_type}`;
+          }
         } else {
           alert(result.error || '建站失敗，請稍後重試');
         }
