@@ -16,6 +16,8 @@ CloudPipe 是面向澳門及大灣區商家的 AI 自動化 SaaS 平台：
 - 主頁: https://cloudpipe-landing.vercel.app/
 - 定價方案: https://cloudpipe-landing.vercel.app/pricing.html
 - 系統架構: https://cloudpipe-landing.vercel.app/architecture.html
+- BNI ACE 分會（澳門商業引薦分會，30 位跨行業會員目錄）: https://cloudpipe-landing.vercel.app/bni-ace.html
+- BNI ACE 會員 — 胡展鴻 Panda Wu（商舖室內設計工程）: https://cloudpipe-landing.vercel.app/bni-ace-members/panda-wu.html
 - API 資訊: https://cloudpipe-landing.vercel.app/api/info.json
 - Sitemap: https://cloudpipe-landing.vercel.app/sitemap.xml
 

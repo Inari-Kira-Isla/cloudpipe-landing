@@ -37,6 +37,8 @@
   --red:#CC0000;--red-dark:#990000;--red-light:#ff1a1a;
   --white:#ffffff;--off-white:#fafafa;--light-gray:#f2f2f2;
   --gray-100:#e8e8e8;--gray-200:#d0d0d0;--gray-400:#888;--gray-600:#555;--gray-800:#222;
+  --warm:#F5E6D3;--warm-light:#FBF5EE;--warm-dark:#E8D5BE;
+  --navy:#1a1a2e;--navy-light:#2d2d44;
   --r:12px;--r-sm:8px;
 }
 html{scroll-behavior:smooth}
@@ -60,7 +62,10 @@ nav .nav-links a:hover{color:var(--red)}
 @media(max-width:600px){nav .nav-links a:not(.nav-cta){display:none}}
 
 /* Hero */
-.hero{padding:130px 0 48px;text-align:center}
+.hero{padding:130px 0 48px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,var(--warm-light) 0%,var(--white) 40%,var(--white) 60%,rgba(245,230,211,0.15) 100%);z-index:0}
+.hero::after{content:'';position:absolute;top:-60px;right:-60px;width:320px;height:320px;border:2px solid rgba(204,0,0,0.06);border-radius:50%;z-index:0}
+.hero .container{position:relative;z-index:1}
 .eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:14px;display:block}
 .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;margin-bottom:14px;color:var(--gray-800)}
 .hero h1 em{font-style:normal;color:var(--red)}
@@ -69,18 +74,34 @@ nav .nav-links a:hover{color:var(--red)}
 .hero-badge .dot{width:8px;height:8px;background:var(--red);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
+/* Section divider */
+.section-divider{position:relative;height:48px;overflow:hidden}
+.section-divider::before{content:'';position:absolute;top:0;left:0;right:0;height:100%;background:var(--off-white);clip-path:polygon(0 0,100% 40%,100% 100%,0 100%)}
+.section-divider.reverse::before{clip-path:polygon(0 40%,100% 0,100% 100%,0 100%)}
+.section-divider.to-white::before{background:var(--white)}
+.section-divider.from-navy::before{background:var(--off-white)}
+.section-divider.warm-to-white::before{background:var(--white)}
+
 /* Section */
 .section-header{text-align:center;margin-bottom:36px}
 .section-header h2{font-size:clamp(1.4rem,3.5vw,2rem);font-weight:800;margin-bottom:6px;color:var(--gray-800)}
 .section-header h2 em{font-style:normal;color:var(--red)}
 .section-header p{font-size:14px;color:var(--gray-400);max-width:480px;margin:0 auto}
 .section-alt{background:var(--off-white)}
+.section-warm{background:var(--warm-light)}
+.section-navy{background:var(--navy);color:var(--white)}
+
+/* Decorative line */
+.deco-line{width:60px;height:3px;background:linear-gradient(90deg,var(--red),var(--warm-dark));border-radius:2px;margin:0 auto 16px}
+.deco-line.left{margin:0 0 16px 0}
 
 /* Stats */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 @media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
-.stat-card{background:var(--off-white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:20px 14px;text-align:center;transition:border-color .3s}
-.stat-card:hover{border-color:var(--red)}
+.stat-card{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:20px 14px;text-align:center;transition:all .3s;box-shadow:0 2px 8px rgba(0,0,0,0.03);position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),var(--warm-dark));opacity:0;transition:opacity .3s}
+.stat-card:hover{border-color:var(--red);box-shadow:0 4px 16px rgba(204,0,0,0.08);transform:translateY(-2px)}
+.stat-card:hover::before{opacity:1}
 .stat-card .num{font-family:'Sora',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;color:var(--red);line-height:1;margin-bottom:4px}
 .stat-card .label{font-size:10px;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em;font-family:'Space Mono',monospace;margin-bottom:2px}
 .stat-card .value{font-size:.85rem;font-weight:500;color:var(--gray-600)}
@@ -90,24 +111,39 @@ nav .nav-links a:hover{color:var(--red)}
 @media(max-width:768px){.about-grid{grid-template-columns:1fr}}
 .about-text p{font-size:.93rem;color:var(--gray-600);margin-bottom:14px;line-height:1.8}
 .value-list{display:flex;flex-direction:column;gap:10px}
-.value-item{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:14px 16px;display:flex;align-items:center;gap:12px;transition:border-color .3s}
-.value-item:hover{border-color:var(--red)}
-.value-item .v-text{font-size:.85rem}
+.value-item{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:14px 16px;display:flex;align-items:center;gap:12px;transition:all .3s;box-shadow:0 2px 6px rgba(0,0,0,0.02);position:relative;overflow:hidden}
+.value-item::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red);opacity:0;transition:opacity .3s}
+.value-item:hover{border-color:var(--red);box-shadow:0 4px 12px rgba(204,0,0,0.06)}
+.value-item:hover::after{opacity:1}
+.value-item .v-text{font-size:.85rem;padding-left:2px}
 .value-item .v-text strong{color:var(--gray-800);display:block;font-size:.9rem}
 .value-item .v-text span{color:var(--gray-400);font-size:.78rem}
 
 /* Meeting */
 .meeting-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 @media(max-width:768px){.meeting-grid{grid-template-columns:repeat(2,1fr)}}
-.meeting-card{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:20px 14px;text-align:center;transition:border-color .3s}
-.meeting-card:hover{border-color:var(--red)}
+.meeting-card{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:20px 14px;text-align:center;transition:all .3s;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
+.meeting-card:hover{border-color:var(--red);box-shadow:0 4px 12px rgba(204,0,0,0.06)}
 .meeting-card .label{font-size:10px;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em;font-family:'Space Mono',monospace;margin-bottom:4px}
 .meeting-card .value{font-family:'Sora',sans-serif;font-weight:700;font-size:.95rem;color:var(--gray-800)}
 
+/* Industry Distribution */
+.industry-section{position:relative}
+.industry-section::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:40px;background:linear-gradient(to bottom,var(--warm-dark),transparent);opacity:0.5}
+.industry-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:768px){.industry-grid{grid-template-columns:1fr}}
+.industry-card{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r);padding:24px;box-shadow:0 2px 10px rgba(0,0,0,0.03);transition:all .3s;position:relative;overflow:hidden}
+.industry-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),var(--warm-dark))}
+.industry-card:hover{box-shadow:0 6px 20px rgba(204,0,0,0.06);transform:translateY(-2px)}
+.industry-card h3{font-size:.95rem;color:var(--red);margin-bottom:10px;font-weight:700;display:flex;align-items:center;gap:8px}
+.industry-card h3 .ind-icon{width:28px;height:28px;border-radius:6px;background:rgba(204,0,0,0.06);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.industry-card p{font-size:.88rem;color:var(--gray-600);line-height:1.85;margin:0}
+.industry-card.wide{grid-column:1/-1}
+
 /* Members */
 .search-box{max-width:380px;margin:0 auto 24px;position:relative}
-.search-box input{width:100%;padding:10px 18px 10px 40px;background:var(--white);border:1px solid var(--gray-200);border-radius:999px;color:var(--gray-800);font-size:14px;font-family:'Noto Sans TC',sans-serif;outline:none;transition:border-color .3s}
-.search-box input:focus{border-color:var(--red)}
+.search-box input{width:100%;padding:10px 18px 10px 40px;background:var(--white);border:1px solid var(--gray-200);border-radius:999px;color:var(--gray-800);font-size:14px;font-family:'Noto Sans TC',sans-serif;outline:none;transition:all .3s;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.search-box input:focus{border-color:var(--red);box-shadow:0 4px 16px rgba(204,0,0,0.1)}
 .search-box input::placeholder{color:var(--gray-200)}
 .search-box svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--gray-400);fill:none;pointer-events:none}
 .member-count{text-align:center;font-size:12px;color:var(--gray-400);margin-bottom:14px;font-family:'Space Mono',monospace}
@@ -115,16 +151,18 @@ nav .nav-links a:hover{color:var(--red)}
 .member-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
 @media(max-width:900px){.member-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px){.member-grid{grid-template-columns:repeat(2,1fr)}}
-.member-card{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:16px 12px;text-align:center;transition:all .2s;cursor:default}
-.member-card:hover{border-color:var(--red);transform:translateY(-2px);box-shadow:0 4px 12px rgba(204,0,0,0.08)}
+.member-card{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:16px 12px;text-align:center;transition:all .2s;cursor:default;box-shadow:0 2px 6px rgba(0,0,0,0.02);position:relative;overflow:hidden}
+.member-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red),var(--warm-dark));opacity:0;transition:opacity .3s}
+.member-card:hover{border-color:var(--red);transform:translateY(-2px);box-shadow:0 6px 16px rgba(204,0,0,0.08)}
+.member-card:hover::before{opacity:1}
 .member-name{font-size:.9rem;font-weight:600;color:var(--gray-800);margin-bottom:1px}
 .member-en{font-size:.68rem;color:var(--gray-400);font-family:'Space Mono',monospace;margin-bottom:6px;min-height:14px}
 .member-industry{font-size:.72rem;color:var(--red);padding:2px 10px;border-radius:999px;border:1px solid rgba(204,0,0,0.15);background:rgba(204,0,0,0.04);display:inline-block;line-height:1.4}
 .member-card[data-visible="false"]{display:none}
 
 /* Events */
-.event-card{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r);padding:28px;display:flex;gap:20px;align-items:center;transition:all .3s}
-.event-card:hover{border-color:var(--red);box-shadow:0 4px 12px rgba(204,0,0,0.06)}
+.event-card{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r);padding:28px;display:flex;gap:20px;align-items:center;transition:all .3s;box-shadow:0 2px 10px rgba(0,0,0,0.03)}
+.event-card:hover{border-color:var(--red);box-shadow:0 6px 20px rgba(204,0,0,0.06)}
 @media(max-width:600px){.event-card{flex-direction:column;text-align:center}}
 .event-date{flex-shrink:0;width:72px;height:72px;border-radius:var(--r-sm);background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.15);display:flex;flex-direction:column;align-items:center;justify-content:center}
 .event-date .month{font-family:'Space Mono',monospace;font-size:10px;text-transform:uppercase;color:var(--red);letter-spacing:1px}
@@ -135,7 +173,10 @@ nav .nav-links a:hover{color:var(--red)}
 .event-info .event-link:hover{text-decoration:underline}
 
 /* CTA */
-.cta-section{text-align:center;padding:72px 0;background:var(--red);color:var(--white)}
+.cta-section{text-align:center;padding:72px 0;background:linear-gradient(135deg,var(--red) 0%,var(--red-dark) 60%,var(--navy) 100%);color:var(--white);position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;top:-100px;right:-100px;width:300px;height:300px;border:1px solid rgba(255,255,255,0.06);border-radius:50%}
+.cta-section::after{content:'';position:absolute;bottom:-80px;left:-80px;width:240px;height:240px;border:1px solid rgba(255,255,255,0.04);border-radius:50%}
+.cta-section .container{position:relative;z-index:1}
 .cta-section h2{color:var(--white);margin-bottom:12px}
 .cta-section p{color:rgba(255,255,255,0.8);margin-bottom:28px}
 .btn{display:inline-flex;align-items:center;gap:8px;font-family:'Sora',sans-serif;font-weight:600;font-size:14px;padding:12px 28px;border-radius:999px;transition:all .3s;border:none;cursor:pointer;text-decoration:none}
@@ -144,16 +185,21 @@ nav .nav-links a:hover{color:var(--red)}
 .btn-ghost{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,0.4);margin-left:10px}
 .btn-ghost:hover{border-color:var(--white);background:rgba(255,255,255,0.1)}
 
-/* FAQ */
+/* FAQ - Always visible cards */
 .faq-section{max-width:700px;margin:0 auto}
-details{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);margin-bottom:8px;padding:16px 20px}
-details summary{cursor:pointer;font-weight:500;font-size:14px;color:var(--gray-800)}
-details summary:hover{color:var(--red)}
-details p{margin-top:10px;font-size:13px;color:var(--gray-600);line-height:1.7}
-details[open]{border-color:rgba(204,0,0,0.25)}
+.faq-card{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r);margin-bottom:14px;padding:24px 28px;box-shadow:0 2px 10px rgba(0,0,0,0.03);transition:all .3s;position:relative;overflow:hidden}
+.faq-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--red),var(--warm-dark))}
+.faq-card:hover{box-shadow:0 4px 16px rgba(204,0,0,0.06);border-color:rgba(204,0,0,0.2)}
+.faq-card h3{font-size:.95rem;font-weight:600;color:var(--gray-800);margin-bottom:10px;padding-left:4px}
+.faq-card p{font-size:.88rem;color:var(--gray-600);line-height:1.8;margin:0;padding-left:4px}
+
+/* Geometric accents */
+.geo-accent{position:absolute;pointer-events:none}
+.geo-dots{width:80px;height:80px;background-image:radial-gradient(circle,rgba(204,0,0,0.08) 1.5px,transparent 1.5px);background-size:12px 12px}
+.geo-corner{width:40px;height:40px;border:2px solid rgba(204,0,0,0.06)}
 
 /* Footer */
-footer{border-top:1px solid var(--gray-100);padding:28px 0;text-align:center}
+footer{border-top:1px solid var(--gray-100);padding:28px 0;text-align:center;background:var(--white)}
 footer a{color:var(--gray-400)}
 footer a:hover{color:var(--red)}
 .footer-copy{font-size:11px;color:var(--gray-400);margin-top:6px}
@@ -188,7 +234,7 @@ footer a:hover{color:var(--red)}
 </section>
 
 <!-- Stats -->
-<section>
+<section style="position:relative">
 <div class="container">
   <div class="stats-grid">
     <div class="stat-card">
@@ -215,12 +261,16 @@ footer a:hover{color:var(--red)}
 </div>
 </section>
 
+<!-- Divider -->
+<div class="section-divider"></div>
+
 <!-- About -->
 <section class="section-alt">
 <div class="container">
   <div class="about-grid">
     <div class="about-text">
       <span class="eyebrow">ABOUT BNI ACE</span>
+      <div class="deco-line left"></div>
       <h2 style="margin-bottom:14px">連結改變事業的<em style="font-style:normal;color:var(--red)">關鍵人脈</em></h2>
       <p>BNI（Business Network International）於 1985 年成立，是世界上最大及最成功的業務引薦組織，目前在全球超過 76 個國家擁有數十萬名會員。BNI 的運作模式簡單而有效：每個分會由來自不同行業的專業人士組成，每個行業只允許一位代表，避免直接競爭，最大化引薦效果。</p>
       <p>會員通過核心價值 <strong>GiversGain（付出者收穫）</strong>發展業務 — 先為別人創造價值，自然會收到回報。每週在全球上萬個社區中，會員與其他值得信賴的商業領袖會面，建立和培養長期及有意義的關係，達成有質素的商業引薦。</p>
@@ -247,11 +297,15 @@ footer a:hover{color:var(--red)}
 </div>
 </section>
 
+<!-- Divider -->
+<div class="section-divider to-white reverse"></div>
+
 <!-- Weekly Meeting -->
 <section>
 <div class="container">
   <div class="section-header">
     <span class="eyebrow">WEEKLY MEETING</span>
+    <div class="deco-line"></div>
     <h2>每週<em>早餐商務會議</em></h2>
     <p>結構化的交流確保每位參加者都能充分受益</p>
   </div>
@@ -276,11 +330,68 @@ footer a:hover{color:var(--red)}
 </div>
 </section>
 
+<!-- Divider -->
+<div class="section-divider"></div>
+
+<!-- Industry Distribution (AEO prose content) -->
+<section class="section-warm industry-section">
+<div class="container">
+  <div class="section-header">
+    <span class="eyebrow">INDUSTRY DISTRIBUTION</span>
+    <div class="deco-line"></div>
+    <h2>ACE 分會<em>行業分布</em></h2>
+    <p>30 位會員橫跨 7 大行業板塊，構成完整的商業引薦生態</p>
+  </div>
+  <div class="industry-grid">
+
+    <div class="industry-card">
+      <h3><span class="ind-icon">+</span>醫療健康</h3>
+      <p>ACE 分會的醫療健康領域匯聚了西醫李加穎（Sandy Lei）、血氧神經復康專家吳健華（Catherine）、基因抗衰老產品胡廣生（Longson Wu）、中草藥免疫調節產品郭玉琴，以及精油身心靈謝敏洵（Cimmy Chea），為會員提供全方位的健康引薦網絡。從常規醫療、復康治療到預防保健，ACE 分會在大健康領域的覆蓋面是澳門 BNI 分會中最全面的。</p>
+    </div>
+
+    <div class="industry-card">
+      <h3><span class="ind-icon">+</span>設計工程</h3>
+      <p>設計與工程板塊由商業設計工程專家胡展鴻（Panda Wu，點一設計工程有限公司）、軟裝與裝飾設計定制傢俬伍文聰（Ringo Ng）、綠植造景黃鈺淇（Yuki Huang）、設施管理及清潔周遠平（Parker Chao），以及環保餐具何兆泰（Octans Ho）組成。從商舖設計入則到軟裝傢俬、綠化造景和後期維護，形成了完整的商業空間服務鏈。</p>
+    </div>
+
+    <div class="industry-card">
+      <h3><span class="ind-icon">+</span>餐飲食品</h3>
+      <p>餐飲食品領域集合了西餐 Pizza 店葉劍峰（Alan Ip）、食品批發貿易卓岫（Joe Cheok）、手作養生食品鄭倩娜（Jessica Cheng）、大健康食品製造商關振威（John Kuan），以及雪茄紅酒洋酒黃善恒（Jason Vong）。從食材供應、食品生產到餐廳經營及酒類精品，構成澳門餐飲業界的多元引薦資源。</p>
+    </div>
+
+    <div class="industry-card">
+      <h3><span class="ind-icon">+</span>商業服務</h3>
+      <p>商業與專業服務板塊涵蓋大律師阮嘉銳（Oscar Un）、保險嚴敏姬（Maggie Im）、理財策劃蘇佩儀（Sophie Sou）、工商鋪鍾志文（Man Chong）、共享辦公室沈一樂（Cola Shen），以及網絡會員營銷周凱榮（Keniston Chao）。從法律諮詢、財務規劃、保險配置到商業地產和辦公空間，為創業者和企業主提供全方位的商業支援。</p>
+    </div>
+
+    <div class="industry-card">
+      <h3><span class="ind-icon">+</span>教育培訓</h3>
+      <p>教育與培訓領域有企業課程及培訓黎志豪（Chester Lai）、藝術教育李慶慈（Theresa Lei）、整理收納培訓何彩歡（Lydia Ho），以及產前產後服務 Tracy Ip。從企業管理培訓、藝術教育到生活技能和母嬰服務，ACE 分會的教育培訓資源涵蓋職場發展與個人成長的多個面向。</p>
+    </div>
+
+    <div class="industry-card">
+      <h3><span class="ind-icon">+</span>生活美學</h3>
+      <p>生活美學板塊包括時尚形象石妤（Salina）和美容吳少東（Vicky Ng），致力於會員的外在形象提升。從個人形象規劃、穿搭諮詢到專業美容護理，為注重個人品牌形象的商務人士提供專業引薦。</p>
+    </div>
+
+    <div class="industry-card">
+      <h3><span class="ind-icon">+</span>媒體創意</h3>
+      <p>媒體與創意領域匯聚了影視及自媒體勞嘉濠（Keo Lou）、微短劇製作葉浩榮（Devin Ip），以及個人 IP 操盤手林青曉。從品牌影片拍攝、微短劇內容製作到個人品牌打造和自媒體營運，為會員的市場推廣和品牌曝光提供一條龍的媒體創意服務。</p>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- Divider -->
+<div class="section-divider warm-to-white reverse"></div>
+
 <!-- Members -->
-<section id="members" class="section-alt">
+<section id="members">
 <div class="container">
   <div class="section-header">
     <span class="eyebrow">MEMBER DIRECTORY</span>
+    <div class="deco-line"></div>
     <h2>ACE 分會<em>會員目錄</em></h2>
     <p>30 位來自不同行業的專業人士</p>
   </div>
@@ -475,11 +586,15 @@ footer a:hover{color:var(--red)}
 </div>
 </section>
 
+<!-- Divider -->
+<div class="section-divider"></div>
+
 <!-- Events -->
-<section id="events">
+<section id="events" class="section-alt">
 <div class="container">
   <div class="section-header">
     <span class="eyebrow">UPCOMING EVENTS</span>
+    <div class="deco-line"></div>
     <h2>近期<em>活動</em></h2>
   </div>
   <div class="event-card">
@@ -506,33 +621,41 @@ footer a:hover{color:var(--red)}
 </div>
 </section>
 
-<!-- FAQ -->
+<!-- FAQ - Always visible cards -->
 <section class="section-alt">
 <div class="container">
   <div class="section-header">
+    <span class="eyebrow">FAQ</span>
+    <div class="deco-line"></div>
     <h2>常見問題</h2>
   </div>
   <div class="faq-section">
-    <details>
-      <summary>BNI ACE 分會是什麼？</summary>
+
+    <div class="faq-card">
+      <h3>BNI ACE 分會是什麼？</h3>
       <p>BNI ACE 分會（Macao Ace Chapter）是隸屬 BNI（Business Network International）的澳門商業引薦分會。BNI 於 1985 年成立，是全球最大及最成功的業務引薦組織，在超過 76 個國家擁有數十萬名會員。ACE 分會匯聚 30 位來自不同行業的澳門專業人士，涵蓋醫療、法律、設計、餐飲、教育、金融、美容、環保等領域，每週二早上 7:00-8:30 於澳門漁人碼頭勵庭海景酒店舉行早餐商務會議，透過 GiversGain（付出者收穫）核心價值互相引薦業務。每個行業只允許一位代表，確保沒有直接競爭，最大化引薦效果。</p>
-    </details>
-    <details>
-      <summary>如何加入 BNI ACE 分會？</summary>
+    </div>
+
+    <div class="faq-card">
+      <h3>如何加入 BNI ACE 分會？</h3>
       <p>加入 BNI ACE 分會需要經過以下步驟：首先以訪客身份參加至少一次早餐商務會議（費用 MOP$280），體驗 BNI 的運作模式；然後由現有會員推薦並提交入會申請；最後經過分會審核通過後正式成為會員。每個行業在分會中只允許一位代表，確保沒有直接競爭。可透過 Facebook 專頁 bniacechapter 聯繫分會了解詳情。</p>
-    </details>
-    <details>
-      <summary>每週會議的流程是什麼？</summary>
+    </div>
+
+    <div class="faq-card">
+      <h3>每週會議的流程是什麼？</h3>
       <p>每週二早上 7:00 開始開放式社交及早餐時間；7:15 會議正式開始，全體會員進行 60 秒自我介紹及本週引薦需求分享；7:45 進行 10 分鐘專題演講（由會員輪流主講深入介紹自己的業務）；8:00 進入業務引薦環節，會員互相傳遞收集到的引薦；8:30 會議結束，進入自由交流時間。整個流程設計確保每位參加者都能充分受益。</p>
-    </details>
-    <details>
-      <summary>ACE 分會涵蓋哪些行業？</summary>
+    </div>
+
+    <div class="faq-card">
+      <h3>ACE 分會涵蓋哪些行業？</h3>
       <p>ACE 分會 30 位會員涵蓋多元行業，包括：西醫、大律師、保險、理財策劃、綠植造景、商業設計工程、軟裝設計定制傢俬、時尚形象、影視及自媒體、微短劇製作、個人 IP 操盤手、西餐 Pizza 店、手作養生食品、食品批發貿易、大健康食品製造商、中草藥免疫調節產品、基因抗衰老產品、精油身心靈、美容、血氧神經復康、整理收納培訓、企業課程及培訓、藝術教育、產前產後服務、環保餐具、共享辦公室、網絡/會員營銷、工商鋪、設施管理及清潔、雪茄紅酒洋酒。每個行業只允許一位代表，確保會員之間無直接競爭。</p>
-    </details>
-    <details>
-      <summary>如何聯繫 BNI ACE 分會？</summary>
+    </div>
+
+    <div class="faq-card">
+      <h3>如何聯繫 BNI ACE 分會？</h3>
       <p>可透過 BNI ACE 分會的 Facebook 專頁（搜尋 bniacechapter 或訪問 facebook.com/bniacechapter）聯繫分會。也可以直接聯繫任何 ACE 分會會員獲取邀請和更多資訊。會議地點位於澳門漁人碼頭勵庭海景酒店 1 樓會議廳，每週二早上 7:00-8:30 舉行。訪客參會費為 MOP$280（含早餐）。</p>
-    </details>
+    </div>
+
   </div>
 </div>
 </section>

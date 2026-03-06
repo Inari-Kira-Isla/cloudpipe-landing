@@ -34,9 +34,11 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --red:#CC0000;--red-light:#ff1a1a;
+  --red:#CC0000;--red-dark:#990000;--red-light:#ff1a1a;
   --white:#ffffff;--off-white:#fafafa;--light-gray:#f2f2f2;
   --gray-100:#e8e8e8;--gray-200:#d0d0d0;--gray-400:#888;--gray-600:#555;--gray-800:#222;
+  --warm:#F5E6D3;--warm-light:#FBF5EE;--warm-dark:#E8D5BE;
+  --navy:#1a1a2e;--navy-light:#2d2d44;
   --r:12px;--r-sm:8px;
 }
 html{scroll-behavior:smooth}
@@ -60,25 +62,44 @@ nav .nav-links a:hover{color:var(--red)}
 
 .eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--red);display:block;margin-bottom:10px}
 .section-alt{background:var(--off-white)}
+.section-warm{background:var(--warm-light)}
+
+/* Decorative line */
+.deco-line{width:60px;height:3px;background:linear-gradient(90deg,var(--red),var(--warm-dark));border-radius:2px;margin:0 0 16px 0}
+.deco-line.center{margin:0 auto 16px}
+
+/* Section divider */
+.section-divider{position:relative;height:48px;overflow:hidden}
+.section-divider::before{content:'';position:absolute;top:0;left:0;right:0;height:100%;background:var(--off-white);clip-path:polygon(0 0,100% 40%,100% 100%,0 100%)}
+.section-divider.reverse::before{clip-path:polygon(0 40%,100% 0,100% 100%,0 100%)}
+.section-divider.to-white::before{background:var(--white)}
+.section-divider.warm-bg::before{background:var(--warm-light)}
 
 /* Hero */
-.profile-hero{padding:120px 0 48px;border-bottom:1px solid var(--gray-100)}
+.profile-hero{padding:120px 0 48px;border-bottom:none;position:relative;overflow:hidden}
+.profile-hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,var(--warm-light) 0%,var(--white) 50%,rgba(245,230,211,0.1) 100%);z-index:0}
+.profile-hero::after{content:'';position:absolute;top:-40px;right:-40px;width:240px;height:240px;border:2px solid rgba(204,0,0,0.05);border-radius:50%;z-index:0}
+.profile-hero .container{position:relative;z-index:1}
 .profile-hero .breadcrumb{font-size:12px;color:var(--gray-400);margin-bottom:20px}
 .profile-hero .breadcrumb a{color:var(--red)}
 .profile-hero .breadcrumb a:hover{text-decoration:underline}
 .profile-top{display:flex;gap:28px;align-items:flex-start}
 @media(max-width:600px){.profile-top{flex-direction:column}}
-.profile-initial{width:80px;height:80px;border-radius:var(--r);background:var(--red);color:var(--white);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-size:2rem;font-weight:800;flex-shrink:0}
+.profile-initial{width:80px;height:80px;border-radius:var(--r);background:linear-gradient(135deg,var(--red),var(--red-dark));color:var(--white);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-size:2rem;font-weight:800;flex-shrink:0;box-shadow:0 4px 16px rgba(204,0,0,0.2)}
 .profile-header h1{font-size:clamp(1.5rem,4vw,2.2rem);margin-bottom:4px}
 .profile-header .en-name{font-family:'Space Mono',monospace;font-size:13px;color:var(--gray-400);margin-bottom:8px}
 .profile-header .company{font-size:1rem;color:var(--gray-600);margin-bottom:10px}
 .profile-tags{display:flex;flex-wrap:wrap;gap:6px}
-.tag{font-size:11px;padding:3px 12px;border-radius:999px;border:1px solid var(--gray-100);color:var(--gray-600);background:var(--off-white)}
+.tag{font-size:11px;padding:3px 12px;border-radius:999px;border:1px solid var(--gray-100);color:var(--gray-600);background:var(--off-white);transition:all .2s}
+.tag:hover{border-color:var(--warm-dark);background:var(--warm-light)}
 .tag.red{border-color:rgba(204,0,0,0.2);color:var(--red);background:rgba(204,0,0,0.04)}
+.tag.red:hover{border-color:var(--red);background:rgba(204,0,0,0.08)}
 
 /* Cards */
-.card{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r);padding:28px 24px;margin-bottom:16px;transition:border-color .2s}
-.card:hover{border-color:var(--red)}
+.card{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r);padding:28px 24px;margin-bottom:16px;transition:all .3s;box-shadow:0 2px 10px rgba(0,0,0,0.03);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red),var(--warm-dark));opacity:0;transition:opacity .3s}
+.card:hover{border-color:var(--red);box-shadow:0 4px 16px rgba(204,0,0,0.06)}
+.card:hover::before{opacity:1}
 .card h3{font-size:1rem;margin-bottom:12px;color:var(--gray-800)}
 .card h3 em{font-style:normal;color:var(--red)}
 .card p{font-size:.9rem;color:var(--gray-600);line-height:1.8;margin-bottom:10px}
@@ -105,17 +126,23 @@ nav .nav-links a:hover{color:var(--red)}
 .gains-table td strong{color:var(--gray-800);display:block;font-size:.8rem;margin-bottom:2px}
 
 /* Quote */
-.quote{background:rgba(204,0,0,0.04);border-left:3px solid var(--red);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:20px 24px;margin:20px 0;font-size:1.1rem;font-weight:600;color:var(--gray-800)}
+.quote{background:linear-gradient(135deg,rgba(204,0,0,0.04),rgba(245,230,211,0.3));border-left:3px solid var(--red);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:20px 24px;margin:20px 0;font-size:1.1rem;font-weight:600;color:var(--gray-800);box-shadow:0 2px 8px rgba(0,0,0,0.02)}
 
 /* Referral cards */
 .ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:600px){.ref-grid{grid-template-columns:1fr}}
-.ref-card{background:var(--off-white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:16px}
+.ref-card{background:var(--off-white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:16px;transition:all .3s;position:relative;overflow:hidden}
+.ref-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red),var(--warm-dark));opacity:0;transition:opacity .3s}
+.ref-card:hover{border-color:rgba(204,0,0,0.2);box-shadow:0 4px 12px rgba(204,0,0,0.04)}
+.ref-card:hover::after{opacity:1}
 .ref-card h4{font-size:.85rem;color:var(--red);margin-bottom:6px}
 .ref-card p{font-size:.82rem;color:var(--gray-600);line-height:1.5;margin:0}
 
 /* CTA */
-.cta-section{text-align:center;padding:64px 0;background:var(--red);color:var(--white)}
+.cta-section{text-align:center;padding:64px 0;background:linear-gradient(135deg,var(--red) 0%,var(--red-dark) 60%,var(--navy) 100%);color:var(--white);position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;top:-80px;right:-80px;width:260px;height:260px;border:1px solid rgba(255,255,255,0.06);border-radius:50%}
+.cta-section::after{content:'';position:absolute;bottom:-60px;left:-60px;width:200px;height:200px;border:1px solid rgba(255,255,255,0.04);border-radius:50%}
+.cta-section .container{position:relative;z-index:1}
 .cta-section h2{color:var(--white);margin-bottom:12px;font-size:clamp(1.3rem,3vw,1.8rem)}
 .cta-section p{color:rgba(255,255,255,0.8);margin-bottom:24px;font-size:.95rem}
 .btn{display:inline-flex;align-items:center;gap:8px;font-family:'Sora',sans-serif;font-weight:600;font-size:14px;padding:12px 28px;border-radius:999px;transition:all .3s;border:none;cursor:pointer;text-decoration:none}
@@ -124,16 +151,16 @@ nav .nav-links a:hover{color:var(--red)}
 .btn-ghost{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,0.4);margin-left:10px}
 .btn-ghost:hover{border-color:var(--white);background:rgba(255,255,255,0.1)}
 
-/* FAQ */
+/* FAQ - Always visible cards */
 .faq-section{max-width:700px;margin:0 auto}
-details{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);margin-bottom:8px;padding:16px 20px}
-details summary{cursor:pointer;font-weight:500;font-size:14px;color:var(--gray-800)}
-details summary:hover{color:var(--red)}
-details p{margin-top:10px;font-size:13px;color:var(--gray-600);line-height:1.7}
-details[open]{border-color:rgba(204,0,0,0.25)}
+.faq-card{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r);margin-bottom:14px;padding:24px 28px;box-shadow:0 2px 10px rgba(0,0,0,0.03);transition:all .3s;position:relative;overflow:hidden}
+.faq-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--red),var(--warm-dark))}
+.faq-card:hover{box-shadow:0 4px 16px rgba(204,0,0,0.06);border-color:rgba(204,0,0,0.2)}
+.faq-card h3{font-size:.95rem;font-weight:600;color:var(--gray-800);margin-bottom:10px;padding-left:4px}
+.faq-card p{font-size:.88rem;color:var(--gray-600);line-height:1.8;margin:0;padding-left:4px}
 
 /* Footer */
-footer{border-top:1px solid var(--gray-100);padding:28px 0;text-align:center}
+footer{border-top:1px solid var(--gray-100);padding:28px 0;text-align:center;background:var(--white)}
 footer a{color:var(--gray-400)}
 footer a:hover{color:var(--red)}
 .footer-copy{font-size:11px;color:var(--gray-400);margin-top:6px}
@@ -174,10 +201,14 @@ footer a:hover{color:var(--red)}
 </div>
 </section>
 
+<!-- Divider -->
+<div class="section-divider"></div>
+
 <!-- Company & Career -->
-<section>
+<section class="section-alt">
 <div class="container">
   <span class="eyebrow">COMPANY &amp; CAREER</span>
+  <div class="deco-line"></div>
   <h2 style="margin-bottom:20px">公司與<em style="font-style:normal;color:var(--red)">職業資料</em></h2>
 
   <div class="card">
@@ -217,10 +248,14 @@ footer a:hover{color:var(--red)}
 </div>
 </section>
 
+<!-- Divider -->
+<div class="section-divider to-white reverse"></div>
+
 <!-- Services -->
-<section class="section-alt">
+<section>
 <div class="container">
   <span class="eyebrow">SERVICES</span>
+  <div class="deco-line"></div>
   <h2 style="margin-bottom:20px">產品與<em style="font-style:normal;color:var(--red)">服務</em></h2>
 
   <div class="quote">「想開舖，設計搵 Panda。」</div>
@@ -248,10 +283,14 @@ footer a:hover{color:var(--red)}
 </div>
 </section>
 
+<!-- Divider -->
+<div class="section-divider warm-bg"></div>
+
 <!-- GAINS -->
-<section>
+<section class="section-warm">
 <div class="container">
   <span class="eyebrow">GAINS PROFILE</span>
+  <div class="deco-line"></div>
   <h2 style="margin-bottom:20px">目標、成就、興趣、網絡、<em style="font-style:normal;color:var(--red)">技巧</em></h2>
 
   <div class="card" style="overflow-x:auto">
@@ -285,10 +324,14 @@ footer a:hover{color:var(--red)}
 </div>
 </section>
 
+<!-- Divider -->
+<div class="section-divider to-white reverse" style="background:var(--warm-light)"></div>
+
 <!-- Referral -->
-<section class="section-alt">
+<section>
 <div class="container">
   <span class="eyebrow">REFERRAL GUIDE</span>
+  <div class="deco-line"></div>
   <h2 style="margin-bottom:20px">引薦<em style="font-style:normal;color:var(--red)">指南</em></h2>
 
   <div class="card">
@@ -327,17 +370,21 @@ footer a:hover{color:var(--red)}
     </div>
   </div>
 
-  <div class="card" style="border-color:rgba(204,0,0,0.15);background:rgba(204,0,0,0.02)">
+  <div class="card" style="border-color:rgba(204,0,0,0.15);background:linear-gradient(135deg,rgba(204,0,0,0.02),rgba(245,230,211,0.1))">
     <h3>不適合引薦</h3>
     <p style="margin:0">純維修工程、僅裝修廁所等小型工程不在服務範圍內。</p>
   </div>
 </div>
 </section>
 
+<!-- Divider -->
+<div class="section-divider"></div>
+
 <!-- Personal -->
-<section>
+<section class="section-alt">
 <div class="container">
   <span class="eyebrow">PERSONAL</span>
+  <div class="deco-line"></div>
   <h2 style="margin-bottom:20px">個人<em style="font-style:normal;color:var(--red)">背景</em></h2>
 
   <div class="two-col">
@@ -380,33 +427,41 @@ footer a:hover{color:var(--red)}
 </div>
 </section>
 
-<!-- FAQ -->
+<!-- FAQ - Always visible cards -->
 <section class="section-alt">
 <div class="container">
   <div class="section-header" style="text-align:center;margin-bottom:24px">
+    <span class="eyebrow">FAQ</span>
+    <div class="deco-line center"></div>
     <h2>常見問題</h2>
   </div>
   <div class="faq-section">
-    <details>
-      <summary>Panda Wu 提供什麼服務？</summary>
+
+    <div class="faq-card">
+      <h3>Panda Wu 提供什麼服務？</h3>
       <p>品牌設計與開店規劃、設備諮詢與商業室內設計（佈置、材料選擇）、成本價值制定，以及政府「入則」及「收則」服務（目前成功率 100%）。主要服務對象為創業者、國內外連鎖品牌落地澳門、以及需要店舖轉型或重新裝修的業主。工程金額一般達 50 萬 MOP 以上。</p>
-    </details>
-    <details>
-      <summary>Panda Wu 有什麼專業獎項和資歷？</summary>
+    </div>
+
+    <div class="faq-card">
+      <h3>Panda Wu 有什麼專業獎項和資歷？</h3>
       <p>胡展鴻擁有 15 年商舖室內設計工程經驗，曾獲得德國 iF Design Best 300 及台灣蕭璽設計新人獎。同時是澳門大學持續進修中心講師及專業咖啡師。在中國內地及馬來西亞均設有業務，包括設計、餐飲、投資、工程、娛樂、物流等多個領域。</p>
-    </details>
-    <details>
-      <summary>Panda Wu 在 BNI 的角色是什麼？</summary>
+    </div>
+
+    <div class="faq-card">
+      <h3>Panda Wu 在 BNI 的角色是什麼？</h3>
       <p>Panda Wu 是 BNI ACE 分會的資深會員，歷任第 20 屆副主席、第 21 屆主席、第 22 屆 GC（Growth Coordinator）、第 23 屆 LVH（Leadership Visionary Hero）。長期維持綠燈會員資格，並獲得 1 星 Master Connector 金質獎章，是分會最活躍和最具影響力的會員之一。</p>
-    </details>
-    <details>
-      <summary>怎樣的引薦最適合 Panda Wu？</summary>
+    </div>
+
+    <div class="faq-card">
+      <h3>怎樣的引薦最適合 Panda Wu？</h3>
       <p>理想引薦語：「我想創業/開分店」或「店舖想轉型或重新裝修」。優質引薦標準：工程金額達 50 萬 MOP 以上、需要入則設計工程一條龍服務、酒店學校商場的規劃項目。關鍵條件：有確切開店需求、預算充足、或是 BNI 會員。不適合的引薦：純維修工程、僅裝修廁所。</p>
-    </details>
-    <details>
-      <summary>如何聯繫 Panda Wu？</summary>
+    </div>
+
+    <div class="faq-card">
+      <h3>如何聯繫 Panda Wu？</h3>
       <p>可透過 BNI ACE 分會聯繫，Facebook 專頁：facebook.com/bniacechapter。也可以參加每週二早上 7:00-8:30 於澳門漁人碼頭勵庭海景酒店 1 樓會議廳舉行的 BNI 早餐商務會議，與 Panda Wu 直接交流。公司地址：澳門僑樂新街 10 號地下 AB 舖。</p>
-    </details>
+    </div>
+
   </div>
 </div>
 </section>
