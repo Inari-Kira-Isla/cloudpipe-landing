@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>免費建站申請 — CloudPipe AEO 網站平台</title>
+  <meta name="description" content="填寫企業或個人資料，CloudPipe 自動生成 AEO 合規網站，AI 引擎優化，即時部署上線。免費方案永久可用。">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://cloudpipe-landing.vercel.app/intake.html">
+  <link rel="llms-txt" href="https://cloudpipe-landing.vercel.app/llms.txt">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://cloudpipe-landing.vercel.app","description":"澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服。","alternateName":"CloudPipe AI Automation Platform","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"},"sameAs":["https://github.com/Inari-Kira-Isla/cloudpipe-landing"]}</script>
+  <meta property="og:title" content="免費建站申請 — CloudPipe">
+  <meta property="og:description" content="填寫企業或個人資料，自動生成 AEO 合規網站。免費方案永久可用。">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:          #080810;
+      --bg-alt:      #0d0d1a;
+      --bg-card:     #111120;
+      --cyan:        #00e5ff;
+      --cyan-dim:    rgba(0,229,255,0.10);
+      --cyan-border: rgba(0,229,255,0.20);
+      --magenta:     #ff2d7b;
+      --amber:       #ffab00;
+      --green:       #00e676;
+      --text:        #e6e6f0;
+      --text-2:      #7272a0;
+      --text-3:      #404060;
+      --border:      rgba(255,255,255,0.07);
+      --r:           16px;
+      --r-sm:        10px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--bg); color: var(--text);
+      line-height: 1.7; overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .bg-ambient {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 900px 700px at 10% 20%, rgba(0,229,255,0.04), transparent 60%),
+        radial-gradient(ellipse 700px 900px at 90% 80%, rgba(255,45,123,0.03), transparent 60%);
+    }
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 72px 72px;
+    }
+
+    .container { max-width: 720px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* NAVBAR */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      padding: 22px 0; background: rgba(8,8,16,0.88); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner { max-width: 1140px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 32px; }
+    .nav-logo { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.5px; }
+    .nav-logo .c { color: var(--cyan); }
+    .nav-back { font-size: 14px; color: var(--text-2); margin-left: auto; }
+    .nav-back:hover { color: var(--text); }
+
+    /* HERO */
+    .page-hero { padding: 120px 0 48px; text-align: center; }
+    .eyebrow {
+      font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--magenta); margin-bottom: 14px;
+    }
+    .page-hero h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
+      letter-spacing: -1.5px; margin-bottom: 16px;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, var(--cyan), var(--magenta));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .page-hero p { font-size: 16px; color: var(--text-2); max-width: 500px; margin: 0 auto; }
+
+    /* STEPPER */
+    .stepper {
+      display: flex; justify-content: center; gap: 8px; margin-bottom: 40px;
+    }
+    .step-dot {
+      width: 40px; height: 4px; border-radius: 4px;
+      background: var(--border); transition: all 0.3s;
+    }
+    .step-dot.active { background: var(--cyan); width: 60px; }
+    .step-dot.done { background: var(--green); }
+
+    /* FORM */
+    .form-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 40px 36px;
+      margin-bottom: 24px;
+    }
+    .form-step { display: none; }
+    .form-step.active { display: block; }
+
+    .step-title {
+      font-family: 'Sora', sans-serif; font-weight: 700; font-size: 20px;
+      margin-bottom: 8px;
+    }
+    .step-desc { color: var(--text-2); font-size: 14px; margin-bottom: 28px; }
+
+    .field { margin-bottom: 20px; }
+    .field label {
+      display: block; font-size: 13px; font-weight: 500;
+      color: var(--text-2); margin-bottom: 6px;
+    }
+    .field label .req { color: var(--magenta); margin-left: 2px; }
+    .field input, .field select, .field textarea {
+      width: 100%; padding: 12px 16px; font-size: 15px;
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--r-sm); color: var(--text);
+      transition: border-color 0.2s;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      outline: none; border-color: var(--cyan);
+    }
+    .field input::placeholder, .field textarea::placeholder { color: var(--text-3); }
+    .field textarea { resize: vertical; min-height: 80px; }
+    .field .hint { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+    .field select option { background: var(--bg-card); color: var(--text); }
+
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 560px) { .field-row { grid-template-columns: 1fr; } }
+
+    .color-preview {
+      display: inline-block; width: 24px; height: 24px;
+      border-radius: 6px; vertical-align: middle; margin-left: 8px;
+      border: 1px solid var(--border);
+    }
+
+    /* INDUSTRY GRID */
+    .industry-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 560px) { .industry-grid { grid-template-columns: repeat(2, 1fr); } }
+    .industry-opt {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 6px; padding: 16px 8px;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--r-sm); cursor: pointer;
+      transition: all 0.2s; font-size: 13px; text-align: center;
+    }
+    .industry-opt:hover { border-color: rgba(255,255,255,0.15); }
+    .industry-opt.selected {
+      border-color: var(--cyan); background: var(--cyan-dim);
+      box-shadow: 0 0 20px rgba(0,229,255,0.1);
+    }
+    .industry-opt .icon { font-size: 24px; }
+    .industry-opt input { display: none; }
+
+    /* PLAN CARDS */
+    .plan-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+    @media (max-width: 560px) { .plan-grid { grid-template-columns: 1fr; } }
+    .plan-opt {
+      padding: 20px; background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--r-sm); cursor: pointer; transition: all 0.2s;
+    }
+    .plan-opt:hover { border-color: rgba(255,255,255,0.15); }
+    .plan-opt.selected { border-color: var(--cyan); background: var(--cyan-dim); }
+    .plan-opt input { display: none; }
+    .plan-name { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+    .plan-price { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 800; color: var(--cyan); }
+    .plan-price small { font-size: 13px; font-weight: 400; color: var(--text-2); }
+    .plan-features { font-size: 12px; color: var(--text-2); margin-top: 8px; line-height: 1.6; }
+
+    /* BUTTONS */
+    .form-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 32px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Sora', sans-serif; font-weight: 600; font-size: 14px;
+      padding: 13px 28px; border-radius: 100px; transition: all 0.2s;
+      border: none; cursor: pointer;
+    }
+    .btn-primary { background: var(--cyan); color: #080810; }
+    .btn-primary:hover { background: #fff; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,229,255,0.25); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-outline { background: transparent; color: var(--text-2); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+    /* REVIEW */
+    .review-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .review-table td { padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .review-table td:first-child { color: var(--text-2); width: 140px; }
+
+    /* SUCCESS */
+    .success-card {
+      text-align: center; padding: 60px 36px;
+    }
+    .success-icon { font-size: 64px; margin-bottom: 16px; }
+    .success-card h2 { font-family: 'Sora', sans-serif; font-size: 24px; margin-bottom: 12px; }
+    .success-card p { color: var(--text-2); margin-bottom: 24px; }
+    .success-url {
+      display: inline-block; padding: 12px 24px;
+      background: var(--bg); border: 1px solid var(--cyan-border);
+      border-radius: var(--r-sm); font-family: 'Space Mono', monospace;
+      font-size: 14px; color: var(--cyan); word-break: break-all;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 40px 0; text-align: center; border-top: 1px solid var(--border);
+      margin-top: 40px;
+    }
+    footer address { font-style: normal; font-size: 12px; color: var(--text-3); }
+    footer a { color: var(--text-2); }
+    .footer-copy { font-size: 12px; color: var(--text-3); margin-top: 8px; }
+
+    /* LOADING */
+    .loading-overlay {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(8,8,16,0.9); backdrop-filter: blur(8px);
+      flex-direction: column; align-items: center; justify-content: center;
+    }
+    .loading-overlay.show { display: flex; }
+    .spinner {
+      width: 48px; height: 48px; border: 3px solid var(--border);
+      border-top-color: var(--cyan); border-radius: 50%;
+      animation: spin 0.8s linear infinite; margin-bottom: 20px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { color: var(--text-2); font-size: 15px; }
+    .loading-steps { color: var(--text-3); font-size: 13px; margin-top: 12px; max-width: 300px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="bg-ambient"></div>
+  <div class="bg-grid"></div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo"><span class="c">Cloud</span>Pipe</a>
+      <a href="/" class="nav-back">&larr; 返回首頁</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="page-hero">
+    <p class="eyebrow">AEO Website Platform</p>
+    <h1><span class="gradient-text">免費建立</span> AEO 合規網站</h1>
+    <p>填寫企業資料，AI 自動生成網站<br>Schema.org + FAQ + llms.txt 一步到位</p>
+  </section>
+
+  <div class="container">
+    <!-- STEPPER -->
+    <div class="stepper">
+      <div class="step-dot active" data-step="1"></div>
+      <div class="step-dot" data-step="2"></div>
+      <div class="step-dot" data-step="3"></div>
+      <div class="step-dot" data-step="4"></div>
+    </div>
+
+    <!-- STEP 1: 基本資料 -->
+    <div class="form-card">
+      <form id="intake-form" novalidate>
+        <div class="form-step active" data-step="1">
+          <h3 class="step-title">1. 基本資料</h3>
+          <p class="step-desc">請填寫品牌名稱與行業類別</p>
+
+          <div class="field">
+            <label>品牌名稱（中文）<span class="req">*</span></label>
+            <input type="text" name="business_name" required placeholder="例：海膽速遞">
+          </div>
+          <div class="field">
+            <label>英文名稱（用於網址）<span class="req">*</span></label>
+            <input type="text" name="business_name_en" required placeholder="例：sea-urchin-delivery">
+            <p class="hint">只能使用英文字母、數字和連字號（-），將成為 yourname.vercel.app</p>
+          </div>
+          <div class="field">
+            <label>一句話介紹（50-200 字）<span class="req">*</span></label>
+            <textarea name="description" required placeholder="例：澳門首家日本直送海膽冷鏈速遞品牌，提供新鮮海膽刺身及壽司到府服務。" rows="3"></textarea>
+          </div>
+
+          <div class="field">
+            <label>行業類別<span class="req">*</span></label>
+          </div>
+          <div class="industry-grid">
+            <label class="industry-opt"><input type="radio" name="industry" value="restaurant"><span class="icon">🍽️</span>餐廳</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="cafe"><span class="icon">☕</span>咖啡店</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="bakery"><span class="icon">🥐</span>烘焙坊</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="bar"><span class="icon">🍷</span>酒吧</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="food_delivery"><span class="icon">🛵</span>外送餐飲</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="retail"><span class="icon">🛍️</span>零售</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="luxury"><span class="icon">💎</span>精品</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="beauty"><span class="icon">💄</span>美容</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="dental"><span class="icon">🦷</span>牙科</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="medical"><span class="icon">🏥</span>醫療</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="legal"><span class="icon">⚖️</span>法律</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="financial"><span class="icon">💰</span>金融</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="real_estate"><span class="icon">🏠</span>地產</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="education"><span class="icon">📚</span>教育</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="travel"><span class="icon">✈️</span>旅遊</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="tech"><span class="icon">💻</span>科技</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="consulting"><span class="icon">📊</span>顧問</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="ngo"><span class="icon">🤝</span>非營利</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="media"><span class="icon">📰</span>媒體</label>
+            <label class="industry-opt"><input type="radio" name="industry" value="personal_brand"><span class="icon">👤</span>個人品牌</label>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label>所在地區<span class="req">*</span></label>
+              <select name="region" required>
+                <option value="Macau SAR" selected>澳門</option>
+                <option value="Hong Kong SAR">香港</option>
+                <option value="Taiwan">台灣</option>
+                <option value="Mainland China">中國大陸</option>
+                <option value="Japan">日本</option>
+                <option value="Singapore">新加坡</option>
+                <option value="Other">其他</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>聯絡 Email<span class="req">*</span></label>
+              <input type="email" name="contact_email" required placeholder="info@example.com">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-primary" onclick="nextStep(2)">下一步</button>
+          </div>
+        </div>
+
+        <!-- STEP 2: 聯絡與地址 -->
+        <div class="form-step" data-step="2">
+          <h3 class="step-title">2. 聯絡與地址</h3>
+          <p class="step-desc">有助 Google 地圖和本地搜尋排名（選填）</p>
+
+          <div class="field">
+            <label>街道地址</label>
+            <input type="text" name="address_street" placeholder="例：氹仔官也街 18 號">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>城市</label>
+              <input type="text" name="address_city" placeholder="例：澳門">
+            </div>
+            <div class="field">
+              <label>電話</label>
+              <input type="tel" name="telephone" placeholder="例：+853-6000-0000">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>價位範圍</label>
+              <select name="price_range">
+                <option value="">未指定</option>
+                <option value="$">$ 經濟實惠</option>
+                <option value="$$">$$ 中等價位</option>
+                <option value="$$$">$$$ 高檔</option>
+                <option value="$$$$">$$$$ 奢華</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>支付方式</label>
+              <input type="text" name="payment_accepted" placeholder="例：現金, Visa, MPay, 微信支付">
+            </div>
+          </div>
+
+          <div class="field">
+            <label>社交媒體連結（每行一個）</label>
+            <textarea name="same_as_urls" placeholder="https://facebook.com/yourpage&#10;https://instagram.com/youraccount" rows="3"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" onclick="prevStep(1)">上一步</button>
+            <button type="button" class="btn btn-primary" onclick="nextStep(3)">下一步</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: 品牌設定 -->
+        <div class="form-step" data-step="3">
+          <h3 class="step-title">3. 品牌與風格</h3>
+          <p class="step-desc">自定義網站外觀（選填，AI 可自動處理）</p>
+
+          <div class="field-row">
+            <div class="field">
+              <label>品牌主色 <span class="color-preview" id="color-preview" style="background:#39d2c0"></span></label>
+              <input type="color" name="accent_color" value="#39d2c0" oninput="document.getElementById('color-preview').style.background=this.value">
+            </div>
+            <div class="field">
+              <label>品牌標語</label>
+              <input type="text" name="tagline" placeholder="例：每一杯都是旅程">
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Logo 圖片 URL</label>
+            <input type="url" name="logo_url" placeholder="https://example.com/logo.png">
+          </div>
+
+          <div class="field">
+            <label>AI 寫作風格指引</label>
+            <textarea name="tone_prompt" placeholder="例：親切、專業，使用繁體中文，偶爾加入澳門本地用語" rows="2"></textarea>
+            <p class="hint">留空則使用預設風格：親切、專業的繁體中文</p>
+          </div>
+
+          <div class="field">
+            <label>關於我們（長文介紹）</label>
+            <textarea name="about_text" placeholder="留空由 AI 根據品牌資料自動生成 800+ 字介紹" rows="4"></textarea>
+            <p class="hint">留空由 AI 自動生成</p>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" onclick="prevStep(2)">上一步</button>
+            <button type="button" class="btn btn-primary" onclick="nextStep(4)">下一步</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: 方案選擇 + 確認 -->
+        <div class="form-step" data-step="4">
+          <h3 class="step-title">4. 選擇方案</h3>
+          <p class="step-desc">所有方案均包含 AEO 合規網站，免費方案永久可用</p>
+
+          <div class="plan-grid">
+            <label class="plan-opt selected">
+              <input type="radio" name="plan_tier" value="free" checked>
+              <div class="plan-name">Free</div>
+              <div class="plan-price">$0 <small>/月</small></div>
+              <div class="plan-features">AEO 合規靜態網站<br>每週審計<br>Vercel 子域名</div>
+            </label>
+            <label class="plan-opt">
+              <input type="radio" name="plan_tier" value="basic">
+              <div class="plan-name">Basic</div>
+              <div class="plan-price">MOP$500 <small>/月</small></div>
+              <div class="plan-features">每天 2 篇 AI 文章<br>每日審計<br>Vercel 子域名</div>
+            </label>
+            <label class="plan-opt">
+              <input type="radio" name="plan_tier" value="pro">
+              <div class="plan-name">Pro</div>
+              <div class="plan-price">MOP$1,500 <small>/月</small></div>
+              <div class="plan-features">每天 6 篇 AI 文章<br>每 3 小時審計<br>自定義域名</div>
+            </label>
+            <label class="plan-opt">
+              <input type="radio" name="plan_tier" value="enterprise">
+              <div class="plan-name">Enterprise</div>
+              <div class="plan-price">MOP$3,000 <small>/月</small></div>
+              <div class="plan-features">每天 12 篇 AI 文章<br>每小時審計<br>自定義域名 + 優先支援</div>
+            </label>
+          </div>
+
+          <h3 class="step-title" style="margin-top:32px;">確認資料</h3>
+          <table class="review-table" id="review-table"></table>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" onclick="prevStep(3)">上一步</button>
+            <button type="submit" class="btn btn-primary" id="submit-btn">提交建站申請</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- SUCCESS (hidden) -->
+    <div class="form-card success-card" id="success-card" style="display:none;">
+      <div class="success-icon">&#10003;</div>
+      <h2>網站建立成功</h2>
+      <p>您的 AEO 合規網站已自動部署上線</p>
+      <div class="success-url" id="success-url"></div>
+      <p style="margin-top:24px;color:var(--text-3);font-size:13px;">
+        網站將在數分鐘內完成全球 CDN 分發。<br>
+        審計報告將發送至您的 Email。
+      </p>
+    </div>
+
+    <footer>
+      <address>
+        <strong>CloudPipe</strong> &middot; AI Automation Platform<br>
+        GitHub：<a href="https://github.com/Inari-Kira-Isla/cloudpipe-landing">Inari-Kira-Isla/cloudpipe-landing</a>
+      </address>
+      <div class="footer-copy">&copy; 2026 CloudPipe &middot; CC BY 4.0</div>
+    </footer>
+  </div>
+
+  <!-- LOADING OVERLAY -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loading-text">正在生成網站...</div>
+    <div class="loading-steps" id="loading-steps"></div>
+  </div>
+
+  <script>
+    // ─── Step Navigation ──────────────────────────────────────────────
+    let currentStep = 1;
+    const totalSteps = 4;
+
+    function showStep(n) {
+      document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
+      document.querySelector(`.form-step[data-step="${n}"]`).classList.add('active');
+      document.querySelectorAll('.step-dot').forEach(dot => {
+        const s = parseInt(dot.dataset.step);
+        dot.classList.toggle('active', s === n);
+        dot.classList.toggle('done', s < n);
+      });
+      currentStep = n;
+      window.scrollTo({ top: 200, behavior: 'smooth' });
+      if (n === 4) buildReview();
+    }
+
+    function nextStep(n) {
+      if (!validateStep(currentStep)) return;
+      showStep(n);
+    }
+    function prevStep(n) { showStep(n); }
+
+    function validateStep(step) {
+      const el = document.querySelector(`.form-step[data-step="${step}"]`);
+      const inputs = el.querySelectorAll('[required]');
+      let valid = true;
+      inputs.forEach(input => {
+        if (!input.value.trim()) {
+          input.style.borderColor = 'var(--magenta)';
+          valid = false;
+          input.addEventListener('input', () => { input.style.borderColor = ''; }, { once: true });
+        }
+      });
+      if (step === 1) {
+        const industry = document.querySelector('input[name="industry"]:checked');
+        if (!industry) {
+          valid = false;
+          document.querySelector('.industry-grid').style.outline = '2px solid var(--magenta)';
+          document.querySelector('.industry-grid').style.borderRadius = '12px';
+          setTimeout(() => { document.querySelector('.industry-grid').style.outline = ''; }, 2000);
+        }
+      }
+      return valid;
+    }
+
+    // ─── Industry Selection ───────────────────────────────────────────
+    document.querySelectorAll('.industry-opt input').forEach(radio => {
+      radio.addEventListener('change', () => {
+        document.querySelectorAll('.industry-opt').forEach(o => o.classList.remove('selected'));
+        radio.closest('.industry-opt').classList.add('selected');
+      });
+    });
+
+    // ─── Plan Selection ───────────────────────────────────────────────
+    document.querySelectorAll('.plan-opt input').forEach(radio => {
+      radio.addEventListener('change', () => {
+        document.querySelectorAll('.plan-opt').forEach(o => o.classList.remove('selected'));
+        radio.closest('.plan-opt').classList.add('selected');
+      });
+    });
+
+    // ─── Auto-generate English name ───────────────────────────────────
+    const bnInput = document.querySelector('input[name="business_name"]');
+    const bnEnInput = document.querySelector('input[name="business_name_en"]');
+    let userEditedEn = false;
+    bnEnInput.addEventListener('input', () => { userEditedEn = true; });
+
+    // ─── Build Review Table ───────────────────────────────────────────
+    const LABELS = {
+      business_name: '品牌名稱',
+      business_name_en: '英文名稱',
+      industry: '行業類別',
+      description: '簡介',
+      region: '地區',
+      contact_email: 'Email',
+      address_street: '街道地址',
+      address_city: '城市',
+      telephone: '電話',
+      price_range: '價位',
+      accent_color: '品牌主色',
+      tagline: '標語',
+      plan_tier: '方案',
+    };
+    const PLAN_NAMES = { free: 'Free ($0)', basic: 'Basic (MOP$500/月)', pro: 'Pro (MOP$1,500/月)', enterprise: 'Enterprise (MOP$3,000/月)' };
+    const INDUSTRY_NAMES = {
+      restaurant:'餐廳', cafe:'咖啡店', bakery:'烘焙坊', bar:'酒吧', food_delivery:'外送餐飲',
+      retail:'零售', luxury:'精品', beauty:'美容', dental:'牙科', medical:'醫療',
+      legal:'法律', financial:'金融', real_estate:'地產', education:'教育', travel:'旅遊',
+      tech:'科技', consulting:'顧問', ngo:'非營利', media:'媒體', personal_brand:'個人品牌',
+    };
+
+    function buildReview() {
+      const form = document.getElementById('intake-form');
+      const fd = new FormData(form);
+      let html = '';
+      for (const [key, label] of Object.entries(LABELS)) {
+        let val = fd.get(key) || '';
+        if (!val) continue;
+        if (key === 'plan_tier') val = PLAN_NAMES[val] || val;
+        if (key === 'industry') val = INDUSTRY_NAMES[val] || val;
+        if (key === 'accent_color') val = `<span class="color-preview" style="background:${val};display:inline-block;vertical-align:middle"></span> ${val}`;
+        html += `<tr><td>${label}</td><td>${val}</td></tr>`;
+      }
+      document.getElementById('review-table').innerHTML = html;
+    }
+
+    // ─── Submit ───────────────────────────────────────────────────────
+    const LOADING_MESSAGES = [
+      '驗證資料...',
+      'AI 正在生成品牌介紹...',
+      '建立 FAQ 問答...',
+      '規劃 40 篇文章主題...',
+      '生成網站檔案...',
+      'AEO 合規檢查中...',
+      '部署到全球 CDN...',
+      '執行首次審計...',
+    ];
+
+    document.getElementById('intake-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const fd = new FormData(form);
+      const data = {};
+      for (const [k, v] of fd.entries()) {
+        if (v) data[k] = v;
+      }
+
+      // Parse same_as_urls
+      if (data.same_as_urls) {
+        data.same_as_urls = data.same_as_urls.split('\n').map(s => s.trim()).filter(Boolean);
+      }
+
+      // Show loading
+      const overlay = document.getElementById('loading-overlay');
+      const loadingText = document.getElementById('loading-text');
+      const loadingSteps = document.getElementById('loading-steps');
+      overlay.classList.add('show');
+
+      let stepIdx = 0;
+      const stepInterval = setInterval(() => {
+        if (stepIdx < LOADING_MESSAGES.length) {
+          loadingText.textContent = LOADING_MESSAGES[stepIdx];
+          loadingSteps.textContent = `步驟 ${stepIdx + 1}/${LOADING_MESSAGES.length}`;
+          stepIdx++;
+        }
+      }, 3000);
+
+      try {
+        // POST to API
+        const resp = await fetch('/api/intake', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const result = await resp.json();
+
+        clearInterval(stepInterval);
+        overlay.classList.remove('show');
+
+        if (result.success) {
+          document.querySelector('.form-card').style.display = 'none';
+          document.querySelector('.stepper').style.display = 'none';
+          const successCard = document.getElementById('success-card');
+          successCard.style.display = 'block';
+          document.getElementById('success-url').textContent = result.url || `https://${data.business_name_en}.vercel.app`;
+        } else {
+          alert(result.error || '建站失敗，請稍後重試');
+        }
+      } catch (err) {
+        clearInterval(stepInterval);
+        overlay.classList.remove('show');
+
+        // Offline / no API — save as JSON and show instructions
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${data.business_name_en || 'intake'}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        document.querySelector('.form-card').style.display = 'none';
+        document.querySelector('.stepper').style.display = 'none';
+        const successCard = document.getElementById('success-card');
+        successCard.style.display = 'block';
+        document.querySelector('.success-icon').textContent = '📋';
+        successCard.querySelector('h2').textContent = '資料已匯出';
+        successCard.querySelector('p').textContent = '已下載 JSON 檔案，請將檔案傳送給 CloudPipe 團隊進行建站。';
+        document.getElementById('success-url').textContent = `${data.business_name_en || 'intake'}.json`;
+      }
+    });
+  </script>
+</body>
+</html>
