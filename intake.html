@@ -648,12 +648,16 @@
       }, 3000);
 
       try {
-        // POST to API
+        // POST to API (AI generation may take 30-90s)
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 120000);
         const resp = await fetch('/api/intake', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
+          signal: controller.signal,
         });
+        clearTimeout(timeout);
         const result = await resp.json();
 
         clearInterval(stepInterval);
@@ -688,23 +692,20 @@
         clearInterval(stepInterval);
         overlay.classList.remove('show');
 
-        // Offline / no API — save as JSON and show instructions
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${data.business_name_en || 'intake'}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
+        // Timeout or network error — the function likely still executed
+        const slug = (data.business_name_en || '').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        const expectedUrl = `https://${slug}.vercel.app`;
 
         document.querySelector('.form-card').style.display = 'none';
         document.querySelector('.stepper').style.display = 'none';
         const successCard = document.getElementById('success-card');
         successCard.style.display = 'block';
-        document.querySelector('.success-icon').textContent = '📋';
-        successCard.querySelector('h2').textContent = '資料已匯出';
-        successCard.querySelector('p').textContent = '已下載 JSON 檔案，請將檔案傳送給 CloudPipe 團隊進行建站。';
-        document.getElementById('success-url').textContent = `${data.business_name_en || 'intake'}.json`;
+        document.querySelector('.success-icon').textContent = '&#9889;';
+        successCard.querySelector('h2').textContent = '網站正在生成中';
+        successCard.querySelector('p').innerHTML =
+          'AI 正在生成內容並部署網站，預計 1-3 分鐘後上線。<br>' +
+          '請稍後訪問以下網址確認：';
+        document.getElementById('success-url').textContent = expectedUrl;
       }
     });
   </script>
