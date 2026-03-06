@@ -4,7 +4,7 @@
 const MINIMAX_API = "https://api.minimax.io/anthropic/v1/messages";
 const MINIMAX_KEY = process.env.MINIMAX_KEY || "sk-cp-1-wFmWnKLx_fRluWBNMioYVWka11Qcl1ZFF7bQxLMt-ODc6iTJ8iwU2ZWRknR8UuSQxUHSV82fqP6iyedFUCEvzEIJDHcY89B5sPhgebIvOA-po0hkxdcTg";
 const MINIMAX_MODEL = "MiniMax-M2.1";
-const VERCEL_TOKEN = process.env.VERCEL_TOKEN || "";
+const VERCEL_TOKEN = process.env.VERCEL_DEPLOY_TOKEN || "";
 const VERCEL_TEAM = process.env.VERCEL_TEAM_ID || "";
 const TELEGRAM_BOT = process.env.TELEGRAM_BOT_TOKEN || "";
 const TELEGRAM_CHAT = process.env.TELEGRAM_CHAT_ID || "8399476482";
