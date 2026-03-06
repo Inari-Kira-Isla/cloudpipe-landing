@@ -1,7 +1,7 @@
 // CloudPipe AEO Intake — Vercel Serverless Function
 // Receives client form → MiniMax AI generation → Vercel Deploy API → returns URL
 
-export const config = { maxDuration: 300 };
+export const config = { maxDuration: 60 };
 
 const MINIMAX_API = "https://api.minimax.io/anthropic/v1/messages";
 const MINIMAX_KEY = process.env.MINIMAX_KEY || "sk-cp-1-wFmWnKLx_fRluWBNMioYVWka11Qcl1ZFF7bQxLMt-ODc6iTJ8iwU2ZWRknR8UuSQxUHSV82fqP6iyedFUCEvzEIJDHcY89B5sPhgebIvOA-po0hkxdcTg";
@@ -61,104 +61,98 @@ async function callMiniMax(system, prompt, maxTokens = 4096) {
   return "";
 }
 
-// ─── AI Content Generation ────────────────────────────────
+// ─── AI Content Generation (single call for speed) ───────
 
-async function generateAbout(data) {
-  if (data.about_text && data.about_text.length > 200) return data.about_text;
+async function generateAllContent(data) {
+  const hasAbout = data.about_text && data.about_text.length > 200;
+  const hasFaqs = data.faq_items && data.faq_items.length >= 5;
+  const hasTopics = data.content_topics && typeof data.content_topics === "object" && Object.keys(data.content_topics).length > 0;
 
-  const system = "你是一個專業的網站內容撰稿人，擅長撰寫 SEO 優化的繁體中文商業介紹。";
-  const prompt = `請為「${data.business_name}」撰寫一篇詳細的品牌介紹頁面內容。
+  // If everything provided, skip AI
+  if (hasAbout && hasFaqs && hasTopics) {
+    return { aboutHTML: data.about_text, faqs: data.faq_items, topics: data.content_topics };
+  }
+
+  const system = `你是一個專業的繁體中文網站內容生成專家。請一次性輸出品牌介紹 + FAQ + 文章主題池。`;
+  const prompt = `為「${data.business_name}」(${data.business_name_en}) 生成完整的網站內容。
 
 品牌資訊：
-- 名稱：${data.business_name}（${data.business_name_en}）
 - 行業：${data.industry}
 - 簡介：${data.description}
 - 地區：${data.region || "Macau SAR"}
 ${data.address_street ? `- 地址：${data.address_street} ${data.address_city || ""}` : ""}
 ${data.tagline ? `- 標語：${data.tagline}` : ""}
 
-要求：
-1. 繁體中文，≥2000 字
-2. 第一段 ≥80 字，直接回答「${data.business_name}是什麼？」
-3. 至少 5 個 h2 區塊（每段 300-500 字）
-4. 包含產品/服務介紹、品質保證、服務特色等
-5. 使用語義化 HTML 標籤（h2, h3, p, ul, li, strong）
-6. 針對${data.region || "Macau SAR"}讀者
-7. 每個 h2 區塊內至少包含 1 個 h3 子標題和 1 個 <ul> 列表
-8. 不要包含「常見問題」區塊（FAQ 由 schema 處理）
+嚴格按照以下三個區塊輸出：
 
-只輸出 HTML 內容（從第一個 <p> 開始，不要包含 <html>, <head>, <body> 等）。`;
+---ABOUT---
+${hasAbout ? "（跳過，已有內容）" : `用語義化 HTML（h2, h3, p, ul, li, strong）撰寫品牌介紹。
+要求：繁體中文，≥1500字，第一段≥80字直接回答「${data.business_name}是什麼」，
+至少4個h2區塊，每個h2內含h3子標題和ul列表。不要包含FAQ區塊。
+從第一個<p>開始，不要包含html/head/body標籤。`}
 
-  return await callMiniMax(system, prompt);
-}
+---FAQ---
+${hasFaqs ? "（跳過，已有內容）" : `生成7個常見問題。格式：
+Q: 問題
+A: 回答（50-100字）`}
 
-async function generateFAQs(data) {
-  const existing = data.faq_items || [];
-  if (existing.length >= 5) return existing;
+---TOPICS---
+${hasTopics ? "（跳過，已有內容）" : `生成4個文章分類，每類5個主題。格式：
+CATEGORY: 分類名
+TOPIC: 主題1
+TOPIC: 主題2`}`;
 
-  const need = Math.max(7 - existing.length, 5);
-  const system = "你是一個 FAQ 生成專家。根據品牌資訊生成常見問題。";
-  const prompt = `為「${data.business_name}」(${data.industry}) 生成 ${need} 個常見問題。
-簡介：${data.description}
-地區：${data.region || "Macau SAR"}
+  const text = await callMiniMax(system, prompt, 8000);
+  if (!text) return null;
 
-嚴格按以下格式輸出：
-Q: 問題1
-A: 回答1（50-150字）
-Q: 問題2
-A: 回答2（50-150字）
-...`;
+  // Parse ABOUT
+  let aboutHTML = hasAbout ? data.about_text : "";
+  if (!hasAbout) {
+    const aboutMatch = text.match(/---ABOUT---\s*([\s\S]*?)(?=---FAQ---|$)/);
+    if (aboutMatch) aboutHTML = aboutMatch[1].trim();
+  }
 
-  const text = await callMiniMax(system, prompt, 2048);
-  const faqs = [...existing];
-  let q = null, a = null;
-  for (const line of text.split("\n")) {
-    const trimmed = line.trim();
-    if (trimmed.startsWith("Q:") || trimmed.startsWith("Q：")) {
+  // Parse FAQ
+  let faqs = hasFaqs ? data.faq_items : [];
+  if (!hasFaqs) {
+    const faqMatch = text.match(/---FAQ---\s*([\s\S]*?)(?=---TOPICS---|$)/);
+    if (faqMatch) {
+      let q = null, a = null;
+      for (const line of faqMatch[1].split("\n")) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith("Q:") || trimmed.startsWith("Q：")) {
+          if (q && a) faqs.push({ q, a });
+          q = trimmed.slice(2).trim();
+          a = null;
+        } else if (trimmed.startsWith("A:") || trimmed.startsWith("A：")) {
+          a = trimmed.slice(2).trim();
+        }
+      }
       if (q && a) faqs.push({ q, a });
-      q = trimmed.slice(2).trim();
-      a = null;
-    } else if (trimmed.startsWith("A:") || trimmed.startsWith("A：")) {
-      a = trimmed.slice(2).trim();
     }
   }
-  if (q && a) faqs.push({ q, a });
-  return faqs.slice(0, 8);
-}
 
-async function generateTopics(data) {
-  if (data.content_topics && typeof data.content_topics === "object" && Object.keys(data.content_topics).length > 0) {
-    return data.content_topics;
-  }
-
-  const system = "你是內容策劃師，為品牌網站規劃文章主題池。";
-  const prompt = `為「${data.business_name}」(${data.industry}) 生成 4 個文章分類，每分類 10 個主題。
-地區：${data.region || "Macau SAR"}
-簡介：${data.description}
-
-嚴格按以下格式（每行一個）：
-CATEGORY: 分類名稱1
-TOPIC: 主題1
-TOPIC: 主題2
-...（10個）
-CATEGORY: 分類名稱2
-TOPIC: 主題1
-...（共 4 類 × 10 題 = 40 題）`;
-
-  const text = await callMiniMax(system, prompt, 3000);
-  const topics = {};
-  let currentCat = null;
-  for (const line of text.split("\n")) {
-    const trimmed = line.trim();
-    if (trimmed.startsWith("CATEGORY:") || trimmed.startsWith("CATEGORY：")) {
-      currentCat = trimmed.split(/[:：]/).slice(1).join(":").trim();
-      if (currentCat) topics[currentCat] = [];
-    } else if ((trimmed.startsWith("TOPIC:") || trimmed.startsWith("TOPIC：")) && currentCat) {
-      const topic = trimmed.split(/[:：]/).slice(1).join(":").trim();
-      if (topic) topics[currentCat].push(topic);
+  // Parse TOPICS
+  let topics = hasTopics ? data.content_topics : {};
+  if (!hasTopics) {
+    const topicsMatch = text.match(/---TOPICS---\s*([\s\S]*?)$/);
+    if (topicsMatch) {
+      let currentCat = null;
+      for (const line of topicsMatch[1].split("\n")) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith("CATEGORY:") || trimmed.startsWith("CATEGORY：")) {
+          currentCat = trimmed.split(/[:：]/).slice(1).join(":").trim();
+          if (currentCat) topics[currentCat] = [];
+        } else if ((trimmed.startsWith("TOPIC:") || trimmed.startsWith("TOPIC：")) && currentCat) {
+          const topic = trimmed.split(/[:：]/).slice(1).join(":").trim();
+          if (topic) topics[currentCat].push(topic);
+        }
+      }
     }
+    if (Object.keys(topics).length === 0) topics = { general: [`${data.business_name}最新資訊`] };
   }
-  return Object.keys(topics).length > 0 ? topics : { general: [`${data.business_name}最新資訊`] };
+
+  return { aboutHTML, faqs: faqs.slice(0, 8), topics };
 }
 
 // ─── File Builders ────────────────────────────────────────
@@ -473,16 +467,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 2. AI Content Generation (parallel)
-    const [aboutHTML, faqs, topics] = await Promise.all([
-      generateAbout(data),
-      generateFAQs(data),
-      generateTopics(data),
-    ]);
-
-    if (!aboutHTML) {
+    // 2. AI Content Generation (single call for speed)
+    const content = await generateAllContent(data);
+    if (!content || !content.aboutHTML) {
       return res.status(500).json({ error: "AI content generation failed" });
     }
+    const { aboutHTML, faqs, topics } = content;
 
     // 3. Build files
     const slug = data.slug;
