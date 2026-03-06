@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AEO 網站自動生成平台 — CloudPipe</title>
+  <meta name="description" content="CloudPipe AEO 網站平台：填寫企業資料，AI 自動生成符合 AEO/SEO/GEO 標準的網站。20 種行業 Schema.org 映射，15 項合規審計，MiniMax M2.1 AI 文章引擎。免費方案永久可用。">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+  <link rel="canonical" href="https://cloudpipe-landing.vercel.app/aeo-platform.html">
+  <link rel="llms-txt" href="https://cloudpipe-landing.vercel.app/llms.txt">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://cloudpipe-landing.vercel.app","description":"澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服。","alternateName":"CloudPipe AI Automation Platform","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"},"sameAs":["https://github.com/Inari-Kira-Isla/cloudpipe-landing"]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+    {"@type":"Question","name":"什麼是 AEO（AI 引擎優化）？","acceptedAnswer":{"@type":"Answer","text":"AEO 是 AI Engine Optimization 的縮寫，指針對 AI 搜尋引擎（如 ChatGPT、Claude、Perplexity）優化網站內容結構，讓 AI 系統能正確理解和引用您的品牌資訊。包括 Schema.org 結構化資料、llms.txt 授權檔案、FAQ 問答結構等。"}},
+    {"@type":"Question","name":"免費方案有什麼限制？","acceptedAnswer":{"@type":"Answer","text":"免費方案包含完整的 AEO 合規靜態網站，部署在 Vercel CDN 上，每週執行一次審計檢查。唯一限制是不包含 AI 自動文章生成和自定義域名。網站永久有效，不限流量。"}},
+    {"@type":"Question","name":"建站需要多長時間？","acceptedAnswer":{"@type":"Answer","text":"從提交資料到網站上線，全自動流程約 3-5 分鐘。系統會自動驗證資料、AI 生成內容、建立 7 個檔案、執行合規檢查、部署到 CDN，並返回網站 URL 和審計報告。"}},
+    {"@type":"Question","name":"支援哪些行業？","acceptedAnswer":{"@type":"Answer","text":"目前支援 20 種行業類型，包括餐廳、咖啡店、烘焙坊、酒吧、外送餐飲、零售、精品、美容、牙科、醫療、法律、金融、地產、教育、旅遊、科技、顧問、非營利、媒體、個人品牌。每種行業自動映射正確的 Schema.org 類型。"}},
+    {"@type":"Question","name":"審計包含哪些指標？","acceptedAnswer":{"@type":"Answer","text":"15 項審計指標分三類：AEO（40 分）— robots.txt AI 爬蟲、llms.txt、link 標籤、Organization Schema、FAQPage；SEO（30 分）— meta description、canonical、OG 標籤、sitemap、security.txt；GEO（30 分）— 首段直答、結構化內容、內容量。總分 100，95+ 為 A+ 級。"}}
+  ]}</script>
+
+  <meta property="og:title" content="AEO 網站自動生成平台 — CloudPipe">
+  <meta property="og:description" content="填寫企業資料，AI 自動生成 AEO 合規網站。20 種行業，15 項審計，免費永久可用。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cloudpipe-landing.vercel.app/aeo-platform.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #080810; --bg-alt: #0d0d1a; --bg-card: #111120;
+      --cyan: #00e5ff; --cyan-dim: rgba(0,229,255,0.10); --cyan-border: rgba(0,229,255,0.20);
+      --magenta: #ff2d7b; --amber: #ffab00; --green: #00e676;
+      --text: #e6e6f0; --text-2: #7272a0; --text-3: #404060;
+      --border: rgba(255,255,255,0.07); --r: 16px; --r-sm: 10px;
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family:'Noto Sans TC',sans-serif; background:var(--bg); color:var(--text); line-height:1.7; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+    a { color:inherit; text-decoration:none; }
+    .bg-ambient { position:fixed; inset:0; z-index:0; pointer-events:none; background: radial-gradient(ellipse 900px 700px at 10% 20%, rgba(0,229,255,0.04), transparent 60%), radial-gradient(ellipse 700px 900px at 90% 80%, rgba(255,45,123,0.03), transparent 60%); }
+    .bg-grid { position:fixed; inset:0; z-index:0; pointer-events:none; background-image: linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px); background-size:72px 72px; }
+
+    .container { max-width:1140px; margin:0 auto; padding:0 24px; position:relative; z-index:1; }
+    section { padding:80px 0; }
+    .section-alt { background:var(--bg-alt); }
+
+    .gradient-text { background:linear-gradient(135deg, var(--cyan), var(--magenta)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+    /* NAV */
+    .nav { position:fixed; top:0; left:0; right:0; z-index:200; padding:22px 0; transition:padding .3s, background .3s; }
+    .nav.scrolled { background:rgba(8,8,16,0.88); backdrop-filter:blur(20px); padding:14px 0; border-bottom:1px solid var(--border); }
+    .nav-inner { display:flex; align-items:center; gap:32px; }
+    .nav-logo { font-family:'Sora',sans-serif; font-weight:800; font-size:20px; letter-spacing:-0.5px; }
+    .nav-logo .c { color:var(--cyan); }
+    .nav-links { display:flex; gap:28px; margin:0 auto; }
+    .nav-links a { font-size:14px; color:var(--text-2); transition:color .2s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--text); }
+    .nav-cta { font-family:'Space Mono',monospace; font-size:11px; font-weight:700; letter-spacing:0.5px; padding:10px 22px; border-radius:100px; background:var(--cyan); color:#080810; transition:all .2s; flex-shrink:0; }
+    .nav-cta:hover { background:#fff; }
+    .nav-burger { display:none; background:none; border:none; color:var(--text-2); cursor:pointer; font-size:22px; margin-left:auto; padding:4px; }
+    @media(max-width:760px) {
+      .nav-links, .nav-cta { display:none; }
+      .nav-burger { display:block; }
+      .nav.open .nav-links { display:flex; flex-direction:column; gap:0; position:absolute; top:100%; left:0; right:0; background:var(--bg-alt); border-bottom:1px solid var(--border); padding:8px 0; }
+      .nav.open .nav-links a { padding:14px 24px; border-bottom:1px solid var(--border); }
+    }
+
+    /* HERO */
+    .page-hero { padding:140px 0 64px; text-align:center; }
+    .eyebrow { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--magenta); margin-bottom:14px; }
+    .page-hero h1 { font-family:'Sora',sans-serif; font-size:clamp(2.4rem,5vw,4rem); font-weight:800; letter-spacing:-2px; margin-bottom:20px; }
+    .page-hero p { font-size:17px; color:var(--text-2); max-width:600px; margin:0 auto 32px; line-height:1.7; }
+
+    .btn { display:inline-flex; align-items:center; gap:8px; font-family:'Sora',sans-serif; font-weight:600; font-size:14px; padding:13px 28px; border-radius:100px; transition:all .2s; border:none; cursor:pointer; }
+    .btn-primary { background:var(--cyan); color:#080810; }
+    .btn-primary:hover { background:#fff; transform:translateY(-1px); box-shadow:0 8px 24px rgba(0,229,255,0.25); }
+    .btn-outline { background:transparent; color:var(--text-2); border:1px solid var(--border); }
+    .btn-outline:hover { border-color:rgba(255,255,255,0.2); color:var(--text); }
+
+    /* STATS BAR */
+    .stats-bar { display:flex; justify-content:center; gap:48px; flex-wrap:wrap; padding:32px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); margin-bottom:0; }
+    .stat { text-align:center; }
+    .stat-num { font-family:'Sora',sans-serif; font-size:32px; font-weight:800; color:var(--cyan); }
+    .stat-label { font-size:12px; color:var(--text-2); margin-top:4px; }
+
+    /* CARDS */
+    .card-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    @media(max-width:860px) { .card-grid { grid-template-columns:1fr; } }
+    .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r); padding:32px 28px; transition:border-color .3s; }
+    .card:hover { border-color:var(--cyan-border); }
+    .card-icon { font-size:32px; margin-bottom:16px; }
+    .card h3 { font-family:'Sora',sans-serif; font-size:17px; font-weight:700; margin-bottom:10px; }
+    .card p { font-size:14px; color:var(--text-2); line-height:1.6; }
+
+    /* FLOW */
+    .flow { max-width:680px; margin:0 auto; }
+    .flow-step { display:flex; gap:24px; margin-bottom:0; position:relative; }
+    .flow-step:not(:last-child) { padding-bottom:32px; }
+    .flow-step:not(:last-child)::before { content:''; position:absolute; left:19px; top:44px; bottom:0; width:2px; background:var(--border); }
+    .flow-num { width:40px; height:40px; border-radius:50%; background:var(--cyan-dim); border:1px solid var(--cyan-border); display:flex; align-items:center; justify-content:center; font-family:'Sora',sans-serif; font-weight:700; font-size:14px; color:var(--cyan); flex-shrink:0; }
+    .flow-body h4 { font-family:'Sora',sans-serif; font-size:15px; font-weight:700; margin-bottom:6px; }
+    .flow-body p { font-size:13px; color:var(--text-2); line-height:1.6; }
+
+    /* TABLE */
+    .data-table { width:100%; border-collapse:collapse; font-size:14px; }
+    .data-table th { text-align:left; padding:12px 16px; font-size:12px; font-family:'Space Mono',monospace; letter-spacing:1px; text-transform:uppercase; color:var(--text-3); border-bottom:1px solid var(--border); }
+    .data-table td { padding:12px 16px; border-bottom:1px solid var(--border); }
+    .data-table tr:hover td { background:rgba(255,255,255,0.02); }
+    .data-table .field-req { color:var(--magenta); font-size:11px; }
+    .data-table .field-opt { color:var(--text-3); font-size:11px; }
+    .data-table .field-ai { color:var(--green); font-size:11px; }
+
+    /* AUDIT GRID */
+    .audit-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    @media(max-width:860px) { .audit-grid { grid-template-columns:1fr; } }
+    .audit-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r); padding:28px 24px; }
+    .audit-card h3 { font-family:'Sora',sans-serif; font-size:15px; font-weight:700; margin-bottom:4px; }
+    .audit-card .score { font-family:'Sora',sans-serif; font-size:28px; font-weight:800; margin-bottom:12px; }
+    .audit-card .score.aeo { color:var(--cyan); }
+    .audit-card .score.seo { color:var(--magenta); }
+    .audit-card .score.geo { color:var(--amber); }
+    .audit-item { display:flex; justify-content:space-between; padding:6px 0; font-size:13px; color:var(--text-2); border-bottom:1px solid var(--border); }
+    .audit-item:last-child { border:none; }
+    .audit-item .pts { font-family:'Space Mono',monospace; color:var(--text); }
+
+    /* GRADE BADGES */
+    .grade-row { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin:24px 0; }
+    .grade-badge { padding:8px 20px; border-radius:var(--r-sm); font-family:'Space Mono',monospace; font-weight:700; font-size:14px; }
+    .grade-aplus { background:rgba(0,230,118,0.15); color:var(--green); border:1px solid rgba(0,230,118,0.3); }
+    .grade-a { background:rgba(0,229,255,0.1); color:var(--cyan); border:1px solid var(--cyan-border); }
+    .grade-b { background:rgba(255,171,0,0.1); color:var(--amber); border:1px solid rgba(255,171,0,0.3); }
+    .grade-c { background:rgba(255,45,123,0.1); color:var(--magenta); border:1px solid rgba(255,45,123,0.3); }
+
+    /* PRICING */
+    .pricing-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    @media(max-width:960px) { .pricing-grid { grid-template-columns:repeat(2,1fr); } }
+    @media(max-width:560px) { .pricing-grid { grid-template-columns:1fr; } }
+    .price-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r); padding:32px 24px; text-align:center; transition:all .3s; }
+    .price-card.popular { border-color:var(--cyan-border); box-shadow:0 0 60px rgba(0,229,255,0.08); }
+    .price-card h4 { font-family:'Sora',sans-serif; font-size:16px; font-weight:700; margin-bottom:8px; }
+    .price-amount { font-family:'Sora',sans-serif; font-size:32px; font-weight:800; color:var(--cyan); margin-bottom:4px; }
+    .price-amount small { font-size:14px; font-weight:400; color:var(--text-2); }
+    .price-features { list-style:none; text-align:left; margin-top:20px; }
+    .price-features li { font-size:13px; color:var(--text-2); padding:6px 0; border-bottom:1px solid var(--border); display:flex; gap:8px; }
+    .price-features li:last-child { border:none; }
+    .price-features .check { color:var(--green); }
+    .price-features .dash { color:var(--text-3); }
+
+    /* SITES TABLE */
+    .sites-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:16px; }
+    .site-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r); padding:24px; display:flex; gap:16px; align-items:center; transition:border-color .3s; }
+    .site-card:hover { border-color:var(--cyan-border); }
+    .site-score { font-family:'Sora',sans-serif; font-size:28px; font-weight:800; color:var(--green); flex-shrink:0; }
+    .site-info h4 { font-size:15px; font-weight:700; margin-bottom:2px; }
+    .site-info p { font-size:12px; color:var(--text-2); }
+    .site-info a { color:var(--cyan); font-size:12px; font-family:'Space Mono',monospace; }
+
+    /* SECTION HEADERS */
+    .section-header { text-align:center; margin-bottom:48px; }
+    .section-header h2 { font-family:'Sora',sans-serif; font-size:clamp(1.8rem,3.5vw,2.8rem); font-weight:800; letter-spacing:-1.5px; margin-bottom:12px; }
+    .section-header p { font-size:16px; color:var(--text-2); max-width:520px; margin:0 auto; }
+
+    /* INDUSTRY GRID */
+    .industry-map { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+    @media(max-width:860px) { .industry-map { grid-template-columns:repeat(2,1fr); } }
+    .industry-item { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r-sm); padding:16px; text-align:center; font-size:13px; }
+    .industry-item .icon { font-size:24px; display:block; margin-bottom:6px; }
+    .industry-item .schema { font-family:'Space Mono',monospace; font-size:10px; color:var(--cyan); margin-top:4px; display:block; }
+
+    /* FAQ */
+    details { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r-sm); margin-bottom:10px; padding:18px 24px; }
+    details summary { cursor:pointer; font-weight:500; font-size:15px; }
+    details summary:hover { color:var(--cyan); }
+    details p { margin-top:12px; font-size:14px; color:var(--text-2); line-height:1.7; }
+    details[open] { border-color:var(--cyan-border); }
+
+    /* FOOTER */
+    footer { padding:40px 0; text-align:center; border-top:1px solid var(--border); }
+    footer address { font-style:normal; font-size:12px; color:var(--text-3); }
+    footer a { color:var(--text-2); }
+    .footer-copy { font-size:12px; color:var(--text-3); margin-top:8px; }
+  </style>
+</head>
+<body>
+  <div class="bg-ambient"></div>
+  <div class="bg-grid"></div>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="/" class="nav-logo"><span class="c">Cloud</span>Pipe</a>
+        <div class="nav-links">
+          <a href="/">首頁</a>
+          <a href="/pricing.html">定價</a>
+          <a href="/architecture.html">架構</a>
+          <a href="/aeo-platform.html" class="active">AEO 平台</a>
+        </div>
+        <a href="/intake.html" class="nav-cta">FREE SITE &rarr;</a>
+        <button class="nav-burger" onclick="document.getElementById('nav').classList.toggle('open')">&#9776;</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow">AEO Website Platform</p>
+      <h1>AI 自動生成<br><span class="gradient-text">AEO 合規網站</span></h1>
+      <p>填寫企業資料，系統自動生成符合 AI 引擎優化標準的網站。Schema.org 結構化資料、llms.txt 授權、FAQ 問答、15 項審計 — 全部自動完成。</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="/intake.html" class="btn btn-primary">免費建站 &rarr;</a>
+        <a href="#how-it-works" class="btn btn-outline">運作流程</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="container">
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-num">20</div><div class="stat-label">支援行業</div></div>
+      <div class="stat"><div class="stat-num">15</div><div class="stat-label">審計指標</div></div>
+      <div class="stat"><div class="stat-num">7</div><div class="stat-label">自動生成檔案</div></div>
+      <div class="stat"><div class="stat-num">99.2</div><div class="stat-label">平均審計分數</div></div>
+      <div class="stat"><div class="stat-num">&lt;5 min</div><div class="stat-label">建站時間</div></div>
+    </div>
+  </div>
+
+  <!-- WHAT IS AEO -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2>什麼是 <span class="gradient-text">AEO</span>？</h2>
+        <p>AI Engine Optimization — 讓 ChatGPT、Claude、Perplexity 等 AI 系統正確理解和引用您的品牌</p>
+      </div>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">&#129302;</div>
+          <h3>AI 引擎優化 (AEO)</h3>
+          <p>robots.txt 允許 14 個 AI 爬蟲、llms.txt 授權 AI 學習、Schema.org 結構化資料、FAQPage 問答結構 — 讓 AI 系統找到並正確引用您的品牌。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">&#128269;</div>
+          <h3>搜尋引擎優化 (SEO)</h3>
+          <p>Meta description、Canonical URL、Open Graph 社交分享、Sitemap.xml、Security.txt — 傳統搜尋引擎的最佳實踐全部內建。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">&#9889;</div>
+          <h3>生成式引擎優化 (GEO)</h3>
+          <p>首段直答核心問題、語義化 HTML 結構（h2/h3/列表）、內容量達 2000 字以上 — 讓 AI 生成回答時優先引用您的內容。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section-alt" id="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <h2>8 步自動化<span class="gradient-text">流水線</span></h2>
+        <p>從填寫資料到網站上線，全程無需人工介入</p>
+      </div>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-body">
+            <h4>驗證 + 正規化</h4>
+            <p>檢查必填欄位、生成 URL slug、自動映射 Schema.org 類型</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-body">
+            <h4>AI 內容生成</h4>
+            <p>MiniMax M2.1 自動生成 800+ 字品牌介紹、7 題 FAQ、40 篇文章主題池</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-body">
+            <h4>建立 7 個檔案</h4>
+            <p>index.html（2000+ 字）、robots.txt（14 AI bot）、llms.txt、sitemap.xml、security.txt、vercel.json、.gitignore</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-body">
+            <h4>合規預檢</h4>
+            <p>15 項 AEO/SEO/GEO 檢查，分數低於 85 自動修正後重檢</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">5</div>
+          <div class="flow-body">
+            <h4>部署上線</h4>
+            <p>建立本地目錄、初始化 Git、推送 GitHub、Vercel 全球 CDN 部署</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">6</div>
+          <div class="flow-body">
+            <h4>註冊到平台</h4>
+            <p>寫入 client_sites.db、動態加入審計排程</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">7</div>
+          <div class="flow-body">
+            <h4>內容排程</h4>
+            <p>根據方案建立 LaunchAgent，自動從主題池生成文章並部署</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">8</div>
+          <div class="flow-body">
+            <h4>審計 + 通知</h4>
+            <p>執行完整審計、發送 Telegram 通知、回傳 URL 和評分</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLIENT DATA -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2>客戶<span class="gradient-text">需提供的資料</span></h2>
+        <p>最少只需 6 個欄位，其餘由 AI 自動生成</p>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr><th>欄位</th><th>說明</th><th>範例</th><th>類型</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>business_name</td><td>品牌名稱（中文）</td><td>海膽速遞</td><td><span class="field-req">必填</span></td></tr>
+            <tr><td>business_name_en</td><td>英文名（用於 URL）</td><td>sea-urchin-delivery</td><td><span class="field-req">必填</span></td></tr>
+            <tr><td>industry</td><td>行業類別</td><td>food_delivery</td><td><span class="field-req">必填</span></td></tr>
+            <tr><td>description</td><td>一句話介紹（50-200 字）</td><td>澳門首家日本直送海膽冷鏈速遞品牌</td><td><span class="field-req">必填</span></td></tr>
+            <tr><td>region</td><td>所在地區</td><td>Macau SAR</td><td><span class="field-req">必填</span></td></tr>
+            <tr><td>contact_email</td><td>聯絡 Email</td><td>info@example.com</td><td><span class="field-req">必填</span></td></tr>
+            <tr><td>address_street</td><td>街道地址</td><td>氹仔官也街 18 號</td><td><span class="field-opt">選填</span></td></tr>
+            <tr><td>telephone</td><td>電話</td><td>+853-6000-0000</td><td><span class="field-opt">選填</span></td></tr>
+            <tr><td>accent_color</td><td>品牌主色</td><td>#C9A84C</td><td><span class="field-opt">選填</span></td></tr>
+            <tr><td>tagline</td><td>品牌標語</td><td>每一杯都是旅程</td><td><span class="field-opt">選填</span></td></tr>
+            <tr><td>about_text</td><td>關於我們（長文）</td><td>—</td><td><span class="field-ai">AI 生成</span></td></tr>
+            <tr><td>faq_items</td><td>FAQ 問答</td><td>—</td><td><span class="field-ai">AI 生成 7 題</span></td></tr>
+            <tr><td>content_topics</td><td>文章主題池</td><td>—</td><td><span class="field-ai">AI 生成 40 題</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- INDUSTRY MAP -->
+  <section class="section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>20 種行業 <span class="gradient-text">Schema.org 映射</span></h2>
+        <p>選擇行業，自動對應正確的 Schema.org 類型</p>
+      </div>
+      <div class="industry-map">
+        <div class="industry-item"><span class="icon">&#127861;</span>咖啡店<span class="schema">CafeOrCoffeeShop</span></div>
+        <div class="industry-item"><span class="icon">&#127869;</span>餐廳<span class="schema">Restaurant</span></div>
+        <div class="industry-item"><span class="icon">&#129360;</span>烘焙坊<span class="schema">Bakery</span></div>
+        <div class="industry-item"><span class="icon">&#127863;</span>酒吧<span class="schema">BarOrPub</span></div>
+        <div class="industry-item"><span class="icon">&#128757;</span>外送餐飲<span class="schema">FoodEstablishment</span></div>
+        <div class="industry-item"><span class="icon">&#128717;</span>零售<span class="schema">Store</span></div>
+        <div class="industry-item"><span class="icon">&#128142;</span>精品<span class="schema">Store</span></div>
+        <div class="industry-item"><span class="icon">&#128132;</span>美容<span class="schema">HealthAndBeautyBusiness</span></div>
+        <div class="industry-item"><span class="icon">&#129463;</span>牙科<span class="schema">Dentist</span></div>
+        <div class="industry-item"><span class="icon">&#127973;</span>醫療<span class="schema">MedicalOrganization</span></div>
+        <div class="industry-item"><span class="icon">&#9878;</span>法律<span class="schema">LegalService</span></div>
+        <div class="industry-item"><span class="icon">&#128176;</span>金融<span class="schema">FinancialService</span></div>
+        <div class="industry-item"><span class="icon">&#127968;</span>地產<span class="schema">RealEstateAgent</span></div>
+        <div class="industry-item"><span class="icon">&#128218;</span>教育<span class="schema">EducationalOrganization</span></div>
+        <div class="industry-item"><span class="icon">&#9992;</span>旅遊<span class="schema">TravelAgency</span></div>
+        <div class="industry-item"><span class="icon">&#128187;</span>科技<span class="schema">Organization</span></div>
+        <div class="industry-item"><span class="icon">&#128202;</span>顧問<span class="schema">Organization</span></div>
+        <div class="industry-item"><span class="icon">&#129309;</span>非營利<span class="schema">NGO</span></div>
+        <div class="industry-item"><span class="icon">&#128240;</span>媒體<span class="schema">NewsMediaOrganization</span></div>
+        <div class="industry-item"><span class="icon">&#128100;</span>個人品牌<span class="schema">Person</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUDIT -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2>15 項<span class="gradient-text">合規審計</span></h2>
+        <p>AEO + SEO + GEO 三維度評分，總分 100</p>
+      </div>
+      <div class="audit-grid">
+        <div class="audit-card">
+          <h3>AEO</h3>
+          <div class="score aeo">40 分</div>
+          <div class="audit-item"><span>A1 robots.txt AI 爬蟲</span><span class="pts">8</span></div>
+          <div class="audit-item"><span>A2 llms.txt 存在</span><span class="pts">8</span></div>
+          <div class="audit-item"><span>A3 link rel="llms-txt"</span><span class="pts">8</span></div>
+          <div class="audit-item"><span>A4 Organization Schema</span><span class="pts">8</span></div>
+          <div class="audit-item"><span>A5 FAQPage Schema</span><span class="pts">8</span></div>
+        </div>
+        <div class="audit-card">
+          <h3>SEO</h3>
+          <div class="score seo">30 分</div>
+          <div class="audit-item"><span>S1 Meta description</span><span class="pts">6</span></div>
+          <div class="audit-item"><span>S2 Canonical URL</span><span class="pts">6</span></div>
+          <div class="audit-item"><span>S3 Open Graph</span><span class="pts">6</span></div>
+          <div class="audit-item"><span>S4 Sitemap.xml</span><span class="pts">6</span></div>
+          <div class="audit-item"><span>S5 Security.txt</span><span class="pts">6</span></div>
+        </div>
+        <div class="audit-card">
+          <h3>GEO</h3>
+          <div class="score geo">30 分</div>
+          <div class="audit-item"><span>G1 首段直答 50+ 字</span><span class="pts">10</span></div>
+          <div class="audit-item"><span>G2 結構化內容</span><span class="pts">10</span></div>
+          <div class="audit-item"><span>G3 內容量 2000+ 字</span><span class="pts">10</span></div>
+        </div>
+      </div>
+
+      <div class="grade-row">
+        <span class="grade-badge grade-aplus">95-100 = A+</span>
+        <span class="grade-badge grade-a">85-94 = A</span>
+        <span class="grade-badge grade-b">70-84 = B</span>
+        <span class="grade-badge grade-c">&lt;70 = C/F</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE SITES -->
+  <section class="section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>已部署<span class="gradient-text">客戶站</span></h2>
+        <p>全部達到 A+ 評級，平均 99.2 分</p>
+      </div>
+      <div class="sites-grid">
+        <div class="site-card">
+          <div class="site-score">98</div>
+          <div class="site-info">
+            <h4>稻荷環球食品</h4>
+            <p>food_delivery &middot; A+</p>
+            <a href="https://inari-global-foods.vercel.app" target="_blank">inari-global-foods.vercel.app</a>
+          </div>
+        </div>
+        <div class="site-card">
+          <div class="site-score">100</div>
+          <div class="site-info">
+            <h4>After School Coffee</h4>
+            <p>cafe &middot; A+</p>
+            <a href="https://after-school-coffee.vercel.app" target="_blank">after-school-coffee.vercel.app</a>
+          </div>
+        </div>
+        <div class="site-card">
+          <div class="site-score">99</div>
+          <div class="site-info">
+            <h4>Mind Coffee</h4>
+            <p>cafe &middot; A+</p>
+            <a href="https://mind-coffee.vercel.app" target="_blank">mind-coffee.vercel.app</a>
+          </div>
+        </div>
+        <div class="site-card">
+          <div class="site-score">100</div>
+          <div class="site-info">
+            <h4>海膽速遞</h4>
+            <p>food_delivery &middot; A+</p>
+            <a href="https://sea-urchin-delivery.vercel.app" target="_blank">sea-urchin-delivery.vercel.app</a>
+          </div>
+        </div>
+        <div class="site-card">
+          <div class="site-score">99</div>
+          <div class="site-info">
+            <h4>BNI 澳門</h4>
+            <p>consulting &middot; A+</p>
+            <a href="https://bni-macau.vercel.app" target="_blank">bni-macau.vercel.app</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2>代託管<span class="gradient-text">方案</span></h2>
+        <p>免費方案永久可用，付費方案解鎖 AI 文章引擎</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <h4>Free</h4>
+          <div class="price-amount">$0<small>/月</small></div>
+          <ul class="price-features">
+            <li><span class="check">&#10003;</span> AEO 合規靜態網站</li>
+            <li><span class="check">&#10003;</span> Vercel CDN 全球分發</li>
+            <li><span class="check">&#10003;</span> 每週審計</li>
+            <li><span class="dash">&mdash;</span> AI 文章生成</li>
+            <li><span class="dash">&mdash;</span> 自定義域名</li>
+          </ul>
+        </div>
+        <div class="price-card popular">
+          <h4>Basic</h4>
+          <div class="price-amount">MOP$500<small>/月</small></div>
+          <ul class="price-features">
+            <li><span class="check">&#10003;</span> 全部 Free 功能</li>
+            <li><span class="check">&#10003;</span> 每天 2 篇 AI 文章</li>
+            <li><span class="check">&#10003;</span> 每日審計</li>
+            <li><span class="dash">&mdash;</span> 自定義域名</li>
+          </ul>
+        </div>
+        <div class="price-card">
+          <h4>Pro</h4>
+          <div class="price-amount">MOP$1,500<small>/月</small></div>
+          <ul class="price-features">
+            <li><span class="check">&#10003;</span> 全部 Basic 功能</li>
+            <li><span class="check">&#10003;</span> 每天 6 篇 AI 文章</li>
+            <li><span class="check">&#10003;</span> 每 3 小時審計</li>
+            <li><span class="check">&#10003;</span> 自定義域名</li>
+          </ul>
+        </div>
+        <div class="price-card">
+          <h4>Enterprise</h4>
+          <div class="price-amount">MOP$3,000<small>/月</small></div>
+          <ul class="price-features">
+            <li><span class="check">&#10003;</span> 全部 Pro 功能</li>
+            <li><span class="check">&#10003;</span> 每天 12 篇 AI 文章</li>
+            <li><span class="check">&#10003;</span> 每小時審計</li>
+            <li><span class="check">&#10003;</span> 優先技術支援</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>常見問題</h2>
+      </div>
+      <div style="max-width:720px;margin:0 auto;">
+        <details>
+          <summary>什麼是 AEO（AI 引擎優化）？</summary>
+          <p>AEO 是 AI Engine Optimization 的縮寫，指針對 AI 搜尋引擎（如 ChatGPT、Claude、Perplexity）優化網站內容結構，讓 AI 系統能正確理解和引用您的品牌資訊。包括 Schema.org 結構化資料、llms.txt 授權檔案、FAQ 問答結構等。</p>
+        </details>
+        <details>
+          <summary>免費方案有什麼限制？</summary>
+          <p>免費方案包含完整的 AEO 合規靜態網站，部署在 Vercel CDN 上，每週執行一次審計檢查。唯一限制是不包含 AI 自動文章生成和自定義域名。網站永久有效，不限流量。</p>
+        </details>
+        <details>
+          <summary>建站需要多長時間？</summary>
+          <p>從提交資料到網站上線，全自動流程約 3-5 分鐘。系統會自動驗證資料、AI 生成內容、建立 7 個檔案、執行合規檢查、部署到 CDN，並返回網站 URL 和審計報告。</p>
+        </details>
+        <details>
+          <summary>支援哪些行業？</summary>
+          <p>目前支援 20 種行業類型，包括餐廳、咖啡店、烘焙坊、酒吧、外送餐飲、零售、精品、美容、牙科、醫療、法律、金融、地產、教育、旅遊、科技、顧問、非營利、媒體、個人品牌。每種行業自動映射正確的 Schema.org 類型。</p>
+        </details>
+        <details>
+          <summary>審計包含哪些指標？</summary>
+          <p>15 項審計指標分三類：AEO（40 分）包含 robots.txt AI 爬蟲、llms.txt、link 標籤、Organization Schema、FAQPage；SEO（30 分）包含 meta description、canonical、OG 標籤、sitemap、security.txt；GEO（30 分）包含首段直答、結構化內容、內容量。總分 100，95 分以上為 A+ 級。</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section>
+    <div class="container" style="text-align:center;padding:80px 0;">
+      <h2 style="font-family:'Sora',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-1.5px;margin-bottom:16px;">準備好建立您的<br><span class="gradient-text">AEO 合規網站</span>了嗎？</h2>
+      <p style="color:var(--text-2);font-size:16px;margin-bottom:32px;">填寫資料，3-5 分鐘自動上線</p>
+      <a href="/intake.html" class="btn btn-primary" style="font-size:16px;padding:16px 36px;">免費建站 &rarr;</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <address>
+        <strong>CloudPipe</strong> &middot; AI Automation Platform<br>
+        GitHub：<a href="https://github.com/Inari-Kira-Isla/cloudpipe-landing">Inari-Kira-Isla/cloudpipe-landing</a>
+      </address>
+      <div class="footer-copy">&copy; 2026 CloudPipe &middot; CC BY 4.0</div>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+    });
+  </script>
+</body>
+</html>
