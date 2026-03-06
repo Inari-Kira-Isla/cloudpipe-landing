@@ -10,6 +10,8 @@ const VERCEL_TOKEN = process.env.VERCEL_DEPLOY_TOKEN || "";
 const VERCEL_TEAM = process.env.VERCEL_TEAM_ID || "";
 const TELEGRAM_BOT = process.env.TELEGRAM_BOT_TOKEN || "";
 const TELEGRAM_CHAT = process.env.TELEGRAM_CHAT_ID || "8399476482";
+const HOSTING_WEBHOOK_URL = process.env.HOSTING_WEBHOOK_URL || "https://kiradeimac.taild5212b.ts.net/api/sites/webhook/new";
+const HOSTING_MASTER_KEY = process.env.HOSTING_MASTER_KEY || "b3d405f1b8a2b4a410b91754927b47deeeb1cdceff717e74";
 
 const INDUSTRY_SCHEMA = {
   restaurant: "Restaurant", cafe: "CafeOrCoffeeShop", bakery: "Bakery",
@@ -416,6 +418,47 @@ async function deployToVercel(slug, files) {
   return result.url ? `https://${result.url}` : null;
 }
 
+// ─── Hosting Platform Push API ─────────────────────────────
+
+async function pushToHostingPlatform(slug, html, brandName) {
+  try {
+    const resp = await fetch(HOSTING_WEBHOOK_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Api-Key": HOSTING_MASTER_KEY,
+      },
+      body: JSON.stringify({
+        html,
+        brandName,
+        subdomain: slug,
+      }),
+      signal: AbortSignal.timeout(30000),
+    });
+
+    if (!resp.ok) {
+      const err = await resp.text();
+      console.error("Hosting push error:", resp.status, err);
+      return null;
+    }
+
+    const result = await resp.json();
+    if (result.ok) {
+      return {
+        siteId: result.site?.id,
+        subdomain: result.site?.subdomain,
+        url: result.site?.url,
+        webhookToken: result.webhook?.token,
+        updateUrl: result.webhook?.updateUrl,
+      };
+    }
+    return null;
+  } catch (e) {
+    console.error("Hosting push failed:", e.message);
+    return null;
+  }
+}
+
 // ─── Telegram Notify ──────────────────────────────────────
 
 async function notifyTelegram(msg) {
@@ -485,24 +528,45 @@ export default async function handler(req, res) {
       "vercel.json": buildVercelJson(),
     };
 
-    // 4. Deploy
+    // 4. Deploy (Vercel + Hosting Platform in parallel)
     let siteUrl = null;
     let deployMethod = "none";
+    let hostingResult = null;
 
-    // Try Vercel Deploy API
+    const deployTasks = [];
+
+    // Vercel Deploy
     if (VERCEL_TOKEN) {
-      siteUrl = await deployToVercel(slug, files);
-      if (siteUrl) deployMethod = "vercel-api";
+      deployTasks.push(
+        deployToVercel(slug, files).then(url => {
+          if (url) { siteUrl = url; deployMethod = "vercel-api"; }
+        })
+      );
     }
+
+    // Hosting Platform Push
+    deployTasks.push(
+      pushToHostingPlatform(slug, files["index.html"], data.business_name).then(r => {
+        hostingResult = r;
+        if (r && !siteUrl) {
+          deployMethod = "hosting-platform";
+        }
+      })
+    );
+
+    await Promise.allSettled(deployTasks);
 
     // Fallback URL
     if (!siteUrl) {
       siteUrl = `https://${slug}.vercel.app`;
-      deployMethod = "pending";
+      if (deployMethod === "none") deployMethod = "pending";
     }
 
     // 5. Notify
     const topicCount = Object.values(topics).reduce((sum, arr) => sum + arr.length, 0);
+    const hostingInfo = hostingResult
+      ? `\n托管平台：✅ ${hostingResult.url}\nWebhook Token：${hostingResult.webhookToken?.slice(0, 8)}...`
+      : "\n托管平台：❌ 未連線";
     const msg = `🆕 <b>新站申請</b>\n` +
       `品牌：${data.business_name}\n` +
       `行業：${data.industry} → ${data.schema_type}\n` +
@@ -510,7 +574,7 @@ export default async function handler(req, res) {
       `FAQ：${faqs.length} 題\n` +
       `主題池：${topicCount} 題\n` +
       `部署：${deployMethod}\n` +
-      `URL：${siteUrl}`;
+      `URL：${siteUrl}${hostingInfo}`;
     await notifyTelegram(msg);
 
     // 6. Return result
@@ -527,6 +591,15 @@ export default async function handler(req, res) {
         files: Object.keys(files),
       },
     };
+
+    // Hosting platform info
+    if (hostingResult) {
+      result.hosting = {
+        url: hostingResult.url,
+        webhookToken: hostingResult.webhookToken,
+        updateUrl: hostingResult.updateUrl,
+      };
+    }
 
     // Include files data for pending deployments
     if (deployMethod === "pending") {

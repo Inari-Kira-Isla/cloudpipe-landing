@@ -15,6 +15,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://cloudpipe-landing.vercel.app/architecture.html">
   <meta property="og:locale" content="zh_TW">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"CloudPipe 系統架構包含哪些微服務？","acceptedAnswer":{"@type":"Answer","text":"包含 5 大微服務：Core 路由引擎（port 4000）、API Proxy AI 代理（port 4002）、Telegram Bot 管理介面（port 4003）、Threads Publisher 自動發文（port 4005）、MCP Server（21 個工具，stdio transport）。"}},{"@type":"Question","name":"CloudPipe 使用什麼 AI 模型？","acceptedAnswer":{"@type":"Answer","text":"預設使用 Claude（透過 claude-max-api-proxy，OpenAI 相容格式），備用 MiniMax M2.1。透過 AI_PROVIDER 環境變數切換。支援 Claude Haiku（客服）、Claude Sonnet（進階分析）、Gemini Flash（輕量任務）。"}},{"@type":"Question","name":"三層 FAQ 匹配引擎如何運作？","acceptedAnswer":{"@type":"Answer","text":"第一層：關鍵字精確匹配（最快），從品牌 FAQ 資料庫中比對。第二層：語義相似度匹配，使用 embedding 向量搜尋。第三層：AI 生成回覆，當前兩層無法匹配時，由 Claude 根據品牌語氣生成回答。"}},{"@type":"Question","name":"CloudPipe 的資料庫結構是什麼？","acceptedAnswer":{"@type":"Answer","text":"使用 SQLite（better-sqlite3），包含 20+ 資料表，涵蓋品牌設定、客戶 CRM、對話記錄、FAQ 匹配、訂單管理、審計歷史等。每個品牌獨立配置，支援多品牌多語言。"}},{"@type":"Question","name":"MCP Server 提供哪些工具？","acceptedAnswer":{"@type":"Answer","text":"提供 21 個 MCP 工具，涵蓋品牌管理、客戶查詢、FAQ 操作、對話記錄、訂單處理、數據分析、系統監控等功能，透過 stdio transport 與 AI 助手整合。"}}]}</script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
