@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brand AI Agent — 品牌 AI 靈魂 | CloudPipe</title>
+<meta name="description" content="CloudPipe Brand AI Agent — 為每個品牌打造專屬 AI 靈魂，越用越聰明的核心資產">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<link rel="canonical" href="https://cloudpipe-landing.vercel.app/brand-ai-agent.html">
+<link rel="llms-txt" href="https://cloudpipe-landing.vercel.app/llms.txt">
+<meta property="og:title" content="Brand AI Agent — 品牌 AI 靈魂 | CloudPipe">
+<meta property="og:description" content="為每個品牌打造專屬 AI 靈魂，越用越聰明的核心資產">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cloudpipe-landing.vercel.app/brand-ai-agent.html">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://cloudpipe-landing.vercel.app","description":"澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服。","alternateName":"CloudPipe AI Automation Platform","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"},"sameAs":["https://github.com/Inari-Kira-Isla/cloudpipe-landing"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+  {"@type":"Question","name":"Brand AI Agent 是什麼？","acceptedAnswer":{"@type":"Answer","text":"Brand AI Agent 是 CloudPipe 的核心功能，為每個品牌打造專屬的 AI 靈魂。它包含品牌人格、內容規則、客服規則和品牌知識庫四大模組，讓 AI 在所有平台展現一致的品牌體驗。"}},
+  {"@type":"Question","name":"Brand AI Agent 和普通 AI 有什麼不同？","acceptedAnswer":{"@type":"Answer","text":"普通 AI（如 ChatGPT）為所有品牌生成相同風格的內容。Brand AI Agent 深度理解你的品牌個性、語氣、禁忌，並持續學習和進化，成為品牌獨一無二的核心資產。"}},
+  {"@type":"Question","name":"設定 Brand AI Agent 需要多長時間？","acceptedAnswer":{"@type":"Answer","text":"只需 5 分鐘。在 CloudPipe Dashboard 填入品牌人格和基本規則，連接 Facebook 或 Threads 帳號，AI 即刻開始工作。"}},
+  {"@type":"Question","name":"Brand AI Agent 支援哪些平台？","acceptedAnswer":{"@type":"Answer","text":"目前支援 Facebook 發文、Messenger 客服、留言自動回覆、Threads 社群經營和 FAQ 自動生成。Instagram DM 和 WhatsApp 即將推出。"}},
+  {"@type":"Question","name":"Brand AI Agent 如何持續進化？","acceptedAnswer":{"@type":"Answer","text":"AI 會自動分析高互動內容、記住客戶偏好、優化回覆策略、追蹤主題新鮮度。每一次互動都在累積品牌知識，使其越用越聰明。"}}
+]}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Sora:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Variables ── */
+:root {
+  --bg: #080810;
+  --bg-alt: #0d0d1a;
+  --card: #111120;
+  --card-hover: #16162a;
+  --cyan: #00e5ff;
+  --magenta: #ff2d7b;
+  --green: #00e676;
+  --amber: #ffab00;
+  --text: #e6e6f0;
+  --text-muted: #7272a0;
+  --text-dim: #404060;
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(0,229,255,0.3);
+  --radius: 16px;
+  --gradient: linear-gradient(135deg, var(--cyan), var(--magenta));
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── Ambient BG ── */
+body::before {
+  content: '';
+  position: fixed;
+  top: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -200px;
+  left: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255,45,123,0.05) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Layout ── */
+.container { max-width: 1140px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+section { padding: 96px 0; }
+@media (max-width: 768px) { section { padding: 64px 0; } }
+
+/* ── Typography ── */
+h1, h2, h3, h4 { font-family: 'Sora', sans-serif; font-weight: 700; line-height: 1.3; }
+h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
+h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); margin-bottom: 16px; }
+h3 { font-size: 1.2rem; margin-bottom: 8px; }
+
+.gradient-text {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--magenta);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--text-muted);
+  max-width: 640px;
+}
+
+/* ── Navbar ── */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 16px 0;
+  backdrop-filter: blur(20px);
+  background: rgba(8,8,16,0.8);
+  border-bottom: 1px solid var(--border);
+}
+nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  font-family: 'Sora', sans-serif;
+  font-weight: 800;
+  font-size: 1.3rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.logo span { color: var(--cyan); }
+nav a.cta-link {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  color: var(--cyan);
+  text-decoration: none;
+  padding: 8px 20px;
+  border: 1px solid rgba(0,229,255,0.3);
+  border-radius: 999px;
+  transition: all 0.2s;
+}
+nav a.cta-link:hover {
+  background: var(--cyan);
+  color: var(--bg);
+}
+
+/* ── Hero ── */
+.hero {
+  padding-top: 160px;
+  padding-bottom: 80px;
+  text-align: center;
+}
+.hero .subtitle { margin: 24px auto 0; }
+.hero-badge {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  border: 1px solid rgba(0,229,255,0.3);
+  border-radius: 999px;
+  padding: 6px 20px;
+  margin-bottom: 32px;
+}
+.hero-badge .dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  margin-right: 8px;
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* ── Soul Anim ── */
+.soul-visual {
+  width: 180px;
+  height: 180px;
+  margin: 48px auto;
+  position: relative;
+}
+.soul-orb {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, rgba(0,229,255,0.25), rgba(255,45,123,0.15), transparent 70%);
+  animation: pulse-orb 4s ease-in-out infinite;
+  box-shadow: 0 0 80px rgba(0,229,255,0.15), 0 0 160px rgba(255,45,123,0.08);
+}
+.soul-ring {
+  position: absolute;
+  top: -10px; left: -10px; right: -10px; bottom: -10px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,229,255,0.15);
+  animation: spin-ring 20s linear infinite;
+}
+.soul-ring::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  width: 8px; height: 8px;
+  background: var(--cyan);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 12px var(--cyan);
+}
+@keyframes pulse-orb { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+@keyframes spin-ring { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* ── Pain Section ── */
+.pain-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 48px;
+}
+@media (max-width: 768px) { .pain-grid { grid-template-columns: 1fr; } }
+
+.pain-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.pain-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--gradient);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.pain-card:hover::before { opacity: 1; }
+.pain-card:hover { border-color: var(--border-hover); }
+
+.pain-card h3 { color: var(--text); }
+.pain-card .icon { font-size: 2rem; margin-bottom: 16px; }
+.pain-card ul { list-style: none; margin-top: 12px; }
+.pain-card li {
+  padding: 6px 0;
+  padding-left: 20px;
+  position: relative;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+.pain-card li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 13px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--magenta);
+}
+
+/* ── Module Cards ── */
+.modules-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 48px;
+}
+@media (max-width: 768px) { .modules-grid { grid-template-columns: 1fr; } }
+
+.module-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.module-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.module-card:nth-child(1)::before { background: var(--cyan); }
+.module-card:nth-child(2)::before { background: var(--magenta); }
+.module-card:nth-child(3)::before { background: var(--green); }
+.module-card:nth-child(4)::before { background: var(--amber); }
+.module-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+.module-card:hover::before { opacity: 1; }
+
+.module-num {
+  font-family: 'Sora', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+.module-card:nth-child(1) .module-num { color: var(--cyan); }
+.module-card:nth-child(2) .module-num { color: var(--magenta); }
+.module-card:nth-child(3) .module-num { color: var(--green); }
+.module-card:nth-child(4) .module-num { color: var(--amber); }
+
+.module-card h3 { font-size: 1.3rem; margin-bottom: 4px; }
+.module-card .en-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* ── Learning Section ── */
+.learning-section { background: var(--bg-alt); }
+.learning-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 48px;
+  flex-wrap: wrap;
+}
+.flow-step {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  text-align: center;
+  min-width: 140px;
+  transition: all 0.3s;
+}
+.flow-step:hover { border-color: var(--border-hover); }
+.flow-step .step-icon { font-size: 1.6rem; margin-bottom: 8px; }
+.flow-step .step-label { font-size: 0.85rem; color: var(--text-muted); }
+.flow-arrow {
+  font-size: 1.2rem;
+  color: var(--cyan);
+  font-family: 'Space Mono', monospace;
+}
+@media (max-width: 768px) {
+  .flow-arrow { transform: rotate(90deg); }
+}
+
+.learning-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+@media (max-width: 768px) { .learning-features { grid-template-columns: 1fr; } }
+
+.learn-feat {
+  text-align: center;
+  padding: 24px;
+}
+.learn-feat .feat-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin: 0 auto 16px;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.learn-feat h4 { font-size: 1rem; margin-bottom: 8px; }
+.learn-feat p { font-size: 0.9rem; color: var(--text-muted); }
+
+/* ── Platform Section ── */
+.platform-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 48px;
+}
+.plat-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-size: 0.95rem;
+  transition: all 0.3s;
+}
+.plat-chip:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+.plat-chip .plat-icon { font-size: 1.3rem; }
+.plat-chip.coming {
+  opacity: 0.5;
+  border-style: dashed;
+}
+.plat-chip.coming::after {
+  content: 'SOON';
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--amber);
+  border: 1px solid rgba(255,171,0,0.3);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+/* ── Value Section ── */
+.value-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 48px;
+}
+@media (max-width: 768px) { .value-grid { grid-template-columns: 1fr; } }
+
+.value-card {
+  text-align: center;
+  padding: 40px 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: all 0.3s;
+}
+.value-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+.value-num {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.value-card:nth-child(1) .value-num { color: var(--cyan); }
+.value-card:nth-child(2) .value-num { color: var(--magenta); }
+.value-card:nth-child(3) .value-num { color: var(--green); }
+.value-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
+.value-card p { font-size: 0.9rem; color: var(--text-muted); }
+
+/* ── CTA Section ── */
+.cta-section {
+  text-align: center;
+  padding: 120px 0;
+}
+.cta-section h2 { margin-bottom: 24px; }
+.cta-steps {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin: 48px 0;
+  flex-wrap: wrap;
+}
+.cta-step {
+  text-align: center;
+  max-width: 200px;
+}
+.cta-step .step-num {
+  font-family: 'Sora', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--cyan);
+  margin-bottom: 8px;
+}
+.cta-step .step-text { font-size: 0.95rem; color: var(--text-muted); }
+.cta-step .step-title { font-weight: 600; margin-bottom: 4px; }
+
+.cta-btn {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  padding: 16px 40px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: all 0.3s;
+  margin: 8px;
+}
+.cta-btn.primary {
+  background: var(--cyan);
+  color: var(--bg);
+  font-weight: 700;
+}
+.cta-btn.primary:hover {
+  background: #fff;
+  box-shadow: 0 0 30px rgba(0,229,255,0.3);
+}
+.cta-btn.outline {
+  border: 1px solid rgba(0,229,255,0.3);
+  color: var(--cyan);
+}
+.cta-btn.outline:hover {
+  border-color: var(--cyan);
+  background: rgba(0,229,255,0.1);
+}
+
+/* ── Footer ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 32px 0;
+  text-align: center;
+}
+footer p {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+footer .logo-footer {
+  font-family: 'Sora', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+footer .logo-footer span { color: var(--cyan); }
+
+/* ── Scroll Reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+</style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav>
+  <div class="container">
+    <a href="https://cloudpipe-landing.vercel.app" class="logo">Cloud<span>Pipe</span></a>
+    <a href="https://cloudpipe-landing.vercel.app/#contact" class="cta-link">CONTACT US &rarr;</a>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge reveal"><span class="dot"></span>BRAND AI AGENT</div>
+    <h1 class="reveal reveal-delay-1">你的品牌<br><span class="gradient-text">有了自己的靈魂</span></h1>
+    <p class="subtitle reveal reveal-delay-2">不只是 AI 工具，是越用越聰明的品牌核心資產。<br>一次設定品牌人格，所有平台自動展現一致的品牌體驗。</p>
+    <div class="soul-visual reveal reveal-delay-3">
+      <div class="soul-orb"></div>
+      <div class="soul-ring"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Pain ── -->
+<section style="background: var(--bg-alt);">
+  <div class="container">
+    <span class="eyebrow reveal">// THE PROBLEM</span>
+    <h2 class="reveal">為什麼你需要 <span class="gradient-text">Brand AI Agent</span>？</h2>
+    <div class="pain-grid">
+      <div class="pain-card reveal reveal-delay-1">
+        <div class="icon">&#x1F468;&#x200D;&#x1F4BC;</div>
+        <h3>傳統人工的困境</h3>
+        <ul>
+          <li>每月數萬元人力成本，只能覆蓋上班時間</li>
+          <li>不同員工回覆風格天差地別，品牌形象模糊</li>
+          <li>凌晨的客戶留言？明天再說</li>
+          <li>員工離職，所有經驗歸零</li>
+        </ul>
+      </div>
+      <div class="pain-card reveal reveal-delay-2">
+        <div class="icon">&#x1F916;</div>
+        <h3>通用 AI 的問題</h3>
+        <ul>
+          <li>ChatGPT 幫每個品牌寫出一樣的文案</li>
+          <li>每次對話都從零開始，不認識你的品牌</li>
+          <li>無法體現品牌獨特的語氣和價值觀</li>
+          <li>沒有記憶，無法累積學習成果</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 4 Modules ── -->
+<section>
+  <div class="container">
+    <span class="eyebrow reveal">// FOUR PILLARS</span>
+    <h2 class="reveal">四大核心模組，打造<span class="gradient-text">專屬 AI 靈魂</span></h2>
+    <p class="subtitle reveal">每個模組精確控制 AI 的行為方式，讓你的品牌在每一次互動中都獨一無二。</p>
+    <div class="modules-grid">
+
+      <div class="module-card reveal reveal-delay-1">
+        <div class="module-num">01</div>
+        <h3>品牌人格</h3>
+        <span class="en-label">Core Identity</span>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">定義 AI 的「性格」— 角色定位、語氣調性、擅長主題、禁忌事項、招牌風格。讓每一次互動都帶有品牌 DNA。</p>
+        <div class="tag-list">
+          <span class="tag">角色定位</span>
+          <span class="tag">語氣調性</span>
+          <span class="tag">品牌聲音</span>
+          <span class="tag">風格示例</span>
+          <span class="tag">禁忌事項</span>
+        </div>
+      </div>
+
+      <div class="module-card reveal reveal-delay-2">
+        <div class="module-num">02</div>
+        <h3>內容規則</h3>
+        <span class="en-label">Content Rules</span>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">精確控制 AI 產出的每一篇內容 — 語言、字數、Emoji 策略、Hashtag 規則、內容結構、時段語氣調整。</p>
+        <div class="tag-list">
+          <span class="tag">字數範圍</span>
+          <span class="tag">Emoji 策略</span>
+          <span class="tag">時段語氣</span>
+          <span class="tag">內容結構</span>
+        </div>
+      </div>
+
+      <div class="module-card reveal reveal-delay-3">
+        <div class="module-num">03</div>
+        <h3>客服規則</h3>
+        <span class="en-label">Customer Service</span>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">讓 AI 客服成為品牌最可靠的第一線 — 問候模板、轉人工觸發條件、不可承諾事項、FAQ 優先匹配。</p>
+        <div class="tag-list">
+          <span class="tag">問候模板</span>
+          <span class="tag">轉人工觸發</span>
+          <span class="tag">不可承諾</span>
+          <span class="tag">FAQ 優先</span>
+        </div>
+      </div>
+
+      <div class="module-card reveal reveal-delay-4">
+        <div class="module-num">04</div>
+        <h3>品牌知識庫</h3>
+        <span class="en-label">Knowledge Base</span>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">讓 AI 真正「認識」你的品牌 — 品牌故事、核心產品、競品分析、行業背景、季節活動日曆。</p>
+        <div class="tag-list">
+          <span class="tag">基本資訊</span>
+          <span class="tag">競品分析</span>
+          <span class="tag">行業背景</span>
+          <span class="tag">活動日曆</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Learning ── -->
+<section class="learning-section">
+  <div class="container">
+    <span class="eyebrow reveal">// CONTINUOUS EVOLUTION</span>
+    <h2 class="reveal">持續進化的 <span class="gradient-text">Learning &amp; Memory</span></h2>
+    <p class="subtitle reveal">Brand AI Agent 不是設定一次就結束。每一次互動都在讓它變得更聰明。</p>
+
+    <div class="learning-flow reveal">
+      <div class="flow-step">
+        <div class="step-icon">&#x1F4DD;</div>
+        <div class="step-label">發文 / 回覆</div>
+      </div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-step">
+        <div class="step-icon">&#x1F4CA;</div>
+        <div class="step-label">收集互動數據</div>
+      </div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-step">
+        <div class="step-icon">&#x1F9E0;</div>
+        <div class="step-label">分析高分內容</div>
+      </div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-step">
+        <div class="step-icon">&#x2728;</div>
+        <div class="step-label">自動調整策略</div>
+      </div>
+      <span class="flow-arrow">&rarr;</span>
+      <div class="flow-step" style="border-color: var(--border-hover);">
+        <div class="step-icon">&#x1F680;</div>
+        <div class="step-label" style="color: var(--cyan);">更好的表現</div>
+      </div>
+    </div>
+
+    <div class="learning-features">
+      <div class="learn-feat reveal reveal-delay-1">
+        <div class="feat-icon">&#x1F525;</div>
+        <h4>高互動分析</h4>
+        <p>自動追蹤哪些內容引發最多互動，學習成功模式並複製</p>
+      </div>
+      <div class="learn-feat reveal reveal-delay-2">
+        <div class="feat-icon">&#x1F464;</div>
+        <h4>客戶記憶</h4>
+        <p>記住每位客戶的偏好和歷史對話，提供個人化回覆</p>
+      </div>
+      <div class="learn-feat reveal reveal-delay-3">
+        <div class="feat-icon">&#x1F504;</div>
+        <h4>策略優化</h4>
+        <p>分析回覆效果、避免重複主題，持續提升內容品質</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Cross-platform ── -->
+<section>
+  <div class="container" style="text-align: center;">
+    <span class="eyebrow reveal">// ONE SOUL, EVERYWHERE</span>
+    <h2 class="reveal">同一靈魂，<span class="gradient-text">多場景表現</span></h2>
+    <p class="subtitle reveal" style="margin: 16px auto 0;">一次設定品牌人格，AI 在每個平台都展現一致的品牌體驗。</p>
+
+    <div class="platform-row">
+      <div class="plat-chip reveal reveal-delay-1">
+        <span class="plat-icon">&#x1F4F1;</span>
+        <span>Facebook 發文</span>
+      </div>
+      <div class="plat-chip reveal reveal-delay-1">
+        <span class="plat-icon">&#x1F4AC;</span>
+        <span>Messenger 客服</span>
+      </div>
+      <div class="plat-chip reveal reveal-delay-2">
+        <span class="plat-icon">&#x1F5E8;&#xFE0F;</span>
+        <span>留言自動回覆</span>
+      </div>
+      <div class="plat-chip reveal reveal-delay-2">
+        <span class="plat-icon">&#x1F9F5;</span>
+        <span>Threads 社群</span>
+      </div>
+      <div class="plat-chip reveal reveal-delay-3">
+        <span class="plat-icon">&#x2753;</span>
+        <span>FAQ 自動生成</span>
+      </div>
+      <div class="plat-chip coming reveal reveal-delay-3">
+        <span class="plat-icon">&#x1F4F7;</span>
+        <span>Instagram DM</span>
+      </div>
+      <div class="plat-chip coming reveal reveal-delay-4">
+        <span class="plat-icon">&#x1F4F2;</span>
+        <span>WhatsApp</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Value ── -->
+<section style="background: var(--bg-alt);">
+  <div class="container">
+    <span class="eyebrow reveal">// CORE VALUE</span>
+    <h2 class="reveal" style="text-align: center;">為什麼選擇 <span class="gradient-text">CloudPipe</span>？</h2>
+    <div class="value-grid">
+      <div class="value-card reveal reveal-delay-1">
+        <div class="value-num">60%+</div>
+        <h3>降低人力成本</h3>
+        <p>AI 處理 80% 常見問題和內容生成，團隊專注高價值工作</p>
+      </div>
+      <div class="value-card reveal reveal-delay-2">
+        <div class="value-num">24/7</div>
+        <h3>全天候運行</h3>
+        <p>不需要排班、不會請假，凌晨三點照樣回覆客戶</p>
+      </div>
+      <div class="value-card reveal reveal-delay-3">
+        <div class="value-num">&infin;</div>
+        <h3>越用越值錢</h3>
+        <p>每次互動都在累積品牌知識，半年後它比新員工更了解你的品牌</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section">
+  <div class="container">
+    <span class="eyebrow reveal">// GET STARTED</span>
+    <h2 class="reveal"><span class="gradient-text">5 分鐘</span>，給品牌一個靈魂</h2>
+
+    <div class="cta-steps">
+      <div class="cta-step reveal reveal-delay-1">
+        <div class="step-num">01</div>
+        <div class="step-title">設定人格</div>
+        <div class="step-text">在 Dashboard 填入品牌人格和基本規則</div>
+      </div>
+      <div class="cta-step reveal reveal-delay-2">
+        <div class="step-num">02</div>
+        <div class="step-title">連接平台</div>
+        <div class="step-text">綁定 Facebook 粉專、Threads 帳號</div>
+      </div>
+      <div class="cta-step reveal reveal-delay-3">
+        <div class="step-num">03</div>
+        <div class="step-title">開始運行</div>
+        <div class="step-text">AI 立即工作，隨時微調</div>
+      </div>
+    </div>
+
+    <div class="reveal reveal-delay-4">
+      <a href="https://cloudpipe-landing.vercel.app" class="cta-btn primary">立即體驗 &rarr;</a>
+      <a href="https://cloudpipe-landing.vercel.app/#contact" class="cta-btn outline">聯繫我們</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="container">
+    <div class="logo-footer">Cloud<span>Pipe</span></div>
+    <address style="font-style:normal;font-size:12px;color:var(--text-dim);margin-bottom:8px;">
+      <strong>CloudPipe</strong> &middot; AI Automation Platform<br>
+      GitHub：<a href="https://github.com/Inari-Kira-Isla/cloudpipe-landing" style="color:var(--text-muted)">Inari-Kira-Isla/cloudpipe-landing</a>
+    </address>
+    <p>&copy; 2026 CloudPipe &middot; CC BY 4.0</p>
+  </div>
+</footer>
+
+<!-- ── Scroll Reveal JS ── -->
+<script>
+(function() {
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(el => observer.observe(el));
+})();
+</script>
+
+</body>
+</html>

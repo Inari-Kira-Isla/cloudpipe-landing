@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Site Manager — CloudPipe</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Sora:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #080810;
+  --bg-alt: #0d0d1a;
+  --card: #111120;
+  --card-hover: #16162a;
+  --cyan: #00e5ff;
+  --magenta: #ff2d7b;
+  --green: #00e676;
+  --amber: #ffab00;
+  --red: #ff4757;
+  --text: #e6e6f0;
+  --text-muted: #7272a0;
+  --text-dim: #404060;
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(0,229,255,0.3);
+  --radius: 16px;
+  --gradient: linear-gradient(135deg, var(--cyan), var(--magenta));
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans TC', sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── Ambient ── */
+body::before {
+  content: '';
+  position: fixed;
+  top: -200px; right: -200px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(0,229,255,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Layout ── */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+/* ── Header ── */
+header {
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  background: rgba(8,8,16,0.85);
+}
+header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  font-family: 'Sora', sans-serif;
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.logo span { color: var(--cyan); }
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.badge-env {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--green);
+  border: 1px solid rgba(0,230,118,0.3);
+  border-radius: 999px;
+  padding: 4px 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.badge-env .dot {
+  width: 6px; height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.page-count {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ── Stats Bar ── */
+.stats-bar {
+  display: flex;
+  gap: 24px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.stat-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.stat-num {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--cyan);
+}
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ── Filter ── */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  padding: 20px 0;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-btn:hover { border-color: var(--border-hover); color: var(--text); }
+.filter-btn.active {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: rgba(0,229,255,0.08);
+}
+
+/* ── Page Grid ── */
+.page-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 8px 0 64px;
+}
+
+/* ── Page Card ── */
+.page-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: start;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.page-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--gradient);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.page-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.page-card:hover::before { opacity: 1; }
+
+@media (max-width: 640px) {
+  .page-card { grid-template-columns: 1fr; }
+}
+
+.card-info { min-width: 0; }
+
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.card-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.card-title:hover { color: var(--cyan); }
+
+.tag-category {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.tag-core { background: rgba(0,229,255,0.12); color: var(--cyan); }
+.tag-tool { background: rgba(255,171,0,0.12); color: var(--amber); }
+.tag-showcase { background: rgba(255,45,123,0.12); color: var(--magenta); }
+.tag-analytics { background: rgba(0,230,118,0.12); color: var(--green); }
+
+.card-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-meta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.meta-item {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-self: center;
+}
+.btn-action {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn-action:hover {
+  border-color: var(--border-hover);
+  color: var(--cyan);
+}
+.btn-action.primary {
+  border-color: rgba(0,229,255,0.3);
+  color: var(--cyan);
+}
+.btn-action.primary:hover {
+  background: var(--cyan);
+  color: var(--bg);
+}
+
+/* ── Status Indicator ── */
+.status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+}
+.status-live .status-dot { background: var(--green); box-shadow: 0 0 8px var(--green); }
+.status-live { color: var(--green); }
+.status-local .status-dot { background: var(--amber); }
+.status-local { color: var(--amber); }
+
+/* ── Footer ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 24px 0;
+  text-align: center;
+}
+footer p {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <a href="index.html" class="logo">Cloud<span>Pipe</span> <span style="font-weight:400;font-size:0.8em;color:var(--text-muted);margin-left:4px;">Site Manager</span></a>
+    <div class="header-right">
+      <span class="badge-env"><span class="dot"></span> VERCEL</span>
+      <span class="page-count" id="pageCount"></span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Stats -->
+  <div class="stats-bar" id="statsBar"></div>
+
+  <!-- Filter -->
+  <div class="filter-bar" id="filterBar"></div>
+
+  <!-- Page Grid -->
+  <div class="page-grid" id="pageGrid"></div>
+
+</div>
+
+<footer>
+  <div class="container">
+    <p>CLOUDPIPE SITE MANAGER &middot; INTERNAL USE</p>
+  </div>
+</footer>
+
+<script>
+// ── Page Registry ──
+const PAGES = [
+  {
+    title: 'CloudPipe — AI 自動化平台',
+    file: 'index.html',
+    desc: '一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服，AI 智能回覆，24/7 自動運行。',
+    category: 'core',
+    status: 'live',
+    size: '44 KB',
+    updated: '2026-03-06',
+  },
+  {
+    title: '定價方案',
+    file: 'pricing.html',
+    desc: '透明定價：基本方案 MOP$500/月、專業方案 MOP$1,500/月、企業方案 MOP$3,000/月。查看完整功能比較。',
+    category: 'core',
+    status: 'live',
+    size: '33 KB',
+    updated: '2026-03-06',
+  },
+  {
+    title: '系統架構',
+    file: 'architecture.html',
+    desc: '多品牌 AI 自動化平台完整系統架構：5 大微服務、20+ 資料表、21 個 MCP 工具、三層 FAQ 匹配引擎。',
+    category: 'core',
+    status: 'live',
+    size: '58 KB',
+    updated: '2026-03-06',
+  },
+  {
+    title: 'Brand AI Agent — 品牌 AI 靈魂',
+    file: 'brand-ai-agent.html',
+    desc: '為每個品牌打造專屬 AI 靈魂 — 四大核心模組：品牌人格、內容規則、客服規則、品牌知識庫，越用越聰明的核心資產。',
+    category: 'showcase',
+    status: 'live',
+    size: '28 KB',
+    updated: '2026-03-06',
+  },
+  {
+    title: 'AEO 評分工具',
+    file: 'aeo-score.html',
+    desc: '免費檢測網站 AEO（AI 引擎優化）分數。檢查 robots.txt、llms.txt、Schema Markup、SSR 等 7 項 AI 可見度指標。',
+    category: 'tool',
+    status: 'live',
+    size: '24 KB',
+    updated: '2026-03-06',
+  },
+  {
+    title: 'AI 爬蟲監控中心',
+    file: 'aeo-monitor.html',
+    desc: '即時監控所有託管網站的 AI 爬蟲活動 — Meta、OpenAI、Claude、Perplexity 等 18 種 AI 系統的訪問追蹤。',
+    category: 'analytics',
+    status: 'live',
+    size: '19 KB',
+    updated: '2026-03-06',
+  },
+  {
+    title: 'AI 足跡追蹤儀表板',
+    file: 'ai-footprint.html',
+    desc: '即時追蹤哪些 AI 系統正在讀取 CloudPipe 的內容，記錄 GPTBot、ClaudeBot、PerplexityBot 等 AI 爬蟲的訪問足跡。',
+    category: 'analytics',
+    status: 'live',
+    size: '12 KB',
+    updated: '2026-03-06',
+  },
+];
+
+const CATEGORIES = {
+  all:       { label: 'ALL', color: 'var(--text)' },
+  core:      { label: 'CORE', color: 'var(--cyan)', tagClass: 'tag-core' },
+  showcase:  { label: 'SHOWCASE', color: 'var(--magenta)', tagClass: 'tag-showcase' },
+  tool:      { label: 'TOOL', color: 'var(--amber)', tagClass: 'tag-tool' },
+  analytics: { label: 'ANALYTICS', color: 'var(--green)', tagClass: 'tag-analytics' },
+};
+
+const BASE_URL = 'https://cloudpipe-landing.vercel.app';
+let activeFilter = 'all';
+
+// ── Render Stats ──
+function renderStats() {
+  const el = document.getElementById('statsBar');
+  const totalSize = PAGES.reduce((sum, p) => sum + parseInt(p.size), 0);
+  const cats = {};
+  PAGES.forEach(p => { cats[p.category] = (cats[p.category] || 0) + 1; });
+
+  el.innerHTML = `
+    <div class="stat-item">
+      <span class="stat-num">${PAGES.length}</span>
+      <span class="stat-label">頁面</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" style="color:var(--green)">${PAGES.filter(p => p.status === 'live').length}</span>
+      <span class="stat-label">已上線</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" style="color:var(--magenta)">${totalSize}</span>
+      <span class="stat-label">KB 總大小</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" style="color:var(--amber)">${Object.keys(cats).length}</span>
+      <span class="stat-label">分類</span>
+    </div>
+  `;
+
+  document.getElementById('pageCount').textContent = `${PAGES.length} PAGES`;
+}
+
+// ── Render Filters ──
+function renderFilters() {
+  const el = document.getElementById('filterBar');
+  el.innerHTML = Object.entries(CATEGORIES).map(([key, cat]) => {
+    const count = key === 'all' ? PAGES.length : PAGES.filter(p => p.category === key).length;
+    return `<button class="filter-btn ${activeFilter === key ? 'active' : ''}" onclick="setFilter('${key}')">${cat.label} (${count})</button>`;
+  }).join('');
+}
+
+// ── Render Cards ──
+function renderCards() {
+  const el = document.getElementById('pageGrid');
+  const filtered = activeFilter === 'all' ? PAGES : PAGES.filter(p => p.category === activeFilter);
+
+  el.innerHTML = filtered.map(page => {
+    const cat = CATEGORIES[page.category];
+    const statusClass = page.status === 'live' ? 'status-live' : 'status-local';
+    const statusLabel = page.status === 'live' ? 'LIVE' : 'LOCAL';
+
+    return `
+    <div class="page-card" data-category="${page.category}">
+      <div class="card-info">
+        <div class="card-top">
+          <a href="${page.file}" class="card-title" target="_blank">${page.title}</a>
+          <span class="tag-category ${cat.tagClass}">${cat.label}</span>
+          <span class="status ${statusClass}"><span class="status-dot"></span>${statusLabel}</span>
+        </div>
+        <div class="card-desc">${page.desc}</div>
+        <div class="card-meta">
+          <span class="meta-item">${page.file}</span>
+          <span class="meta-item">${page.size}</span>
+          <span class="meta-item">${page.updated}</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <a href="${page.file}" target="_blank" class="btn-action primary">OPEN &rarr;</a>
+        <a href="${BASE_URL}/${page.file}" target="_blank" class="btn-action">PROD</a>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setFilter(key) {
+  activeFilter = key;
+  renderFilters();
+  renderCards();
+}
+
+// ── Init ──
+renderStats();
+renderFilters();
+renderCards();
+</script>
+
+</body>
+</html>
