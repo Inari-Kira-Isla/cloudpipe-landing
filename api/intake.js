@@ -1,6 +1,8 @@
 // CloudPipe AEO Intake — Vercel Serverless Function
 // Receives client form → MiniMax AI generation → Vercel Deploy API → returns URL
 
+export const config = { maxDuration: 300 };
+
 const MINIMAX_API = "https://api.minimax.io/anthropic/v1/messages";
 const MINIMAX_KEY = process.env.MINIMAX_KEY || "sk-cp-1-wFmWnKLx_fRluWBNMioYVWka11Qcl1ZFF7bQxLMt-ODc6iTJ8iwU2ZWRknR8UuSQxUHSV82fqP6iyedFUCEvzEIJDHcY89B5sPhgebIvOA-po0hkxdcTg";
 const MINIMAX_MODEL = "MiniMax-M2.1";
