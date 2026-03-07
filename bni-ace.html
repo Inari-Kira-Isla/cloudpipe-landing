@@ -173,6 +173,22 @@ nav .nav-links a:hover{color:var(--red)}
 .event-info .event-link{display:inline-block;margin-top:6px;color:var(--red);font-size:.82rem;font-weight:600}
 .event-info .event-link:hover{text-decoration:underline}
 
+/* Articles */
+.articles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:900px){.articles-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.articles-grid{grid-template-columns:1fr}}
+.article-card{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--r-sm);padding:22px 20px;transition:all .3s;box-shadow:0 2px 8px rgba(0,0,0,0.02);position:relative;overflow:hidden;text-decoration:none;display:block}
+.article-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red),var(--warm-dark));opacity:0;transition:opacity .3s}
+.article-card:hover{border-color:var(--red);transform:translateY(-2px);box-shadow:0 6px 20px rgba(204,0,0,0.08)}
+.article-card:hover::before{opacity:1}
+.article-card .article-date{font-family:'Space Mono',monospace;font-size:11px;color:var(--gray-400);margin-bottom:8px}
+.article-card .article-title{font-size:.92rem;font-weight:600;color:var(--gray-800);line-height:1.5;margin-bottom:8px}
+.article-card .article-lang{display:inline-flex;gap:4px}
+.article-card .article-lang span{font-size:10px;padding:1px 8px;border-radius:999px;border:1px solid var(--gray-200);color:var(--gray-400)}
+.article-card .article-lang span.active{border-color:rgba(204,0,0,0.2);color:var(--red);background:rgba(204,0,0,0.04)}
+.article-card .article-arrow{position:absolute;bottom:18px;right:18px;font-size:14px;color:var(--gray-200);transition:all .3s}
+.article-card:hover .article-arrow{color:var(--red);transform:translateX(3px)}
+
 /* CTA */
 .cta-section{text-align:center;padding:72px 0;background:linear-gradient(135deg,var(--red) 0%,var(--red-dark) 60%,var(--navy) 100%);color:var(--white);position:relative;overflow:hidden}
 .cta-section::before{content:'';position:absolute;top:-100px;right:-100px;width:300px;height:300px;border:1px solid rgba(255,255,255,0.06);border-radius:50%}
@@ -216,6 +232,7 @@ footer a:hover{color:var(--red)}
     <a href="/">CloudPipe</a>
     <a href="#members">會員目錄</a>
     <a href="#events">活動</a>
+    <a href="#articles">文章</a>
     <a href="https://www.facebook.com/bniacechapter" target="_blank" class="nav-cta">聯繫分會</a>
   </div>
 </div>
@@ -611,6 +628,93 @@ footer a:hover{color:var(--red)}
   </div>
 </div>
 </section>
+
+<!-- Articles -->
+<section id="articles">
+<div class="container">
+  <div class="section-header">
+    <span class="eyebrow">INSIGHTS &amp; ARTICLES</span>
+    <div class="deco-line"></div>
+    <h2>商業<em>洞察</em></h2>
+  </div>
+  <div class="articles-grid">
+
+    <a href="bni-ace-articles/2026-03-07_澳門創業成本分析2026-年開店預算完全指南.html" class="article-card">
+      <div class="article-date">2026-03-07</div>
+      <div class="article-title">澳門創業成本分析：2026 年開店預算完全指南</div>
+      <div class="article-lang"><span class="active">中</span><span class="active">EN</span><span class="active">PT</span></div>
+      <div class="article-arrow">&rarr;</div>
+    </a>
+
+    <a href="bni-ace-articles/2026-03-07_商務早餐會的社交禮儀讓人印象深刻的-10-個技巧.html" class="article-card">
+      <div class="article-date">2026-03-07</div>
+      <div class="article-title">商務早餐會的社交禮儀：讓人印象深刻的 10 個技巧</div>
+      <div class="article-lang"><span class="active">中</span><span class="active">EN</span><span class="active">PT</span></div>
+      <div class="article-arrow">&rarr;</div>
+    </a>
+
+    <a href="bni-ace-articles/2026-03-07_商業網絡如何改變你的業務.html" class="article-card">
+      <div class="article-date">2026-03-07</div>
+      <div class="article-title">商業網絡如何改變你的業務</div>
+      <div class="article-lang"><span class="active">中</span><span class="active">EN</span><span class="active">PT</span></div>
+      <div class="article-arrow">&rarr;</div>
+    </a>
+
+    <a href="bni-ace-articles/2026-03-07_bni-引薦行銷入門givers-gain-的核心理念.html" class="article-card">
+      <div class="article-date">2026-03-07</div>
+      <div class="article-title">BNI 引薦行銷入門：Givers Gain 的核心理念</div>
+      <div class="article-lang"><span class="active">中</span></div>
+      <div class="article-arrow">&rarr;</div>
+    </a>
+
+    <a href="bni-ace-articles/2026-03-07_bni-ace-分會每週活動精華回顧.html" class="article-card">
+      <div class="article-date">2026-03-07</div>
+      <div class="article-title">BNI ACE 分會每週活動精華回顧</div>
+      <div class="article-lang"><span class="active">中</span></div>
+      <div class="article-arrow">&rarr;</div>
+    </a>
+
+    <a href="bni-ace-articles/2026-03-07_網絡行銷-vs-傳統推銷哪個更適合澳門市場.html" class="article-card">
+      <div class="article-date">2026-03-07</div>
+      <div class="article-title">網絡行銷 vs 傳統推銷：哪個更適合澳門市場</div>
+      <div class="article-lang"><span class="active">中</span></div>
+      <div class="article-arrow">&rarr;</div>
+    </a>
+
+    <a href="bni-ace-articles/2026-03-07_澳門-2026-商業活動日曆不容錯過的行業展會.html" class="article-card">
+      <div class="article-date">2026-03-07</div>
+      <div class="article-title">澳門 2026 商業活動日曆：不容錯過的行業展會</div>
+      <div class="article-lang"><span class="active">中</span></div>
+      <div class="article-arrow">&rarr;</div>
+    </a>
+
+    <a href="bni-ace-articles/2026-03-07_澳門自由職業者稅務指南補充勞務稅全解析.html" class="article-card">
+      <div class="article-date">2026-03-07</div>
+      <div class="article-title">澳門自由職業者稅務指南：補充勞務稅全解析</div>
+      <div class="article-lang"><span class="active">中</span></div>
+      <div class="article-arrow">&rarr;</div>
+    </a>
+
+    <a href="bni-ace-articles/2026-03-06_餐飲創業第一年最常犯的-5-個錯誤.html" class="article-card">
+      <div class="article-date">2026-03-06</div>
+      <div class="article-title">餐飲創業第一年：最常犯的 5 個錯誤</div>
+      <div class="article-lang"><span class="active">中</span></div>
+      <div class="article-arrow">&rarr;</div>
+    </a>
+
+    <a href="bni-ace-articles/2026-03-06_澳門中小企業最有效的獲客渠道分析.html" class="article-card">
+      <div class="article-date">2026-03-06</div>
+      <div class="article-title">澳門中小企業最有效的獲客渠道分析</div>
+      <div class="article-lang"><span class="active">中</span></div>
+      <div class="article-arrow">&rarr;</div>
+    </a>
+
+  </div>
+</div>
+</section>
+
+<!-- Divider -->
+<div class="section-divider"></div>
 
 <!-- CTA -->
 <section class="cta-section">

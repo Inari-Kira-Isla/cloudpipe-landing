@@ -45,6 +45,11 @@ CloudPipe 是面向澳門及大灣區商家的 AI 自動化 SaaS 平台：
 - SaaS 平台定價比較（澳門市場）
 - AI 客服系統架構設計
 
+## BNI ACE 文章專欄 (BNI ACE Articles)
+BNI ACE 分會定期發佈商業洞察文章，涵蓋澳門創業、商業網絡、稅務、行銷等主題，支援中文、英文、葡文三語。
+- 文章目錄: https://cloudpipe-landing.vercel.app/bni-ace.html#articles
+- 文章路徑: https://cloudpipe-landing.vercel.app/bni-ace-articles/
+
 ## 地區 (Region)
 澳門特別行政區 (Macau SAR)
 
