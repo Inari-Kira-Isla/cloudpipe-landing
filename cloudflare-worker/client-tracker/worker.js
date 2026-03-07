@@ -5,13 +5,20 @@
 // ============================================
 
 const CLIENT_SITES = {
-  "yamanakada":         "https://inari-kira-isla.github.io/yamanakada",
-  "inari-global-foods": "https://inari-kira-isla.github.io/inari-global-foods",
-  "after-school-coffee":"https://inari-kira-isla.github.io/after-school-coffee",
-  "mind-coffee":        "https://mind-coffee.vercel.app",
-  "sea-urchin-delivery":"https://inari-kira-isla.github.io/sea-urchin-delivery",
-  "bni-macau":          "https://bni-macau.vercel.app",
-  "test-cafe-demo":     "https://test-cafe-demo.vercel.app",
+  // === 4 品牌站 ===
+  "yamanakada":           "https://inari-kira-isla.github.io/yamanakada",
+  "inari-global-foods":   "https://inari-kira-isla.github.io/inari-global-foods",
+  "after-school-coffee":  "https://inari-kira-isla.github.io/after-school-coffee",
+  "sea-urchin-delivery":  "https://inari-kira-isla.github.io/sea-urchin-delivery",
+  // === 4 AEO Demo 站 ===
+  "aeo-demo-education":   "https://inari-kira-isla.github.io/aeo-demo-education",
+  "aeo-demo-finance":     "https://inari-kira-isla.github.io/aeo-demo-finance",
+  "aeo-demo-luxury":      "https://inari-kira-isla.github.io/aeo-demo-luxury",
+  "aeo-demo-travel-food": "https://inari-kira-isla.github.io/aeo-demo-travel-food",
+  // === 其他 ===
+  "mind-coffee":          "https://mind-coffee.vercel.app",
+  "bni-macau":            "https://bni-macau.vercel.app",
+  "test-cafe-demo":       "https://test-cafe-demo.vercel.app",
 };
 
 const AI_BOTS = {
