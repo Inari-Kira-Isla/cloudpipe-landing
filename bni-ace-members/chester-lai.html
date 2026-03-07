@@ -57,7 +57,12 @@ nav .nav-links a{font-size:13px;color:var(--gray-600);transition:color .2s}
 nav .nav-links a:hover{color:var(--red)}
 .nav-cta{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;padding:8px 18px;border-radius:999px;background:var(--red);color:var(--white);transition:all .2s}
 .nav-cta:hover{background:var(--red-light);box-shadow:0 4px 16px rgba(204,0,0,0.25)}
-@media(max-width:600px){nav .nav-links a:not(.nav-cta){display:none}}
+@media(max-width:600px){nav .nav-links a:not(.nav-cta){display:none}.lang-switch{display:flex!important}}
+
+.lang-switch{display:flex;gap:3px;background:rgba(204,0,0,0.06);border-radius:999px;padding:2px;margin-right:8px}
+.lang-btn{font-family:'Space Mono',monospace;font-size:10px;padding:3px 10px;border-radius:999px;border:none;cursor:pointer;background:transparent;color:var(--gray-400);transition:all .2s;font-weight:700}
+.lang-btn.active{background:var(--red);color:#fff}
+.lang-btn:hover:not(.active){color:var(--gray-800)}
 
 .eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--red);display:block;margin-bottom:10px}
 .section-alt{background:var(--off-white)}
@@ -163,9 +168,14 @@ footer a:hover{color:var(--red)}
 <div class="container">
   <a href="/bni-ace.html" class="logo"><span>BNI</span> ACE</a>
   <div class="nav-links">
-    <a href="/bni-ace.html">分會主頁</a>
-    <a href="/bni-ace.html#members">會員目錄</a>
-    <a href="https://www.facebook.com/bniacechapter" target="_blank" class="nav-cta">聯繫分會</a>
+    <div class="lang-switch">
+      <button class="lang-btn active" onclick="switchLang('zh')">中</button>
+      <button class="lang-btn" onclick="switchLang('en')">EN</button>
+      <button class="lang-btn" onclick="switchLang('pt')">PT</button>
+    </div>
+    <a href="/bni-ace.html"><span data-lang="zh">分會主頁</span><span data-lang="en" style="display:none">Chapter Home</span><span data-lang="pt" style="display:none">Página do Capítulo</span></a>
+    <a href="/bni-ace.html#members"><span data-lang="zh">會員目錄</span><span data-lang="en" style="display:none">Member Directory</span><span data-lang="pt" style="display:none">Diretório de Membros</span></a>
+    <a href="https://www.facebook.com/bniacechapter" target="_blank" class="nav-cta"><span data-lang="zh">聯繫分會</span><span data-lang="en" style="display:none">Contact Us</span><span data-lang="pt" style="display:none">Contactar</span></a>
   </div>
 </div>
 </nav>
@@ -173,19 +183,21 @@ footer a:hover{color:var(--red)}
 <!-- Profile Hero -->
 <section class="profile-hero">
 <div class="container">
-  <div class="breadcrumb"><a href="/bni-ace.html">BNI ACE 分會</a> &rarr; <a href="/bni-ace.html#members">會員目錄</a> &rarr; 黎志豪</div>
+  <div class="breadcrumb">
+    <a href="/bni-ace.html"><span data-lang="zh">BNI ACE 分會</span><span data-lang="en" style="display:none">BNI ACE Chapter</span><span data-lang="pt" style="display:none">Capítulo BNI ACE</span></a> &rarr; <a href="/bni-ace.html#members"><span data-lang="zh">會員目錄</span><span data-lang="en" style="display:none">Member Directory</span><span data-lang="pt" style="display:none">Diretório de Membros</span></a> &rarr; <span data-lang="zh">黎志豪</span><span data-lang="en" style="display:none">Chester Lai</span><span data-lang="pt" style="display:none">Chester Lai</span>
+  </div>
   <div class="profile-top">
     <div class="profile-initial">C</div>
     <div class="profile-header">
-      <h1>黎志豪</h1>
-      <div class="en-name">Chester Lai</div>
-      <div class="company">領強教練 &middot; 企業領導力與個人表達教練</div>
+      <h1><span data-lang="zh">黎志豪</span><span data-lang="en" style="display:none">Chester Lai</span><span data-lang="pt" style="display:none">Chester Lai</span></h1>
+      <div class="en-name"><span data-lang="zh">Chester Lai</span><span data-lang="en" style="display:none">黎志豪</span><span data-lang="pt" style="display:none">黎志豪</span></div>
+      <div class="company"><span data-lang="zh">領強教練 &middot; 企業領導力與個人表達教練</span><span data-lang="en" style="display:none">Lead Strong Coach &middot; Corporate Leadership &amp; Personal Expression Coach</span><span data-lang="pt" style="display:none">Coach Lead Strong &middot; Coach de Liderança Empresarial e Expressão Pessoal</span></div>
       <div class="profile-tags">
-        <span class="tag red">企業課程及培訓</span>
-        <span class="tag red">20+ 年經驗</span>
-        <span class="tag">1,000+ 名學員</span>
-        <span class="tag">溝通力教練</span>
-        <span class="tag">MindSpeak 導師</span>
+        <span class="tag red"><span data-lang="zh">企業課程及培訓</span><span data-lang="en" style="display:none">Corporate Training &amp; Courses</span><span data-lang="pt" style="display:none">Formação e Cursos Empresariais</span></span>
+        <span class="tag red"><span data-lang="zh">20+ 年經驗</span><span data-lang="en" style="display:none">20+ Years Experience</span><span data-lang="pt" style="display:none">20+ Anos de Experiência</span></span>
+        <span class="tag"><span data-lang="zh">1,000+ 名學員</span><span data-lang="en" style="display:none">1,000+ Trainees</span><span data-lang="pt" style="display:none">1.000+ Formandos</span></span>
+        <span class="tag"><span data-lang="zh">溝通力教練</span><span data-lang="en" style="display:none">Communication Coach</span><span data-lang="pt" style="display:none">Coach de Comunicação</span></span>
+        <span class="tag"><span data-lang="zh">MindSpeak 導師</span><span data-lang="en" style="display:none">MindSpeak Instructor</span><span data-lang="pt" style="display:none">Instrutor MindSpeak</span></span>
       </div>
     </div>
   </div>
@@ -199,38 +211,54 @@ footer a:hover{color:var(--red)}
 <div class="container">
   <span class="eyebrow">COMPANY &amp; CAREER</span>
   <div class="deco-line"></div>
-  <h2 style="margin-bottom:20px">品牌與<em style="font-style:normal;color:var(--red)">職業資料</em></h2>
+  <h2 style="margin-bottom:20px"><span data-lang="zh">品牌與<em style="font-style:normal;color:var(--red)">職業資料</em></span><span data-lang="en" style="display:none">Brand &amp; <em style="font-style:normal;color:var(--red)">Career Profile</em></span><span data-lang="pt" style="display:none">Marca e <em style="font-style:normal;color:var(--red)">Perfil Profissional</em></span></h2>
 
   <div class="card">
     <div class="info-row">
-      <div class="info-label">品牌名稱</div>
+      <div class="info-label"><span data-lang="zh">品牌名稱</span><span data-lang="en" style="display:none">Brand Name</span><span data-lang="pt" style="display:none">Nome da Marca</span></div>
       <div class="info-value">領強教練</div>
     </div>
     <div class="info-row">
-      <div class="info-label">專業領域</div>
-      <div class="info-value">企業課程及培訓</div>
+      <div class="info-label"><span data-lang="zh">專業領域</span><span data-lang="en" style="display:none">Speciality</span><span data-lang="pt" style="display:none">Especialidade</span></div>
+      <div class="info-value"><span data-lang="zh">企業課程及培訓</span><span data-lang="en" style="display:none">Corporate Training &amp; Courses</span><span data-lang="pt" style="display:none">Formação e Cursos Empresariais</span></div>
     </div>
     <div class="info-row">
-      <div class="info-label">專注方向</div>
-      <div class="info-value">企業領導力與個人表達教練</div>
+      <div class="info-label"><span data-lang="zh">專注方向</span><span data-lang="en" style="display:none">Focus</span><span data-lang="pt" style="display:none">Área de Foco</span></div>
+      <div class="info-value"><span data-lang="zh">企業領導力與個人表達教練</span><span data-lang="en" style="display:none">Corporate Leadership &amp; Personal Expression Coaching</span><span data-lang="pt" style="display:none">Coaching de Liderança Empresarial e Expressão Pessoal</span></div>
     </div>
     <div class="info-row">
-      <div class="info-label">行業資歷</div>
-      <div class="info-value">20+ 年企業管理與商業實戰經驗</div>
+      <div class="info-label"><span data-lang="zh">行業資歷</span><span data-lang="en" style="display:none">Experience</span><span data-lang="pt" style="display:none">Experiência</span></div>
+      <div class="info-value"><span data-lang="zh">20+ 年企業管理與商業實戰經驗</span><span data-lang="en" style="display:none">20+ years of corporate management and business experience</span><span data-lang="pt" style="display:none">Mais de 20 anos de experiência em gestão empresarial e negócios</span></div>
     </div>
     <div class="info-row">
-      <div class="info-label">培訓紀錄</div>
-      <div class="info-value">逾 1,000 名事業領袖</div>
+      <div class="info-label"><span data-lang="zh">培訓紀錄</span><span data-lang="en" style="display:none">Training Record</span><span data-lang="pt" style="display:none">Registo de Formação</span></div>
+      <div class="info-value"><span data-lang="zh">逾 1,000 名事業領袖</span><span data-lang="en" style="display:none">Over 1,000 business leaders trained</span><span data-lang="pt" style="display:none">Mais de 1.000 líderes empresariais formados</span></div>
     </div>
   </div>
 
   <div class="card">
-    <h3>三大<em>核心能力</em></h3>
-    <ul>
-      <li><strong>行動</strong> — 將知識轉化為可執行的具體步驟</li>
-      <li><strong>話術</strong> — 掌握有效溝通與說服的語言技巧</li>
-      <li><strong>思維</strong> — 建立領導者和成功者的思維模式</li>
-    </ul>
+    <h3><span data-lang="zh">三大<em>核心能力</em></span><span data-lang="en" style="display:none">Three <em>Core Competencies</em></span><span data-lang="pt" style="display:none">Três <em>Competências Essenciais</em></span></h3>
+    <div data-lang="zh">
+      <ul>
+        <li><strong>行動</strong> — 將知識轉化為可執行的具體步驟</li>
+        <li><strong>話術</strong> — 掌握有效溝通與說服的語言技巧</li>
+        <li><strong>思維</strong> — 建立領導者和成功者的思維模式</li>
+      </ul>
+    </div>
+    <div data-lang="en" style="display:none">
+      <ul>
+        <li><strong>Action</strong> — Turning knowledge into actionable, concrete steps</li>
+        <li><strong>Communication</strong> — Mastering effective verbal techniques for persuasion</li>
+        <li><strong>Mindset</strong> — Building the mindset of leaders and achievers</li>
+      </ul>
+    </div>
+    <div data-lang="pt" style="display:none">
+      <ul>
+        <li><strong>Ação</strong> — Transformar conhecimento em passos concretos e executáveis</li>
+        <li><strong>Comunicação</strong> — Dominar técnicas verbais eficazes de persuasão</li>
+        <li><strong>Mentalidade</strong> — Construir a mentalidade de líderes e pessoas de sucesso</li>
+      </ul>
+    </div>
   </div>
 </div>
 </section>
@@ -242,28 +270,68 @@ footer a:hover{color:var(--red)}
 <div class="container">
   <span class="eyebrow">SERVICES</span>
   <div class="deco-line"></div>
-  <h2 style="margin-bottom:20px">培訓<em style="font-style:normal;color:var(--red)">服務</em></h2>
+  <h2 style="margin-bottom:20px"><span data-lang="zh">培訓<em style="font-style:normal;color:var(--red)">服務</em></span><span data-lang="en" style="display:none">Training <em style="font-style:normal;color:var(--red)">Services</em></span><span data-lang="pt" style="display:none">Serviços de <em style="font-style:normal;color:var(--red)">Formação</em></span></h2>
 
-  <div class="quote">「真正有力量的表達，不是講得多，而是講得入耳。」</div>
+  <div class="quote">
+    <span data-lang="zh">「真正有力量的表達，不是講得多，而是講得入耳。」</span>
+    <span data-lang="en" style="display:none">"Truly powerful expression is not about saying more, but about being heard."</span>
+    <span data-lang="pt" style="display:none">"Uma expressão verdadeiramente poderosa não é falar mais, mas sim ser ouvido."</span>
+  </div>
 
   <div class="two-col">
     <div class="card">
-      <h3>核心服務</h3>
-      <ul>
-        <li><strong>企業內訓</strong> — 溝通技巧、領導力發展、團隊建設</li>
-        <li><strong>個人教練</strong> — 一對一表達力、說服力提升</li>
-        <li><strong>工作坊</strong> — 互動式實戰演練和技巧培訓</li>
-        <li><strong>分享會</strong> — MindSpeak 系列主題分享活動</li>
-      </ul>
+      <h3><span data-lang="zh">核心服務</span><span data-lang="en" style="display:none">Core Services</span><span data-lang="pt" style="display:none">Serviços Principais</span></h3>
+      <div data-lang="zh">
+        <ul>
+          <li><strong>企業內訓</strong> — 溝通技巧、領導力發展、團隊建設</li>
+          <li><strong>個人教練</strong> — 一對一表達力、說服力提升</li>
+          <li><strong>工作坊</strong> — 互動式實戰演練和技巧培訓</li>
+          <li><strong>分享會</strong> — MindSpeak 系列主題分享活動</li>
+        </ul>
+      </div>
+      <div data-lang="en" style="display:none">
+        <ul>
+          <li><strong>Corporate Training</strong> — Communication skills, leadership development, team building</li>
+          <li><strong>Personal Coaching</strong> — One-on-one presentation and persuasion improvement</li>
+          <li><strong>Workshops</strong> — Interactive, hands-on practice and skills training</li>
+          <li><strong>Seminars</strong> — MindSpeak thematic sharing sessions</li>
+        </ul>
+      </div>
+      <div data-lang="pt" style="display:none">
+        <ul>
+          <li><strong>Formação Empresarial</strong> — Competências de comunicação, desenvolvimento de liderança, construção de equipas</li>
+          <li><strong>Coaching Individual</strong> — Melhoria individual de expressão e persuasão</li>
+          <li><strong>Workshops</strong> — Prática interativa e formação de competências</li>
+          <li><strong>Seminários</strong> — Sessões temáticas MindSpeak</li>
+        </ul>
+      </div>
     </div>
     <div class="card">
-      <h3>學員能<em>提升</em>的能力</h3>
-      <ul>
-        <li><strong>溝通力</strong> — 讓對方真正「聽入耳」</li>
-        <li><strong>說服力</strong> — 有效影響他人決策</li>
-        <li><strong>影響力</strong> — 建立個人品牌和領袖魅力</li>
-        <li><strong>自信心</strong> — 快速建立公開表達的信心</li>
-      </ul>
+      <h3><span data-lang="zh">學員能<em>提升</em>的能力</span><span data-lang="en" style="display:none">Skills Trainees Can <em>Develop</em></span><span data-lang="pt" style="display:none">Competências que os Formandos Podem <em>Desenvolver</em></span></h3>
+      <div data-lang="zh">
+        <ul>
+          <li><strong>溝通力</strong> — 讓對方真正「聽入耳」</li>
+          <li><strong>說服力</strong> — 有效影響他人決策</li>
+          <li><strong>影響力</strong> — 建立個人品牌和領袖魅力</li>
+          <li><strong>自信心</strong> — 快速建立公開表達的信心</li>
+        </ul>
+      </div>
+      <div data-lang="en" style="display:none">
+        <ul>
+          <li><strong>Communication Skills</strong> — Make others truly listen and understand</li>
+          <li><strong>Persuasion Skills</strong> — Effectively influence others' decisions</li>
+          <li><strong>Influence</strong> — Build personal brand and leadership charisma</li>
+          <li><strong>Confidence</strong> — Rapidly build confidence in public speaking</li>
+        </ul>
+      </div>
+      <div data-lang="pt" style="display:none">
+        <ul>
+          <li><strong>Competências de Comunicação</strong> — Fazer os outros ouvirem e compreenderem verdadeiramente</li>
+          <li><strong>Competências de Persuasão</strong> — Influenciar eficazmente as decisões dos outros</li>
+          <li><strong>Influência</strong> — Construir marca pessoal e carisma de liderança</li>
+          <li><strong>Confiança</strong> — Desenvolver rapidamente confiança para falar em público</li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
@@ -276,7 +344,7 @@ footer a:hover{color:var(--red)}
 <div class="container">
   <span class="eyebrow">RECENT EVENTS</span>
   <div class="deco-line"></div>
-  <h2 style="margin-bottom:20px">近期<em style="font-style:normal;color:var(--red)">活動</em></h2>
+  <h2 style="margin-bottom:20px"><span data-lang="zh">近期<em style="font-style:normal;color:var(--red)">活動</em></span><span data-lang="en" style="display:none">Recent <em style="font-style:normal;color:var(--red)">Events</em></span><span data-lang="pt" style="display:none">Eventos <em style="font-style:normal;color:var(--red)">Recentes</em></span></h2>
 
   <a href="/bni-event-20260314.html" class="event-link-card">
     <div class="ev-date">
@@ -284,8 +352,8 @@ footer a:hover{color:var(--red)}
       <div class="day">14</div>
     </div>
     <div class="ev-info">
-      <h4>MindSpeak 分享會《說話如何聽入耳》</h4>
-      <p>2026/3/14（六）15:30-17:00 &middot; 峰盛比薩 &middot; MOP$108</p>
+      <h4><span data-lang="zh">MindSpeak 分享會《說話如何聽入耳》</span><span data-lang="en" style="display:none">MindSpeak Seminar: "How to Be Heard"</span><span data-lang="pt" style="display:none">Seminário MindSpeak: "Como Ser Ouvido"</span></h4>
+      <p><span data-lang="zh">2026/3/14（六）15:30-17:00 &middot; 峰盛比薩 &middot; MOP$108</span><span data-lang="en" style="display:none">2026/3/14 (Sat) 15:30-17:00 &middot; Feng Sheng Pizza &middot; MOP$108</span><span data-lang="pt" style="display:none">2026/3/14 (Sáb) 15:30-17:00 &middot; Feng Sheng Pizza &middot; MOP$108</span></p>
     </div>
     <div class="ev-arrow">&rarr;</div>
   </a>
@@ -299,36 +367,84 @@ footer a:hover{color:var(--red)}
 <div class="container">
   <span class="eyebrow">REFERRAL GUIDE</span>
   <div class="deco-line"></div>
-  <h2 style="margin-bottom:20px">引薦<em style="font-style:normal;color:var(--red)">指南</em></h2>
+  <h2 style="margin-bottom:20px"><span data-lang="zh">引薦<em style="font-style:normal;color:var(--red)">指南</em></span><span data-lang="en" style="display:none">Referral <em style="font-style:normal;color:var(--red)">Guide</em></span><span data-lang="pt" style="display:none">Guia de <em style="font-style:normal;color:var(--red)">Referências</em></span></h2>
 
   <div class="card">
-    <h3>理想<em>合作對象</em></h3>
+    <h3><span data-lang="zh">理想<em>合作對象</em></span><span data-lang="en" style="display:none">Ideal <em>Partners</em></span><span data-lang="pt" style="display:none">Parceiros <em>Ideais</em></span></h3>
     <div class="ref-grid" style="margin-top:12px">
-      <div class="ref-card"><h4>企業 HR / 管理層</h4><p>需要員工溝通培訓或管理層領導力發展</p></div>
-      <div class="ref-card"><h4>創業者 / 企業主</h4><p>想提升個人演講、商務談判和說服能力</p></div>
-      <div class="ref-card"><h4>銷售團隊</h4><p>需要提升成交率和客戶溝通技巧</p></div>
-      <div class="ref-card"><h4>機構 / 社團</h4><p>舉辦工作坊或分享會，提升成員表達力</p></div>
+      <div class="ref-card">
+        <h4><span data-lang="zh">企業 HR / 管理層</span><span data-lang="en" style="display:none">Corporate HR / Management</span><span data-lang="pt" style="display:none">RH / Gestão Empresarial</span></h4>
+        <p><span data-lang="zh">需要員工溝通培訓或管理層領導力發展</span><span data-lang="en" style="display:none">Need employee communication training or management leadership development</span><span data-lang="pt" style="display:none">Necessitam de formação em comunicação para colaboradores ou desenvolvimento de liderança para gestores</span></p>
+      </div>
+      <div class="ref-card">
+        <h4><span data-lang="zh">創業者 / 企業主</span><span data-lang="en" style="display:none">Entrepreneurs / Business Owners</span><span data-lang="pt" style="display:none">Empreendedores / Empresários</span></h4>
+        <p><span data-lang="zh">想提升個人演講、商務談判和說服能力</span><span data-lang="en" style="display:none">Want to improve public speaking, business negotiation and persuasion</span><span data-lang="pt" style="display:none">Pretendem melhorar a oratória, negociação empresarial e persuasão</span></p>
+      </div>
+      <div class="ref-card">
+        <h4><span data-lang="zh">銷售團隊</span><span data-lang="en" style="display:none">Sales Teams</span><span data-lang="pt" style="display:none">Equipas de Vendas</span></h4>
+        <p><span data-lang="zh">需要提升成交率和客戶溝通技巧</span><span data-lang="en" style="display:none">Need to improve closing rates and client communication skills</span><span data-lang="pt" style="display:none">Necessitam de melhorar taxas de fecho e competências de comunicação com clientes</span></p>
+      </div>
+      <div class="ref-card">
+        <h4><span data-lang="zh">機構 / 社團</span><span data-lang="en" style="display:none">Organisations / Associations</span><span data-lang="pt" style="display:none">Organizações / Associações</span></h4>
+        <p><span data-lang="zh">舉辦工作坊或分享會，提升成員表達力</span><span data-lang="en" style="display:none">Host workshops or seminars to improve members' presentation skills</span><span data-lang="pt" style="display:none">Organizar workshops ou seminários para melhorar a expressão dos membros</span></p>
+      </div>
     </div>
   </div>
 
   <div class="two-col">
     <div class="card">
-      <h3>優質引薦<em>標準</em></h3>
-      <ul>
-        <li>理想引薦語：<strong>「我們團隊需要溝通培訓」</strong>或<strong>「我想提升表達力和影響力」</strong></li>
-        <li>有明確的<strong>培訓需求和預算</strong></li>
-        <li>企業規模 <strong>10 人以上</strong>的團隊培訓</li>
-        <li>需要<strong>長期教練指導</strong>的管理層</li>
-      </ul>
+      <h3><span data-lang="zh">優質引薦<em>標準</em></span><span data-lang="en" style="display:none">Quality Referral <em>Criteria</em></span><span data-lang="pt" style="display:none">Critérios de Referência <em>de Qualidade</em></span></h3>
+      <div data-lang="zh">
+        <ul>
+          <li>理想引薦語：<strong>「我們團隊需要溝通培訓」</strong>或<strong>「我想提升表達力和影響力」</strong></li>
+          <li>有明確的<strong>培訓需求和預算</strong></li>
+          <li>企業規模 <strong>10 人以上</strong>的團隊培訓</li>
+          <li>需要<strong>長期教練指導</strong>的管理層</li>
+        </ul>
+      </div>
+      <div data-lang="en" style="display:none">
+        <ul>
+          <li>Ideal referral phrase: <strong>"Our team needs communication training"</strong> or <strong>"I want to improve my presentation and influence skills"</strong></li>
+          <li>Clear <strong>training needs and budget</strong></li>
+          <li>Team training for companies with <strong>10+ employees</strong></li>
+          <li>Management seeking <strong>long-term coaching</strong></li>
+        </ul>
+      </div>
+      <div data-lang="pt" style="display:none">
+        <ul>
+          <li>Frase de referência ideal: <strong>"A nossa equipa precisa de formação em comunicação"</strong> ou <strong>"Quero melhorar a minha expressão e influência"</strong></li>
+          <li><strong>Necessidades de formação e orçamento</strong> claramente definidos</li>
+          <li>Formação de equipas em empresas com <strong>mais de 10 colaboradores</strong></li>
+          <li>Gestores que procuram <strong>coaching a longo prazo</strong></li>
+        </ul>
+      </div>
     </div>
     <div class="card">
-      <h3>目標<em>客戶類型</em></h3>
-      <ul>
-        <li><strong>中小企業管理層</strong> — 領導力提升</li>
-        <li><strong>銷售團隊主管</strong> — 成交技巧培訓</li>
-        <li><strong>公共演講者</strong> — 舞台表達指導</li>
-        <li><strong>專業人士</strong> — 個人品牌建設</li>
-      </ul>
+      <h3><span data-lang="zh">目標<em>客戶類型</em></span><span data-lang="en" style="display:none">Target <em>Client Types</em></span><span data-lang="pt" style="display:none">Tipos de <em>Clientes-Alvo</em></span></h3>
+      <div data-lang="zh">
+        <ul>
+          <li><strong>中小企業管理層</strong> — 領導力提升</li>
+          <li><strong>銷售團隊主管</strong> — 成交技巧培訓</li>
+          <li><strong>公共演講者</strong> — 舞台表達指導</li>
+          <li><strong>專業人士</strong> — 個人品牌建設</li>
+        </ul>
+      </div>
+      <div data-lang="en" style="display:none">
+        <ul>
+          <li><strong>SME Management</strong> — Leadership development</li>
+          <li><strong>Sales Team Leaders</strong> — Closing skills training</li>
+          <li><strong>Public Speakers</strong> — Stage presentation coaching</li>
+          <li><strong>Professionals</strong> — Personal branding</li>
+        </ul>
+      </div>
+      <div data-lang="pt" style="display:none">
+        <ul>
+          <li><strong>Gestão de PME</strong> — Desenvolvimento de liderança</li>
+          <li><strong>Chefes de Equipas de Vendas</strong> — Formação em técnicas de fecho</li>
+          <li><strong>Oradores Públicos</strong> — Coaching de apresentação em palco</li>
+          <li><strong>Profissionais</strong> — Construção de marca pessoal</li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
@@ -339,10 +455,10 @@ footer a:hover{color:var(--red)}
 <!-- CTA -->
 <section class="cta-section">
 <div class="container">
-  <h2>想提升溝通力和影響力？</h2>
-  <p>透過 BNI ACE 分會聯繫黎志豪，獲取專業企業培訓服務</p>
-  <a href="https://www.facebook.com/bniacechapter" target="_blank" class="btn btn-white">聯繫 BNI ACE &rarr;</a>
-  <a href="/bni-ace.html#members" class="btn btn-ghost">返回會員目錄</a>
+  <h2><span data-lang="zh">想提升溝通力和影響力？</span><span data-lang="en" style="display:none">Want to Improve Your Communication and Influence?</span><span data-lang="pt" style="display:none">Quer Melhorar a Sua Comunicação e Influência?</span></h2>
+  <p><span data-lang="zh">透過 BNI ACE 分會聯繫黎志豪，獲取專業企業培訓服務</span><span data-lang="en" style="display:none">Contact Chester Lai through BNI ACE Chapter for professional corporate training</span><span data-lang="pt" style="display:none">Contacte Chester Lai através do Capítulo BNI ACE para formação empresarial profissional</span></p>
+  <a href="https://www.facebook.com/bniacechapter" target="_blank" class="btn btn-white"><span data-lang="zh">聯繫 BNI ACE &rarr;</span><span data-lang="en" style="display:none">Contact BNI ACE &rarr;</span><span data-lang="pt" style="display:none">Contactar BNI ACE &rarr;</span></a>
+  <a href="/bni-ace.html#members" class="btn btn-ghost"><span data-lang="zh">返回會員目錄</span><span data-lang="en" style="display:none">Back to Member Directory</span><span data-lang="pt" style="display:none">Voltar ao Diretório de Membros</span></a>
 </div>
 </section>
 
@@ -352,33 +468,33 @@ footer a:hover{color:var(--red)}
   <div class="section-header" style="text-align:center;margin-bottom:24px">
     <span class="eyebrow">FAQ</span>
     <div class="deco-line center"></div>
-    <h2>常見問題</h2>
+    <h2><span data-lang="zh">常見問題</span><span data-lang="en" style="display:none">Frequently Asked Questions</span><span data-lang="pt" style="display:none">Perguntas Frequentes</span></h2>
   </div>
   <div class="faq-section">
 
     <div class="faq-card">
-      <h3>黎Sir 提供什麼培訓服務？</h3>
-      <p>黎志豪（領強教練）提供企業內訓、個人教練、工作坊和分享會等多元培訓服務。核心內容包括溝通技巧、領導力發展、團隊建設、演講表達和說服力訓練。擁有 20 年以上企業管理與商業實戰經驗，曾培訓逾千名事業領袖。</p>
+      <h3><span data-lang="zh">黎Sir 提供什麼培訓服務？</span><span data-lang="en" style="display:none">What training services does Chester Lai offer?</span><span data-lang="pt" style="display:none">Que serviços de formação oferece Chester Lai?</span></h3>
+      <p><span data-lang="zh">黎志豪（領強教練）提供企業內訓、個人教練、工作坊和分享會等多元培訓服務。核心內容包括溝通技巧、領導力發展、團隊建設、演講表達和說服力訓練。擁有 20 年以上企業管理與商業實戰經驗，曾培訓逾千名事業領袖。</span><span data-lang="en" style="display:none">Chester Lai (Lead Strong Coach) offers a wide range of training services including corporate in-house training, personal coaching, workshops and seminars. Core content includes communication skills, leadership development, team building, public speaking and persuasion training. With over 20 years of corporate management and business experience, he has trained more than a thousand business leaders.</span><span data-lang="pt" style="display:none">Chester Lai (Coach Lead Strong) oferece uma vasta gama de serviços de formação, incluindo formação empresarial interna, coaching individual, workshops e seminários. O conteúdo principal inclui competências de comunicação, desenvolvimento de liderança, construção de equipas, oratória e formação em persuasão. Com mais de 20 anos de experiência em gestão empresarial e negócios, formou mais de mil líderes empresariais.</span></p>
     </div>
 
     <div class="faq-card">
-      <h3>黎Sir 的培訓有什麼特色？</h3>
-      <p>黎Sir 的培訓專注強化三大核心能力：行動（將知識轉化為可執行步驟）、話術（掌握溝通與說服的語言技巧）、思維（建立領導者思維模式）。結合實戰案例與互動練習，幫助學員快速建立自信與表達力，而非純理論教學。</p>
+      <h3><span data-lang="zh">黎Sir 的培訓有什麼特色？</span><span data-lang="en" style="display:none">What makes Chester Lai's training unique?</span><span data-lang="pt" style="display:none">O que torna a formação de Chester Lai única?</span></h3>
+      <p><span data-lang="zh">黎Sir 的培訓專注強化三大核心能力：行動（將知識轉化為可執行步驟）、話術（掌握溝通與說服的語言技巧）、思維（建立領導者思維模式）。結合實戰案例與互動練習，幫助學員快速建立自信與表達力，而非純理論教學。</span><span data-lang="en" style="display:none">Chester's training focuses on strengthening three core competencies: Action (turning knowledge into actionable steps), Communication (mastering verbal techniques for persuasion) and Mindset (building a leadership mentality). It combines real-world case studies with interactive exercises to help trainees quickly build confidence and presentation skills, rather than relying on pure theory.</span><span data-lang="pt" style="display:none">A formação de Chester centra-se no reforço de três competências essenciais: Ação (transformar conhecimento em passos executáveis), Comunicação (dominar técnicas verbais de persuasão) e Mentalidade (construir uma mentalidade de liderança). Combina estudos de caso reais com exercícios interativos para ajudar os formandos a desenvolver rapidamente confiança e capacidade de expressão, em vez de se basear apenas em teoria.</span></p>
     </div>
 
     <div class="faq-card">
-      <h3>什麼是 MindSpeak 分享會？</h3>
-      <p>MindSpeak 是由黎Sir 舉辦的溝通技巧分享會系列活動。每次圍繞一個溝通主題進行深入探討，結合互動練習讓參加者即場實踐。最近一期主題為《說話如何聽入耳》，分享接收感、方式感、動機感三個讓溝通更有力量的關鍵認知。</p>
+      <h3><span data-lang="zh">什麼是 MindSpeak 分享會？</span><span data-lang="en" style="display:none">What is a MindSpeak seminar?</span><span data-lang="pt" style="display:none">O que é um seminário MindSpeak?</span></h3>
+      <p><span data-lang="zh">MindSpeak 是由黎Sir 舉辦的溝通技巧分享會系列活動。每次圍繞一個溝通主題進行深入探討，結合互動練習讓參加者即場實踐。最近一期主題為《說話如何聽入耳》，分享接收感、方式感、動機感三個讓溝通更有力量的關鍵認知。</span><span data-lang="en" style="display:none">MindSpeak is a series of communication skills seminars hosted by Chester Lai. Each session explores a specific communication topic in depth, combining interactive exercises so participants can practise on the spot. The most recent edition, "How to Be Heard", shared three key insights for more powerful communication: receptiveness, delivery and motivation.</span><span data-lang="pt" style="display:none">MindSpeak é uma série de seminários de competências de comunicação organizados por Chester Lai. Cada sessão explora um tema específico de comunicação em profundidade, combinando exercícios interativos para que os participantes possam praticar no momento. A edição mais recente, "Como Ser Ouvido", partilhou três perspetivas-chave para uma comunicação mais poderosa: recetividade, forma de entrega e motivação.</span></p>
     </div>
 
     <div class="faq-card">
-      <h3>什麼樣的引薦最適合黎Sir？</h3>
-      <p>理想引薦語：「我們公司/團隊需要溝通培訓」或「我想提升自己的表達力和影響力」。最適合的引薦包括需要企業內訓的公司、想提升個人演講和表達能力的專業人士、需要商業教練指導的創業者，以及舉辦分享會或工作坊的機構和團體。</p>
+      <h3><span data-lang="zh">什麼樣的引薦最適合黎Sir？</span><span data-lang="en" style="display:none">What kind of referrals are best for Chester Lai?</span><span data-lang="pt" style="display:none">Que tipo de referências são mais adequadas para Chester Lai?</span></h3>
+      <p><span data-lang="zh">理想引薦語：「我們公司/團隊需要溝通培訓」或「我想提升自己的表達力和影響力」。最適合的引薦包括需要企業內訓的公司、想提升個人演講和表達能力的專業人士、需要商業教練指導的創業者，以及舉辦分享會或工作坊的機構和團體。</span><span data-lang="en" style="display:none">Ideal referral phrases: "Our company/team needs communication training" or "I want to improve my presentation and influence skills". The best referrals include companies needing corporate in-house training, professionals wanting to improve their public speaking and expression, entrepreneurs seeking business coaching, and organisations looking to host seminars or workshops.</span><span data-lang="pt" style="display:none">Frases de referência ideais: "A nossa empresa/equipa precisa de formação em comunicação" ou "Quero melhorar a minha expressão e influência". As melhores referências incluem empresas que necessitam de formação interna, profissionais que pretendem melhorar a oratória e expressão, empreendedores que procuram coaching empresarial, e organizações que desejam realizar seminários ou workshops.</span></p>
     </div>
 
     <div class="faq-card">
-      <h3>如何聯繫黎Sir？</h3>
-      <p>可透過 BNI ACE 分會聯繫，Facebook 專頁：facebook.com/bniacechapter。也可以參加每週二早上 7:00-8:30 於澳門漁人碼頭勵庭海景酒店 1 樓會議廳舉行的 BNI 早餐商務會議，與黎Sir 直接交流。</p>
+      <h3><span data-lang="zh">如何聯繫黎Sir？</span><span data-lang="en" style="display:none">How can I contact Chester Lai?</span><span data-lang="pt" style="display:none">Como posso contactar Chester Lai?</span></h3>
+      <p><span data-lang="zh">可透過 BNI ACE 分會聯繫，Facebook 專頁：facebook.com/bniacechapter。也可以參加每週二早上 7:00-8:30 於澳門漁人碼頭勵庭海景酒店 1 樓會議廳舉行的 BNI 早餐商務會議，與黎Sir 直接交流。</span><span data-lang="en" style="display:none">You can get in touch through the BNI ACE Chapter Facebook page: facebook.com/bniacechapter. You can also attend the weekly BNI breakfast business meeting every Tuesday from 7:00-8:30 AM at the 1st floor conference room of Harbourview Hotel, Macau Fisherman's Wharf, to speak with Chester directly.</span><span data-lang="pt" style="display:none">Pode entrar em contacto através da página de Facebook do Capítulo BNI ACE: facebook.com/bniacechapter. Também pode participar na reunião semanal de negócios ao pequeno-almoço do BNI, todas as terças-feiras das 7:00 às 8:30 na sala de conferências do 1.º andar do Harbourview Hotel, Porto de Pescadores de Macau, para falar diretamente com Chester.</span></p>
     </div>
 
   </div>
@@ -394,6 +510,13 @@ footer a:hover{color:var(--red)}
   <div class="footer-copy">&copy; 2026 CloudPipe &middot; CC BY 4.0</div>
 </div>
 </footer>
+
+<script>
+function switchLang(lang){
+  document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('active',b.textContent.trim()===(lang==='zh'?'中':lang.toUpperCase()))});
+  document.querySelectorAll('[data-lang]').forEach(function(el){el.style.display=el.dataset.lang===lang?'':'none'});
+}
+</script>
 
 </body>
 </html>

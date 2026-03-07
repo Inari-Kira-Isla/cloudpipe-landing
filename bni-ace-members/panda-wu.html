@@ -58,11 +58,17 @@ nav .nav-links a{font-size:13px;color:var(--gray-600);transition:color .2s}
 nav .nav-links a:hover{color:var(--red)}
 .nav-cta{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;padding:8px 18px;border-radius:999px;background:var(--red);color:var(--white);transition:all .2s}
 .nav-cta:hover{background:var(--red-light);box-shadow:0 4px 16px rgba(204,0,0,0.25)}
-@media(max-width:600px){nav .nav-links a:not(.nav-cta){display:none}}
+@media(max-width:600px){nav .nav-links a:not(.nav-cta){display:none}.lang-switch{display:flex!important}}
 
 .eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--red);display:block;margin-bottom:10px}
 .section-alt{background:var(--off-white)}
 .section-warm{background:var(--warm-light)}
+
+/* Language switcher */
+.lang-switch{display:flex;gap:3px;background:rgba(204,0,0,0.06);border-radius:999px;padding:2px;margin-right:8px}
+.lang-btn{font-family:'Space Mono',monospace;font-size:10px;padding:3px 10px;border-radius:999px;border:none;cursor:pointer;background:transparent;color:var(--gray-400);transition:all .2s;font-weight:700}
+.lang-btn.active{background:var(--red);color:#fff}
+.lang-btn:hover:not(.active){color:var(--gray-800)}
 
 /* Decorative line */
 .deco-line{width:60px;height:3px;background:linear-gradient(90deg,var(--red),var(--warm-dark));border-radius:2px;margin:0 0 16px 0}
@@ -172,9 +178,20 @@ footer a:hover{color:var(--red)}
 <div class="container">
   <a href="/bni-ace.html" class="logo"><span>BNI</span> ACE</a>
   <div class="nav-links">
-    <a href="/bni-ace.html">分會主頁</a>
-    <a href="/bni-ace.html#members">會員目錄</a>
-    <a href="https://www.facebook.com/bniacechapter" target="_blank" class="nav-cta">聯繫分會</a>
+    <div class="lang-switch">
+      <button class="lang-btn active" onclick="switchLang('zh')">中</button>
+      <button class="lang-btn" onclick="switchLang('en')">EN</button>
+      <button class="lang-btn" onclick="switchLang('pt')">PT</button>
+    </div>
+    <a href="/bni-ace.html" data-lang="zh">分會主頁</a>
+    <a href="/bni-ace.html" data-lang="en" style="display:none">Chapter Home</a>
+    <a href="/bni-ace.html" data-lang="pt" style="display:none">P&aacute;gina do Cap&iacute;tulo</a>
+    <a href="/bni-ace.html#members" data-lang="zh">會員目錄</a>
+    <a href="/bni-ace.html#members" data-lang="en" style="display:none">Member Directory</a>
+    <a href="/bni-ace.html#members" data-lang="pt" style="display:none">Diret&oacute;rio de Membros</a>
+    <a href="https://www.facebook.com/bniacechapter" target="_blank" class="nav-cta" data-lang="zh">聯繫分會</a>
+    <a href="https://www.facebook.com/bniacechapter" target="_blank" class="nav-cta" data-lang="en" style="display:none">Contact Us</a>
+    <a href="https://www.facebook.com/bniacechapter" target="_blank" class="nav-cta" data-lang="pt" style="display:none">Contactar</a>
   </div>
 </div>
 </nav>
@@ -182,19 +199,37 @@ footer a:hover{color:var(--red)}
 <!-- Profile Hero -->
 <section class="profile-hero">
 <div class="container">
-  <div class="breadcrumb"><a href="/bni-ace.html">BNI ACE 分會</a> &rarr; <a href="/bni-ace.html#members">會員目錄</a> &rarr; 胡展鴻</div>
+  <div class="breadcrumb" data-lang="zh"><a href="/bni-ace.html">BNI ACE 分會</a> &rarr; <a href="/bni-ace.html#members">會員目錄</a> &rarr; 胡展鴻</div>
+  <div class="breadcrumb" data-lang="en" style="display:none"><a href="/bni-ace.html">BNI ACE Chapter</a> &rarr; <a href="/bni-ace.html#members">Member Directory</a> &rarr; Panda Wu</div>
+  <div class="breadcrumb" data-lang="pt" style="display:none"><a href="/bni-ace.html">Cap&iacute;tulo BNI ACE</a> &rarr; <a href="/bni-ace.html#members">Diret&oacute;rio de Membros</a> &rarr; Panda Wu</div>
   <div class="profile-top">
     <div class="profile-initial">P</div>
     <div class="profile-header">
       <h1>胡展鴻</h1>
       <div class="en-name">Panda Wu</div>
-      <div class="company">點一設計工程有限公司 Point One Design Engineering Ltd.</div>
-      <div class="profile-tags">
+      <div class="company" data-lang="zh">點一設計工程有限公司 Point One Design Engineering Ltd.</div>
+      <div class="company" data-lang="en" style="display:none">Point One Design Engineering Ltd. 點一設計工程有限公司</div>
+      <div class="company" data-lang="pt" style="display:none">Point One Design Engineering Ltd. 點一設計工程有限公司</div>
+      <div class="profile-tags" data-lang="zh">
         <span class="tag red">商舖室內設計工程</span>
         <span class="tag red">15 年資歷</span>
         <span class="tag">iF Design Best 300</span>
         <span class="tag">BNI 前主席</span>
         <span class="tag">1 星 Master Connector</span>
+      </div>
+      <div class="profile-tags" data-lang="en" style="display:none">
+        <span class="tag red">Commercial Interior Design &amp; Engineering</span>
+        <span class="tag red">15 Years Experience</span>
+        <span class="tag">iF Design Best 300</span>
+        <span class="tag">BNI Past President</span>
+        <span class="tag">1-Star Master Connector</span>
+      </div>
+      <div class="profile-tags" data-lang="pt" style="display:none">
+        <span class="tag red">Design de Interiores e Engenharia Comercial</span>
+        <span class="tag red">15 Anos de Experi&ecirc;ncia</span>
+        <span class="tag">iF Design Best 300</span>
+        <span class="tag">Ex-Presidente BNI</span>
+        <span class="tag">Master Connector 1 Estrela</span>
       </div>
     </div>
   </div>
@@ -209,9 +244,11 @@ footer a:hover{color:var(--red)}
 <div class="container">
   <span class="eyebrow">COMPANY &amp; CAREER</span>
   <div class="deco-line"></div>
-  <h2 style="margin-bottom:20px">公司與<em style="font-style:normal;color:var(--red)">職業資料</em></h2>
+  <h2 style="margin-bottom:20px" data-lang="zh">公司與<em style="font-style:normal;color:var(--red)">職業資料</em></h2>
+  <h2 data-lang="en" style="margin-bottom:20px;display:none">Company &amp; <em style="font-style:normal;color:var(--red)">Career</em></h2>
+  <h2 data-lang="pt" style="margin-bottom:20px;display:none">Empresa e <em style="font-style:normal;color:var(--red)">Carreira</em></h2>
 
-  <div class="card">
+  <div class="card" data-lang="zh">
     <div class="info-row">
       <div class="info-label">公司名稱</div>
       <div class="info-value">點一設計工程有限公司（Point One Design Engineering Ltd.）</div>
@@ -234,7 +271,53 @@ footer a:hover{color:var(--red)}
     </div>
   </div>
 
-  <div class="card">
+  <div class="card" data-lang="en" style="display:none">
+    <div class="info-row">
+      <div class="info-label">Company</div>
+      <div class="info-value">Point One Design Engineering Ltd. (點一設計工程有限公司)</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">Expertise</div>
+      <div class="info-value">Commercial Interior Design &amp; Engineering</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">Location</div>
+      <div class="info-value">G/F AB, No. 10 Rua dos Currais, Macau</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">Experience</div>
+      <div class="info-value">15 Years</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">Background</div>
+      <div class="info-value">Meng Yi Design (Taiwan), Nature Home (Macau), Choice Design Engineering</div>
+    </div>
+  </div>
+
+  <div class="card" data-lang="pt" style="display:none">
+    <div class="info-row">
+      <div class="info-label">Empresa</div>
+      <div class="info-value">Point One Design Engineering Ltd. (點一設計工程有限公司)</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">Especialidade</div>
+      <div class="info-value">Design de Interiores e Engenharia Comercial</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">Localiza&ccedil;&atilde;o</div>
+      <div class="info-value">R/C AB, N.&ordm; 10 Rua dos Currais, Macau</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">Experi&ecirc;ncia</div>
+      <div class="info-value">15 Anos</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">Percurso</div>
+      <div class="info-value">Meng Yi Design (Taiwan), Nature Home (Macau), Choice Design Engineering</div>
+    </div>
+  </div>
+
+  <div class="card" data-lang="zh">
     <h3>BNI <em>榮譽與職務</em></h3>
     <ul>
       <li>第 20 屆 <strong>副主席</strong></li>
@@ -243,6 +326,30 @@ footer a:hover{color:var(--red)}
       <li>第 23 屆 <strong>LVH</strong>（Leadership Visionary Hero）</li>
       <li><strong>長期綠燈會員</strong></li>
       <li><strong>1 星 Master Connector</strong>（金質獎章會員）</li>
+    </ul>
+  </div>
+
+  <div class="card" data-lang="en" style="display:none">
+    <h3>BNI <em>Honours &amp; Roles</em></h3>
+    <ul>
+      <li>Term 20 <strong>Vice President</strong></li>
+      <li>Term 21 <strong>President</strong></li>
+      <li>Term 22 <strong>GC</strong> (Growth Coordinator)</li>
+      <li>Term 23 <strong>LVH</strong> (Leadership Visionary Hero)</li>
+      <li><strong>Long-term Green-light Member</strong></li>
+      <li><strong>1-Star Master Connector</strong> (Gold Badge Member)</li>
+    </ul>
+  </div>
+
+  <div class="card" data-lang="pt" style="display:none">
+    <h3>BNI <em>Honras e Cargos</em></h3>
+    <ul>
+      <li>Mandato 20 <strong>Vice-Presidente</strong></li>
+      <li>Mandato 21 <strong>Presidente</strong></li>
+      <li>Mandato 22 <strong>GC</strong> (Growth Coordinator)</li>
+      <li>Mandato 23 <strong>LVH</strong> (Leadership Visionary Hero)</li>
+      <li><strong>Membro de Luz Verde a Longo Prazo</strong></li>
+      <li><strong>Master Connector 1 Estrela</strong> (Membro com Medalha de Ouro)</li>
     </ul>
   </div>
 </div>
@@ -256,11 +363,15 @@ footer a:hover{color:var(--red)}
 <div class="container">
   <span class="eyebrow">SERVICES</span>
   <div class="deco-line"></div>
-  <h2 style="margin-bottom:20px">產品與<em style="font-style:normal;color:var(--red)">服務</em></h2>
+  <h2 style="margin-bottom:20px" data-lang="zh">產品與<em style="font-style:normal;color:var(--red)">服務</em></h2>
+  <h2 data-lang="en" style="margin-bottom:20px;display:none">Products &amp; <em style="font-style:normal;color:var(--red)">Services</em></h2>
+  <h2 data-lang="pt" style="margin-bottom:20px;display:none">Produtos e <em style="font-style:normal;color:var(--red)">Servi&ccedil;os</em></h2>
 
-  <div class="quote">「想開舖，設計搵 Panda。」</div>
+  <div class="quote" data-lang="zh">「想開舖，設計搵 Panda。」</div>
+  <div class="quote" data-lang="en" style="display:none">"Want to open a shop? Find Panda for design."</div>
+  <div class="quote" data-lang="pt" style="display:none">&laquo;Quer abrir uma loja? Procure o Panda para o design.&raquo;</div>
 
-  <div class="two-col">
+  <div class="two-col" data-lang="zh">
     <div class="card">
       <h3>核心服務</h3>
       <ul>
@@ -280,6 +391,48 @@ footer a:hover{color:var(--red)}
       </ul>
     </div>
   </div>
+
+  <div class="two-col" data-lang="en" style="display:none">
+    <div class="card">
+      <h3>Core Services</h3>
+      <ul>
+        <li><strong>Brand Design &amp; Store Planning</strong></li>
+        <li><strong>Equipment Consulting &amp; Commercial Interior Design</strong> (layout, material selection)</li>
+        <li><strong>Cost &amp; Value Assessment</strong></li>
+        <li><strong>Government Building Plans Submission &amp; Approval</strong> &mdash; current success rate 100%</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Target Market</h3>
+      <ul>
+        <li><strong>Entrepreneurs</strong> &mdash; first-time store planning</li>
+        <li><strong>Domestic &amp; international chain brands</strong> &mdash; launching in Macau</li>
+        <li><strong>Store transformation or renovation</strong></li>
+        <li><strong>Hotels, schools, shopping malls</strong> &mdash; large-scale project planning</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="two-col" data-lang="pt" style="display:none">
+    <div class="card">
+      <h3>Servi&ccedil;os Principais</h3>
+      <ul>
+        <li><strong>Design de Marca e Planeamento de Loja</strong></li>
+        <li><strong>Consultoria de Equipamentos e Design de Interiores Comercial</strong> (disposi&ccedil;&atilde;o, sele&ccedil;&atilde;o de materiais)</li>
+        <li><strong>Avalia&ccedil;&atilde;o de Custos e Valor</strong></li>
+        <li><strong>Submiss&atilde;o e Aprova&ccedil;&atilde;o de Projetos Governamentais</strong> &mdash; taxa de sucesso atual: 100%</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Mercado-Alvo</h3>
+      <ul>
+        <li><strong>Empreendedores</strong> &mdash; planeamento da primeira loja</li>
+        <li><strong>Marcas de cadeia nacionais e internacionais</strong> &mdash; estabelecimento em Macau</li>
+        <li><strong>Transforma&ccedil;&atilde;o ou renova&ccedil;&atilde;o de lojas</strong></li>
+        <li><strong>Hot&eacute;is, escolas, centros comerciais</strong> &mdash; planeamento de grandes projetos</li>
+      </ul>
+    </div>
+  </div>
 </div>
 </section>
 
@@ -291,9 +444,11 @@ footer a:hover{color:var(--red)}
 <div class="container">
   <span class="eyebrow">GAINS PROFILE</span>
   <div class="deco-line"></div>
-  <h2 style="margin-bottom:20px">目標、成就、興趣、網絡、<em style="font-style:normal;color:var(--red)">技巧</em></h2>
+  <h2 style="margin-bottom:20px" data-lang="zh">目標、成就、興趣、網絡、<em style="font-style:normal;color:var(--red)">技巧</em></h2>
+  <h2 data-lang="en" style="margin-bottom:20px;display:none">Goals, Accomplishments, Interests, Networks, <em style="font-style:normal;color:var(--red)">Skills</em></h2>
+  <h2 data-lang="pt" style="margin-bottom:20px;display:none">Objetivos, Conquistas, Interesses, Redes, <em style="font-style:normal;color:var(--red)">Compet&ecirc;ncias</em></h2>
 
-  <div class="card" style="overflow-x:auto">
+  <div class="card" style="overflow-x:auto" data-lang="zh">
     <table class="gains-table">
       <tr>
         <th style="width:100px">項目</th>
@@ -321,6 +476,64 @@ footer a:hover{color:var(--red)}
       </tr>
     </table>
   </div>
+
+  <div class="card" data-lang="en" style="overflow-x:auto;display:none">
+    <table class="gains-table">
+      <tr>
+        <th style="width:100px">Category</th>
+        <th>Details</th>
+      </tr>
+      <tr>
+        <td><strong>Goals</strong></td>
+        <td><strong>Personal:</strong> Connect with more domestic and international resources through BNI<br><strong>Business:</strong> Bring more mainland Chinese chain restaurants and enterprises to Macau</td>
+      </tr>
+      <tr>
+        <td><strong>Accomplishments</strong></td>
+        <td><strong>Awards:</strong> Germany iF Design Best 300, Taiwan Xiao Xi Design Newcomer Award<br><strong>International presence:</strong> Design, F&amp;B, and investment companies in mainland China; engineering, entertainment, and logistics companies in Malaysia</td>
+      </tr>
+      <tr>
+        <td><strong>Interests</strong></td>
+        <td>Basketball, badminton, boxing, coffee brewing, watching films</td>
+      </tr>
+      <tr>
+        <td><strong>Networks</strong></td>
+        <td>Coffee community, Malaysia business connections</td>
+      </tr>
+      <tr>
+        <td><strong>Skills</strong></td>
+        <td>Lecturer at University of Macau Centre for Continuing Education, professional barista</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card" data-lang="pt" style="overflow-x:auto;display:none">
+    <table class="gains-table">
+      <tr>
+        <th style="width:100px">Categoria</th>
+        <th>Detalhes</th>
+      </tr>
+      <tr>
+        <td><strong>Objetivos</strong></td>
+        <td><strong>Pessoal:</strong> Conhecer mais recursos nacionais e internacionais atrav&eacute;s do BNI<br><strong>Comercial:</strong> Trazer mais cadeias de restaura&ccedil;&atilde;o e empresas da China continental para Macau</td>
+      </tr>
+      <tr>
+        <td><strong>Conquistas</strong></td>
+        <td><strong>Pr&eacute;mios:</strong> Alemanha iF Design Best 300, Pr&eacute;mio de Novo Talento Xiao Xi Design de Taiwan<br><strong>Presen&ccedil;a internacional:</strong> Empresas de design, restaura&ccedil;&atilde;o e investimento na China continental; engenharia, entretenimento e log&iacute;stica na Mal&aacute;sia</td>
+      </tr>
+      <tr>
+        <td><strong>Interesses</strong></td>
+        <td>Basquetebol, badminton, boxe, prepara&ccedil;&atilde;o de caf&eacute;, cinema</td>
+      </tr>
+      <tr>
+        <td><strong>Redes</strong></td>
+        <td>Comunidade do caf&eacute;, contactos comerciais na Mal&aacute;sia</td>
+      </tr>
+      <tr>
+        <td><strong>Compet&ecirc;ncias</strong></td>
+        <td>Docente no Centro de Forma&ccedil;&atilde;o Cont&iacute;nua da Universidade de Macau, barista profissional</td>
+      </tr>
+    </table>
+  </div>
 </div>
 </section>
 
@@ -332,9 +545,11 @@ footer a:hover{color:var(--red)}
 <div class="container">
   <span class="eyebrow">REFERRAL GUIDE</span>
   <div class="deco-line"></div>
-  <h2 style="margin-bottom:20px">引薦<em style="font-style:normal;color:var(--red)">指南</em></h2>
+  <h2 style="margin-bottom:20px" data-lang="zh">引薦<em style="font-style:normal;color:var(--red)">指南</em></h2>
+  <h2 data-lang="en" style="margin-bottom:20px;display:none">Referral <em style="font-style:normal;color:var(--red)">Guide</em></h2>
+  <h2 data-lang="pt" style="margin-bottom:20px;display:none">Guia de <em style="font-style:normal;color:var(--red)">Refer&ecirc;ncias</em></h2>
 
-  <div class="card">
+  <div class="card" data-lang="zh">
     <h3>理想<em>合作夥伴</em>（聯繫範圍）</h3>
     <div class="ref-grid" style="margin-top:12px">
       <div class="ref-card"><h4>地產業</h4><p>物業代理、地產發展商</p></div>
@@ -348,7 +563,35 @@ footer a:hover{color:var(--red)}
     </div>
   </div>
 
-  <div class="two-col">
+  <div class="card" data-lang="en" style="display:none">
+    <h3>Ideal <em>Partners</em> (Contact Scope)</h3>
+    <div class="ref-grid" style="margin-top:12px">
+      <div class="ref-card"><h4>Real Estate</h4><p>Property agents, real estate developers</p></div>
+      <div class="ref-card"><h4>Mainland Franchise Brands</h4><p>Chain F&amp;B, retail brands launching in Macau</p></div>
+      <div class="ref-card"><h4>Food &amp; Beverage</h4><p>Restaurant, caf&eacute;, and tea shop operators</p></div>
+      <div class="ref-card"><h4>Interior Design Firms</h4><p>Industry collaboration, project subcontracting</p></div>
+      <div class="ref-card"><h4>Engineering Companies</h4><p>Construction contracting, specialised engineering</p></div>
+      <div class="ref-card"><h4>Feng Shui Masters</h4><p>Commercial space feng shui layout coordination</p></div>
+      <div class="ref-card"><h4>Architects</h4><p>Architectural design coordination and building plan submission</p></div>
+      <div class="ref-card"><h4>Property Management</h4><p>Shopping mall management, property maintenance</p></div>
+    </div>
+  </div>
+
+  <div class="card" data-lang="pt" style="display:none">
+    <h3>Parceiros <em>Ideais</em> (&Acirc;mbito de Contacto)</h3>
+    <div class="ref-grid" style="margin-top:12px">
+      <div class="ref-card"><h4>Imobili&aacute;rio</h4><p>Agentes imobili&aacute;rios, promotores</p></div>
+      <div class="ref-card"><h4>Franquias da China Continental</h4><p>Cadeias de restaura&ccedil;&atilde;o e retalho a estabelecer-se em Macau</p></div>
+      <div class="ref-card"><h4>Restaura&ccedil;&atilde;o</h4><p>Operadores de restaurantes, cafetarias e casas de ch&aacute;</p></div>
+      <div class="ref-card"><h4>Empresas de Design de Interiores</h4><p>Colabora&ccedil;&atilde;o no setor, subcontrata&ccedil;&atilde;o de projetos</p></div>
+      <div class="ref-card"><h4>Empresas de Engenharia</h4><p>Empreitadas de constru&ccedil;&atilde;o, engenharia especializada</p></div>
+      <div class="ref-card"><h4>Mestres de Feng Shui</h4><p>Coordena&ccedil;&atilde;o de feng shui em espa&ccedil;os comerciais</p></div>
+      <div class="ref-card"><h4>Arquitectos</h4><p>Coordena&ccedil;&atilde;o de projetos arquitect&oacute;nicos e submiss&atilde;o de plantas</p></div>
+      <div class="ref-card"><h4>Gest&atilde;o de Propriedades</h4><p>Gest&atilde;o de centros comerciais, manuten&ccedil;&atilde;o de im&oacute;veis</p></div>
+    </div>
+  </div>
+
+  <div class="two-col" data-lang="zh">
     <div class="card">
       <h3>優質引薦<em>標準</em></h3>
       <ul>
@@ -370,9 +613,61 @@ footer a:hover{color:var(--red)}
     </div>
   </div>
 
-  <div class="card" style="border-color:rgba(204,0,0,0.15);background:linear-gradient(135deg,rgba(204,0,0,0.02),rgba(245,230,211,0.1))">
+  <div class="two-col" data-lang="en" style="display:none">
+    <div class="card">
+      <h3>Quality Referral <em>Criteria</em></h3>
+      <ul>
+        <li>Ideal referral phrases: <strong>"I want to start a business / open a branch"</strong> or <strong>"The shop needs a transformation or renovation"</strong></li>
+        <li>Project value of <strong>MOP 500,000 or above</strong></li>
+        <li>Needs <strong>one-stop building plan, design, and engineering services</strong></li>
+        <li>Planning for <strong>hotels, schools, or shopping malls</strong></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Top 10 Target <em>Client Types</em></h3>
+      <ul>
+        <li><strong>F&amp;B and caf&eacute; owners</strong></li>
+        <li><strong>Investors and entrepreneurs</strong></li>
+        <li><strong>Mall management and developers</strong></li>
+        <li><strong>Architects and government departments</strong></li>
+        <li>Key criteria: confirmed store opening needs, sufficient budget, or BNI members</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="two-col" data-lang="pt" style="display:none">
+    <div class="card">
+      <h3>Crit&eacute;rios de Refer&ecirc;ncia <em>de Qualidade</em></h3>
+      <ul>
+        <li>Frases ideais de refer&ecirc;ncia: <strong>&laquo;Quero abrir um neg&oacute;cio / uma filial&raquo;</strong> ou <strong>&laquo;A loja precisa de uma transforma&ccedil;&atilde;o ou renova&ccedil;&atilde;o&raquo;</strong></li>
+        <li>Valor do projeto de <strong>MOP 500.000 ou superior</strong></li>
+        <li>Necessidade de <strong>servi&ccedil;os integrados de projeto, design e engenharia</strong></li>
+        <li>Planeamento para <strong>hot&eacute;is, escolas ou centros comerciais</strong></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Top 10 Tipos de <em>Clientes-Alvo</em></h3>
+      <ul>
+        <li><strong>Propriet&aacute;rios de restaura&ccedil;&atilde;o e cafetarias</strong></li>
+        <li><strong>Investidores e empreendedores</strong></li>
+        <li><strong>Gestores de centros comerciais e promotores</strong></li>
+        <li><strong>Arquitectos e departamentos governamentais</strong></li>
+        <li>Crit&eacute;rios-chave: necessidade confirmada de abertura de loja, or&ccedil;amento suficiente, ou membros BNI</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:rgba(204,0,0,0.15);background:linear-gradient(135deg,rgba(204,0,0,0.02),rgba(245,230,211,0.1))" data-lang="zh">
     <h3>不適合引薦</h3>
     <p style="margin:0">純維修工程、僅裝修廁所等小型工程不在服務範圍內。</p>
+  </div>
+  <div class="card" data-lang="en" style="border-color:rgba(204,0,0,0.15);background:linear-gradient(135deg,rgba(204,0,0,0.02),rgba(245,230,211,0.1));display:none"
+    <h3>Not Suitable for Referral</h3>
+    <p style="margin:0">Pure maintenance work and small-scale projects such as bathroom-only renovations are outside the scope of services.</p>
+  </div>
+  <div class="card" data-lang="pt" style="border-color:rgba(204,0,0,0.15);background:linear-gradient(135deg,rgba(204,0,0,0.02),rgba(245,230,211,0.1));display:none"
+    <h3>N&atilde;o Adequado para Refer&ecirc;ncia</h3>
+    <p style="margin:0">Trabalhos de pura manuten&ccedil;&atilde;o e projetos de pequena escala, como renova&ccedil;&otilde;es apenas de casas de banho, est&atilde;o fora do &acirc;mbito dos servi&ccedil;os.</p>
   </div>
 </div>
 </section>
@@ -385,9 +680,11 @@ footer a:hover{color:var(--red)}
 <div class="container">
   <span class="eyebrow">PERSONAL</span>
   <div class="deco-line"></div>
-  <h2 style="margin-bottom:20px">個人<em style="font-style:normal;color:var(--red)">背景</em></h2>
+  <h2 style="margin-bottom:20px" data-lang="zh">個人<em style="font-style:normal;color:var(--red)">背景</em></h2>
+  <h2 data-lang="en" style="margin-bottom:20px;display:none">Personal <em style="font-style:normal;color:var(--red)">Background</em></h2>
+  <h2 data-lang="pt" style="margin-bottom:20px;display:none">Perfil <em style="font-style:normal;color:var(--red)">Pessoal</em></h2>
 
-  <div class="two-col">
+  <div class="two-col" data-lang="zh">
     <div class="card">
       <h3>關於 Panda</h3>
       <div class="info-row">
@@ -414,16 +711,77 @@ footer a:hover{color:var(--red)}
       </ul>
     </div>
   </div>
+
+  <div class="two-col" data-lang="en" style="display:none">
+    <div class="card">
+      <h3>About Panda</h3>
+      <div class="info-row">
+        <div class="info-label">City</div>
+        <div class="info-value">Macau (40-year resident)</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Family</div>
+        <div class="info-value">Spouse Amanda, daughter Miley</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Key to Success</div>
+        <div class="info-value">Integrity and responsibility</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Hobbies</h3>
+      <ul>
+        <li>Basketball</li>
+        <li>Boxing</li>
+        <li>Badminton</li>
+        <li>Coffee brewing</li>
+        <li>Watching films</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="two-col" data-lang="pt" style="display:none">
+    <div class="card">
+      <h3>Sobre o Panda</h3>
+      <div class="info-row">
+        <div class="info-label">Cidade</div>
+        <div class="info-value">Macau (residente h&aacute; 40 anos)</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Fam&iacute;lia</div>
+        <div class="info-value">C&ocirc;njuge Amanda, filha Miley</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Chave do Sucesso</div>
+        <div class="info-value">Integridade e responsabilidade</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Passatempos</h3>
+      <ul>
+        <li>Basquetebol</li>
+        <li>Boxe</li>
+        <li>Badminton</li>
+        <li>Prepara&ccedil;&atilde;o de caf&eacute;</li>
+        <li>Cinema</li>
+      </ul>
+    </div>
+  </div>
 </div>
 </section>
 
 <!-- CTA -->
 <section class="cta-section">
 <div class="container">
-  <h2>想開舖？設計搵 Panda</h2>
-  <p>透過 BNI ACE 分會聯繫胡展鴻，獲取專業商舖設計工程服務</p>
-  <a href="https://www.facebook.com/bniacechapter" target="_blank" class="btn btn-white">聯繫 BNI ACE &rarr;</a>
-  <a href="/bni-ace.html#members" class="btn btn-ghost">返回會員目錄</a>
+  <h2 data-lang="zh">想開舖？設計搵 Panda</h2>
+  <h2 data-lang="en" style="display:none">Want to Open a Shop? Find Panda for Design</h2>
+  <h2 data-lang="pt" style="display:none">Quer Abrir uma Loja? Procure o Panda para o Design</h2>
+  <p data-lang="zh">透過 BNI ACE 分會聯繫胡展鴻，獲取專業商舖設計工程服務</p>
+  <p data-lang="en" style="display:none">Contact Panda Wu through BNI ACE Chapter for professional commercial interior design &amp; engineering services</p>
+  <p data-lang="pt" style="display:none">Contacte Panda Wu atrav&eacute;s do Cap&iacute;tulo BNI ACE para servi&ccedil;os profissionais de design de interiores e engenharia comercial</p>
+  <span data-lang="zh"><a href="https://www.facebook.com/bniacechapter" target="_blank" class="btn btn-white">聯繫 BNI ACE &rarr;</a><a href="/bni-ace.html#members" class="btn btn-ghost">返回會員目錄</a></span>
+  <span data-lang="en" style="display:none"><a href="https://www.facebook.com/bniacechapter" target="_blank" class="btn btn-white">Contact BNI ACE &rarr;</a><a href="/bni-ace.html#members" class="btn btn-ghost">Back to Member Directory</a></span>
+  <span data-lang="pt" style="display:none"><a href="https://www.facebook.com/bniacechapter" target="_blank" class="btn btn-white">Contactar BNI ACE &rarr;</a><a href="/bni-ace.html#members" class="btn btn-ghost">Voltar ao Diret&oacute;rio de Membros</a></span>
 </div>
 </section>
 
@@ -433,33 +791,75 @@ footer a:hover{color:var(--red)}
   <div class="section-header" style="text-align:center;margin-bottom:24px">
     <span class="eyebrow">FAQ</span>
     <div class="deco-line center"></div>
-    <h2>常見問題</h2>
+    <h2 data-lang="zh">常見問題</h2>
+    <h2 data-lang="en" style="display:none">Frequently Asked Questions</h2>
+    <h2 data-lang="pt" style="display:none">Perguntas Frequentes</h2>
   </div>
   <div class="faq-section">
 
-    <div class="faq-card">
+    <div class="faq-card" data-lang="zh">
       <h3>Panda Wu 提供什麼服務？</h3>
       <p>品牌設計與開店規劃、設備諮詢與商業室內設計（佈置、材料選擇）、成本價值制定，以及政府「入則」及「收則」服務（目前成功率 100%）。主要服務對象為創業者、國內外連鎖品牌落地澳門、以及需要店舖轉型或重新裝修的業主。工程金額一般達 50 萬 MOP 以上。</p>
     </div>
+    <div class="faq-card" data-lang="en" style="display:none">
+      <h3>What services does Panda Wu provide?</h3>
+      <p>Brand design and store planning, equipment consulting and commercial interior design (layout, material selection), cost and value assessment, and government building plans submission and approval (current success rate: 100%). Primary clients include entrepreneurs, domestic and international chain brands launching in Macau, and shop owners seeking transformation or renovation. Project values are generally MOP 500,000 or above.</p>
+    </div>
+    <div class="faq-card" data-lang="pt" style="display:none">
+      <h3>Que servi&ccedil;os oferece o Panda Wu?</h3>
+      <p>Design de marca e planeamento de loja, consultoria de equipamentos e design de interiores comercial (disposi&ccedil;&atilde;o, sele&ccedil;&atilde;o de materiais), avalia&ccedil;&atilde;o de custos e valor, e submiss&atilde;o e aprova&ccedil;&atilde;o de projetos governamentais (taxa de sucesso atual: 100%). Os principais clientes incluem empreendedores, marcas de cadeia nacionais e internacionais a estabelecer-se em Macau, e propriet&aacute;rios de lojas que procuram transforma&ccedil;&atilde;o ou renova&ccedil;&atilde;o. O valor dos projetos &eacute; geralmente de MOP 500.000 ou superior.</p>
+    </div>
 
-    <div class="faq-card">
+    <div class="faq-card" data-lang="zh">
       <h3>Panda Wu 有什麼專業獎項和資歷？</h3>
       <p>胡展鴻擁有 15 年商舖室內設計工程經驗，曾獲得德國 iF Design Best 300 及台灣蕭璽設計新人獎。同時是澳門大學持續進修中心講師及專業咖啡師。在中國內地及馬來西亞均設有業務，包括設計、餐飲、投資、工程、娛樂、物流等多個領域。</p>
     </div>
+    <div class="faq-card" data-lang="en" style="display:none">
+      <h3>What are Panda Wu's professional awards and qualifications?</h3>
+      <p>Panda Wu has 15 years of experience in commercial interior design and engineering. He has received the Germany iF Design Best 300 and the Taiwan Xiao Xi Design Newcomer Award. He is also a lecturer at the University of Macau Centre for Continuing Education and a professional barista. He has business operations in mainland China and Malaysia spanning design, F&amp;B, investment, engineering, entertainment, and logistics.</p>
+    </div>
+    <div class="faq-card" data-lang="pt" style="display:none">
+      <h3>Quais s&atilde;o os pr&eacute;mios e qualifica&ccedil;&otilde;es profissionais do Panda Wu?</h3>
+      <p>Panda Wu tem 15 anos de experi&ecirc;ncia em design de interiores e engenharia comercial. Recebeu o pr&eacute;mio iF Design Best 300 da Alemanha e o Pr&eacute;mio de Novo Talento Xiao Xi Design de Taiwan. &Eacute; tamb&eacute;m docente no Centro de Forma&ccedil;&atilde;o Cont&iacute;nua da Universidade de Macau e barista profissional. Tem opera&ccedil;&otilde;es comerciais na China continental e na Mal&aacute;sia nas &aacute;reas de design, restaura&ccedil;&atilde;o, investimento, engenharia, entretenimento e log&iacute;stica.</p>
+    </div>
 
-    <div class="faq-card">
+    <div class="faq-card" data-lang="zh">
       <h3>Panda Wu 在 BNI 的角色是什麼？</h3>
       <p>Panda Wu 是 BNI ACE 分會的資深會員，歷任第 20 屆副主席、第 21 屆主席、第 22 屆 GC（Growth Coordinator）、第 23 屆 LVH（Leadership Visionary Hero）。長期維持綠燈會員資格，並獲得 1 星 Master Connector 金質獎章，是分會最活躍和最具影響力的會員之一。</p>
     </div>
+    <div class="faq-card" data-lang="en" style="display:none">
+      <h3>What is Panda Wu's role in BNI?</h3>
+      <p>Panda Wu is a senior member of BNI ACE Chapter. He has served as Term 20 Vice President, Term 21 President, Term 22 GC (Growth Coordinator), and Term 23 LVH (Leadership Visionary Hero). He has maintained long-term green-light member status and earned the 1-Star Master Connector Gold Badge, making him one of the most active and influential members of the chapter.</p>
+    </div>
+    <div class="faq-card" data-lang="pt" style="display:none">
+      <h3>Qual &eacute; o papel do Panda Wu no BNI?</h3>
+      <p>Panda Wu &eacute; um membro s&eacute;nior do Cap&iacute;tulo BNI ACE. Exerceu os cargos de Vice-Presidente no Mandato 20, Presidente no Mandato 21, GC (Growth Coordinator) no Mandato 22 e LVH (Leadership Visionary Hero) no Mandato 23. Mant&eacute;m o estatuto de membro de luz verde a longo prazo e conquistou a Medalha de Ouro Master Connector 1 Estrela, sendo um dos membros mais ativos e influentes do cap&iacute;tulo.</p>
+    </div>
 
-    <div class="faq-card">
+    <div class="faq-card" data-lang="zh">
       <h3>怎樣的引薦最適合 Panda Wu？</h3>
       <p>理想引薦語：「我想創業/開分店」或「店舖想轉型或重新裝修」。優質引薦標準：工程金額達 50 萬 MOP 以上、需要入則設計工程一條龍服務、酒店學校商場的規劃項目。關鍵條件：有確切開店需求、預算充足、或是 BNI 會員。不適合的引薦：純維修工程、僅裝修廁所。</p>
     </div>
+    <div class="faq-card" data-lang="en" style="display:none">
+      <h3>What kind of referrals are best suited for Panda Wu?</h3>
+      <p>Ideal referral phrases: "I want to start a business / open a branch" or "The shop needs a transformation or renovation." Quality referral criteria: project value of MOP 500,000 or above, one-stop building plan, design, and engineering services, planning for hotels, schools, or shopping malls. Key conditions: confirmed store opening needs, sufficient budget, or BNI members. Not suitable: pure maintenance work, bathroom-only renovations.</p>
+    </div>
+    <div class="faq-card" data-lang="pt" style="display:none">
+      <h3>Que tipo de refer&ecirc;ncias s&atilde;o mais adequadas para o Panda Wu?</h3>
+      <p>Frases ideais de refer&ecirc;ncia: &laquo;Quero abrir um neg&oacute;cio / uma filial&raquo; ou &laquo;A loja precisa de uma transforma&ccedil;&atilde;o ou renova&ccedil;&atilde;o.&raquo; Crit&eacute;rios de refer&ecirc;ncia de qualidade: valor do projeto de MOP 500.000 ou superior, servi&ccedil;os integrados de projeto, design e engenharia, planeamento para hot&eacute;is, escolas ou centros comerciais. Condi&ccedil;&otilde;es-chave: necessidade confirmada de abertura de loja, or&ccedil;amento suficiente, ou membros BNI. N&atilde;o adequado: trabalhos de pura manuten&ccedil;&atilde;o, renova&ccedil;&otilde;es apenas de casas de banho.</p>
+    </div>
 
-    <div class="faq-card">
+    <div class="faq-card" data-lang="zh">
       <h3>如何聯繫 Panda Wu？</h3>
       <p>可透過 BNI ACE 分會聯繫，Facebook 專頁：facebook.com/bniacechapter。也可以參加每週二早上 7:00-8:30 於澳門漁人碼頭勵庭海景酒店 1 樓會議廳舉行的 BNI 早餐商務會議，與 Panda Wu 直接交流。公司地址：澳門僑樂新街 10 號地下 AB 舖。</p>
+    </div>
+    <div class="faq-card" data-lang="en" style="display:none">
+      <h3>How can I contact Panda Wu?</h3>
+      <p>You can reach him through BNI ACE Chapter. Facebook page: facebook.com/bniacechapter. You can also attend the weekly BNI breakfast business meeting held every Tuesday from 7:00&ndash;8:30 AM at the 1/F conference hall of Harbourview Hotel, Fisherman's Wharf, Macau, to meet Panda Wu in person. Office address: G/F AB, No. 10 Rua dos Currais, Macau.</p>
+    </div>
+    <div class="faq-card" data-lang="pt" style="display:none">
+      <h3>Como posso contactar o Panda Wu?</h3>
+      <p>Pode contact&aacute;-lo atrav&eacute;s do Cap&iacute;tulo BNI ACE. P&aacute;gina do Facebook: facebook.com/bniacechapter. Tamb&eacute;m pode participar na reuni&atilde;o semanal de neg&oacute;cios BNI, todas as ter&ccedil;as-feiras das 7:00 &agrave;s 8:30 da manh&atilde;, na sala de confer&ecirc;ncias do 1.&ordm; andar do Hotel Harbourview, Porto Exterior de Macau, para conhecer o Panda Wu pessoalmente. Endere&ccedil;o do escrit&oacute;rio: R/C AB, N.&ordm; 10 Rua dos Currais, Macau.</p>
     </div>
 
   </div>
@@ -476,6 +876,13 @@ footer a:hover{color:var(--red)}
   <div class="footer-copy">&copy; 2026 CloudPipe &middot; CC BY 4.0</div>
 </div>
 </footer>
+
+<script>
+function switchLang(lang){
+  document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('active',b.textContent.trim()===(lang==='zh'?'中':lang.toUpperCase()))});
+  document.querySelectorAll('[data-lang]').forEach(function(el){el.style.display=el.dataset.lang===lang?'':'none'});
+}
+</script>
 
 </body>
 </html>

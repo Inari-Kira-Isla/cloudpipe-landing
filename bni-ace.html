@@ -220,6 +220,10 @@ footer{border-top:1px solid var(--gray-100);padding:28px 0;text-align:center;bac
 footer a{color:var(--gray-400)}
 footer a:hover{color:var(--red)}
 .footer-copy{font-size:11px;color:var(--gray-400);margin-top:6px}
+.lang-switch{display:flex;gap:3px;background:rgba(204,0,0,0.06);border-radius:999px;padding:2px;margin-right:8px}
+.lang-btn{font-family:'Space Mono',monospace;font-size:10px;padding:3px 10px;border-radius:999px;border:none;cursor:pointer;background:transparent;color:var(--gray-400);transition:all .2s;font-weight:700}
+.lang-btn.active{background:var(--red);color:#fff}
+.lang-btn:hover:not(.active){color:var(--gray-800)}
 </style>
 </head>
 <body>
@@ -229,11 +233,16 @@ footer a:hover{color:var(--red)}
 <div class="container">
   <a href="/bni-ace.html" class="logo"><span>BNI</span> ACE</a>
   <div class="nav-links">
+    <div class="lang-switch">
+      <button class="lang-btn active" onclick="switchLang('zh')">中</button>
+      <button class="lang-btn" onclick="switchLang('en')">EN</button>
+      <button class="lang-btn" onclick="switchLang('pt')">PT</button>
+    </div>
     <a href="/">CloudPipe</a>
-    <a href="#members">會員目錄</a>
-    <a href="#events">活動</a>
-    <a href="#articles">文章</a>
-    <a href="https://www.facebook.com/bniacechapter" target="_blank" class="nav-cta">聯繫分會</a>
+    <a href="#members"><span data-lang="zh">會員目錄</span><span data-lang="en" style="display:none">Members</span><span data-lang="pt" style="display:none">Membros</span></a>
+    <a href="#events"><span data-lang="zh">活動</span><span data-lang="en" style="display:none">Events</span><span data-lang="pt" style="display:none">Eventos</span></a>
+    <a href="#articles"><span data-lang="zh">文章</span><span data-lang="en" style="display:none">Articles</span><span data-lang="pt" style="display:none">Artigos</span></a>
+    <a href="https://www.facebook.com/bniacechapter" target="_blank" class="nav-cta"><span data-lang="zh">聯繫分會</span><span data-lang="en" style="display:none">Contact</span><span data-lang="pt" style="display:none">Contactar</span></a>
   </div>
 </div>
 </nav>
@@ -242,11 +251,17 @@ footer a:hover{color:var(--red)}
 <section class="hero">
 <div class="container">
   <span class="eyebrow">BNI ACE CHAPTER &middot; MACAO</span>
-  <h1>澳門最具活力的<em>商業引薦分會</em></h1>
-  <p class="subtitle">30 位跨行業專業人士 &middot; GiversGain 付出者收穫</p>
+  <h1 data-lang="zh">澳門最具活力的<em>商業引薦分會</em></h1>
+  <h1 data-lang="en" style="display:none">Macau's Most Dynamic <em>Business Referral Chapter</em></h1>
+  <h1 data-lang="pt" style="display:none">O Capítulo de Referências Comerciais <em>Mais Dinâmico de Macau</em></h1>
+  <p class="subtitle" data-lang="zh">30 位跨行業專業人士 &middot; GiversGain 付出者收穫</p>
+  <p class="subtitle" data-lang="en" style="display:none">30 Cross-industry Professionals &middot; GiversGain</p>
+  <p class="subtitle" data-lang="pt" style="display:none">30 Profissionais Multissetoriais &middot; GiversGain — Quem Dá, Recebe</p>
   <div class="hero-badge">
     <span class="dot"></span>
-    每週二 7:00-8:30am &middot; 漁人碼頭勵庭海景酒店
+    <span data-lang="zh">每週二 7:00-8:30am &middot; 漁人碼頭勵庭海景酒店</span>
+    <span data-lang="en" style="display:none">Every Tuesday 7:00-8:30am &middot; Harbourview Hotel, Fisherman's Wharf</span>
+    <span data-lang="pt" style="display:none">Todas as terças 7:00-8:30am &middot; Hotel Harbourview, Porto Exterior</span>
   </div>
 </div>
 </section>
@@ -258,22 +273,22 @@ footer a:hover{color:var(--red)}
     <div class="stat-card">
       <div class="num">30</div>
       <div class="label">MEMBERS</div>
-      <div class="value">跨行業專業人士</div>
+      <div class="value"><span data-lang="zh">跨行業專業人士</span><span data-lang="en" style="display:none">Cross-industry Professionals</span><span data-lang="pt" style="display:none">Profissionais Multissetoriais</span></div>
     </div>
     <div class="stat-card">
       <div class="num">1985</div>
       <div class="label">FOUNDED</div>
-      <div class="value">BNI 全球成立</div>
+      <div class="value"><span data-lang="zh">BNI 全球成立</span><span data-lang="en" style="display:none">BNI Founded Globally</span><span data-lang="pt" style="display:none">Fundação Global do BNI</span></div>
     </div>
     <div class="stat-card">
       <div class="num">76+</div>
       <div class="label">COUNTRIES</div>
-      <div class="value">全球網絡覆蓋</div>
+      <div class="value"><span data-lang="zh">全球網絡覆蓋</span><span data-lang="en" style="display:none">Global Network Coverage</span><span data-lang="pt" style="display:none">Cobertura da Rede Global</span></div>
     </div>
     <div class="stat-card">
       <div class="num">30</div>
       <div class="label">INDUSTRIES</div>
-      <div class="value">一行一席制</div>
+      <div class="value"><span data-lang="zh">一行一席制</span><span data-lang="en" style="display:none">One Seat Per Industry</span><span data-lang="pt" style="display:none">Um Lugar por Setor</span></div>
     </div>
   </div>
 </div>
@@ -289,26 +304,50 @@ footer a:hover{color:var(--red)}
     <div class="about-text">
       <span class="eyebrow">ABOUT BNI ACE</span>
       <div class="deco-line left"></div>
-      <h2 style="margin-bottom:14px">連結改變事業的<em style="font-style:normal;color:var(--red)">關鍵人脈</em></h2>
-      <p>BNI（Business Network International）於 1985 年成立，是世界上最大及最成功的業務引薦組織，目前在全球超過 76 個國家擁有數十萬名會員。BNI 的運作模式簡單而有效：每個分會由來自不同行業的專業人士組成，每個行業只允許一位代表，避免直接競爭，最大化引薦效果。</p>
-      <p>會員通過核心價值 <strong>GiversGain（付出者收穫）</strong>發展業務 — 先為別人創造價值，自然會收到回報。每週在全球上萬個社區中，會員與其他值得信賴的商業領袖會面，建立和培養長期及有意義的關係，達成有質素的商業引薦。</p>
-      <p><strong>ACE 分會（Macao Ace Chapter）</strong>是澳門最具發展潛力和活力的分會，貫通粵港澳網路，聯繫國際商機。分會匯聚 30 位來自醫療、法律、設計、餐飲、教育、金融等不同行業的專業人士，每週二早上 7:00-8:30 於澳門漁人碼頭勵庭海景酒店 1 樓會議廳舉行早餐商務會議。歡迎關注 Facebook 專頁 <strong>bniacechapter</strong> 了解更多分會動態。</p>
+      <h2 data-lang="zh" style="margin-bottom:14px">連結改變事業的<em style="font-style:normal;color:var(--red)">關鍵人脈</em></h2>
+      <h2 data-lang="en" style="display:none;margin-bottom:14px">Connect with the <em style="font-style:normal;color:var(--red)">Key People</em> Who Transform Your Business</h2>
+      <h2 data-lang="pt" style="display:none;margin-bottom:14px">Conecte-se com as <em style="font-style:normal;color:var(--red)">Pessoas-chave</em> que Transformam o Seu Negócio</h2>
+      <div data-lang="zh">
+        <p>BNI（Business Network International）於 1985 年成立，是世界上最大及最成功的業務引薦組織，目前在全球超過 76 個國家擁有數十萬名會員。BNI 的運作模式簡單而有效：每個分會由來自不同行業的專業人士組成，每個行業只允許一位代表，避免直接競爭，最大化引薦效果。</p>
+        <p>會員通過核心價值 <strong>GiversGain（付出者收穫）</strong>發展業務 — 先為別人創造價值，自然會收到回報。每週在全球上萬個社區中，會員與其他值得信賴的商業領袖會面，建立和培養長期及有意義的關係，達成有質素的商業引薦。</p>
+        <p><strong>ACE 分會（Macao Ace Chapter）</strong>是澳門最具發展潛力和活力的分會，貫通粵港澳網路，聯繫國際商機。分會匯聚 30 位來自醫療、法律、設計、餐飲、教育、金融等不同行業的專業人士，每週二早上 7:00-8:30 於澳門漁人碼頭勵庭海景酒店 1 樓會議廳舉行早餐商務會議。歡迎關注 Facebook 專頁 <strong>bniacechapter</strong> 了解更多分會動態。</p>
+      </div>
+      <div data-lang="en" style="display:none">
+        <p>BNI (Business Network International) was founded in 1985 and is the world's largest and most successful business referral organisation, with hundreds of thousands of members in over 76 countries. BNI's model is simple yet effective: each chapter is composed of professionals from different industries, with only one representative per industry to avoid direct competition and maximise referral results.</p>
+        <p>Members grow their business through the core value of <strong>Givers Gain</strong> — by creating value for others first, rewards naturally follow. Every week in thousands of communities worldwide, members meet with other trusted business leaders to build and nurture long-term, meaningful relationships that generate quality business referrals.</p>
+        <p><strong>ACE Chapter (Macao Ace Chapter)</strong> is Macau's most dynamic and promising chapter, bridging the Guangdong-Hong Kong-Macau network and connecting international business opportunities. The chapter brings together 30 professionals from healthcare, law, design, F&B, education, finance and more, meeting every Tuesday 7:00-8:30am at Harbourview Hotel, Fisherman's Wharf, 1/F Conference Room. Follow us on Facebook at <strong>bniacechapter</strong> for the latest updates.</p>
+      </div>
+      <div data-lang="pt" style="display:none">
+        <p>O BNI (Business Network International) foi fundado em 1985 e é a maior e mais bem-sucedida organização de referências comerciais do mundo, com centenas de milhares de membros em mais de 76 países. O modelo do BNI é simples mas eficaz: cada capítulo é composto por profissionais de diferentes setores, com apenas um representante por setor para evitar concorrência direta e maximizar os resultados das referências.</p>
+        <p>Os membros desenvolvem os seus negócios através do valor central <strong>Givers Gain (Quem Dá, Recebe)</strong> — ao criar valor para os outros primeiro, as recompensas surgem naturalmente. Todas as semanas, em milhares de comunidades em todo o mundo, os membros encontram-se com outros líderes empresariais de confiança para construir e cultivar relações duradouras e significativas que geram referências comerciais de qualidade.</p>
+        <p>O <strong>Capítulo ACE (Macao Ace Chapter)</strong> é o capítulo mais dinâmico e promissor de Macau, fazendo a ponte entre a rede Guangdong-Hong Kong-Macau e conectando oportunidades de negócios internacionais. O capítulo reúne 30 profissionais das áreas da saúde, direito, design, restauração, educação, finanças e mais, reunindo-se todas as terças-feiras das 7:00 às 8:30 no Hotel Harbourview, Porto Exterior, Sala de Conferências do 1.º andar. Siga-nos no Facebook em <strong>bniacechapter</strong> para as últimas novidades.</p>
+      </div>
     </div>
     <div class="value-list">
       <div class="value-item">
-        <div class="v-text"><strong>GiversGain 付出者收穫</strong><span>BNI 核心價值：先為別人創造價值，自然會收到回報</span></div>
+        <div class="v-text" data-lang="zh"><strong>GiversGain 付出者收穫</strong><span>BNI 核心價值：先為別人創造價值，自然會收到回報</span></div>
+        <div class="v-text" data-lang="en" style="display:none"><strong>Givers Gain</strong><span>BNI's core value: create value for others first, and rewards follow naturally</span></div>
+        <div class="v-text" data-lang="pt" style="display:none"><strong>Quem Dá, Recebe</strong><span>Valor central do BNI: crie valor para os outros primeiro e as recompensas surgem naturalmente</span></div>
       </div>
       <div class="value-item">
-        <div class="v-text"><strong>全球 76+ 國家網絡</strong><span>數十萬 BNI 會員，跨國引薦機會無限</span></div>
+        <div class="v-text" data-lang="zh"><strong>全球 76+ 國家網絡</strong><span>數十萬 BNI 會員，跨國引薦機會無限</span></div>
+        <div class="v-text" data-lang="en" style="display:none"><strong>76+ Countries Worldwide</strong><span>Hundreds of thousands of BNI members, unlimited international referral opportunities</span></div>
+        <div class="v-text" data-lang="pt" style="display:none"><strong>Rede em 76+ Países</strong><span>Centenas de milhares de membros BNI, oportunidades de referência internacionais ilimitadas</span></div>
       </div>
       <div class="value-item">
-        <div class="v-text"><strong>每週結構化會面</strong><span>定期交流、建立信任、追蹤引薦成果</span></div>
+        <div class="v-text" data-lang="zh"><strong>每週結構化會面</strong><span>定期交流、建立信任、追蹤引薦成果</span></div>
+        <div class="v-text" data-lang="en" style="display:none"><strong>Weekly Structured Meetings</strong><span>Regular exchange, trust building, and referral tracking</span></div>
+        <div class="v-text" data-lang="pt" style="display:none"><strong>Reuniões Semanais Estruturadas</strong><span>Intercâmbio regular, construção de confiança e acompanhamento de referências</span></div>
       </div>
       <div class="value-item">
-        <div class="v-text"><strong>一行一席制</strong><span>每個行業只允許一位代表，無直接競爭</span></div>
+        <div class="v-text" data-lang="zh"><strong>一行一席制</strong><span>每個行業只允許一位代表，無直接競爭</span></div>
+        <div class="v-text" data-lang="en" style="display:none"><strong>One Seat Per Industry</strong><span>Only one representative per industry, no direct competition</span></div>
+        <div class="v-text" data-lang="pt" style="display:none"><strong>Um Lugar por Setor</strong><span>Apenas um representante por setor, sem concorrência direta</span></div>
       </div>
       <div class="value-item">
-        <div class="v-text"><strong>ACE — 澳門最具活力</strong><span>粵港澳商機門戶，30 個行業會員組合</span></div>
+        <div class="v-text" data-lang="zh"><strong>ACE — 澳門最具活力</strong><span>粵港澳商機門戶，30 個行業會員組合</span></div>
+        <div class="v-text" data-lang="en" style="display:none"><strong>ACE — Macau's Most Dynamic</strong><span>Gateway to GBA business opportunities, 30 industries represented</span></div>
+        <div class="v-text" data-lang="pt" style="display:none"><strong>ACE — O Mais Dinâmico de Macau</strong><span>Portal de negócios da Grande Baía, 30 setores representados</span></div>
       </div>
     </div>
   </div>
@@ -324,24 +363,28 @@ footer a:hover{color:var(--red)}
   <div class="section-header">
     <span class="eyebrow">WEEKLY MEETING</span>
     <div class="deco-line"></div>
-    <h2>每週<em>早餐商務會議</em></h2>
-    <p>結構化的交流確保每位參加者都能充分受益</p>
+    <h2 data-lang="zh">每週<em>早餐商務會議</em></h2>
+    <h2 data-lang="en" style="display:none">Weekly <em>Business Breakfast Meeting</em></h2>
+    <h2 data-lang="pt" style="display:none">Reunião Semanal de <em>Negócios ao Pequeno-almoço</em></h2>
+    <p data-lang="zh">結構化的交流確保每位參加者都能充分受益</p>
+    <p data-lang="en" style="display:none">Structured networking ensures every attendee benefits fully</p>
+    <p data-lang="pt" style="display:none">O networking estruturado garante que todos os participantes beneficiem plenamente</p>
   </div>
   <div class="meeting-grid">
     <div class="meeting-card">
-      <div class="label">日期</div>
-      <div class="value">每週二</div>
+      <div class="label"><span data-lang="zh">日期</span><span data-lang="en" style="display:none">DAY</span><span data-lang="pt" style="display:none">DIA</span></div>
+      <div class="value"><span data-lang="zh">每週二</span><span data-lang="en" style="display:none">Every Tuesday</span><span data-lang="pt" style="display:none">Todas as terças</span></div>
     </div>
     <div class="meeting-card">
-      <div class="label">時間</div>
+      <div class="label"><span data-lang="zh">時間</span><span data-lang="en" style="display:none">TIME</span><span data-lang="pt" style="display:none">HORA</span></div>
       <div class="value" style="color:var(--red)">7:00-8:30am</div>
     </div>
     <div class="meeting-card">
-      <div class="label">地點</div>
-      <div class="value" style="font-size:.82rem">漁人碼頭勵庭海景酒店<br>1 樓會議廳</div>
+      <div class="label"><span data-lang="zh">地點</span><span data-lang="en" style="display:none">VENUE</span><span data-lang="pt" style="display:none">LOCAL</span></div>
+      <div class="value" style="font-size:.82rem"><span data-lang="zh">漁人碼頭勵庭海景酒店<br>1 樓會議廳</span><span data-lang="en" style="display:none">Harbourview Hotel<br>Fisherman's Wharf, 1/F</span><span data-lang="pt" style="display:none">Hotel Harbourview<br>Porto Exterior, 1.º andar</span></div>
     </div>
     <div class="meeting-card">
-      <div class="label">參會費</div>
+      <div class="label"><span data-lang="zh">參會費</span><span data-lang="en" style="display:none">VISITOR FEE</span><span data-lang="pt" style="display:none">TAXA</span></div>
       <div class="value" style="color:var(--red)">MOP$280</div>
     </div>
   </div>
@@ -357,44 +400,62 @@ footer a:hover{color:var(--red)}
   <div class="section-header">
     <span class="eyebrow">INDUSTRY DISTRIBUTION</span>
     <div class="deco-line"></div>
-    <h2>ACE 分會<em>行業分布</em></h2>
-    <p>30 位會員橫跨 7 大行業板塊，構成完整的商業引薦生態</p>
+    <h2 data-lang="zh">ACE 分會<em>行業分布</em></h2>
+    <h2 data-lang="en" style="display:none">ACE Chapter <em>Industry Distribution</em></h2>
+    <h2 data-lang="pt" style="display:none">Capítulo ACE <em>Distribuição por Setores</em></h2>
+    <p data-lang="zh">30 位會員橫跨 7 大行業板塊，構成完整的商業引薦生態</p>
+    <p data-lang="en" style="display:none">30 members across 7 major industry sectors, forming a complete business referral ecosystem</p>
+    <p data-lang="pt" style="display:none">30 membros em 7 grandes setores industriais, formando um ecossistema completo de referências comerciais</p>
   </div>
   <div class="industry-grid">
 
     <div class="industry-card">
-      <h3><span class="ind-icon">+</span>醫療健康</h3>
-      <p>ACE 分會的醫療健康領域匯聚了西醫李加穎（Sandy Lei）、血氧神經復康專家吳健華（Catherine）、基因抗衰老產品胡廣生（Longson Wu）、中草藥免疫調節產品郭玉琴，以及精油身心靈謝敏洵（Cimmy Chea），為會員提供全方位的健康引薦網絡。從常規醫療、復康治療到預防保健，ACE 分會在大健康領域的覆蓋面是澳門 BNI 分會中最全面的。</p>
+      <h3><span class="ind-icon">+</span><span data-lang="zh">醫療健康</span><span data-lang="en" style="display:none">Healthcare & Wellness</span><span data-lang="pt" style="display:none">Saúde e Bem-estar</span></h3>
+      <p data-lang="zh">ACE 分會的醫療健康領域匯聚了西醫李加穎（Sandy Lei）、血氧神經復康專家吳健華（Catherine）、基因抗衰老產品胡廣生（Longson Wu）、中草藥免疫調節產品郭玉琴，以及精油身心靈謝敏洵（Cimmy Chea），為會員提供全方位的健康引薦網絡。從常規醫療、復康治療到預防保健，ACE 分會在大健康領域的覆蓋面是澳門 BNI 分會中最全面的。</p>
+      <p data-lang="en" style="display:none">ACE Chapter's healthcare sector brings together General Practitioner Sandy Lei, Neuro-rehabilitation specialist Catherine, Genetic Anti-aging Products expert Longson Wu, Herbal Immune Products specialist Yuk Kam Kwok, and Essential Oils & Wellness practitioner Cimmy Chea, providing members with a comprehensive health referral network. From conventional medicine and rehabilitation to preventive care, ACE Chapter offers the most complete coverage in the health sector among Macau's BNI chapters.</p>
+      <p data-lang="pt" style="display:none">O setor de saúde do Capítulo ACE reúne a Médica Sandy Lei, a especialista em Neuro-reabilitação Catherine, o especialista em Produtos Anti-envelhecimento Genéticos Longson Wu, a especialista em Produtos Imunológicos de Ervas Yuk Kam Kwok e a praticante de Óleos Essenciais e Bem-estar Cimmy Chea, proporcionando aos membros uma rede abrangente de referências de saúde. Da medicina convencional e reabilitação aos cuidados preventivos, o Capítulo ACE oferece a cobertura mais completa no setor da saúde entre os capítulos BNI de Macau.</p>
     </div>
 
     <div class="industry-card">
-      <h3><span class="ind-icon">+</span>設計工程</h3>
-      <p>設計與工程板塊由商業設計工程專家胡展鴻（Panda Wu，點一設計工程有限公司）、軟裝與裝飾設計定制傢俬伍文聰（Ringo Ng）、綠植造景黃鈺淇（Yuki Huang）、設施管理及清潔周遠平（Parker Chao），以及環保餐具何兆泰（Octans Ho）組成。從商舖設計入則到軟裝傢俬、綠化造景和後期維護，形成了完整的商業空間服務鏈。</p>
+      <h3><span class="ind-icon">+</span><span data-lang="zh">設計工程</span><span data-lang="en" style="display:none">Design & Engineering</span><span data-lang="pt" style="display:none">Design e Engenharia</span></h3>
+      <p data-lang="zh">設計與工程板塊由商業設計工程專家胡展鴻（Panda Wu，點一設計工程有限公司）、軟裝與裝飾設計定制傢俬伍文聰（Ringo Ng）、綠植造景黃鈺淇（Yuki Huang）、設施管理及清潔周遠平（Parker Chao），以及環保餐具何兆泰（Octans Ho）組成。從商舖設計入則到軟裝傢俬、綠化造景和後期維護，形成了完整的商業空間服務鏈。</p>
+      <p data-lang="en" style="display:none">The Design & Engineering sector comprises Commercial Design Engineering expert Panda Wu (Dot One Design Engineering Ltd), Soft Furnishing & Custom Furniture specialist Ringo Ng, Green Plant Landscaping specialist Yuki Huang, Facility Management & Cleaning expert Parker Chao, and Eco-friendly Tableware provider Octans Ho. From commercial space design to soft furnishing, landscaping and ongoing maintenance, they form a complete commercial space service chain.</p>
+      <p data-lang="pt" style="display:none">O setor de Design e Engenharia é composto pelo especialista em Engenharia de Design Comercial Panda Wu (Dot One Design Engineering Ltd), o especialista em Decoração e Mobiliário Personalizado Ringo Ng, a especialista em Paisagismo de Plantas Yuki Huang, o especialista em Gestão de Instalações e Limpeza Parker Chao e o fornecedor de Talheres Ecológicos Octans Ho. Do design de espaços comerciais à decoração, paisagismo e manutenção contínua, formam uma cadeia completa de serviços para espaços comerciais.</p>
     </div>
 
     <div class="industry-card">
-      <h3><span class="ind-icon">+</span>餐飲食品</h3>
-      <p>餐飲食品領域集合了西餐 Pizza 店葉劍峰（Alan Ip）、食品批發貿易卓岫（Joe Cheok）、手作養生食品鄭倩娜（Jessica Cheng）、大健康食品製造商關振威（John Kuan），以及雪茄紅酒洋酒黃善恒（Jason Vong）。從食材供應、食品生產到餐廳經營及酒類精品，構成澳門餐飲業界的多元引薦資源。</p>
+      <h3><span class="ind-icon">+</span><span data-lang="zh">餐飲食品</span><span data-lang="en" style="display:none">Food & Beverage</span><span data-lang="pt" style="display:none">Alimentação e Bebidas</span></h3>
+      <p data-lang="zh">餐飲食品領域集合了西餐 Pizza 店葉劍峰（Alan Ip）、食品批發貿易卓岫（Joe Cheok）、手作養生食品鄭倩娜（Jessica Cheng）、大健康食品製造商關振威（John Kuan），以及雪茄紅酒洋酒黃善恒（Jason Vong）。從食材供應、食品生產到餐廳經營及酒類精品，構成澳門餐飲業界的多元引薦資源。</p>
+      <p data-lang="en" style="display:none">The Food & Beverage sector brings together Western Restaurant & Pizza owner Alan Ip, Food Wholesale & Trading specialist Joe Cheok, Handmade Health Food artisan Jessica Cheng, Health Food Manufacturer John Kuan, and Cigars, Wine & Spirits connoisseur Jason Vong. From ingredient supply and food production to restaurant operations and premium beverages, they constitute a diverse referral resource for Macau's F&B industry.</p>
+      <p data-lang="pt" style="display:none">O setor de Alimentação e Bebidas reúne o proprietário de Restaurante Ocidental e Pizza Alan Ip, o especialista em Comércio Grossista de Alimentos Joe Cheok, a artesã de Alimentação Saudável Artesanal Jessica Cheng, o Fabricante de Alimentos Saudáveis John Kuan e o conhecedor de Charutos, Vinho e Bebidas Espirituosas Jason Vong. Do fornecimento de ingredientes e produção alimentar à gestão de restaurantes e bebidas premium, constituem um recurso diversificado de referências para o setor de restauração de Macau.</p>
     </div>
 
     <div class="industry-card">
-      <h3><span class="ind-icon">+</span>商業服務</h3>
-      <p>商業與專業服務板塊涵蓋大律師阮嘉銳（Oscar Un）、保險嚴敏姬（Maggie Im）、理財策劃蘇佩儀（Sophie Sou）、工商鋪鍾志文（Man Chong）、共享辦公室沈一樂（Cola Shen），以及網絡會員營銷周凱榮（Keniston Chao）。從法律諮詢、財務規劃、保險配置到商業地產和辦公空間，為創業者和企業主提供全方位的商業支援。</p>
+      <h3><span class="ind-icon">+</span><span data-lang="zh">商業服務</span><span data-lang="en" style="display:none">Business Services</span><span data-lang="pt" style="display:none">Serviços Empresariais</span></h3>
+      <p data-lang="zh">商業與專業服務板塊涵蓋大律師阮嘉銳（Oscar Un）、保險嚴敏姬（Maggie Im）、理財策劃蘇佩儀（Sophie Sou）、工商鋪鍾志文（Man Chong）、共享辦公室沈一樂（Cola Shen），以及網絡會員營銷周凱榮（Keniston Chao）。從法律諮詢、財務規劃、保險配置到商業地產和辦公空間，為創業者和企業主提供全方位的商業支援。</p>
+      <p data-lang="en" style="display:none">The Business Services sector covers Barrister Oscar Un, Insurance specialist Maggie Im, Financial Planning advisor Sophie Sou, Commercial Property agent Man Chong, Co-working Space operator Cola Shen, and Network Marketing expert Keniston Chao. From legal advice, financial planning and insurance to commercial real estate and office space, they provide comprehensive business support for entrepreneurs and business owners.</p>
+      <p data-lang="pt" style="display:none">O setor de Serviços Empresariais abrange o Advogado Oscar Un, a especialista em Seguros Maggie Im, a consultora de Planeamento Financeiro Sophie Sou, o agente de Imóveis Comerciais Man Chong, o operador de Espaço de Coworking Cola Shen e o especialista em Marketing de Rede Keniston Chao. De consultoria jurídica, planeamento financeiro e seguros a imóveis comerciais e espaços de escritório, proporcionam apoio empresarial abrangente para empreendedores e empresários.</p>
     </div>
 
     <div class="industry-card">
-      <h3><span class="ind-icon">+</span>教育培訓</h3>
-      <p>教育與培訓領域有企業課程及培訓黎志豪（Chester Lai）、藝術教育李慶慈（Theresa Lei）、整理收納培訓何彩歡（Lydia Ho），以及產前產後服務 Tracy Ip。從企業管理培訓、藝術教育到生活技能和母嬰服務，ACE 分會的教育培訓資源涵蓋職場發展與個人成長的多個面向。</p>
+      <h3><span class="ind-icon">+</span><span data-lang="zh">教育培訓</span><span data-lang="en" style="display:none">Education & Training</span><span data-lang="pt" style="display:none">Educação e Formação</span></h3>
+      <p data-lang="zh">教育與培訓領域有企業課程及培訓黎志豪（Chester Lai）、藝術教育李慶慈（Theresa Lei）、整理收納培訓何彩歡（Lydia Ho），以及產前產後服務 Tracy Ip。從企業管理培訓、藝術教育到生活技能和母嬰服務，ACE 分會的教育培訓資源涵蓋職場發展與個人成長的多個面向。</p>
+      <p data-lang="en" style="display:none">The Education & Training sector includes Corporate Training specialist Chester Lai, Art Education instructor Theresa Lei, Organisation & Declutter Training expert Lydia Ho, and Pre & Postnatal Services provider Tracy Ip. From corporate management training and art education to life skills and maternity services, ACE Chapter's education resources cover multiple dimensions of professional and personal development.</p>
+      <p data-lang="pt" style="display:none">O setor de Educação e Formação inclui o especialista em Formação Empresarial Chester Lai, a instrutora de Educação Artística Theresa Lei, a especialista em Formação em Organização Lydia Ho e a prestadora de Serviços Pré e Pós-natal Tracy Ip. Da formação em gestão empresarial e educação artística às competências de vida e serviços de maternidade, os recursos educativos do Capítulo ACE cobrem múltiplas dimensões do desenvolvimento profissional e pessoal.</p>
     </div>
 
     <div class="industry-card">
-      <h3><span class="ind-icon">+</span>生活美學</h3>
-      <p>生活美學板塊包括時尚形象石妤（Salina）和美容吳少東（Vicky Ng），致力於會員的外在形象提升。從個人形象規劃、穿搭諮詢到專業美容護理，為注重個人品牌形象的商務人士提供專業引薦。</p>
+      <h3><span class="ind-icon">+</span><span data-lang="zh">生活美學</span><span data-lang="en" style="display:none">Lifestyle & Aesthetics</span><span data-lang="pt" style="display:none">Estilo de Vida e Estética</span></h3>
+      <p data-lang="zh">生活美學板塊包括時尚形象石妤（Salina）和美容吳少東（Vicky Ng），致力於會員的外在形象提升。從個人形象規劃、穿搭諮詢到專業美容護理，為注重個人品牌形象的商務人士提供專業引薦。</p>
+      <p data-lang="en" style="display:none">The Lifestyle & Aesthetics sector includes Fashion & Image consultant Salina and Beauty specialist Vicky Ng, dedicated to enhancing members' personal image. From image planning and styling advice to professional beauty treatments, they provide expert referrals for business professionals who value their personal brand image.</p>
+      <p data-lang="pt" style="display:none">O setor de Estilo de Vida e Estética inclui a consultora de Moda e Imagem Salina e a especialista em Beleza Vicky Ng, dedicadas a melhorar a imagem pessoal dos membros. Do planeamento de imagem e consultoria de estilo aos tratamentos profissionais de beleza, proporcionam referências especializadas para profissionais que valorizam a sua marca pessoal.</p>
     </div>
 
     <div class="industry-card">
-      <h3><span class="ind-icon">+</span>媒體創意</h3>
-      <p>媒體與創意領域匯聚了影視及自媒體勞嘉濠（Keo Lou）、微短劇製作葉浩榮（Devin Ip），以及個人 IP 操盤手林青曉。從品牌影片拍攝、微短劇內容製作到個人品牌打造和自媒體營運，為會員的市場推廣和品牌曝光提供一條龍的媒體創意服務。</p>
+      <h3><span class="ind-icon">+</span><span data-lang="zh">媒體創意</span><span data-lang="en" style="display:none">Media & Creative</span><span data-lang="pt" style="display:none">Média e Criatividade</span></h3>
+      <p data-lang="zh">媒體與創意領域匯聚了影視及自媒體勞嘉濠（Keo Lou）、微短劇製作葉浩榮（Devin Ip），以及個人 IP 操盤手林青曉。從品牌影片拍攝、微短劇內容製作到個人品牌打造和自媒體營運，為會員的市場推廣和品牌曝光提供一條龍的媒體創意服務。</p>
+      <p data-lang="en" style="display:none">The Media & Creative sector brings together Film & Social Media specialist Keo Lou, Short Drama Production expert Devin Ip, and Personal Branding Strategist Ching Hiu Lam. From brand video production and short drama content creation to personal branding and social media management, they provide one-stop media and creative services for members' marketing and brand exposure.</p>
+      <p data-lang="pt" style="display:none">O setor de Média e Criatividade reúne o especialista em Cinema e Média Social Keo Lou, o especialista em Produção de Curtas Devin Ip e a Estrategista de Marca Pessoal Ching Hiu Lam. Da produção de vídeos de marca e criação de conteúdo de curtas à construção de marca pessoal e gestão de média social, proporcionam serviços completos de média e criatividade para o marketing e exposição da marca dos membros.</p>
     </div>
 
   </div>
@@ -410,200 +471,204 @@ footer a:hover{color:var(--red)}
   <div class="section-header">
     <span class="eyebrow">MEMBER DIRECTORY</span>
     <div class="deco-line"></div>
-    <h2>ACE 分會<em>會員目錄</em></h2>
-    <p>30 位來自不同行業的專業人士</p>
+    <h2 data-lang="zh">ACE 分會<em>會員目錄</em></h2>
+    <h2 data-lang="en" style="display:none">ACE Chapter <em>Member Directory</em></h2>
+    <h2 data-lang="pt" style="display:none">Capítulo ACE <em>Diretório de Membros</em></h2>
+    <p data-lang="zh">30 位來自不同行業的專業人士</p>
+    <p data-lang="en" style="display:none">30 professionals from diverse industries</p>
+    <p data-lang="pt" style="display:none">30 profissionais de diversos setores</p>
   </div>
   <div class="search-box">
     <svg viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input type="text" id="memberSearch" placeholder="搜尋會員姓名或行業...">
+    <input type="text" id="memberSearch" placeholder="搜尋會員姓名或行業..." data-ph-zh="搜尋會員姓名或行業..." data-ph-en="Search by name or industry..." data-ph-pt="Pesquisar por nome ou setor...">
   </div>
-  <div class="member-count" id="memberCount">顯示 31 / 31 位會員</div>
+  <div class="member-count" id="memberCount"><span data-lang="zh">顯示 31 / 31 位會員</span><span data-lang="en" style="display:none">Showing 31 / 31 members</span><span data-lang="pt" style="display:none">A mostrar 31 / 31 membros</span></div>
   <div class="member-grid" id="memberGrid">
 
-    <div class="member-card" data-member-id="1" data-name="黃鈺淇 Yuki Huang" data-industry="綠植造景">
+    <div class="member-card" data-member-id="1" data-name="黃鈺淇 Yuki Huang" data-industry="綠植造景" data-industry-en="Green Plant Landscaping" data-industry-pt="Paisagismo de Plantas">
       <div class="member-name">黃鈺淇</div>
       <div class="member-en">Yuki Huang</div>
-      <span class="member-industry">綠植造景</span>
+      <span class="member-industry"><span data-lang="zh">綠植造景</span><span data-lang="en" style="display:none">Green Plant Landscaping</span><span data-lang="pt" style="display:none">Paisagismo de Plantas</span></span>
     </div>
 
-    <div class="member-card" data-member-id="2" data-name="伍文聰 Ringo Ng" data-industry="軟裝與裝飾設計定制傢俬">
+    <div class="member-card" data-member-id="2" data-name="伍文聰 Ringo Ng" data-industry="軟裝與裝飾設計定制傢俬" data-industry-en="Soft Furnishing & Custom Furniture" data-industry-pt="Decoração e Mobiliário Personalizado">
       <div class="member-name">伍文聰</div>
       <div class="member-en">Ringo Ng</div>
-      <span class="member-industry">軟裝與裝飾設計定制傢俬</span>
+      <span class="member-industry"><span data-lang="zh">軟裝與裝飾設計定制傢俬</span><span data-lang="en" style="display:none">Soft Furnishing & Custom Furniture</span><span data-lang="pt" style="display:none">Decoração e Mobiliário Personalizado</span></span>
     </div>
 
-    <div class="member-card" data-member-id="3" data-name="周遠平 Parker Chao" data-industry="設施管理及清潔">
+    <div class="member-card" data-member-id="3" data-name="周遠平 Parker Chao" data-industry="設施管理及清潔" data-industry-en="Facility Management & Cleaning" data-industry-pt="Gestão de Instalações e Limpeza">
       <div class="member-name">周遠平</div>
       <div class="member-en">Parker Chao</div>
-      <span class="member-industry">設施管理及清潔</span>
+      <span class="member-industry"><span data-lang="zh">設施管理及清潔</span><span data-lang="en" style="display:none">Facility Management & Cleaning</span><span data-lang="pt" style="display:none">Gestão de Instalações e Limpeza</span></span>
     </div>
 
-    <div class="member-card" data-member-id="4" data-name="鍾志文 Man Chong" data-industry="工商鋪">
+    <div class="member-card" data-member-id="4" data-name="鍾志文 Man Chong" data-industry="工商鋪" data-industry-en="Commercial Property" data-industry-pt="Imóveis Comerciais">
       <div class="member-name">鍾志文</div>
       <div class="member-en">Man Chong</div>
-      <span class="member-industry">工商鋪</span>
+      <span class="member-industry"><span data-lang="zh">工商鋪</span><span data-lang="en" style="display:none">Commercial Property</span><span data-lang="pt" style="display:none">Imóveis Comerciais</span></span>
     </div>
 
-    <div class="member-card" data-member-id="5" data-name="鄭倩娜 Jessica Cheng" data-industry="手作養生食品">
+    <div class="member-card" data-member-id="5" data-name="鄭倩娜 Jessica Cheng" data-industry="手作養生食品" data-industry-en="Handmade Health Food" data-industry-pt="Alimentação Saudável Artesanal">
       <div class="member-name">鄭倩娜</div>
       <div class="member-en">Jessica Cheng</div>
-      <span class="member-industry">手作養生食品</span>
+      <span class="member-industry"><span data-lang="zh">手作養生食品</span><span data-lang="en" style="display:none">Handmade Health Food</span><span data-lang="pt" style="display:none">Alimentação Saudável Artesanal</span></span>
     </div>
 
-    <div class="member-card" data-member-id="6" data-name="石妤 Salina" data-industry="時尚形象">
+    <div class="member-card" data-member-id="6" data-name="石妤 Salina" data-industry="時尚形象" data-industry-en="Fashion & Image" data-industry-pt="Moda e Imagem">
       <div class="member-name">石妤</div>
       <div class="member-en">Salina</div>
-      <span class="member-industry">時尚形象</span>
+      <span class="member-industry"><span data-lang="zh">時尚形象</span><span data-lang="en" style="display:none">Fashion & Image</span><span data-lang="pt" style="display:none">Moda e Imagem</span></span>
     </div>
 
-    <div class="member-card" data-member-id="7" data-name="Tracy Ip" data-industry="產前產後服務">
+    <div class="member-card" data-member-id="7" data-name="Tracy Ip" data-industry="產前產後服務" data-industry-en="Pre & Postnatal Services" data-industry-pt="Serviços Pré e Pós-natal">
       <div class="member-name">Tracy Ip</div>
       <div class="member-en">Tracy Ip</div>
-      <span class="member-industry">產前產後服務</span>
+      <span class="member-industry"><span data-lang="zh">產前產後服務</span><span data-lang="en" style="display:none">Pre & Postnatal Services</span><span data-lang="pt" style="display:none">Serviços Pré e Pós-natal</span></span>
     </div>
 
-    <div class="member-card" data-member-id="8" data-name="何彩歡 Lydia Ho" data-industry="整理收納培訓">
+    <div class="member-card" data-member-id="8" data-name="何彩歡 Lydia Ho" data-industry="整理收納培訓" data-industry-en="Organization & Declutter Training" data-industry-pt="Formação em Organização">
       <div class="member-name">何彩歡</div>
       <div class="member-en">Lydia Ho</div>
-      <span class="member-industry">整理收納培訓</span>
+      <span class="member-industry"><span data-lang="zh">整理收納培訓</span><span data-lang="en" style="display:none">Organization & Declutter Training</span><span data-lang="pt" style="display:none">Formação em Organização</span></span>
     </div>
 
-    <div class="member-card" data-member-id="9" data-name="郭玉琴" data-industry="中草藥免疫調節產品">
+    <div class="member-card" data-member-id="9" data-name="郭玉琴" data-industry="中草藥免疫調節產品" data-industry-en="Herbal Immune Products" data-industry-pt="Produtos Imunológicos de Ervas">
       <div class="member-name">郭玉琴</div>
       <div class="member-en">&nbsp;</div>
-      <span class="member-industry">中草藥免疫調節產品</span>
+      <span class="member-industry"><span data-lang="zh">中草藥免疫調節產品</span><span data-lang="en" style="display:none">Herbal Immune Products</span><span data-lang="pt" style="display:none">Produtos Imunológicos de Ervas</span></span>
     </div>
 
-    <div class="member-card" data-member-id="10" data-name="謝敏洵 Cimmy Chea" data-industry="精油身心靈">
+    <div class="member-card" data-member-id="10" data-name="謝敏洵 Cimmy Chea" data-industry="精油身心靈" data-industry-en="Essential Oils & Wellness" data-industry-pt="Óleos Essenciais e Bem-estar">
       <div class="member-name">謝敏洵</div>
       <div class="member-en">Cimmy Chea</div>
-      <span class="member-industry">精油身心靈</span>
+      <span class="member-industry"><span data-lang="zh">精油身心靈</span><span data-lang="en" style="display:none">Essential Oils & Wellness</span><span data-lang="pt" style="display:none">Óleos Essenciais e Bem-estar</span></span>
     </div>
 
-    <div class="member-card" data-member-id="11" data-name="胡廣生 Longson Wu" data-industry="基因抗衰老產品">
+    <div class="member-card" data-member-id="11" data-name="胡廣生 Longson Wu" data-industry="基因抗衰老產品" data-industry-en="Genetic Anti-aging Products" data-industry-pt="Produtos Anti-envelhecimento Genéticos">
       <div class="member-name">胡廣生</div>
       <div class="member-en">Longson Wu</div>
-      <span class="member-industry">基因抗衰老產品</span>
+      <span class="member-industry"><span data-lang="zh">基因抗衰老產品</span><span data-lang="en" style="display:none">Genetic Anti-aging Products</span><span data-lang="pt" style="display:none">Produtos Anti-envelhecimento Genéticos</span></span>
     </div>
 
-    <div class="member-card" data-member-id="12" data-name="李加穎 Sandy Lei" data-industry="西醫">
+    <div class="member-card" data-member-id="12" data-name="李加穎 Sandy Lei" data-industry="西醫" data-industry-en="General Practice (Western Medicine)" data-industry-pt="Medicina Ocidental">
       <div class="member-name">李加穎</div>
       <div class="member-en">Sandy Lei</div>
-      <span class="member-industry">西醫</span>
+      <span class="member-industry"><span data-lang="zh">西醫</span><span data-lang="en" style="display:none">General Practice (Western Medicine)</span><span data-lang="pt" style="display:none">Medicina Ocidental</span></span>
     </div>
 
-    <div class="member-card" data-member-id="13" data-name="林青曉" data-industry="個人 IP 操盤手">
+    <div class="member-card" data-member-id="13" data-name="林青曉" data-industry="個人 IP 操盤手" data-industry-en="Personal Branding Strategist" data-industry-pt="Estrategista de Marca Pessoal">
       <div class="member-name">林青曉</div>
       <div class="member-en">&nbsp;</div>
-      <span class="member-industry">個人 IP 操盤手</span>
+      <span class="member-industry"><span data-lang="zh">個人 IP 操盤手</span><span data-lang="en" style="display:none">Personal Branding Strategist</span><span data-lang="pt" style="display:none">Estrategista de Marca Pessoal</span></span>
     </div>
 
-    <div class="member-card" data-member-id="14" data-name="勞嘉濠 Keo Lou" data-industry="影視及自媒體">
+    <div class="member-card" data-member-id="14" data-name="勞嘉濠 Keo Lou" data-industry="影視及自媒體" data-industry-en="Film & Social Media" data-industry-pt="Cinema e Média Social">
       <div class="member-name">勞嘉濠</div>
       <div class="member-en">Keo Lou</div>
-      <span class="member-industry">影視及自媒體</span>
+      <span class="member-industry"><span data-lang="zh">影視及自媒體</span><span data-lang="en" style="display:none">Film & Social Media</span><span data-lang="pt" style="display:none">Cinema e Média Social</span></span>
     </div>
 
-    <div class="member-card" data-member-id="15" data-name="卓岫 Joe Cheok" data-industry="食品批發貿易">
+    <div class="member-card" data-member-id="15" data-name="卓岫 Joe Cheok" data-industry="食品批發貿易" data-industry-en="Food Wholesale & Trading" data-industry-pt="Comércio Grossista de Alimentos">
       <div class="member-name">卓岫</div>
       <div class="member-en">Joe Cheok</div>
-      <span class="member-industry">食品批發貿易</span>
+      <span class="member-industry"><span data-lang="zh">食品批發貿易</span><span data-lang="en" style="display:none">Food Wholesale & Trading</span><span data-lang="pt" style="display:none">Comércio Grossista de Alimentos</span></span>
     </div>
 
-    <div class="member-card" data-member-id="16" data-name="黃善恒 Jason Vong" data-industry="雪茄、紅酒、洋酒">
+    <div class="member-card" data-member-id="16" data-name="黃善恒 Jason Vong" data-industry="雪茄、紅酒、洋酒" data-industry-en="Cigars, Wine & Spirits" data-industry-pt="Charutos, Vinho e Bebidas Espirituosas">
       <div class="member-name">黃善恒</div>
       <div class="member-en">Jason Vong</div>
-      <span class="member-industry">雪茄、紅酒、洋酒</span>
+      <span class="member-industry"><span data-lang="zh">雪茄、紅酒、洋酒</span><span data-lang="en" style="display:none">Cigars, Wine & Spirits</span><span data-lang="pt" style="display:none">Charutos, Vinho e Bebidas Espirituosas</span></span>
     </div>
 
-    <div class="member-card" data-member-id="17" data-name="周凱榮 Keniston Chao" data-industry="網絡/會員營銷">
+    <div class="member-card" data-member-id="17" data-name="周凱榮 Keniston Chao" data-industry="網絡/會員營銷" data-industry-en="Network Marketing" data-industry-pt="Marketing de Rede">
       <div class="member-name">周凱榮</div>
       <div class="member-en">Keniston Chao</div>
-      <span class="member-industry">網絡/會員營銷</span>
+      <span class="member-industry"><span data-lang="zh">網絡/會員營銷</span><span data-lang="en" style="display:none">Network Marketing</span><span data-lang="pt" style="display:none">Marketing de Rede</span></span>
     </div>
 
-    <div class="member-card" data-member-id="18" data-name="葉劍峰 Alan Ip" data-industry="西餐 Pizza 店">
+    <div class="member-card" data-member-id="18" data-name="葉劍峰 Alan Ip" data-industry="西餐 Pizza 店" data-industry-en="Western Restaurant & Pizza" data-industry-pt="Restaurante Ocidental e Pizza">
       <div class="member-name">葉劍峰</div>
       <div class="member-en">Alan Ip</div>
-      <span class="member-industry">西餐 Pizza 店</span>
+      <span class="member-industry"><span data-lang="zh">西餐 Pizza 店</span><span data-lang="en" style="display:none">Western Restaurant & Pizza</span><span data-lang="pt" style="display:none">Restaurante Ocidental e Pizza</span></span>
     </div>
 
-    <div class="member-card" data-member-id="19" data-name="蘇佩儀 Sophie Sou" data-industry="理財策劃">
+    <div class="member-card" data-member-id="19" data-name="蘇佩儀 Sophie Sou" data-industry="理財策劃" data-industry-en="Financial Planning" data-industry-pt="Planeamento Financeiro">
       <div class="member-name">蘇佩儀</div>
       <div class="member-en">Sophie Sou</div>
-      <span class="member-industry">理財策劃</span>
+      <span class="member-industry"><span data-lang="zh">理財策劃</span><span data-lang="en" style="display:none">Financial Planning</span><span data-lang="pt" style="display:none">Planeamento Financeiro</span></span>
     </div>
 
-    <div class="member-card" data-member-id="20" data-name="阮嘉銳 Oscar Un" data-industry="大律師">
+    <div class="member-card" data-member-id="20" data-name="阮嘉銳 Oscar Un" data-industry="大律師" data-industry-en="Barrister" data-industry-pt="Advogado">
       <div class="member-name">阮嘉銳</div>
       <div class="member-en">Oscar Un</div>
-      <span class="member-industry">大律師</span>
+      <span class="member-industry"><span data-lang="zh">大律師</span><span data-lang="en" style="display:none">Barrister</span><span data-lang="pt" style="display:none">Advogado</span></span>
     </div>
 
-    <div class="member-card" data-member-id="21" data-name="沈一樂 Cola Shen" data-industry="共享辦公室">
+    <div class="member-card" data-member-id="21" data-name="沈一樂 Cola Shen" data-industry="共享辦公室" data-industry-en="Co-working Space" data-industry-pt="Espaço de Coworking">
       <div class="member-name">沈一樂</div>
       <div class="member-en">Cola Shen</div>
-      <span class="member-industry">共享辦公室</span>
+      <span class="member-industry"><span data-lang="zh">共享辦公室</span><span data-lang="en" style="display:none">Co-working Space</span><span data-lang="pt" style="display:none">Espaço de Coworking</span></span>
     </div>
 
-    <a class="member-card" data-member-id="22" data-name="黎志豪 Chester Lai" data-industry="企業課程及培訓" href="bni-ace-members/chester-lai.html" style="cursor:pointer">
+    <a class="member-card" data-member-id="22" data-name="黎志豪 Chester Lai" data-industry="企業課程及培訓" data-industry-en="Corporate Training" data-industry-pt="Formação Empresarial" href="bni-ace-members/chester-lai.html" style="cursor:pointer">
       <div class="member-name">黎志豪</div>
       <div class="member-en">Chester Lai</div>
-      <span class="member-industry">企業課程及培訓</span>
+      <span class="member-industry"><span data-lang="zh">企業課程及培訓</span><span data-lang="en" style="display:none">Corporate Training</span><span data-lang="pt" style="display:none">Formação Empresarial</span></span>
     </a>
 
-    <div class="member-card" data-member-id="23" data-name="吳健華 Catherine" data-industry="血氧神經復康">
+    <div class="member-card" data-member-id="23" data-name="吳健華 Catherine" data-industry="血氧神經復康" data-industry-en="Neuro-rehabilitation" data-industry-pt="Neuro-reabilitação">
       <div class="member-name">吳健華</div>
       <div class="member-en">Catherine</div>
-      <span class="member-industry">血氧神經復康</span>
+      <span class="member-industry"><span data-lang="zh">血氧神經復康</span><span data-lang="en" style="display:none">Neuro-rehabilitation</span><span data-lang="pt" style="display:none">Neuro-reabilitação</span></span>
     </div>
 
-    <div class="member-card" data-member-id="24" data-name="何兆泰 Octans Ho" data-industry="環保餐具">
+    <div class="member-card" data-member-id="24" data-name="何兆泰 Octans Ho" data-industry="環保餐具" data-industry-en="Eco-friendly Tableware" data-industry-pt="Talheres Ecológicos">
       <div class="member-name">何兆泰</div>
       <div class="member-en">Octans Ho</div>
-      <span class="member-industry">環保餐具</span>
+      <span class="member-industry"><span data-lang="zh">環保餐具</span><span data-lang="en" style="display:none">Eco-friendly Tableware</span><span data-lang="pt" style="display:none">Talheres Ecológicos</span></span>
     </div>
 
-    <div class="member-card" data-member-id="25" data-name="吳少東 Vicky Ng" data-industry="美容">
+    <div class="member-card" data-member-id="25" data-name="吳少東 Vicky Ng" data-industry="美容" data-industry-en="Beauty" data-industry-pt="Beleza">
       <div class="member-name">吳少東</div>
       <div class="member-en">Vicky Ng</div>
-      <span class="member-industry">美容</span>
+      <span class="member-industry"><span data-lang="zh">美容</span><span data-lang="en" style="display:none">Beauty</span><span data-lang="pt" style="display:none">Beleza</span></span>
     </div>
 
-    <div class="member-card" data-member-id="26" data-name="葉浩榮 Devin Ip" data-industry="微短劇製作">
+    <div class="member-card" data-member-id="26" data-name="葉浩榮 Devin Ip" data-industry="微短劇製作" data-industry-en="Short Drama Production" data-industry-pt="Produção de Curtas">
       <div class="member-name">葉浩榮</div>
       <div class="member-en">Devin Ip</div>
-      <span class="member-industry">微短劇製作</span>
+      <span class="member-industry"><span data-lang="zh">微短劇製作</span><span data-lang="en" style="display:none">Short Drama Production</span><span data-lang="pt" style="display:none">Produção de Curtas</span></span>
     </div>
 
-    <div class="member-card" data-member-id="27" data-name="李慶慈 Theresa Lei" data-industry="藝術教育">
+    <div class="member-card" data-member-id="27" data-name="李慶慈 Theresa Lei" data-industry="藝術教育" data-industry-en="Art Education" data-industry-pt="Educação Artística">
       <div class="member-name">李慶慈</div>
       <div class="member-en">Theresa Lei</div>
-      <span class="member-industry">藝術教育</span>
+      <span class="member-industry"><span data-lang="zh">藝術教育</span><span data-lang="en" style="display:none">Art Education</span><span data-lang="pt" style="display:none">Educação Artística</span></span>
     </div>
 
-    <a class="member-card" data-member-id="28" data-name="胡展鴻 Panda Wu" data-industry="商業設計工程" href="bni-ace-members/panda-wu.html" style="cursor:pointer">
+    <a class="member-card" data-member-id="28" data-name="胡展鴻 Panda Wu" data-industry="商業設計工程" data-industry-en="Commercial Design Engineering" data-industry-pt="Engenharia de Design Comercial" href="bni-ace-members/panda-wu.html" style="cursor:pointer">
       <div class="member-name">胡展鴻</div>
       <div class="member-en">Panda Wu</div>
-      <span class="member-industry">商業設計工程</span>
+      <span class="member-industry"><span data-lang="zh">商業設計工程</span><span data-lang="en" style="display:none">Commercial Design Engineering</span><span data-lang="pt" style="display:none">Engenharia de Design Comercial</span></span>
     </a>
 
-    <div class="member-card" data-member-id="29" data-name="關振威 John Kuan" data-industry="大健康食品製造商">
+    <div class="member-card" data-member-id="29" data-name="關振威 John Kuan" data-industry="大健康食品製造商" data-industry-en="Health Food Manufacturer" data-industry-pt="Fabricante de Alimentos Saudáveis">
       <div class="member-name">關振威</div>
       <div class="member-en">John Kuan</div>
-      <span class="member-industry">大健康食品製造商</span>
+      <span class="member-industry"><span data-lang="zh">大健康食品製造商</span><span data-lang="en" style="display:none">Health Food Manufacturer</span><span data-lang="pt" style="display:none">Fabricante de Alimentos Saudáveis</span></span>
     </div>
 
-    <div class="member-card" data-member-id="30" data-name="嚴敏姬 Maggie Im" data-industry="保險">
+    <div class="member-card" data-member-id="30" data-name="嚴敏姬 Maggie Im" data-industry="保險" data-industry-en="Insurance" data-industry-pt="Seguros">
       <div class="member-name">嚴敏姬</div>
       <div class="member-en">Maggie Im</div>
-      <span class="member-industry">保險</span>
+      <span class="member-industry"><span data-lang="zh">保險</span><span data-lang="en" style="display:none">Insurance</span><span data-lang="pt" style="display:none">Seguros</span></span>
     </div>
 
-    <a class="member-card" data-member-id="31" data-name="Will Chen" data-industry="茶飲小食" href="bni-ace-members/will-chen.html" style="cursor:pointer">
+    <a class="member-card" data-member-id="31" data-name="Will Chen" data-industry="茶飲小食" data-industry-en="Tea & Snacks" data-industry-pt="Chá e Snacks" href="bni-ace-members/will-chen.html" style="cursor:pointer">
       <div class="member-name">Will Chen</div>
       <div class="member-en">Will Chen</div>
-      <span class="member-industry">茶飲小食</span>
+      <span class="member-industry"><span data-lang="zh">茶飲小食</span><span data-lang="en" style="display:none">Tea & Snacks</span><span data-lang="pt" style="display:none">Chá e Snacks</span></span>
     </a>
 
   </div>
@@ -619,7 +684,9 @@ footer a:hover{color:var(--red)}
   <div class="section-header">
     <span class="eyebrow">UPCOMING EVENTS</span>
     <div class="deco-line"></div>
-    <h2>近期<em>活動</em></h2>
+    <h2 data-lang="zh">近期<em>活動</em></h2>
+    <h2 data-lang="en" style="display:none">Upcoming <em>Events</em></h2>
+    <h2 data-lang="pt" style="display:none">Próximos <em>Eventos</em></h2>
   </div>
   <div class="event-card">
     <div class="event-date">
@@ -627,9 +694,13 @@ footer a:hover{color:var(--red)}
       <div class="day">14</div>
     </div>
     <div class="event-info">
-      <h3>MindSpeak 分享會《說話如何聽入耳》 &mdash; 領強教練 黎Sir</h3>
-      <p>溝通技巧分享會 &middot; 2026/3/14（六）15:30-17:00 &middot; 峰盛比薩 &middot; MOP$108</p>
-      <a href="bni-event-20260314.html" class="event-link">查看詳情 &rarr;</a>
+      <h3 data-lang="zh">MindSpeak 分享會《說話如何聽入耳》 &mdash; 領強教練 黎Sir</h3>
+      <h3 data-lang="en" style="display:none">MindSpeak Sharing: "How to Make Your Words Land" &mdash; Coach Chester Lai</h3>
+      <h3 data-lang="pt" style="display:none">MindSpeak: "Como Fazer as Suas Palavras Serem Ouvidas" &mdash; Coach Chester Lai</h3>
+      <p data-lang="zh">溝通技巧分享會 &middot; 2026/3/14（六）15:30-17:00 &middot; 峰盛比薩 &middot; MOP$108</p>
+      <p data-lang="en" style="display:none">Communication Skills Workshop &middot; 2026/3/14 (Sat) 15:30-17:00 &middot; Fong Seng Pizza &middot; MOP$108</p>
+      <p data-lang="pt" style="display:none">Workshop de Comunicação &middot; 2026/3/14 (Sáb) 15:30-17:00 &middot; Fong Seng Pizza &middot; MOP$108</p>
+      <a href="bni-event-20260314.html" class="event-link"><span data-lang="zh">查看詳情</span><span data-lang="en" style="display:none">View Details</span><span data-lang="pt" style="display:none">Ver Detalhes</span> &rarr;</a>
     </div>
   </div>
 
@@ -639,9 +710,13 @@ footer a:hover{color:var(--red)}
       <div class="day">10</div>
     </div>
     <div class="event-info">
-      <h3>占卜 + 茶飲小食的新體驗 &mdash; Will Chen 聖杯茶飲小食</h3>
-      <p>10 分鐘專題演講 &middot; 2026/3/10（二）7:00-8:30am &middot; 漁人碼頭勵庭海景酒店</p>
-      <a href="bni-event-20260310.html" class="event-link">查看詳情 &rarr;</a>
+      <h3 data-lang="zh">占卜 + 茶飲小食的新體驗 &mdash; Will Chen 聖杯茶飲小食</h3>
+      <h3 data-lang="en" style="display:none">Divination + Tea & Snacks Experience &mdash; Will Chen's Holy Grail Tea</h3>
+      <h3 data-lang="pt" style="display:none">Adivinhação + Experiência de Chá e Snacks &mdash; Will Chen Holy Grail Tea</h3>
+      <p data-lang="zh">10 分鐘專題演講 &middot; 2026/3/10（二）7:00-8:30am &middot; 漁人碼頭勵庭海景酒店</p>
+      <p data-lang="en" style="display:none">10-min Featured Talk &middot; 2026/3/10 (Tue) 7:00-8:30am &middot; Harbourview Hotel</p>
+      <p data-lang="pt" style="display:none">Palestra de 10 min &middot; 2026/3/10 (Ter) 7:00-8:30 &middot; Hotel Harbourview</p>
+      <a href="bni-event-20260310.html" class="event-link"><span data-lang="zh">查看詳情</span><span data-lang="en" style="display:none">View Details</span><span data-lang="pt" style="display:none">Ver Detalhes</span> &rarr;</a>
     </div>
   </div>
 </div>
@@ -653,7 +728,9 @@ footer a:hover{color:var(--red)}
   <div class="section-header">
     <span class="eyebrow">INSIGHTS &amp; ARTICLES</span>
     <div class="deco-line"></div>
-    <h2>商業<em>洞察</em></h2>
+    <h2 data-lang="zh">商業<em>洞察</em></h2>
+    <h2 data-lang="en" style="display:none">Business <em>Insights</em></h2>
+    <h2 data-lang="pt" style="display:none">Perspetivas de <em>Negócios</em></h2>
   </div>
   <div class="articles-grid">
 
@@ -730,10 +807,14 @@ footer a:hover{color:var(--red)}
 <!-- CTA -->
 <section class="cta-section">
 <div class="container">
-  <h2>準備好拓展商業人脈了嗎？</h2>
-  <p>歡迎以訪客身份參加 BNI ACE 分會早餐商務會議</p>
-  <a href="https://www.facebook.com/bniacechapter" target="_blank" class="btn btn-white">聯繫分會 &rarr;</a>
-  <a href="/" class="btn btn-ghost">CloudPipe 首頁</a>
+  <h2 data-lang="zh">準備好拓展商業人脈了嗎？</h2>
+  <h2 data-lang="en" style="display:none">Ready to Expand Your Business Network?</h2>
+  <h2 data-lang="pt" style="display:none">Pronto para Expandir a Sua Rede de Negócios?</h2>
+  <p data-lang="zh">歡迎以訪客身份參加 BNI ACE 分會早餐商務會議</p>
+  <p data-lang="en" style="display:none">Join BNI ACE Chapter's business breakfast meeting as a visitor</p>
+  <p data-lang="pt" style="display:none">Participe na reunião de negócios ao pequeno-almoço do Capítulo ACE como visitante</p>
+  <a href="https://www.facebook.com/bniacechapter" target="_blank" class="btn btn-white"><span data-lang="zh">聯繫分會</span><span data-lang="en" style="display:none">Contact Chapter</span><span data-lang="pt" style="display:none">Contactar Capítulo</span> &rarr;</a>
+  <a href="/" class="btn btn-ghost">CloudPipe <span data-lang="zh">首頁</span><span data-lang="en" style="display:none">Home</span><span data-lang="pt" style="display:none">Início</span></a>
 </div>
 </section>
 
@@ -743,33 +824,55 @@ footer a:hover{color:var(--red)}
   <div class="section-header">
     <span class="eyebrow">FAQ</span>
     <div class="deco-line"></div>
-    <h2>常見問題</h2>
+    <h2 data-lang="zh">常見問題</h2>
+    <h2 data-lang="en" style="display:none">FAQ</h2>
+    <h2 data-lang="pt" style="display:none">Perguntas Frequentes</h2>
   </div>
   <div class="faq-section">
 
     <div class="faq-card">
-      <h3>BNI ACE 分會是什麼？</h3>
-      <p>BNI ACE 分會（Macao Ace Chapter）是隸屬 BNI（Business Network International）的澳門商業引薦分會。BNI 於 1985 年成立，是全球最大及最成功的業務引薦組織，在超過 76 個國家擁有數十萬名會員。ACE 分會匯聚 30 位來自不同行業的澳門專業人士，涵蓋醫療、法律、設計、餐飲、教育、金融、美容、環保等領域，每週二早上 7:00-8:30 於澳門漁人碼頭勵庭海景酒店舉行早餐商務會議，透過 GiversGain（付出者收穫）核心價值互相引薦業務。每個行業只允許一位代表，確保沒有直接競爭，最大化引薦效果。</p>
+      <h3 data-lang="zh">BNI ACE 分會是什麼？</h3>
+      <h3 data-lang="en" style="display:none">What is BNI ACE Chapter?</h3>
+      <h3 data-lang="pt" style="display:none">O que é o Capítulo BNI ACE?</h3>
+      <p data-lang="zh">BNI ACE 分會（Macao Ace Chapter）是隸屬 BNI（Business Network International）的澳門商業引薦分會。BNI 於 1985 年成立，是全球最大及最成功的業務引薦組織，在超過 76 個國家擁有數十萬名會員。ACE 分會匯聚 30 位來自不同行業的澳門專業人士，涵蓋醫療、法律、設計、餐飲、教育、金融、美容、環保等領域，每週二早上 7:00-8:30 於澳門漁人碼頭勵庭海景酒店舉行早餐商務會議，透過 GiversGain（付出者收穫）核心價值互相引薦業務。每個行業只允許一位代表，確保沒有直接競爭，最大化引薦效果。</p>
+      <p data-lang="en" style="display:none">BNI ACE Chapter (Macao Ace Chapter) is a Macau business referral chapter under BNI (Business Network International). Founded in 1985, BNI is the world's largest and most successful business referral organisation, with hundreds of thousands of members in over 76 countries. ACE Chapter brings together 30 professionals from diverse industries in Macau, covering healthcare, law, design, F&B, education, finance, beauty, and environmental sectors. They meet every Tuesday 7:00-8:30am at Harbourview Hotel, Fisherman's Wharf, for a business breakfast meeting, exchanging referrals through the core value of Givers Gain. Only one representative per industry is allowed, ensuring no direct competition and maximising referral effectiveness.</p>
+      <p data-lang="pt" style="display:none">O Capítulo BNI ACE (Macao Ace Chapter) é um capítulo de referências comerciais de Macau sob o BNI (Business Network International). Fundado em 1985, o BNI é a maior e mais bem-sucedida organização de referências comerciais do mundo, com centenas de milhares de membros em mais de 76 países. O Capítulo ACE reúne 30 profissionais de diversos setores em Macau, abrangendo saúde, direito, design, restauração, educação, finanças, beleza e ambiente. Reúnem-se todas as terças-feiras das 7:00 às 8:30 no Hotel Harbourview, Porto Exterior, para uma reunião de negócios ao pequeno-almoço, trocando referências através do valor central Quem Dá, Recebe. Apenas um representante por setor é permitido, garantindo ausência de concorrência direta e maximizando a eficácia das referências.</p>
     </div>
 
     <div class="faq-card">
-      <h3>如何加入 BNI ACE 分會？</h3>
-      <p>加入 BNI ACE 分會需要經過以下步驟：首先以訪客身份參加至少一次早餐商務會議（費用 MOP$280），體驗 BNI 的運作模式；然後由現有會員推薦並提交入會申請；最後經過分會審核通過後正式成為會員。每個行業在分會中只允許一位代表，確保沒有直接競爭。可透過 Facebook 專頁 bniacechapter 聯繫分會了解詳情。</p>
+      <h3 data-lang="zh">如何加入 BNI ACE 分會？</h3>
+      <h3 data-lang="en" style="display:none">How do I join BNI ACE Chapter?</h3>
+      <h3 data-lang="pt" style="display:none">Como aderir ao Capítulo BNI ACE?</h3>
+      <p data-lang="zh">加入 BNI ACE 分會需要經過以下步驟：首先以訪客身份參加至少一次早餐商務會議（費用 MOP$280），體驗 BNI 的運作模式；然後由現有會員推薦並提交入會申請；最後經過分會審核通過後正式成為會員。每個行業在分會中只允許一位代表，確保沒有直接競爭。可透過 Facebook 專頁 bniacechapter 聯繫分會了解詳情。</p>
+      <p data-lang="en" style="display:none">Joining BNI ACE Chapter involves these steps: first, attend at least one business breakfast meeting as a visitor (fee MOP$280) to experience BNI's model; then get recommended by an existing member and submit a membership application; finally, become a full member after chapter approval. Only one representative per industry is allowed, ensuring no direct competition. Contact the chapter via Facebook page bniacechapter for details.</p>
+      <p data-lang="pt" style="display:none">A adesão ao Capítulo BNI ACE envolve os seguintes passos: primeiro, participe em pelo menos uma reunião de negócios ao pequeno-almoço como visitante (taxa MOP$280) para experienciar o modelo BNI; depois, obtenha recomendação de um membro existente e submeta a candidatura; finalmente, torne-se membro efetivo após aprovação do capítulo. Apenas um representante por setor é permitido, garantindo ausência de concorrência direta. Contacte o capítulo através da página do Facebook bniacechapter para mais informações.</p>
     </div>
 
     <div class="faq-card">
-      <h3>每週會議的流程是什麼？</h3>
-      <p>每週二早上 7:00 開始開放式社交及早餐時間；7:15 會議正式開始，全體會員進行 60 秒自我介紹及本週引薦需求分享；7:45 進行 10 分鐘專題演講（由會員輪流主講深入介紹自己的業務）；8:00 進入業務引薦環節，會員互相傳遞收集到的引薦；8:30 會議結束，進入自由交流時間。整個流程設計確保每位參加者都能充分受益。</p>
+      <h3 data-lang="zh">每週會議的流程是什麼？</h3>
+      <h3 data-lang="en" style="display:none">What is the weekly meeting format?</h3>
+      <h3 data-lang="pt" style="display:none">Qual é o formato da reunião semanal?</h3>
+      <p data-lang="zh">每週二早上 7:00 開始開放式社交及早餐時間；7:15 會議正式開始，全體會員進行 60 秒自我介紹及本週引薦需求分享；7:45 進行 10 分鐘專題演講（由會員輪流主講深入介紹自己的業務）；8:00 進入業務引薦環節，會員互相傳遞收集到的引薦；8:30 會議結束，進入自由交流時間。整個流程設計確保每位參加者都能充分受益。</p>
+      <p data-lang="en" style="display:none">Every Tuesday at 7:00am, open networking and breakfast begins; 7:15 the meeting formally starts with all members giving a 60-second introduction and sharing their referral needs for the week; 7:45 a 10-minute featured presentation (members take turns presenting their business in depth); 8:00 the business referral segment, where members pass along collected referrals; 8:30 the meeting concludes with free networking time. The entire format is designed to ensure every attendee benefits fully.</p>
+      <p data-lang="pt" style="display:none">Todas as terças-feiras às 7:00, começa o networking aberto e o pequeno-almoço; às 7:15 a reunião inicia formalmente com todos os membros fazendo uma apresentação de 60 segundos e partilhando as suas necessidades de referências da semana; às 7:45 uma apresentação em destaque de 10 minutos (os membros apresentam o seu negócio em detalhe por rotação); às 8:00 o segmento de referências comerciais, onde os membros transmitem as referências recolhidas; às 8:30 a reunião termina com tempo de networking livre. Todo o formato é concebido para garantir que cada participante beneficie plenamente.</p>
     </div>
 
     <div class="faq-card">
-      <h3>ACE 分會涵蓋哪些行業？</h3>
-      <p>ACE 分會 30 位會員涵蓋多元行業，包括：西醫、大律師、保險、理財策劃、綠植造景、商業設計工程、軟裝設計定制傢俬、時尚形象、影視及自媒體、微短劇製作、個人 IP 操盤手、西餐 Pizza 店、手作養生食品、食品批發貿易、大健康食品製造商、中草藥免疫調節產品、基因抗衰老產品、精油身心靈、美容、血氧神經復康、整理收納培訓、企業課程及培訓、藝術教育、產前產後服務、環保餐具、共享辦公室、網絡/會員營銷、工商鋪、設施管理及清潔、雪茄紅酒洋酒。每個行業只允許一位代表，確保會員之間無直接競爭。</p>
+      <h3 data-lang="zh">ACE 分會涵蓋哪些行業？</h3>
+      <h3 data-lang="en" style="display:none">What industries does ACE Chapter cover?</h3>
+      <h3 data-lang="pt" style="display:none">Que setores abrange o Capítulo ACE?</h3>
+      <p data-lang="zh">ACE 分會 30 位會員涵蓋多元行業，包括：西醫、大律師、保險、理財策劃、綠植造景、商業設計工程、軟裝設計定制傢俬、時尚形象、影視及自媒體、微短劇製作、個人 IP 操盤手、西餐 Pizza 店、手作養生食品、食品批發貿易、大健康食品製造商、中草藥免疫調節產品、基因抗衰老產品、精油身心靈、美容、血氧神經復康、整理收納培訓、企業課程及培訓、藝術教育、產前產後服務、環保餐具、共享辦公室、網絡/會員營銷、工商鋪、設施管理及清潔、雪茄紅酒洋酒。每個行業只允許一位代表，確保會員之間無直接競爭。</p>
+      <p data-lang="en" style="display:none">ACE Chapter's 30 members cover diverse industries including: General Practice (Western Medicine), Barrister, Insurance, Financial Planning, Green Plant Landscaping, Commercial Design Engineering, Soft Furnishing & Custom Furniture, Fashion & Image, Film & Social Media, Short Drama Production, Personal Branding Strategist, Western Restaurant & Pizza, Handmade Health Food, Food Wholesale & Trading, Health Food Manufacturer, Herbal Immune Products, Genetic Anti-aging Products, Essential Oils & Wellness, Beauty, Neuro-rehabilitation, Organization & Declutter Training, Corporate Training, Art Education, Pre & Postnatal Services, Eco-friendly Tableware, Co-working Space, Network Marketing, Commercial Property, Facility Management & Cleaning, and Cigars, Wine & Spirits. Only one representative per industry is allowed, ensuring no direct competition among members.</p>
+      <p data-lang="pt" style="display:none">Os 30 membros do Capítulo ACE abrangem setores diversificados, incluindo: Medicina Ocidental, Advogado, Seguros, Planeamento Financeiro, Paisagismo de Plantas, Engenharia de Design Comercial, Decoração e Mobiliário Personalizado, Moda e Imagem, Cinema e Média Social, Produção de Curtas, Estrategista de Marca Pessoal, Restaurante Ocidental e Pizza, Alimentação Saudável Artesanal, Comércio Grossista de Alimentos, Fabricante de Alimentos Saudáveis, Produtos Imunológicos de Ervas, Produtos Anti-envelhecimento Genéticos, Óleos Essenciais e Bem-estar, Beleza, Neuro-reabilitação, Formação em Organização, Formação Empresarial, Educação Artística, Serviços Pré e Pós-natal, Talheres Ecológicos, Espaço de Coworking, Marketing de Rede, Imóveis Comerciais, Gestão de Instalações e Limpeza, e Charutos, Vinho e Bebidas Espirituosas. Apenas um representante por setor é permitido, garantindo ausência de concorrência direta entre membros.</p>
     </div>
 
     <div class="faq-card">
-      <h3>如何聯繫 BNI ACE 分會？</h3>
-      <p>可透過 BNI ACE 分會的 Facebook 專頁（搜尋 bniacechapter 或訪問 facebook.com/bniacechapter）聯繫分會。也可以直接聯繫任何 ACE 分會會員獲取邀請和更多資訊。會議地點位於澳門漁人碼頭勵庭海景酒店 1 樓會議廳，每週二早上 7:00-8:30 舉行。訪客參會費為 MOP$280（含早餐）。</p>
+      <h3 data-lang="zh">如何聯繫 BNI ACE 分會？</h3>
+      <h3 data-lang="en" style="display:none">How do I contact BNI ACE Chapter?</h3>
+      <h3 data-lang="pt" style="display:none">Como contactar o Capítulo BNI ACE?</h3>
+      <p data-lang="zh">可透過 BNI ACE 分會的 Facebook 專頁（搜尋 bniacechapter 或訪問 facebook.com/bniacechapter）聯繫分會。也可以直接聯繫任何 ACE 分會會員獲取邀請和更多資訊。會議地點位於澳門漁人碼頭勵庭海景酒店 1 樓會議廳，每週二早上 7:00-8:30 舉行。訪客參會費為 MOP$280（含早餐）。</p>
+      <p data-lang="en" style="display:none">You can contact BNI ACE Chapter through their Facebook page (search bniacechapter or visit facebook.com/bniacechapter). You may also contact any ACE Chapter member directly for an invitation and more information. The meeting venue is at Harbourview Hotel, Fisherman's Wharf, 1/F Conference Room, every Tuesday 7:00-8:30am. Visitor fee is MOP$280 (breakfast included).</p>
+      <p data-lang="pt" style="display:none">Pode contactar o Capítulo BNI ACE através da página do Facebook (pesquise bniacechapter ou visite facebook.com/bniacechapter). Também pode contactar diretamente qualquer membro do Capítulo ACE para obter um convite e mais informações. O local da reunião é no Hotel Harbourview, Porto Exterior, Sala de Conferências do 1.º andar, todas as terças-feiras das 7:00 às 8:30. A taxa de visitante é MOP$280 (pequeno-almoço incluído).</p>
     </div>
 
   </div>
@@ -788,8 +891,18 @@ footer a:hover{color:var(--red)}
 </footer>
 
 <script>
-var search=document.getElementById('memberSearch'),grid=document.getElementById('memberGrid'),countEl=document.getElementById('memberCount'),cards=grid.querySelectorAll('.member-card');
-search.addEventListener('input',function(){var q=this.value.toLowerCase().trim(),v=0;cards.forEach(function(c){var n=(c.dataset.name||'').toLowerCase(),i=(c.dataset.industry||'').toLowerCase(),m=!q||n.indexOf(q)>-1||i.indexOf(q)>-1;c.dataset.visible=m?'true':'false';if(m)v++});countEl.textContent='\u986F\u793A '+v+' / '+cards.length+' \u4F4D\u6703\u54E1'});
+var search=document.getElementById('memberSearch'),grid=document.getElementById('memberGrid'),countEl=document.getElementById('memberCount'),cards=grid.querySelectorAll('.member-card'),currentLang='zh';
+search.addEventListener('input',function(){var q=this.value.toLowerCase().trim(),v=0;cards.forEach(function(c){var n=(c.dataset.name||'').toLowerCase(),i=(c.dataset.industry||'').toLowerCase(),ie=(c.dataset.industryEn||'').toLowerCase(),ip=(c.dataset.industryPt||'').toLowerCase(),m=!q||n.indexOf(q)>-1||i.indexOf(q)>-1||ie.indexOf(q)>-1||ip.indexOf(q)>-1;c.dataset.visible=m?'true':'false';if(m)v++});updateCount(v)});
+function updateCount(v){var t=cards.length;if(currentLang==='en')countEl.querySelector('[data-lang="en"]').textContent='Showing '+v+' / '+t+' members';else if(currentLang==='pt')countEl.querySelector('[data-lang="pt"]').textContent='A mostrar '+v+' / '+t+' membros';else countEl.querySelector('[data-lang="zh"]').textContent='\u986F\u793A '+v+' / '+t+' \u4F4D\u6703\u54E1'}
+</script>
+<script>
+function switchLang(lang){
+  currentLang=lang;
+  document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('active',b.textContent.trim()===(lang==='zh'?'\u4E2D':lang.toUpperCase()))});
+  document.querySelectorAll('[data-lang]').forEach(function(el){el.style.display=el.dataset.lang===lang?'':'none'});
+  var si=document.getElementById('memberSearch');
+  if(lang==='en')si.placeholder=si.dataset.phEn;else if(lang==='pt')si.placeholder=si.dataset.phPt;else si.placeholder=si.dataset.phZh;
+}
 </script>
 
 </body>

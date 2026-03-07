@@ -64,7 +64,13 @@ nav .nav-links a{font-size:13px;color:var(--text-2);transition:color .2s}
 nav .nav-links a:hover{color:var(--text)}
 .nav-cta{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;padding:8px 18px;border-radius:999px;background:var(--bni-red);color:#fff;transition:all .2s}
 .nav-cta:hover{background:#ff1a1a;box-shadow:0 0 20px rgba(204,0,0,0.3)}
-@media(max-width:600px){nav .nav-links a:not(.nav-cta){display:none}}
+@media(max-width:600px){nav .nav-links a:not(.nav-cta){display:none}.lang-switch{display:flex!important}}
+
+/* Lang Switch */
+.lang-switch{display:flex;gap:3px;background:rgba(204,0,0,0.15);border-radius:999px;padding:2px;margin-right:8px}
+.lang-btn{font-family:'Space Mono',monospace;font-size:10px;padding:3px 10px;border-radius:999px;border:none;cursor:pointer;background:transparent;color:var(--text-2);transition:all .2s;font-weight:700}
+.lang-btn.active{background:var(--bni-red);color:#fff}
+.lang-btn:hover:not(.active){color:var(--text)}
 
 /* Hero */
 .hero{padding:140px 0 60px;text-align:center}
@@ -150,6 +156,11 @@ details[open]{border-color:rgba(204,0,0,0.3)}
 footer{border-top:1px solid var(--border);padding:32px 0;text-align:center}
 footer a{color:var(--text-2)}
 .footer-copy{font-size:12px;color:var(--text-3);margin-top:8px}
+
+/* i18n: hide non-active lang blocks */
+[data-lang]{display:none}
+[data-lang="zh"]{display:block}
+span[data-lang="zh"],a[data-lang="zh"]{display:inline}
 </style>
 </head>
 <body>
@@ -159,9 +170,18 @@ footer a{color:var(--text-2)}
 <div class="container">
   <a href="bni-ace.html" class="logo"><span>BNI</span> ACE</a>
   <div class="nav-links">
-    <a href="bni-ace.html">分會主頁</a>
+    <div class="lang-switch">
+      <button class="lang-btn active" onclick="switchLang('zh')">中</button>
+      <button class="lang-btn" onclick="switchLang('en')">EN</button>
+      <button class="lang-btn" onclick="switchLang('pt')">PT</button>
+    </div>
+    <a href="bni-ace.html" data-lang="zh">分會主頁</a>
+    <a href="bni-ace.html" data-lang="en" style="display:none">Chapter Home</a>
+    <a href="bni-ace.html" data-lang="pt" style="display:none">Pagina do Capitulo</a>
     <a href="https://www.facebook.com/bniacechapter" target="_blank">Facebook</a>
-    <a href="#register" class="nav-cta">立即報名</a>
+    <a href="#register" class="nav-cta" data-lang="zh">立即報名</a>
+    <a href="#register" class="nav-cta" data-lang="en" style="display:none">Register Now</a>
+    <a href="#register" class="nav-cta" data-lang="pt" style="display:none">Inscreva-se Agora</a>
   </div>
 </div>
 </nav>
@@ -170,8 +190,12 @@ footer a{color:var(--text-2)}
 <section class="hero">
 <div class="container">
   <span class="eyebrow">BNI ACE CHAPTER &middot; 2026.03.10</span>
-  <h1><span class="gradient-text">占卜 + 茶飲小食</span>的新體驗</h1>
-  <p class="subtitle">10 分鐘專題演講 — <strong>Will Chen</strong> &middot; 聖杯茶飲小食</p>
+  <h1 data-lang="zh"><span class="gradient-text">占卜 + 茶飲小食</span>的新體驗</h1>
+  <h1 data-lang="en" style="display:none">A New Experience: <span class="gradient-text">Divination + Tea &amp; Snacks</span></h1>
+  <h1 data-lang="pt" style="display:none">Uma Nova Experiencia: <span class="gradient-text">Adivinhacao + Cha e Snacks</span></h1>
+  <p class="subtitle" data-lang="zh">10 分鐘專題演講 — <strong>Will Chen</strong> &middot; 聖杯茶飲小食</p>
+  <p class="subtitle" data-lang="en" style="display:none">10-Minute Featured Talk — <strong>Will Chen</strong> &middot; Holy Grail Tea &amp; Snacks</p>
+  <p class="subtitle" data-lang="pt" style="display:none">Palestra de 10 Minutos — <strong>Will Chen</strong> &middot; Calice Cha e Snacks</p>
   <div class="date-badge">
     <span class="dot"></span>
     2026 年 3 月 10 日（二）7:00-8:30am &middot; 澳門漁人碼頭
@@ -194,22 +218,32 @@ footer a{color:var(--text-2)}
   <div class="info-grid">
     <div class="info-card">
       <div class="icon">&#128197;</div>
-      <div class="label">日期</div>
+      <div class="label" data-lang="zh">日期</div>
+      <div class="label" data-lang="en" style="display:none">DATE</div>
+      <div class="label" data-lang="pt" style="display:none">DATA</div>
       <div class="value">2026/3/10（二）</div>
     </div>
     <div class="info-card">
       <div class="icon">&#9200;</div>
       <div class="value" style="color:var(--gold)">7:00-8:30am</div>
-      <div class="label">時間</div>
+      <div class="label" data-lang="zh">時間</div>
+      <div class="label" data-lang="en" style="display:none">TIME</div>
+      <div class="label" data-lang="pt" style="display:none">HORA</div>
     </div>
     <div class="info-card">
       <div class="icon">&#128205;</div>
-      <div class="label">地點</div>
-      <div class="value" style="font-size:.85rem">漁人碼頭勵庭海景酒店<br>1 樓會議廳</div>
+      <div class="label" data-lang="zh">地點</div>
+      <div class="label" data-lang="en" style="display:none">VENUE</div>
+      <div class="label" data-lang="pt" style="display:none">LOCAL</div>
+      <div class="value" style="font-size:.85rem" data-lang="zh">漁人碼頭勵庭海景酒店<br>1 樓會議廳</div>
+      <div class="value" style="font-size:.85rem" data-lang="en" style="display:none">Harbourview Hotel<br>Fisherman's Wharf, 1/F</div>
+      <div class="value" style="font-size:.85rem" data-lang="pt" style="display:none">Hotel Harbourview<br>Porto Pescador, 1.&ordm; andar</div>
     </div>
     <div class="info-card">
       <div class="icon">&#128176;</div>
-      <div class="label">參會費</div>
+      <div class="label" data-lang="zh">參會費</div>
+      <div class="label" data-lang="en" style="display:none">FEE</div>
+      <div class="label" data-lang="pt" style="display:none">TAXA</div>
       <div class="value" style="color:var(--bni-red)">MOP$280</div>
     </div>
   </div>
@@ -221,26 +255,36 @@ footer a{color:var(--text-2)}
 <div class="container">
   <div class="section-header">
     <span class="eyebrow">SPEAKER HIGHLIGHTS</span>
-    <h2><a href="bni-ace-members/will-chen.html" style="text-decoration:none">Will Chen</a> &middot; <a href="bni-ace-members/will-chen.html" style="text-decoration:none"><span class="gradient-text">聖杯茶飲小食</span></a></h2>
-    <p>茶飲店可能你認識得多，但有特色兼併有市場佔有率的，你一定要認識佢</p>
-    <p style="margin-top:8px"><a href="bni-ace-members/will-chen.html" style="color:var(--gold);font-size:13px;font-weight:600">查看完整會員檔案 &rarr;</a></p>
+    <h2><a href="bni-ace-members/will-chen.html" style="text-decoration:none">Will Chen</a> &middot; <a href="bni-ace-members/will-chen.html" style="text-decoration:none"><span class="gradient-text" data-lang="zh">聖杯茶飲小食</span><span class="gradient-text" data-lang="en" style="display:none">Holy Grail Tea &amp; Snacks</span><span class="gradient-text" data-lang="pt" style="display:none">Calice Cha e Snacks</span></a></h2>
+    <p data-lang="zh">茶飲店可能你認識得多，但有特色兼併有市場佔有率的，你一定要認識佢</p>
+    <p data-lang="en" style="display:none">You may know many tea shops, but one with both character and market share? You need to meet this one.</p>
+    <p data-lang="pt" style="display:none">Pode conhecer muitas lojas de cha, mas uma com caracter e quota de mercado? Tem de conhecer esta.</p>
+    <p style="margin-top:8px"><a href="bni-ace-members/will-chen.html" style="color:var(--gold);font-size:13px;font-weight:600" data-lang="zh">查看完整會員檔案 &rarr;</a><a href="bni-ace-members/will-chen.html" style="color:var(--gold);font-size:13px;font-weight:600;display:none" data-lang="en">View Full Member Profile &rarr;</a><a href="bni-ace-members/will-chen.html" style="color:var(--gold);font-size:13px;font-weight:600;display:none" data-lang="pt">Ver Perfil Completo do Membro &rarr;</a></p>
   </div>
   <div class="highlight-grid">
     <div class="highlight-card">
       <div class="num">TOP2</div>
-      <div class="desc">外賣平台<br>小食類茶飲排名</div>
+      <div class="desc" data-lang="zh">外賣平台<br>小食類茶飲排名</div>
+      <div class="desc" data-lang="en" style="display:none">Delivery Platform<br>Snack Tea Ranking</div>
+      <div class="desc" data-lang="pt" style="display:none">Plataforma de Entregas<br>Ranking de Cha e Snacks</div>
     </div>
     <div class="highlight-card">
       <div class="num">60,000+</div>
-      <div class="desc">累計銷量</div>
+      <div class="desc" data-lang="zh">累計銷量</div>
+      <div class="desc" data-lang="en" style="display:none">Total Sales</div>
+      <div class="desc" data-lang="pt" style="display:none">Vendas Totais</div>
     </div>
     <div class="highlight-card">
       <div class="num" style="font-size:clamp(1.2rem,2.5vw,1.6rem)">&#127875; 首創</div>
-      <div class="desc">澳門塔羅占卜茶</div>
+      <div class="desc" data-lang="zh">澳門塔羅占卜茶</div>
+      <div class="desc" data-lang="en" style="display:none">Macau's First<br>Tarot Divination Tea</div>
+      <div class="desc" data-lang="pt" style="display:none">Primeiro em Macau<br>Cha de Tarot</div>
     </div>
     <div class="highlight-card">
       <div class="num" style="font-size:clamp(1.2rem,2.5vw,1.6rem)">&#127942; 金蓮花</div>
-      <div class="desc">黑松露肉鬆<br>雞蛋仔菜式獎</div>
+      <div class="desc" data-lang="zh">黑松露肉鬆<br>雞蛋仔菜式獎</div>
+      <div class="desc" data-lang="en" style="display:none">Black Truffle Pork Floss<br>Egg Waffle Award</div>
+      <div class="desc" data-lang="pt" style="display:none">Waffle de Ovo com Trufa Negra<br>Premio Flor de Lotus Dourada</div>
     </div>
   </div>
 </div>
@@ -251,27 +295,80 @@ footer a{color:var(--text-2)}
 <div class="container">
   <div class="section-header">
     <span class="eyebrow">BRAND STORY</span>
-    <h2>認識<span class="gradient-text">聖杯茶飲小食</span></h2>
-    <p>從塔羅占卜到金蓮花菜式獎，一個充滿創意的澳門本地品牌故事</p>
+    <h2 data-lang="zh">認識<span class="gradient-text">聖杯茶飲小食</span></h2>
+    <h2 data-lang="en" style="display:none">Discover <span class="gradient-text">Holy Grail Tea &amp; Snacks</span></h2>
+    <h2 data-lang="pt" style="display:none">Conheca o <span class="gradient-text">Calice Cha e Snacks</span></h2>
+    <p data-lang="zh">從塔羅占卜到金蓮花菜式獎，一個充滿創意的澳門本地品牌故事</p>
+    <p data-lang="en" style="display:none">From Tarot divination to the Golden Lotus Cuisine Award — a creative Macau local brand story</p>
+    <p data-lang="pt" style="display:none">Da adivinhacao de Tarot ao Premio Culinario Flor de Lotus Dourada — uma historia criativa de uma marca local de Macau</p>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start">
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px">
-      <h3 style="color:var(--gold);margin-bottom:16px;font-size:1.2rem">品牌起源與定位</h3>
-      <p style="color:var(--text-2);font-size:.95rem;line-height:1.8;margin-bottom:16px">在澳門茶飲市場競爭激烈的環境中，聖杯茶飲小食走出了一條與眾不同的道路。品牌創辦人 Will Chen 將塔羅占卜文化與茶飲體驗結合，打造出澳門首創的塔羅占卜茶概念。每一杯茶飲不僅是味蕾的享受，更是一次獨特的文化體驗。顧客在點餐時可以抽取塔羅牌，獲得專屬的運勢解讀，讓一杯茶飲成為社交話題和打卡亮點。</p>
-      <p style="color:var(--text-2);font-size:.95rem;line-height:1.8">這種「茶飲 + 占卜」的跨界創新模式，成功吸引了大量年輕消費者和旅客。從最初的小店起步，聖杯憑藉獨特的品牌定位和持續創新的產品線，迅速在澳門外賣平台嶄露頭角，成為小食類茶飲銷量排名前二的品牌，累計銷量突破六萬份。</p>
+
+  <!-- zh Brand Story -->
+  <div data-lang="zh">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px">
+        <h3 style="color:var(--gold);margin-bottom:16px;font-size:1.2rem">品牌起源與定位</h3>
+        <p style="color:var(--text-2);font-size:.95rem;line-height:1.8;margin-bottom:16px">在澳門茶飲市場競爭激烈的環境中，聖杯茶飲小食走出了一條與眾不同的道路。品牌創辦人 Will Chen 將塔羅占卜文化與茶飲體驗結合，打造出澳門首創的塔羅占卜茶概念。每一杯茶飲不僅是味蕾的享受，更是一次獨特的文化體驗。顧客在點餐時可以抽取塔羅牌，獲得專屬的運勢解讀，讓一杯茶飲成為社交話題和打卡亮點。</p>
+        <p style="color:var(--text-2);font-size:.95rem;line-height:1.8">這種「茶飲 + 占卜」的跨界創新模式，成功吸引了大量年輕消費者和旅客。從最初的小店起步，聖杯憑藉獨特的品牌定位和持續創新的產品線，迅速在澳門外賣平台嶄露頭角，成為小食類茶飲銷量排名前二的品牌，累計銷量突破六萬份。</p>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px">
+        <h3 style="color:var(--gold);margin-bottom:16px;font-size:1.2rem">獲獎產品與創新</h3>
+        <p style="color:var(--text-2);font-size:.95rem;line-height:1.8;margin-bottom:16px">聖杯不僅在茶飲領域有出色表現，其小食系列同樣備受肯定。招牌產品「黑松露肉鬆雞蛋仔」更是榮獲了澳門餐飲界極具份量的金蓮花菜式獎。這款產品將法式黑松露的奢華風味與港澳傳統雞蛋仔完美結合，搭配自家特製的肉鬆醬料，口感層次豐富，外酥內軟，一推出便成為門店的銷量冠軍。</p>
+        <p style="color:var(--text-2);font-size:.95rem;line-height:1.8">除了黑松露雞蛋仔系列，聖杯持續研發新品，包括季節限定茶飲、聯名特別版甜品、節日主題套餐等，保持品牌的新鮮感和話題性。Will Chen 認為，餐飲品牌要在競爭中脫穎而出，不僅需要好的產品質量，更需要持續創新和獨特的品牌故事。</p>
+      </div>
     </div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px">
-      <h3 style="color:var(--gold);margin-bottom:16px;font-size:1.2rem">獲獎產品與創新</h3>
-      <p style="color:var(--text-2);font-size:.95rem;line-height:1.8;margin-bottom:16px">聖杯不僅在茶飲領域有出色表現，其小食系列同樣備受肯定。招牌產品「黑松露肉鬆雞蛋仔」更是榮獲了澳門餐飲界極具份量的金蓮花菜式獎。這款產品將法式黑松露的奢華風味與港澳傳統雞蛋仔完美結合，搭配自家特製的肉鬆醬料，口感層次豐富，外酥內軟，一推出便成為門店的銷量冠軍。</p>
-      <p style="color:var(--text-2);font-size:.95rem;line-height:1.8">除了黑松露雞蛋仔系列，聖杯持續研發新品，包括季節限定茶飲、聯名特別版甜品、節日主題套餐等，保持品牌的新鮮感和話題性。Will Chen 認為，餐飲品牌要在競爭中脫穎而出，不僅需要好的產品質量，更需要持續創新和獨特的品牌故事。</p>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px;margin-top:20px">
+      <h3 style="color:var(--gold);margin-bottom:16px;font-size:1.2rem">從網紅店到穩定盈利 — Will Chen 的經營哲學</h3>
+      <p style="color:var(--text-2);font-size:.95rem;line-height:1.8;margin-bottom:16px">很多人好奇，聖杯是如何從一家特色小店成長為外賣平台排名前列的品牌？Will Chen 將在本次 BNI ACE 分會的 10 分鐘專題演講中，分享他的實戰經驗和經營心得。從選址策略、產品研發流程、外賣平台運營技巧，到如何打造品牌 IP、製造社交媒體話題、建立穩定的回頭客群體 — 這些都是 Will 在創業過程中摸索出來的寶貴經驗。</p>
+      <p style="color:var(--text-2);font-size:.95rem;line-height:1.8;margin-bottom:16px">特別值得一提的是，聖杯在外賣平台的運營策略。在澳門外賣市場快速增長的背景下，聖杯透過精準的品類定位、高性價比的套餐組合、以及穩定的出品速度，成功佔據了小食類茶飲 TOP2 的位置。六萬多份的累計銷量背後，是對每一個環節的精細化管理 — 從原材料採購、製作流程標準化，到包裝設計和配送體驗的優化。</p>
+      <p style="color:var(--text-2);font-size:.95rem;line-height:1.8">如果你也想了解如何在澳門餐飲市場中找到自己的定位，如何將一家茶飲店打造成有特色、有市場佔有率的品牌，那你一定不能錯過 Will Chen 在 BNI ACE 分會的這次分享。無論你是餐飲同業、想要合作的商家，還是對創業感興趣的朋友，都能從中獲得啟發。</p>
     </div>
   </div>
-  <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px;margin-top:20px">
-    <h3 style="color:var(--gold);margin-bottom:16px;font-size:1.2rem">從網紅店到穩定盈利 — Will Chen 的經營哲學</h3>
-    <p style="color:var(--text-2);font-size:.95rem;line-height:1.8;margin-bottom:16px">很多人好奇，聖杯是如何從一家特色小店成長為外賣平台排名前列的品牌？Will Chen 將在本次 BNI ACE 分會的 10 分鐘專題演講中，分享他的實戰經驗和經營心得。從選址策略、產品研發流程、外賣平台運營技巧，到如何打造品牌 IP、製造社交媒體話題、建立穩定的回頭客群體 — 這些都是 Will 在創業過程中摸索出來的寶貴經驗。</p>
-    <p style="color:var(--text-2);font-size:.95rem;line-height:1.8;margin-bottom:16px">特別值得一提的是，聖杯在外賣平台的運營策略。在澳門外賣市場快速增長的背景下，聖杯透過精準的品類定位、高性價比的套餐組合、以及穩定的出品速度，成功佔據了小食類茶飲 TOP2 的位置。六萬多份的累計銷量背後，是對每一個環節的精細化管理 — 從原材料採購、製作流程標準化，到包裝設計和配送體驗的優化。</p>
-    <p style="color:var(--text-2);font-size:.95rem;line-height:1.8">如果你也想了解如何在澳門餐飲市場中找到自己的定位，如何將一家茶飲店打造成有特色、有市場佔有率的品牌，那你一定不能錯過 Will Chen 在 BNI ACE 分會的這次分享。無論你是餐飲同業、想要合作的商家，還是對創業感興趣的朋友，都能從中獲得啟發。</p>
+
+  <!-- en Brand Story -->
+  <div data-lang="en" style="display:none">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px">
+        <h3 style="color:var(--gold);margin-bottom:16px;font-size:1.2rem">Brand Origin &amp; Positioning</h3>
+        <p style="color:var(--text-2);font-size:.95rem;line-height:1.8;margin-bottom:16px">In Macau's fiercely competitive tea market, Holy Grail Tea &amp; Snacks carved out a unique path. Founder Will Chen merged Tarot divination culture with the tea-drinking experience, creating Macau's first Tarot Divination Tea concept. Every cup is not just a treat for the palate but a unique cultural experience. Customers can draw a Tarot card when ordering, receiving a personalised fortune reading — turning a simple drink into a social talking point and photo-worthy moment.</p>
+        <p style="color:var(--text-2);font-size:.95rem;line-height:1.8">This cross-over "tea + divination" innovation successfully attracted a huge following of young consumers and tourists. Starting from a small shop, Holy Grail quickly rose to prominence on Macau's delivery platforms thanks to its distinctive brand positioning and continuous product innovation, reaching No. 2 in the snack-tea category with cumulative sales exceeding 60,000 orders.</p>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px">
+        <h3 style="color:var(--gold);margin-bottom:16px;font-size:1.2rem">Award-Winning Products &amp; Innovation</h3>
+        <p style="color:var(--text-2);font-size:.95rem;line-height:1.8;margin-bottom:16px">Holy Grail excels not only in tea but also in its snack lineup. The signature Black Truffle Pork Floss Egg Waffle won the prestigious Golden Lotus Cuisine Award in Macau's food scene. This product perfectly blends the luxurious flavour of French black truffle with the traditional Hong Kong &amp; Macau egg waffle, paired with house-made pork floss sauce — rich in texture, crispy outside and soft inside — becoming the shop's bestseller from day one.</p>
+        <p style="color:var(--text-2);font-size:.95rem;line-height:1.8">Beyond the egg waffle series, Holy Grail continuously develops new products including seasonal limited-edition teas, co-branded desserts, and festive themed sets, keeping the brand fresh and buzzworthy. Will Chen believes that to stand out in the food &amp; beverage industry, you need not only quality products but also continuous innovation and a compelling brand story.</p>
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px;margin-top:20px">
+      <h3 style="color:var(--gold);margin-bottom:16px;font-size:1.2rem">From Viral Hit to Sustainable Profit — Will Chen's Business Philosophy</h3>
+      <p style="color:var(--text-2);font-size:.95rem;line-height:1.8;margin-bottom:16px">Many wonder how Holy Grail grew from a niche shop into a top-ranked delivery-platform brand. Will Chen will share his real-world experience and business insights during this BNI ACE 10-minute featured talk. From site selection strategy, product development processes, delivery platform tactics, to building a brand IP, creating social media buzz, and establishing a loyal repeat customer base — these are all hard-won lessons from Will's entrepreneurial journey.</p>
+      <p style="color:var(--text-2);font-size:.95rem;line-height:1.8;margin-bottom:16px">Particularly noteworthy is Holy Grail's delivery platform strategy. Against the backdrop of Macau's rapidly growing delivery market, Holy Grail secured the TOP2 position in the snack-tea category through precise category positioning, high-value combo deals, and consistent production speed. Behind the 60,000+ cumulative sales lies meticulous management of every detail — from raw material procurement and production standardisation to packaging design and delivery experience optimisation.</p>
+      <p style="color:var(--text-2);font-size:.95rem;line-height:1.8">If you want to learn how to find your positioning in Macau's F&amp;B market and build a distinctive brand with real market share, you cannot miss Will Chen's talk at BNI ACE. Whether you're in the food industry, a potential business partner, or simply interested in entrepreneurship, you'll find inspiration here.</p>
+    </div>
   </div>
+
+  <!-- pt Brand Story -->
+  <div data-lang="pt" style="display:none">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px">
+        <h3 style="color:var(--gold);margin-bottom:16px;font-size:1.2rem">Origem e Posicionamento da Marca</h3>
+        <p style="color:var(--text-2);font-size:.95rem;line-height:1.8;margin-bottom:16px">No competitivo mercado de cha de Macau, o Calice Cha e Snacks encontrou um caminho unico. O fundador Will Chen combinou a cultura da adivinhacao de Tarot com a experiencia de beber cha, criando o primeiro conceito de Cha de Tarot em Macau. Cada chavena nao e apenas um prazer para o paladar, mas uma experiencia cultural unica. Os clientes podem tirar uma carta de Tarot ao fazer o pedido, recebendo uma leitura personalizada da sorte — transformando uma simples bebida num tema de conversa e momento fotografico.</p>
+        <p style="color:var(--text-2);font-size:.95rem;line-height:1.8">Esta inovacao cruzada de "cha + adivinhacao" atraiu com sucesso um grande numero de jovens consumidores e turistas. Comecando numa pequena loja, o Calice rapidamente se destacou nas plataformas de entrega de Macau gracas ao seu posicionamento distintivo e inovacao continua de produtos, alcancando o 2.&ordm; lugar na categoria de cha e snacks com vendas acumuladas superiores a 60.000 pedidos.</p>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px">
+        <h3 style="color:var(--gold);margin-bottom:16px;font-size:1.2rem">Produtos Premiados e Inovacao</h3>
+        <p style="color:var(--text-2);font-size:.95rem;line-height:1.8;margin-bottom:16px">O Calice destaca-se nao so no cha mas tambem nos snacks. O iconica Waffle de Ovo com Trufa Negra e Fio de Carne de Porco ganhou o prestigiado Premio Culinario Flor de Lotus Dourada na gastronomia de Macau. Este produto combina perfeitamente o sabor luxuoso da trufa negra francesa com o tradicional waffle de ovo de Hong Kong e Macau, acompanhado de molho caseiro de fio de carne de porco — rico em textura, crocante por fora e macio por dentro — tornando-se o mais vendido desde o primeiro dia.</p>
+        <p style="color:var(--text-2);font-size:.95rem;line-height:1.8">Para alem da serie de waffles de ovo, o Calice desenvolve continuamente novos produtos, incluindo chas de edicao limitada sazonal, sobremesas em co-branding e menus tematicos festivos, mantendo a marca fresca e relevante. Will Chen acredita que para se destacar na restauracao, e necessario nao apenas produtos de qualidade, mas tambem inovacao continua e uma historia de marca convincente.</p>
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px;margin-top:20px">
+      <h3 style="color:var(--gold);margin-bottom:16px;font-size:1.2rem">De Loja Viral a Lucro Sustentavel — A Filosofia de Negocios de Will Chen</h3>
+      <p style="color:var(--text-2);font-size:.95rem;line-height:1.8;margin-bottom:16px">Muitos perguntam como o Calice cresceu de uma loja de nicho para uma marca de topo nas plataformas de entrega. Will Chen vai partilhar a sua experiencia real e conhecimentos de negocio nesta palestra de 10 minutos no BNI ACE. Desde a estrategia de localizacao, processos de desenvolvimento de produtos, tacticas de plataformas de entrega, ate a construcao de uma marca IP, criacao de buzz nas redes sociais e estabelecimento de uma base fiel de clientes recorrentes — tudo isto sao licoes valiosas da jornada empreendedora de Will.</p>
+      <p style="color:var(--text-2);font-size:.95rem;line-height:1.8;margin-bottom:16px">Particularmente notavel e a estrategia do Calice nas plataformas de entrega. No contexto do mercado de entregas em rapido crescimento em Macau, o Calice assegurou a posicao TOP2 na categoria de cha e snacks atraves de um posicionamento preciso, combinacoes de alto valor e velocidade de producao consistente. Por detras das mais de 60.000 vendas acumuladas esta uma gestao meticulosa de cada detalhe — desde a aquisicao de materias-primas e padronizacao da producao ate ao design de embalagens e otimizacao da experiencia de entrega.</p>
+      <p style="color:var(--text-2);font-size:.95rem;line-height:1.8">Se quer aprender a encontrar o seu posicionamento no mercado de restauracao de Macau e construir uma marca distintiva com verdadeira quota de mercado, nao pode perder a palestra de Will Chen no BNI ACE. Quer seja da area da restauracao, um potencial parceiro de negocios, ou simplesmente interessado em empreendedorismo, encontrara inspiracao aqui.</p>
+    </div>
+  </div>
+
 </div>
 </section>
 
@@ -280,9 +377,13 @@ footer a{color:var(--text-2)}
 <div class="container">
   <div class="section-header">
     <span class="eyebrow">WHY ATTEND</span>
-    <h2>參加這次活動<span class="gradient-text">你能獲得什麼？</span></h2>
+    <h2 data-lang="zh">參加這次活動<span class="gradient-text">你能獲得什麼？</span></h2>
+    <h2 data-lang="en" style="display:none"><span class="gradient-text">What You'll Gain</span> from This Event</h2>
+    <h2 data-lang="pt" style="display:none"><span class="gradient-text">O Que Vai Ganhar</span> com Este Evento</h2>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+
+  <!-- zh Why Attend -->
+  <div data-lang="zh" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
     <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px 24px;text-align:center">
       <div style="font-size:2.4rem;margin-bottom:12px">&#127891;</div>
       <h3 style="margin-bottom:8px;font-size:1rem">實戰經驗分享</h3>
@@ -299,6 +400,44 @@ footer a{color:var(--text-2)}
       <p style="color:var(--text-2);font-size:.9rem;line-height:1.6">聖杯茶飲小食正在積極尋找合作夥伴 — 無論你是需要到會服務的機構、想要 IP 聯名快閃的商家，還是擁有潛在客源的業務人員，現場就能直接與 Will 對接，把握合作機會。</p>
     </div>
   </div>
+
+  <!-- en Why Attend -->
+  <div data-lang="en" style="display:none;grid-template-columns:repeat(3,1fr);gap:20px">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px 24px;text-align:center">
+      <div style="font-size:2.4rem;margin-bottom:12px">&#127891;</div>
+      <h3 style="margin-bottom:8px;font-size:1rem">Real-World Experience</h3>
+      <p style="color:var(--text-2);font-size:.9rem;line-height:1.6">Hear Will Chen's genuine journey of building a viral brand from scratch — delivery platform strategies, product innovation methods, and brand IP building techniques. All first-hand practical experience, not textbook theory.</p>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px 24px;text-align:center">
+      <div style="font-size:2.4rem;margin-bottom:12px">&#129309;</div>
+      <h3 style="margin-bottom:8px;font-size:1rem">Quality Business Network</h3>
+      <p style="color:var(--text-2);font-size:.9rem;line-height:1.6">BNI ACE brings together professionals and business owners from all industries in Macau. In just 90 minutes, you'll meet not only Will Chen but also partners from finance, real estate, law, design, tech, and more — expanding your referral network.</p>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px 24px;text-align:center">
+      <div style="font-size:2.4rem;margin-bottom:12px">&#128640;</div>
+      <h3 style="margin-bottom:8px;font-size:1rem">Partnership Opportunities</h3>
+      <p style="color:var(--text-2);font-size:.9rem;line-height:1.6">Holy Grail Tea &amp; Snacks is actively seeking partners — whether you're an organisation needing catering, a business wanting an IP pop-up collaboration, or someone with potential customer leads, you can connect directly with Will on the spot.</p>
+    </div>
+  </div>
+
+  <!-- pt Why Attend -->
+  <div data-lang="pt" style="display:none;grid-template-columns:repeat(3,1fr);gap:20px">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px 24px;text-align:center">
+      <div style="font-size:2.4rem;margin-bottom:12px">&#127891;</div>
+      <h3 style="margin-bottom:8px;font-size:1rem">Experiencia Real</h3>
+      <p style="color:var(--text-2);font-size:.9rem;line-height:1.6">Ouca a jornada genuina de Will Chen na construcao de uma marca viral do zero — estrategias de plataformas de entrega, metodos de inovacao de produtos e tecnicas de construcao de marca IP. Toda a experiencia pratica em primeira mao, nao teoria de livros.</p>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px 24px;text-align:center">
+      <div style="font-size:2.4rem;margin-bottom:12px">&#129309;</div>
+      <h3 style="margin-bottom:8px;font-size:1rem">Rede de Negocios de Qualidade</h3>
+      <p style="color:var(--text-2);font-size:.9rem;line-height:1.6">O BNI ACE reune profissionais e empresarios de todas as industrias em Macau. Em apenas 90 minutos, conhecera nao so Will Chen mas tambem parceiros de financas, imobiliario, direito, design, tecnologia e mais — expandindo a sua rede de referencias.</p>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px 24px;text-align:center">
+      <div style="font-size:2.4rem;margin-bottom:12px">&#128640;</div>
+      <h3 style="margin-bottom:8px;font-size:1rem">Oportunidades de Parceria</h3>
+      <p style="color:var(--text-2);font-size:.9rem;line-height:1.6">O Calice Cha e Snacks esta a procurar parceiros ativamente — quer seja uma organizacao que precisa de catering, uma empresa que quer uma colaboracao pop-up IP, ou alguem com potenciais clientes, pode conectar-se diretamente com Will no local.</p>
+    </div>
+  </div>
 </div>
 </section>
 
@@ -307,10 +446,16 @@ footer a{color:var(--text-2)}
 <div class="container">
   <div class="section-header">
     <span class="eyebrow">EVENT SCHEDULE</span>
-    <h2>活動<span class="gradient-text">流程安排</span></h2>
-    <p>BNI ACE 分會每週二早餐商務會議，結構化的交流確保每位參加者都能充分受益</p>
+    <h2 data-lang="zh">活動<span class="gradient-text">流程安排</span></h2>
+    <h2 data-lang="en" style="display:none"><span class="gradient-text">Event</span> Schedule</h2>
+    <h2 data-lang="pt" style="display:none"><span class="gradient-text">Programa</span> do Evento</h2>
+    <p data-lang="zh">BNI ACE 分會每週二早餐商務會議，結構化的交流確保每位參加者都能充分受益</p>
+    <p data-lang="en" style="display:none">BNI ACE Chapter's weekly Tuesday breakfast meeting — structured networking ensures every attendee benefits fully</p>
+    <p data-lang="pt" style="display:none">Reuniao semanal de pequeno-almoco do Capitulo BNI ACE as tercas-feiras — networking estruturado garante que cada participante beneficie plenamente</p>
   </div>
-  <div style="max-width:640px;margin:0 auto">
+
+  <!-- zh Schedule -->
+  <div data-lang="zh" style="max-width:640px;margin:0 auto">
     <div style="display:flex;gap:20px;margin-bottom:0;position:relative">
       <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
         <div style="width:40px;height:40px;border-radius:50%;background:rgba(204,0,0,0.15);border:1px solid rgba(204,0,0,0.3);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;color:var(--bni-red)">1</div>
@@ -361,6 +506,113 @@ footer a{color:var(--text-2)}
       </div>
     </div>
   </div>
+
+  <!-- en Schedule -->
+  <div data-lang="en" style="display:none;max-width:640px;margin:0 auto">
+    <div style="display:flex;gap:20px;margin-bottom:0;position:relative">
+      <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(204,0,0,0.15);border:1px solid rgba(204,0,0,0.3);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;color:var(--bni-red)">1</div>
+        <div style="width:2px;flex:1;background:var(--border);margin:4px 0"></div>
+      </div>
+      <div style="padding-bottom:28px">
+        <h4 style="font-size:1rem;margin-bottom:4px">7:00 — Open Networking Time</h4>
+        <p style="color:var(--text-2);font-size:.9rem;line-height:1.6">Arrive at Harbourview Hotel, Fisherman's Wharf, 1/F Meeting Room (press 1 in the lift). Mingle freely with members from various industries and enjoy breakfast. This is the best time to make initial connections — arrive early to make the most of every opportunity to meet new contacts.</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:20px;margin-bottom:0;position:relative">
+      <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(204,0,0,0.15);border:1px solid rgba(204,0,0,0.3);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;color:var(--bni-red)">2</div>
+        <div style="width:2px;flex:1;background:var(--border);margin:4px 0"></div>
+      </div>
+      <div style="padding-bottom:28px">
+        <h4 style="font-size:1rem;margin-bottom:4px">7:15 — Meeting Officially Begins</h4>
+        <p style="color:var(--text-2);font-size:.9rem;line-height:1.6">The Chapter President opens the session, and all members deliver their 60-second introductions. Each member shares their business scope and the type of referrals they're seeking this week. An excellent opportunity to learn about every business professional in the room.</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:20px;margin-bottom:0;position:relative">
+      <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(212,175,55,0.2);border:1px solid rgba(212,175,55,0.4);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;color:var(--gold)">&#9733;</div>
+        <div style="width:2px;flex:1;background:var(--border);margin:4px 0"></div>
+      </div>
+      <div style="padding-bottom:28px">
+        <h4 style="font-size:1rem;margin-bottom:4px;color:var(--gold)">7:45 — 10-Minute Featured Talk: Will Chen, Holy Grail Tea &amp; Snacks</h4>
+        <p style="color:var(--text-2);font-size:.9rem;line-height:1.6">This week's highlight! Will Chen will spend 10 minutes sharing "A New Experience: Divination + Tea &amp; Snacks." From the brand concept, the inspiration behind Tarot Divination Tea, delivery platform strategies, to the development of the Golden Lotus Award-winning product — all distilled into 10 minutes. A Q&amp;A session follows where you can ask Will directly.</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:20px;margin-bottom:0;position:relative">
+      <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(204,0,0,0.15);border:1px solid rgba(204,0,0,0.3);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;color:var(--bni-red)">4</div>
+        <div style="width:2px;flex:1;background:var(--border);margin:4px 0"></div>
+      </div>
+      <div style="padding-bottom:28px">
+        <h4 style="font-size:1rem;margin-bottom:4px">8:00 — Business Referral Session</h4>
+        <p style="color:var(--text-2);font-size:.9rem;line-height:1.6">Members exchange business referrals collected during the week. This is the core of every BNI meeting — each referral is a quality lead personally vetted by a fellow member, with conversion rates far higher than cold outreach. If you can bring suitable partners or clients to Holy Grail Tea &amp; Snacks, this is the moment to share.</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:20px;position:relative">
+      <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(204,0,0,0.15);border:1px solid rgba(204,0,0,0.3);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;color:var(--bni-red)">5</div>
+      </div>
+      <div>
+        <h4 style="font-size:1rem;margin-bottom:4px">8:30 — Meeting Ends, Free Networking</h4>
+        <p style="color:var(--text-2);font-size:.9rem;line-height:1.6">After the meeting officially concludes, stay to have deeper conversations with members who interest you. This is your chance for a one-on-one chat with Will Chen — whether to discuss collaboration, learn about partnership details, or simply exchange F&amp;B insights. Make the most of this valuable networking time.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- pt Schedule -->
+  <div data-lang="pt" style="display:none;max-width:640px;margin:0 auto">
+    <div style="display:flex;gap:20px;margin-bottom:0;position:relative">
+      <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(204,0,0,0.15);border:1px solid rgba(204,0,0,0.3);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;color:var(--bni-red)">1</div>
+        <div style="width:2px;flex:1;background:var(--border);margin:4px 0"></div>
+      </div>
+      <div style="padding-bottom:28px">
+        <h4 style="font-size:1rem;margin-bottom:4px">7:00 — Tempo de Networking Aberto</h4>
+        <p style="color:var(--text-2);font-size:.9rem;line-height:1.6">Chegue ao Hotel Harbourview, Porto Pescador, Sala de Reunioes no 1.&ordm; andar (prima 1 no elevador). Conviva livremente com membros de varias industrias e desfrute do pequeno-almoco. Este e o melhor momento para estabelecer contactos iniciais — chegue cedo para aproveitar cada oportunidade de conhecer novos contactos.</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:20px;margin-bottom:0;position:relative">
+      <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(204,0,0,0.15);border:1px solid rgba(204,0,0,0.3);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;color:var(--bni-red)">2</div>
+        <div style="width:2px;flex:1;background:var(--border);margin:4px 0"></div>
+      </div>
+      <div style="padding-bottom:28px">
+        <h4 style="font-size:1rem;margin-bottom:4px">7:15 — Inicio Oficial da Reuniao</h4>
+        <p style="color:var(--text-2);font-size:.9rem;line-height:1.6">O Presidente do Capitulo abre a sessao e todos os membros fazem as suas apresentacoes de 60 segundos. Cada membro partilha o seu ambito de negocios e o tipo de referencias que procura esta semana. Uma excelente oportunidade para conhecer todos os profissionais presentes.</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:20px;margin-bottom:0;position:relative">
+      <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(212,175,55,0.2);border:1px solid rgba(212,175,55,0.4);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;color:var(--gold)">&#9733;</div>
+        <div style="width:2px;flex:1;background:var(--border);margin:4px 0"></div>
+      </div>
+      <div style="padding-bottom:28px">
+        <h4 style="font-size:1rem;margin-bottom:4px;color:var(--gold)">7:45 — Palestra de 10 Minutos: Will Chen, Calice Cha e Snacks</h4>
+        <p style="color:var(--text-2);font-size:.9rem;line-height:1.6">O destaque desta semana! Will Chen vai dedicar 10 minutos a partilhar "Uma Nova Experiencia: Adivinhacao + Cha e Snacks." Desde o conceito da marca, a inspiracao por detras do Cha de Tarot, estrategias de plataformas de entrega, ate ao desenvolvimento do produto premiado com a Flor de Lotus Dourada — tudo condensado em 10 minutos. Segue-se uma sessao de perguntas e respostas onde pode questionar Will diretamente.</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:20px;margin-bottom:0;position:relative">
+      <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(204,0,0,0.15);border:1px solid rgba(204,0,0,0.3);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;color:var(--bni-red)">4</div>
+        <div style="width:2px;flex:1;background:var(--border);margin:4px 0"></div>
+      </div>
+      <div style="padding-bottom:28px">
+        <h4 style="font-size:1rem;margin-bottom:4px">8:00 — Sessao de Referencias Comerciais</h4>
+        <p style="color:var(--text-2);font-size:.9rem;line-height:1.6">Os membros trocam referencias comerciais recolhidas durante a semana. Este e o nucleo de cada reuniao BNI — cada referencia e uma oportunidade de qualidade pessoalmente validada por um colega membro, com taxas de conversao muito superiores a contactos nao solicitados. Se puder trazer parceiros ou clientes adequados para o Calice Cha e Snacks, este e o momento para partilhar.</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:20px;position:relative">
+      <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(204,0,0,0.15);border:1px solid rgba(204,0,0,0.3);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;color:var(--bni-red)">5</div>
+      </div>
+      <div>
+        <h4 style="font-size:1rem;margin-bottom:4px">8:30 — Fim da Reuniao, Networking Livre</h4>
+        <p style="color:var(--text-2);font-size:.9rem;line-height:1.6">Apos o termino oficial da reuniao, fique para ter conversas mais aprofundadas com os membros que lhe interessam. Esta e a sua oportunidade para uma conversa individual com Will Chen — seja para discutir colaboracoes, conhecer detalhes de parceria, ou simplesmente trocar experiencias sobre restauracao. Aproveite ao maximo este valioso tempo de networking.</p>
+      </div>
+    </div>
+  </div>
+
 </div>
 </section>
 
@@ -369,10 +621,16 @@ footer a{color:var(--text-2)}
 <div class="container">
   <div class="section-header">
     <span class="eyebrow">REFERRAL NEEDS</span>
-    <h2>希望合作<span class="gradient-text">引薦客戶</span></h2>
-    <p>想了解生意點做成為網紅店？你點可以錯過？</p>
+    <h2 data-lang="zh">希望合作<span class="gradient-text">引薦客戶</span></h2>
+    <h2 data-lang="en" style="display:none"><span class="gradient-text">Referral</span> &amp; Collaboration Needs</h2>
+    <h2 data-lang="pt" style="display:none">Necessidades de <span class="gradient-text">Referencia e Colaboracao</span></h2>
+    <p data-lang="zh">想了解生意點做成為網紅店？你點可以錯過？</p>
+    <p data-lang="en" style="display:none">Want to learn how a business becomes a viral hit? You can't afford to miss this.</p>
+    <p data-lang="pt" style="display:none">Quer saber como um negocio se torna viral? Nao pode perder isto.</p>
   </div>
-  <div class="referral-grid">
+
+  <!-- zh Referral -->
+  <div class="referral-grid" data-lang="zh">
     <div class="referral-card">
       <div class="card-icon">&#128188;</div>
       <h3>TO C 消費者</h3>
@@ -411,6 +669,89 @@ footer a{color:var(--text-2)}
       </div>
     </div>
   </div>
+
+  <!-- en Referral -->
+  <div class="referral-grid" data-lang="en" style="display:none">
+    <div class="referral-card">
+      <div class="card-icon">&#128188;</div>
+      <h3>B2C Consumers</h3>
+      <p>Office workers who order delivery — people who want a quality tea and snacks during their day. Whether it's a lunch add-on, an afternoon tea treat, or overtime fuel, Holy Grail offers fast, delicious, distinctive delivery. If you know friends or colleagues who frequently use delivery platforms, please recommend Holy Grail Tea &amp; Snacks.</p>
+      <div class="tags">
+        <span class="tag">Office Delivery</span>
+        <span class="tag">Daily Tea</span>
+        <span class="tag">Afternoon Snacks</span>
+        <span class="tag">Overtime Fuel</span>
+      </div>
+    </div>
+    <div class="referral-card">
+      <div class="card-icon">&#127880;</div>
+      <h3>Group Catering</h3>
+      <p>Groups needing snacks, tea, and desserts for gatherings. Holy Grail offers flexible catering packages customised by headcount and budget, including curated teas, signature egg waffles, and dessert platters. Ideal for team building, department meals, club events, school celebrations, and client appreciation events.</p>
+      <div class="tags">
+        <span class="tag">Organisations</span>
+        <span class="tag">Clubs</span>
+        <span class="tag">Banks</span>
+        <span class="tag">Schools</span>
+        <span class="tag">Corporate Events</span>
+        <span class="tag">Client Appreciation</span>
+      </div>
+    </div>
+    <div class="referral-card">
+      <div class="card-icon">&#129309;</div>
+      <h3>Business Partnerships</h3>
+      <p>Businesses seeking IP pop-up collaborations and tea &amp; snack services to boost off-peak revenue. Holy Grail's Tarot divination tea concept naturally generates buzz and is Instagram-worthy, making it perfect for co-branding with tourist spots, malls, hotels, and creative brands. Formats include pop-ups, limited editions, and event sponsorship.</p>
+      <div class="tags">
+        <span class="tag">Ruins of St. Paul's</span>
+        <span class="tag">Rua do Cunha</span>
+        <span class="tag">Casinos</span>
+        <span class="tag">Taipa</span>
+        <span class="tag">Schools</span>
+        <span class="tag">IP Co-Brand</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- pt Referral -->
+  <div class="referral-grid" data-lang="pt" style="display:none">
+    <div class="referral-card">
+      <div class="card-icon">&#128188;</div>
+      <h3>Consumidores B2C</h3>
+      <p>Trabalhadores de escritorio que encomendam entregas — pessoas que querem um cha e snacks de qualidade durante o dia. Seja um complemento ao almoco, um lanche da tarde, ou energia para horas extra, o Calice oferece entregas rapidas, deliciosas e distintivas. Se conhece amigos ou colegas que usam frequentemente plataformas de entrega, por favor recomende o Calice Cha e Snacks.</p>
+      <div class="tags">
+        <span class="tag">Entrega Escritorio</span>
+        <span class="tag">Cha Diario</span>
+        <span class="tag">Snacks da Tarde</span>
+        <span class="tag">Energia Extra</span>
+      </div>
+    </div>
+    <div class="referral-card">
+      <div class="card-icon">&#127880;</div>
+      <h3>Catering para Grupos</h3>
+      <p>Grupos que precisam de snacks, cha e sobremesas para encontros. O Calice oferece pacotes de catering flexiveis personalizados por numero de pessoas e orcamento, incluindo chas selecionados, waffles de ovo de assinatura e travessas de sobremesas. Ideal para team building, refeicoes de departamento, eventos de clubes, celebracoes escolares e eventos de agradecimento a clientes.</p>
+      <div class="tags">
+        <span class="tag">Organizacoes</span>
+        <span class="tag">Clubes</span>
+        <span class="tag">Bancos</span>
+        <span class="tag">Escolas</span>
+        <span class="tag">Eventos Corporativos</span>
+        <span class="tag">Agradecimento Clientes</span>
+      </div>
+    </div>
+    <div class="referral-card">
+      <div class="card-icon">&#129309;</div>
+      <h3>Parcerias Comerciais</h3>
+      <p>Empresas que procuram colaboracoes pop-up IP e servicos de cha e snacks para aumentar receitas em epocas baixas. O conceito de Cha de Tarot do Calice gera naturalmente buzz e e perfeito para co-branding com pontos turisticos, centros comerciais, hoteis e marcas criativas. Formatos incluem pop-ups, edicoes limitadas e patrocinio de eventos.</p>
+      <div class="tags">
+        <span class="tag">Ruinas de S. Paulo</span>
+        <span class="tag">Rua do Cunha</span>
+        <span class="tag">Casinos</span>
+        <span class="tag">Taipa</span>
+        <span class="tag">Escolas</span>
+        <span class="tag">Co-Brand IP</span>
+      </div>
+    </div>
+  </div>
+
 </div>
 </section>
 
@@ -420,27 +761,91 @@ footer a{color:var(--text-2)}
   <div class="bni-content">
     <div class="bni-text">
       <span class="eyebrow">ABOUT BNI ACE</span>
-      <h2 style="margin-bottom:16px">連結改變事業的<span class="gradient-text">關鍵人脈</span></h2>
-      <p>BNI（Business Network International）於 1985 年成立，是世界上最大及最成功的業務引薦組織，目前在全球超過 76 個國家擁有數十萬名會員。BNI 的運作模式非常簡單而有效：每個分會由來自不同行業的專業人士組成，每個行業只允許一位代表，避免直接競爭，最大化引薦效果。</p>
-      <p>我們的會員都是不同行業的專業人士，他們通過對我們的主要核心價值 GiversGain（付出者收穫）發展業務。每週在全球上萬個社區中會員與其他值得信賴的商業領袖會面，以建立和培養長期及有意義的關係，及達成有質素的商業引薦。會員更有機會參與不同的商業培訓，及與全球數三十萬名的 BNI 會員聯繫和開展更多業務。</p>
-      <p><strong>ACE 分會（Macao Ace Chapter）</strong>是澳門最具發展潛力活力的分會，貫通粵港澳網路，聯繫國際商機。ACE 分會的會員來自澳門各行各業，包括餐飲、金融、科技、法律、地產、教育、設計等領域，每週二早上在漁人碼頭勵庭海景酒店舉行早餐商務會議。歡迎關注 Facebook 專頁 <strong>bniacechapter</strong> 了解更多分會動態。</p>
+
+      <!-- zh BNI -->
+      <div data-lang="zh">
+        <h2 style="margin-bottom:16px">連結改變事業的<span class="gradient-text">關鍵人脈</span></h2>
+        <p>BNI（Business Network International）於 1985 年成立，是世界上最大及最成功的業務引薦組織，目前在全球超過 76 個國家擁有數十萬名會員。BNI 的運作模式非常簡單而有效：每個分會由來自不同行業的專業人士組成，每個行業只允許一位代表，避免直接競爭，最大化引薦效果。</p>
+        <p>我們的會員都是不同行業的專業人士，他們通過對我們的主要核心價值 GiversGain（付出者收穫）發展業務。每週在全球上萬個社區中會員與其他值得信賴的商業領袖會面，以建立和培養長期及有意義的關係，及達成有質素的商業引薦。會員更有機會參與不同的商業培訓，及與全球數三十萬名的 BNI 會員聯繫和開展更多業務。</p>
+        <p><strong>ACE 分會（Macao Ace Chapter）</strong>是澳門最具發展潛力活力的分會，貫通粵港澳網路，聯繫國際商機。ACE 分會的會員來自澳門各行各業，包括餐飲、金融、科技、法律、地產、教育、設計等領域，每週二早上在漁人碼頭勵庭海景酒店舉行早餐商務會議。歡迎關注 Facebook 專頁 <strong>bniacechapter</strong> 了解更多分會動態。</p>
+      </div>
+
+      <!-- en BNI -->
+      <div data-lang="en" style="display:none">
+        <h2 style="margin-bottom:16px">Connect with the <span class="gradient-text">Key People</span> Who Transform Your Business</h2>
+        <p>BNI (Business Network International), founded in 1985, is the world's largest and most successful business referral organisation, with hundreds of thousands of members across 76+ countries. BNI's model is simple yet effective: each chapter comprises professionals from different industries, with only one representative per industry — eliminating direct competition and maximising referral effectiveness.</p>
+        <p>Our members are professionals from diverse industries who grow their businesses through our core value of GiversGain — Givers Gain. Every week, members in tens of thousands of communities worldwide meet with other trusted business leaders to build and nurture long-term, meaningful relationships and generate quality business referrals. Members also access various business training opportunities and connect with over 300,000 BNI members globally to expand their business further.</p>
+        <p><strong>ACE Chapter (Macao Ace Chapter)</strong> is Macau's most dynamic and high-potential chapter, bridging the Guangdong-Hong Kong-Macau network with international business opportunities. ACE members span a wide range of industries including F&amp;B, finance, tech, law, real estate, education, and design, meeting every Tuesday morning at the Harbourview Hotel, Fisherman's Wharf. Follow our Facebook page <strong>bniacechapter</strong> for the latest updates.</p>
+      </div>
+
+      <!-- pt BNI -->
+      <div data-lang="pt" style="display:none">
+        <h2 style="margin-bottom:16px">Conecte-se com as <span class="gradient-text">Pessoas-Chave</span> Que Transformam o Seu Negocio</h2>
+        <p>O BNI (Business Network International), fundado em 1985, e a maior e mais bem-sucedida organizacao de referencias comerciais do mundo, com centenas de milhares de membros em mais de 76 paises. O modelo do BNI e simples mas eficaz: cada capitulo e composto por profissionais de diferentes industrias, com apenas um representante por industria — eliminando a concorrencia direta e maximizando a eficacia das referencias.</p>
+        <p>Os nossos membros sao profissionais de diversas industrias que desenvolvem os seus negocios atraves do nosso valor central GiversGain — Quem Da, Recebe. Todas as semanas, membros em dezenas de milhares de comunidades em todo o mundo reunem-se com outros lideres empresariais de confianca para construir e cultivar relacoes duradouras e significativas e gerar referencias comerciais de qualidade. Os membros tambem acedem a varias oportunidades de formacao empresarial e conectam-se com mais de 300.000 membros BNI globalmente para expandir ainda mais os seus negocios.</p>
+        <p><strong>Capitulo ACE (Macao Ace Chapter)</strong> e o capitulo mais dinamico e com maior potencial de Macau, fazendo a ponte entre a rede Guangdong-Hong Kong-Macau e as oportunidades de negocios internacionais. Os membros do ACE abrangem uma vasta gama de industrias incluindo restauracao, financas, tecnologia, direito, imobiliario, educacao e design, reunindo-se todas as tercas-feiras de manha no Hotel Harbourview, Porto Pescador. Siga a nossa pagina de Facebook <strong>bniacechapter</strong> para as ultimas novidades.</p>
+      </div>
     </div>
+
     <div class="bni-values">
-      <div class="bni-value">
-        <div class="v-icon">&#128165;</div>
-        <div class="v-text"><strong>GiversGain 付出者收穫</strong><span>BNI 核心價值：先為別人創造價值，自然會收到回報</span></div>
+      <!-- zh values -->
+      <div data-lang="zh">
+        <div class="bni-value">
+          <div class="v-icon">&#128165;</div>
+          <div class="v-text"><strong>GiversGain 付出者收穫</strong><span>BNI 核心價值：先為別人創造價值，自然會收到回報</span></div>
+        </div>
+        <div class="bni-value" style="margin-top:12px">
+          <div class="v-icon">&#127758;</div>
+          <div class="v-text"><strong>全球 76+ 國家網絡</strong><span>數十萬 BNI 會員，跨國引薦機會無限</span></div>
+        </div>
+        <div class="bni-value" style="margin-top:12px">
+          <div class="v-icon">&#128200;</div>
+          <div class="v-text"><strong>每週結構化會面</strong><span>定期交流、建立信任、追蹤引薦成果</span></div>
+        </div>
+        <div class="bni-value" style="margin-top:12px">
+          <div class="v-icon">&#127941;</div>
+          <div class="v-text"><strong>ACE 分會 — 澳門最具活力</strong><span>粵港澳商機門戶，多元行業會員組合</span></div>
+        </div>
       </div>
-      <div class="bni-value">
-        <div class="v-icon">&#127758;</div>
-        <div class="v-text"><strong>全球 76+ 國家網絡</strong><span>數十萬 BNI 會員，跨國引薦機會無限</span></div>
+
+      <!-- en values -->
+      <div data-lang="en" style="display:none">
+        <div class="bni-value">
+          <div class="v-icon">&#128165;</div>
+          <div class="v-text"><strong>GiversGain — Givers Gain</strong><span>BNI core value: create value for others first, and rewards follow naturally</span></div>
+        </div>
+        <div class="bni-value" style="margin-top:12px">
+          <div class="v-icon">&#127758;</div>
+          <div class="v-text"><strong>76+ Countries Worldwide</strong><span>Hundreds of thousands of BNI members, unlimited cross-border referral opportunities</span></div>
+        </div>
+        <div class="bni-value" style="margin-top:12px">
+          <div class="v-icon">&#128200;</div>
+          <div class="v-text"><strong>Weekly Structured Meetings</strong><span>Regular exchange, trust building, referral tracking</span></div>
+        </div>
+        <div class="bni-value" style="margin-top:12px">
+          <div class="v-icon">&#127941;</div>
+          <div class="v-text"><strong>ACE Chapter — Macau's Most Dynamic</strong><span>Gateway to Guangdong-HK-Macau business, diverse industry mix</span></div>
+        </div>
       </div>
-      <div class="bni-value">
-        <div class="v-icon">&#128200;</div>
-        <div class="v-text"><strong>每週結構化會面</strong><span>定期交流、建立信任、追蹤引薦成果</span></div>
-      </div>
-      <div class="bni-value">
-        <div class="v-icon">&#127941;</div>
-        <div class="v-text"><strong>ACE 分會 — 澳門最具活力</strong><span>粵港澳商機門戶，多元行業會員組合</span></div>
+
+      <!-- pt values -->
+      <div data-lang="pt" style="display:none">
+        <div class="bni-value">
+          <div class="v-icon">&#128165;</div>
+          <div class="v-text"><strong>GiversGain — Quem Da, Recebe</strong><span>Valor central do BNI: crie valor para os outros primeiro e as recompensas seguem naturalmente</span></div>
+        </div>
+        <div class="bni-value" style="margin-top:12px">
+          <div class="v-icon">&#127758;</div>
+          <div class="v-text"><strong>76+ Paises em Todo o Mundo</strong><span>Centenas de milhares de membros BNI, oportunidades ilimitadas de referencias internacionais</span></div>
+        </div>
+        <div class="bni-value" style="margin-top:12px">
+          <div class="v-icon">&#128200;</div>
+          <div class="v-text"><strong>Reunioes Semanais Estruturadas</strong><span>Troca regular, construcao de confianca, acompanhamento de referencias</span></div>
+        </div>
+        <div class="bni-value" style="margin-top:12px">
+          <div class="v-icon">&#127941;</div>
+          <div class="v-text"><strong>Capitulo ACE — O Mais Dinamico de Macau</strong><span>Portal de negocios Guangdong-HK-Macau, mix diversificado de industrias</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -450,10 +855,16 @@ footer a{color:var(--text-2)}
 <!-- CTA -->
 <section class="cta-section" id="register">
 <div class="container">
-  <h2>準備好拓展<span class="gradient-text">商業人脈</span>了嗎？</h2>
+  <h2 data-lang="zh">準備好拓展<span class="gradient-text">商業人脈</span>了嗎？</h2>
+  <h2 data-lang="en" style="display:none">Ready to Expand Your <span class="gradient-text">Business Network</span>?</h2>
+  <h2 data-lang="pt" style="display:none">Pronto para Expandir a Sua <span class="gradient-text">Rede de Negocios</span>?</h2>
   <p style="color:var(--text-2);margin-bottom:32px">2026 年 3 月 10 日（二）7:00am &middot; 澳門漁人碼頭勵庭海景酒店</p>
-  <a href="https://www.facebook.com/bniacechapter" target="_blank" class="btn btn-primary">立即報名 &rarr;</a>
-  <a href="bni-ace.html" class="btn btn-outline">&larr; BNI ACE 分會</a>
+  <a href="https://www.facebook.com/bniacechapter" target="_blank" class="btn btn-primary" data-lang="zh">立即報名 &rarr;</a>
+  <a href="https://www.facebook.com/bniacechapter" target="_blank" class="btn btn-primary" data-lang="en" style="display:none">Register Now &rarr;</a>
+  <a href="https://www.facebook.com/bniacechapter" target="_blank" class="btn btn-primary" data-lang="pt" style="display:none">Inscreva-se Agora &rarr;</a>
+  <a href="bni-ace.html" class="btn btn-outline" data-lang="zh">&larr; BNI ACE 分會</a>
+  <a href="bni-ace.html" class="btn btn-outline" data-lang="en" style="display:none">&larr; BNI ACE Chapter</a>
+  <a href="bni-ace.html" class="btn btn-outline" data-lang="pt" style="display:none">&larr; Capitulo BNI ACE</a>
 </div>
 </section>
 
@@ -461,9 +872,13 @@ footer a{color:var(--text-2)}
 <section style="background:var(--bg-alt)">
 <div class="container">
   <div class="section-header">
-    <h2>常見問題</h2>
+    <h2 data-lang="zh">常見問題</h2>
+    <h2 data-lang="en" style="display:none">FAQ</h2>
+    <h2 data-lang="pt" style="display:none">Perguntas Frequentes</h2>
   </div>
-  <div class="faq-section">
+
+  <!-- zh FAQ -->
+  <div class="faq-section" data-lang="zh">
     <details>
       <summary>BNI ACE 分會是什麼？</summary>
       <p>BNI（Business Network International）於 1985 年成立，是世界上最大及最成功的業務引薦組織，在全球超過 76 個國家擁有數十萬名會員。ACE 分會是澳門最具發展潛力和活力的分會，貫通粵港澳網路，聯繫國際商機。會員透過核心價值 GiversGain（付出者收穫）互相引薦業務。每個分會由來自不同行業的專業人士組成，每個行業只允許一位代表，確保沒有直接競爭，最大化引薦效果。</p>
@@ -485,6 +900,55 @@ footer a{color:var(--text-2)}
       <p>當然可以！BNI 歡迎非會員以訪客身份參加會議，親身體驗 BNI 的運作模式和商業引薦的力量。你可以透過 BNI ACE 分會 Facebook 專頁（搜尋 bniacechapter）報名，或聯繫任何 ACE 分會會員獲取邀請。參會費為 MOP$280（含早餐）。無論你是想拓展人脈、尋找合作夥伴、了解 BNI 加入方式，還是純粹想聆聽 Will Chen 的精彩分享，都歡迎參加。</p>
     </details>
   </div>
+
+  <!-- en FAQ -->
+  <div class="faq-section" data-lang="en" style="display:none">
+    <details>
+      <summary>What is BNI ACE Chapter?</summary>
+      <p>BNI (Business Network International), founded in 1985, is the world's largest and most successful business referral organisation, with hundreds of thousands of members across 76+ countries. ACE Chapter is Macau's most dynamic and high-potential chapter, bridging the Guangdong-Hong Kong-Macau network with international opportunities. Members refer business to each other through the core value of GiversGain. Each chapter comprises professionals from different industries, with only one representative per industry, ensuring no direct competition and maximising referral effectiveness.</p>
+    </details>
+    <details>
+      <summary>Who is the speaker Will Chen? What makes Holy Grail Tea &amp; Snacks special?</summary>
+      <p>This week's 10-minute featured talk is by Will Chen, founder of Holy Grail Tea &amp; Snacks. Holy Grail is Macau's first Tarot Divination Tea brand — combining Tarot culture with the tea-drinking experience. Customers draw a Tarot card when ordering to receive a fortune reading, turning a simple drink into a unique cultural experience. The signature Black Truffle Pork Floss Egg Waffle won the Golden Lotus Cuisine Award. Ranked TOP2 in the snack-tea category on delivery platforms with 60,000+ cumulative sales. Will will share his real-world experience from brand creation to viral success.</p>
+    </details>
+    <details>
+      <summary>What are the event details — time, venue, and fee?</summary>
+      <p>Date: Tuesday, 10 March 2026. Time: 7:00-8:30am. Venue: Harbourview Hotel, Fisherman's Wharf, 1/F Meeting Room (press 1 in the lift). Fee: MOP$280 (attendance fee, breakfast included). The programme includes open networking, 60-second member introductions, Will Chen's 10-minute featured talk, a business referral session, and free networking time. We recommend arriving 10 minutes early to maximise networking opportunities.</p>
+    </details>
+    <details>
+      <summary>What referrals and partnerships does Holy Grail Tea &amp; Snacks need?</summary>
+      <p>Holy Grail's referral needs span three areas: First, B2C consumers — especially office workers who use delivery platforms and daily tea lovers. Second, group catering — for organisations, clubs, banks, schools, and other groups needing snack, tea, and dessert catering for events. Third, business partnerships — including IP pop-up collaborations, venue partnerships (Ruins of St. Paul's, Rua do Cunha, casinos, Taipa, school areas), and businesses looking to boost off-peak revenue through tea &amp; snack services.</p>
+    </details>
+    <details>
+      <summary>I'm not a BNI member. Can I attend? How do I register?</summary>
+      <p>Absolutely! BNI welcomes non-members to attend as visitors and experience the BNI model and the power of business referrals first-hand. You can register through the BNI ACE Chapter Facebook page (search bniacechapter) or contact any ACE member for an invitation. The attendance fee is MOP$280 (breakfast included). Whether you want to expand your network, find partners, learn about joining BNI, or simply hear Will Chen's inspiring talk, you're welcome to attend.</p>
+    </details>
+  </div>
+
+  <!-- pt FAQ -->
+  <div class="faq-section" data-lang="pt" style="display:none">
+    <details>
+      <summary>O que e o Capitulo BNI ACE?</summary>
+      <p>O BNI (Business Network International), fundado em 1985, e a maior e mais bem-sucedida organizacao de referencias comerciais do mundo, com centenas de milhares de membros em mais de 76 paises. O Capitulo ACE e o capitulo mais dinamico e com maior potencial de Macau, fazendo a ponte entre a rede Guangdong-Hong Kong-Macau e as oportunidades internacionais. Os membros referem negocios uns aos outros atraves do valor central GiversGain. Cada capitulo e composto por profissionais de diferentes industrias, com apenas um representante por industria, garantindo ausencia de concorrencia direta e maximizando a eficacia das referencias.</p>
+    </details>
+    <details>
+      <summary>Quem e o orador Will Chen? O que torna o Calice Cha e Snacks especial?</summary>
+      <p>A palestra de 10 minutos desta semana e de Will Chen, fundador do Calice Cha e Snacks. O Calice e a primeira marca de Cha de Tarot de Macau — combinando a cultura do Tarot com a experiencia de beber cha. Os clientes tiram uma carta de Tarot ao fazer o pedido para receber uma leitura da sorte, transformando uma simples bebida numa experiencia cultural unica. O iconica Waffle de Ovo com Trufa Negra e Fio de Carne de Porco ganhou o Premio Culinario Flor de Lotus Dourada. Classificado TOP2 na categoria de cha e snacks nas plataformas de entrega com mais de 60.000 vendas acumuladas. Will partilhara a sua experiencia real desde a criacao da marca ate ao sucesso viral.</p>
+    </details>
+    <details>
+      <summary>Quais sao os detalhes do evento — hora, local e taxa?</summary>
+      <p>Data: Terca-feira, 10 de Marco de 2026. Hora: 7:00-8:30. Local: Hotel Harbourview, Porto Pescador, Sala de Reunioes no 1.&ordm; andar (prima 1 no elevador). Taxa: MOP$280 (taxa de participacao, pequeno-almoco incluido). O programa inclui networking aberto, apresentacoes de 60 segundos dos membros, palestra de 10 minutos de Will Chen, sessao de referencias comerciais e tempo de networking livre. Recomendamos chegar 10 minutos mais cedo para maximizar as oportunidades de networking.</p>
+    </details>
+    <details>
+      <summary>Que referencias e parcerias precisa o Calice Cha e Snacks?</summary>
+      <p>As necessidades de referencia do Calice abrangem tres areas: Primeiro, consumidores B2C — especialmente trabalhadores de escritorio que usam plataformas de entrega e amantes de cha diario. Segundo, catering para grupos — para organizacoes, clubes, bancos, escolas e outros grupos que precisam de catering de snacks, cha e sobremesas para eventos. Terceiro, parcerias comerciais — incluindo colaboracoes pop-up IP, parcerias de locais (Ruinas de S. Paulo, Rua do Cunha, casinos, Taipa, zonas escolares), e empresas que procuram aumentar receitas em epocas baixas atraves de servicos de cha e snacks.</p>
+    </details>
+    <details>
+      <summary>Nao sou membro do BNI. Posso participar? Como me inscrevo?</summary>
+      <p>Claro que sim! O BNI da as boas-vindas a nao-membros como visitantes para experimentarem o modelo BNI e o poder das referencias comerciais em primeira mao. Pode inscrever-se atraves da pagina de Facebook do Capitulo BNI ACE (pesquise bniacechapter) ou contactar qualquer membro ACE para obter um convite. A taxa de participacao e MOP$280 (pequeno-almoco incluido). Quer queira expandir a sua rede, encontrar parceiros, saber mais sobre como aderir ao BNI, ou simplesmente ouvir a palestra inspiradora de Will Chen, e bem-vindo a participar.</p>
+    </details>
+  </div>
+
 </div>
 </section>
 
@@ -498,6 +962,23 @@ footer a{color:var(--text-2)}
   <div class="footer-copy">&copy; 2026 CloudPipe &middot; CC BY 4.0</div>
 </div>
 </footer>
+
+<script>
+function switchLang(lang){
+  document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('active',b.textContent.trim()===(lang==='zh'?'中':lang.toUpperCase()))});
+  document.querySelectorAll('[data-lang]').forEach(function(el){
+    var isMatch=el.dataset.lang===lang;
+    var tag=el.tagName.toLowerCase();
+    if(tag==='span'||tag==='a'){
+      el.style.display=isMatch?'inline':'none';
+    }else if(el.classList.contains('referral-grid')||(el.style.gridTemplateColumns&&el.style.gridTemplateColumns.indexOf('repeat')!==-1)){
+      el.style.display=isMatch?'grid':'none';
+    }else{
+      el.style.display=isMatch?'':'none';
+    }
+  });
+}
+</script>
 
 </body>
 </html>

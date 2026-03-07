@@ -62,7 +62,12 @@ nav .nav-links a{font-size:13px;color:var(--text-2);transition:color .2s}
 nav .nav-links a:hover{color:var(--text)}
 .nav-cta{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;padding:8px 18px;border-radius:999px;background:var(--brown);color:#fff;transition:all .2s}
 .nav-cta:hover{background:#a07a1a;box-shadow:0 0 20px rgba(139,105,20,0.3)}
-@media(max-width:600px){nav .nav-links a:not(.nav-cta){display:none}}
+@media(max-width:600px){nav .nav-links a:not(.nav-cta){display:none}.lang-switch{display:flex!important}}
+
+.lang-switch{display:flex;gap:3px;background:rgba(139,105,20,0.15);border-radius:999px;padding:2px;margin-right:8px}
+.lang-btn{font-family:'Space Mono',monospace;font-size:10px;padding:3px 10px;border-radius:999px;border:none;cursor:pointer;background:transparent;color:var(--text-2);transition:all .2s;font-weight:700}
+.lang-btn.active{background:var(--brown);color:#fff}
+.lang-btn:hover:not(.active){color:var(--text)}
 
 .hero{padding:140px 0 60px;text-align:center}
 .eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--brown);margin-bottom:16px;display:block}
@@ -147,9 +152,18 @@ footer a{color:var(--text-2)}
 <div class="container">
   <a href="bni-ace.html" class="logo"><span>BNI</span> ACE</a>
   <div class="nav-links">
-    <a href="bni-ace.html">分會主頁</a>
+    <div class="lang-switch">
+      <button class="lang-btn active" onclick="switchLang('zh')">中</button>
+      <button class="lang-btn" onclick="switchLang('en')">EN</button>
+      <button class="lang-btn" onclick="switchLang('pt')">PT</button>
+    </div>
+    <a href="bni-ace.html" data-lang="zh">分會主頁</a>
+    <a href="bni-ace.html" data-lang="en" style="display:none">Chapter Home</a>
+    <a href="bni-ace.html" data-lang="pt" style="display:none">Página do Capítulo</a>
     <a href="https://www.facebook.com/bniacechapter" target="_blank">Facebook</a>
-    <a href="#register" class="nav-cta">立即報名</a>
+    <a href="#register" class="nav-cta" data-lang="zh">立即報名</a>
+    <a href="#register" class="nav-cta" data-lang="en" style="display:none">Register Now</a>
+    <a href="#register" class="nav-cta" data-lang="pt" style="display:none">Inscreva-se Agora</a>
   </div>
 </div>
 </nav>
@@ -158,8 +172,20 @@ footer a{color:var(--text-2)}
 <section class="hero">
 <div class="container">
   <span class="eyebrow">MINDSPEAK &middot; 2026.03.14</span>
-  <h1><span class="gradient-text">說話如何聽入耳</span></h1>
-  <p class="subtitle">點解我講極佢都唔聽？&mdash; <strong>領強教練 黎Sir</strong></p>
+
+  <div data-lang="zh">
+    <h1><span class="gradient-text">說話如何聽入耳</span></h1>
+    <p class="subtitle">點解我講極佢都唔聽？&mdash; <strong>領強教練 黎Sir</strong></p>
+  </div>
+  <div data-lang="en" style="display:none">
+    <h1><span class="gradient-text">How to Make Your Words Heard</span></h1>
+    <p class="subtitle">Why won't they listen no matter what I say? &mdash; <strong>Lead Strong Coach Mr. Lai</strong></p>
+  </div>
+  <div data-lang="pt" style="display:none">
+    <h1><span class="gradient-text">Como Fazer as Suas Palavras Serem Ouvidas</span></h1>
+    <p class="subtitle">Porque é que não me ouvem, por mais que eu diga? &mdash; <strong>Coach Lead Strong Sr. Lai</strong></p>
+  </div>
+
   <div class="date-badge">
     <span class="dot"></span>
     2026 年 3 月 14 日（六）15:30-17:00 &middot; 峰盛比薩
@@ -182,23 +208,28 @@ footer a{color:var(--text-2)}
   <div class="info-grid">
     <div class="info-card">
       <div class="icon">&#128197;</div>
-      <div class="label">日期</div>
-      <div class="value">2026/3/14（六）</div>
+      <div data-lang="zh"><div class="label">日期</div><div class="value">2026/3/14（六）</div></div>
+      <div data-lang="en" style="display:none"><div class="label">Date</div><div class="value">2026/3/14 (Sat)</div></div>
+      <div data-lang="pt" style="display:none"><div class="label">Data</div><div class="value">2026/3/14 (Sáb)</div></div>
     </div>
     <div class="info-card">
       <div class="icon">&#9200;</div>
       <div class="value" style="color:var(--gold)">15:30-17:00</div>
-      <div class="label">時間</div>
+      <div data-lang="zh"><div class="label">時間</div></div>
+      <div data-lang="en" style="display:none"><div class="label">Time</div></div>
+      <div data-lang="pt" style="display:none"><div class="label">Hora</div></div>
     </div>
     <div class="info-card">
       <div class="icon">&#128205;</div>
-      <div class="label">地點</div>
-      <div class="value" style="font-size:.85rem">峰盛比薩 Lavish Pizza<br>雅廉坊大馬路29號</div>
+      <div data-lang="zh"><div class="label">地點</div><div class="value" style="font-size:.85rem">峰盛比薩 Lavish Pizza<br>雅廉坊大馬路29號</div></div>
+      <div data-lang="en" style="display:none"><div class="label">Venue</div><div class="value" style="font-size:.85rem">峰盛比薩 Lavish Pizza<br>Rua de Ouvidor Arriaga No. 29</div></div>
+      <div data-lang="pt" style="display:none"><div class="label">Local</div><div class="value" style="font-size:.85rem">峰盛比薩 Lavish Pizza<br>Rua de Ouvidor Arriaga N.º 29</div></div>
     </div>
     <div class="info-card">
       <div class="icon">&#127829;</div>
-      <div class="label">費用</div>
-      <div class="value" style="color:var(--gold)">MOP$108<br><span style="font-size:.7rem;color:var(--text-2)">包飲品及小食</span></div>
+      <div data-lang="zh"><div class="label">費用</div><div class="value" style="color:var(--gold)">MOP$108<br><span style="font-size:.7rem;color:var(--text-2)">包飲品及小食</span></div></div>
+      <div data-lang="en" style="display:none"><div class="label">Fee</div><div class="value" style="color:var(--gold)">MOP$108<br><span style="font-size:.7rem;color:var(--text-2)">Drinks &amp; snacks included</span></div></div>
+      <div data-lang="pt" style="display:none"><div class="label">Preço</div><div class="value" style="color:var(--gold)">MOP$108<br><span style="font-size:.7rem;color:var(--text-2)">Bebidas e petiscos incluídos</span></div></div>
     </div>
   </div>
 </div>
@@ -209,24 +240,64 @@ footer a{color:var(--text-2)}
 <div class="container">
   <div class="section-header">
     <span class="eyebrow">THREE KEY INSIGHTS</span>
-    <h2>三個讓說話<span class="gradient-text">「入耳」</span>的關鍵</h2>
-    <p>真正有力量的表達，不是講得多，而是講得「入耳」</p>
+    <div data-lang="zh">
+      <h2>三個讓說話<span class="gradient-text">「入耳」</span>的關鍵</h2>
+      <p>真正有力量的表達，不是講得多，而是講得「入耳」</p>
+    </div>
+    <div data-lang="en" style="display:none">
+      <h2>Three Keys to Making Your Words <span class="gradient-text">Heard</span></h2>
+      <p>Powerful communication isn't about saying more &mdash; it's about being heard</p>
+    </div>
+    <div data-lang="pt" style="display:none">
+      <h2>Três Chaves para Fazer as Suas Palavras Serem <span class="gradient-text">Ouvidas</span></h2>
+      <p>Uma comunicação poderosa não é falar mais &mdash; é ser ouvido</p>
+    </div>
   </div>
   <div class="key-grid">
     <div class="key-card">
       <div class="card-icon">&#128066;</div>
-      <h3>接收感</h3>
-      <p>對方準備好聽未？不是每一刻，都適合講道理。學會判斷溝通的最佳時機，讓你的話在對方最能接受的時候傳達。</p>
+      <div data-lang="zh">
+        <h3>接收感</h3>
+        <p>對方準備好聽未？不是每一刻，都適合講道理。學會判斷溝通的最佳時機，讓你的話在對方最能接受的時候傳達。</p>
+      </div>
+      <div data-lang="en" style="display:none">
+        <h3>Receptivity</h3>
+        <p>Is the other person ready to listen? Not every moment is right for reasoning. Learn to identify the best timing for communication, so your words land when they're most receptive.</p>
+      </div>
+      <div data-lang="pt" style="display:none">
+        <h3>Recetividade</h3>
+        <p>A outra pessoa está pronta para ouvir? Nem todos os momentos são adequados para argumentar. Aprenda a identificar o melhor momento para comunicar, para que as suas palavras cheguem quando o outro está mais recetivo.</p>
+      </div>
     </div>
     <div class="key-card">
       <div class="card-icon">&#127908;</div>
-      <h3>方式感</h3>
-      <p>你用的是什麼語氣？語氣錯位，再好的建議都變成壓力。掌握語氣的力量，讓同一句話產生截然不同的效果。</p>
+      <div data-lang="zh">
+        <h3>方式感</h3>
+        <p>你用的是什麼語氣？語氣錯位，再好的建議都變成壓力。掌握語氣的力量，讓同一句話產生截然不同的效果。</p>
+      </div>
+      <div data-lang="en" style="display:none">
+        <h3>Delivery</h3>
+        <p>What tone are you using? The wrong tone turns even the best advice into pressure. Master the power of tone to make the same words produce entirely different results.</p>
+      </div>
+      <div data-lang="pt" style="display:none">
+        <h3>Forma de Expressão</h3>
+        <p>Que tom está a usar? Um tom inadequado transforma até o melhor conselho em pressão. Domine o poder do tom para que as mesmas palavras produzam resultados completamente diferentes.</p>
+      </div>
     </div>
     <div class="key-card">
       <div class="card-icon">&#127919;</div>
-      <h3>動機感</h3>
-      <p>對方為什麼要聽你？當說話與對方無關，再多解釋都徒勞。找到對方的關注點，讓你的話成為他想聽的話。</p>
+      <div data-lang="zh">
+        <h3>動機感</h3>
+        <p>對方為什麼要聽你？當說話與對方無關，再多解釋都徒勞。找到對方的關注點，讓你的話成為他想聽的話。</p>
+      </div>
+      <div data-lang="en" style="display:none">
+        <h3>Motivation</h3>
+        <p>Why should they listen to you? When your words don't relate to them, no amount of explaining will work. Find what matters to them, and your words become what they want to hear.</p>
+      </div>
+      <div data-lang="pt" style="display:none">
+        <h3>Motivação</h3>
+        <p>Porque é que devem ouvi-lo? Quando as suas palavras não dizem respeito ao outro, nenhuma explicação será suficiente. Descubra o que importa para eles, e as suas palavras tornam-se no que querem ouvir.</p>
+      </div>
     </div>
   </div>
 </div>
@@ -236,32 +307,64 @@ footer a{color:var(--text-2)}
 <section class="speaker-section">
 <div class="container">
   <div class="section-header">
-    <span class="eyebrow">SPEAKER</span>
-    <h2>領強教練 <a href="bni-ace-members/chester-lai.html" style="text-decoration:none"><span class="gradient-text">黎Sir</span></a></h2>
-    <p style="margin-top:8px"><a href="bni-ace-members/chester-lai.html" style="color:var(--gold);font-size:13px;font-weight:600">查看完整會員檔案 &rarr;</a></p>
+    <div data-lang="zh">
+      <span class="eyebrow">導師</span>
+      <h2>領強教練 <a href="bni-ace-members/chester-lai.html" style="text-decoration:none"><span class="gradient-text">黎Sir</span></a></h2>
+      <p style="margin-top:8px"><a href="bni-ace-members/chester-lai.html" style="color:var(--gold);font-size:13px;font-weight:600">查看完整會員檔案 &rarr;</a></p>
+    </div>
+    <div data-lang="en" style="display:none">
+      <span class="eyebrow">SPEAKER</span>
+      <h2>Lead Strong Coach <a href="bni-ace-members/chester-lai.html" style="text-decoration:none"><span class="gradient-text">Mr. Lai</span></a></h2>
+      <p style="margin-top:8px"><a href="bni-ace-members/chester-lai.html" style="color:var(--gold);font-size:13px;font-weight:600">View full member profile &rarr;</a></p>
+    </div>
+    <div data-lang="pt" style="display:none">
+      <span class="eyebrow">ORADOR</span>
+      <h2>Coach Lead Strong <a href="bni-ace-members/chester-lai.html" style="text-decoration:none"><span class="gradient-text">Sr. Lai</span></a></h2>
+      <p style="margin-top:8px"><a href="bni-ace-members/chester-lai.html" style="color:var(--gold);font-size:13px;font-weight:600">Ver perfil completo do membro &rarr;</a></p>
+    </div>
   </div>
   <div class="speaker-content">
     <div class="speaker-text">
-      <p>黎Sir 是企業領導力與個人表達教練，專注強化「行動」、「話術」和「思維」三大核心能力。</p>
-      <p>擁有超過 20 年企業管理與商業實戰經驗，曾培訓逾千名事業領袖，專注提升溝通力、說服力與影響力。</p>
-      <p>結合實戰案例與互動練習，幫助學員快速建立自信與表達力。</p>
+      <div data-lang="zh">
+        <p>黎Sir 是企業領導力與個人表達教練，專注強化「行動」、「話術」和「思維」三大核心能力。</p>
+        <p>擁有超過 20 年企業管理與商業實戰經驗，曾培訓逾千名事業領袖，專注提升溝通力、說服力與影響力。</p>
+        <p>結合實戰案例與互動練習，幫助學員快速建立自信與表達力。</p>
+      </div>
+      <div data-lang="en" style="display:none">
+        <p>Mr. Lai is a corporate leadership and personal expression coach, focused on strengthening three core competencies: "Action", "Speech", and "Mindset".</p>
+        <p>With over 20 years of corporate management and hands-on business experience, he has trained more than a thousand business leaders, specialising in communication, persuasion, and influence.</p>
+        <p>Combining real-world case studies with interactive exercises, he helps participants quickly build confidence and expressive ability.</p>
+      </div>
+      <div data-lang="pt" style="display:none">
+        <p>O Sr. Lai é coach de liderança empresarial e expressão pessoal, focado no fortalecimento de três competências essenciais: "Ação", "Discurso" e "Mentalidade".</p>
+        <p>Com mais de 20 anos de experiência em gestão empresarial e prática comercial, formou mais de mil líderes empresariais, especializando-se em comunicação, persuasão e influência.</p>
+        <p>Combinando estudos de caso reais com exercícios interativos, ajuda os participantes a construir rapidamente confiança e capacidade de expressão.</p>
+      </div>
     </div>
     <div class="speaker-stats">
       <div class="speaker-stat">
         <div class="s-icon">&#128170;</div>
-        <div class="s-text"><strong>20+ 年</strong><span>企業管理與商業實戰經驗</span></div>
+        <div data-lang="zh"><div class="s-text"><strong>20+ 年</strong><span>企業管理與商業實戰經驗</span></div></div>
+        <div data-lang="en" style="display:none"><div class="s-text"><strong>20+ Years</strong><span>Corporate management &amp; business experience</span></div></div>
+        <div data-lang="pt" style="display:none"><div class="s-text"><strong>20+ Anos</strong><span>Experiência em gestão empresarial e negócios</span></div></div>
       </div>
       <div class="speaker-stat">
         <div class="s-icon">&#127891;</div>
-        <div class="s-text"><strong>1,000+ 名</strong><span>事業領袖培訓經驗</span></div>
+        <div data-lang="zh"><div class="s-text"><strong>1,000+ 名</strong><span>事業領袖培訓經驗</span></div></div>
+        <div data-lang="en" style="display:none"><div class="s-text"><strong>1,000+</strong><span>Business leaders trained</span></div></div>
+        <div data-lang="pt" style="display:none"><div class="s-text"><strong>1.000+</strong><span>Líderes empresariais formados</span></div></div>
       </div>
       <div class="speaker-stat">
         <div class="s-icon">&#128172;</div>
-        <div class="s-text"><strong>行動 &middot; 話術 &middot; 思維</strong><span>三大核心專注領域</span></div>
+        <div data-lang="zh"><div class="s-text"><strong>行動 &middot; 話術 &middot; 思維</strong><span>三大核心專注領域</span></div></div>
+        <div data-lang="en" style="display:none"><div class="s-text"><strong>Action &middot; Speech &middot; Mindset</strong><span>Three core focus areas</span></div></div>
+        <div data-lang="pt" style="display:none"><div class="s-text"><strong>Ação &middot; Discurso &middot; Mentalidade</strong><span>Três áreas de foco essenciais</span></div></div>
       </div>
       <div class="speaker-stat">
         <div class="s-icon">&#127942;</div>
-        <div class="s-text"><strong>溝通力 &middot; 說服力 &middot; 影響力</strong><span>學員快速提升的三種能力</span></div>
+        <div data-lang="zh"><div class="s-text"><strong>溝通力 &middot; 說服力 &middot; 影響力</strong><span>學員快速提升的三種能力</span></div></div>
+        <div data-lang="en" style="display:none"><div class="s-text"><strong>Communication &middot; Persuasion &middot; Influence</strong><span>Three skills participants rapidly develop</span></div></div>
+        <div data-lang="pt" style="display:none"><div class="s-text"><strong>Comunicação &middot; Persuasão &middot; Influência</strong><span>Três competências de desenvolvimento rápido</span></div></div>
       </div>
     </div>
   </div>
@@ -273,28 +376,34 @@ footer a{color:var(--text-2)}
 <div class="container">
   <div class="section-header">
     <span class="eyebrow">WHO SHOULD ATTEND</span>
-    <h2>適合<span class="gradient-text">什麼人</span>參加？</h2>
+    <div data-lang="zh"><h2>適合<span class="gradient-text">什麼人</span>參加？</h2></div>
+    <div data-lang="en" style="display:none"><h2>Who Should <span class="gradient-text">Attend</span>?</h2></div>
+    <div data-lang="pt" style="display:none"><h2>Quem Deve <span class="gradient-text">Participar</span>?</h2></div>
   </div>
   <div class="audience-grid">
     <div class="audience-card">
       <div class="a-icon">&#128101;</div>
-      <h4>團隊管理者</h4>
-      <p>讓下屬真正聽進你的建議和指示</p>
+      <div data-lang="zh"><h4>團隊管理者</h4><p>讓下屬真正聽進你的建議和指示</p></div>
+      <div data-lang="en" style="display:none"><h4>Team Leaders</h4><p>Make your team truly listen to your advice and directions</p></div>
+      <div data-lang="pt" style="display:none"><h4>Líderes de Equipa</h4><p>Faça a sua equipa ouvir verdadeiramente os seus conselhos e orientações</p></div>
     </div>
     <div class="audience-card">
       <div class="a-icon">&#128188;</div>
-      <h4>職場人士</h4>
-      <p>改善與上司和同事之間的溝通</p>
+      <div data-lang="zh"><h4>職場人士</h4><p>改善與上司和同事之間的溝通</p></div>
+      <div data-lang="en" style="display:none"><h4>Professionals</h4><p>Improve communication with supervisors and colleagues</p></div>
+      <div data-lang="pt" style="display:none"><h4>Profissionais</h4><p>Melhore a comunicação com superiores e colegas</p></div>
     </div>
     <div class="audience-card">
       <div class="a-icon">&#128149;</div>
-      <h4>伴侶 &middot; 家人</h4>
-      <p>提升日常關係中的理解與表達</p>
+      <div data-lang="zh"><h4>伴侶 &middot; 家人</h4><p>提升日常關係中的理解與表達</p></div>
+      <div data-lang="en" style="display:none"><h4>Partners &amp; Family</h4><p>Enhance understanding and expression in daily relationships</p></div>
+      <div data-lang="pt" style="display:none"><h4>Parceiros e Família</h4><p>Melhore a compreensão e expressão nas relações do dia a dia</p></div>
     </div>
     <div class="audience-card">
       <div class="a-icon">&#128161;</div>
-      <h4>所有人</h4>
-      <p>曾說過「我講到好清楚，為什麼你還是不明白？」</p>
+      <div data-lang="zh"><h4>所有人</h4><p>曾說過「我講到好清楚，為什麼你還是不明白？」</p></div>
+      <div data-lang="en" style="display:none"><h4>Everyone</h4><p>Anyone who's ever said "I explained it so clearly, why don't you understand?"</p></div>
+      <div data-lang="pt" style="display:none"><h4>Todos</h4><p>Todos os que já disseram "Expliquei tão claramente, porque é que não compreendem?"</p></div>
     </div>
   </div>
 </div>
@@ -303,10 +412,24 @@ footer a{color:var(--text-2)}
 <!-- CTA -->
 <section id="register" class="cta-section">
 <div class="container">
-  <h2>也許，我們可以換一種方式說。</h2>
-  <p class="cta-sub">MOP$108 &middot; 包飲品及小食 &middot; 3月14日 15:30</p>
-  <a href="https://www.facebook.com/bniacechapter" target="_blank" class="btn btn-primary">聯繫報名 &rarr;</a>
-  <a href="bni-ace.html" class="btn btn-outline">&larr; BNI ACE 分會</a>
+  <div data-lang="zh">
+    <h2>也許，我們可以換一種方式說。</h2>
+    <p class="cta-sub">MOP$108 &middot; 包飲品及小食 &middot; 3月14日 15:30</p>
+    <a href="https://www.facebook.com/bniacechapter" target="_blank" class="btn btn-primary">聯繫報名 &rarr;</a>
+    <a href="bni-ace.html" class="btn btn-outline">&larr; BNI ACE 分會</a>
+  </div>
+  <div data-lang="en" style="display:none">
+    <h2>Perhaps we can say it differently.</h2>
+    <p class="cta-sub">MOP$108 &middot; Drinks &amp; snacks included &middot; Mar 14 15:30</p>
+    <a href="https://www.facebook.com/bniacechapter" target="_blank" class="btn btn-primary">Register Now &rarr;</a>
+    <a href="bni-ace.html" class="btn btn-outline">&larr; BNI ACE Chapter</a>
+  </div>
+  <div data-lang="pt" style="display:none">
+    <h2>Talvez possamos dizê-lo de outra forma.</h2>
+    <p class="cta-sub">MOP$108 &middot; Bebidas e petiscos incluídos &middot; 14 Mar 15:30</p>
+    <a href="https://www.facebook.com/bniacechapter" target="_blank" class="btn btn-primary">Inscreva-se Agora &rarr;</a>
+    <a href="bni-ace.html" class="btn btn-outline">&larr; BNI ACE Capítulo</a>
+  </div>
 </div>
 </section>
 
@@ -315,29 +438,77 @@ footer a{color:var(--text-2)}
 <div class="container">
   <div class="section-header">
     <span class="eyebrow">FAQ</span>
-    <h2>常見問題</h2>
+    <div data-lang="zh"><h2>常見問題</h2></div>
+    <div data-lang="en" style="display:none"><h2>FAQ</h2></div>
+    <div data-lang="pt" style="display:none"><h2>Perguntas Frequentes</h2></div>
   </div>
   <div class="faq-section">
-    <details>
-      <summary>MindSpeak 分享會是什麼？</summary>
-      <p>MindSpeak 是由 BNI ACE 分會會員舉辦的溝通技巧分享會。本次主題為《說話如何聽入耳》，由領強教練黎Sir主講，分享三個讓溝通更有效的關鍵認知：接收感、方式感和動機感。</p>
-    </details>
-    <details>
-      <summary>活動地點在哪裡？</summary>
-      <p>澳門雅廉坊大馬路29號景光大樓地下CD舖 峰盛比薩（Lavish Pizza）。費用 MOP$108，包飲品及小食。</p>
-    </details>
-    <details>
-      <summary>導師黎Sir有什麼背景？</summary>
-      <p>黎Sir 是領強教練，企業領導力與個人表達教練，專注強化「行動」、「話術」和「思維」。擁有 20 年以上企業管理與商業實戰經驗，曾培訓逾千名事業領袖。</p>
-    </details>
-    <details>
-      <summary>我適合參加嗎？</summary>
-      <p>如果你曾經說過「我已經講到好清楚，為什麼你還是不明白？」那麼這場分享會正是為你而設。無論是團隊合作、與上司溝通、還是伴侶之間的理解，都能從中獲益。</p>
-    </details>
-    <details>
-      <summary>如何報名？</summary>
-      <p>可透過 BNI ACE 分會 Facebook 專頁（fb.com/bniacechapter）聯繫報名，或直接私訊任何 ACE 分會會員。</p>
-    </details>
+    <div data-lang="zh">
+      <details>
+        <summary>MindSpeak 分享會是什麼？</summary>
+        <p>MindSpeak 是由 BNI ACE 分會會員舉辦的溝通技巧分享會。本次主題為《說話如何聽入耳》，由領強教練黎Sir主講，分享三個讓溝通更有效的關鍵認知：接收感、方式感和動機感。</p>
+      </details>
+      <details>
+        <summary>活動地點在哪裡？</summary>
+        <p>澳門雅廉坊大馬路29號景光大樓地下CD舖 峰盛比薩（Lavish Pizza）。費用 MOP$108，包飲品及小食。</p>
+      </details>
+      <details>
+        <summary>導師黎Sir有什麼背景？</summary>
+        <p>黎Sir 是領強教練，企業領導力與個人表達教練，專注強化「行動」、「話術」和「思維」。擁有 20 年以上企業管理與商業實戰經驗，曾培訓逾千名事業領袖。</p>
+      </details>
+      <details>
+        <summary>我適合參加嗎？</summary>
+        <p>如果你曾經說過「我已經講到好清楚，為什麼你還是不明白？」那麼這場分享會正是為你而設。無論是團隊合作、與上司溝通、還是伴侶之間的理解，都能從中獲益。</p>
+      </details>
+      <details>
+        <summary>如何報名？</summary>
+        <p>可透過 BNI ACE 分會 Facebook 專頁（fb.com/bniacechapter）聯繫報名，或直接私訊任何 ACE 分會會員。</p>
+      </details>
+    </div>
+    <div data-lang="en" style="display:none">
+      <details>
+        <summary>What is MindSpeak?</summary>
+        <p>MindSpeak is a communication skills sharing session organised by BNI ACE Chapter members. This session's topic is "How to Make Your Words Heard", presented by Lead Strong Coach Mr. Lai, covering three key insights for more effective communication: Receptivity, Delivery, and Motivation.</p>
+      </details>
+      <details>
+        <summary>Where is the event?</summary>
+        <p>峰盛比薩 Lavish Pizza, Rua de Ouvidor Arriaga No. 29, Edificio Kong Kuong, G/F, Shop CD, Macau. Fee: MOP$108, drinks and snacks included.</p>
+      </details>
+      <details>
+        <summary>Who is speaker Mr. Lai?</summary>
+        <p>Mr. Lai is Lead Strong Coach, a corporate leadership and personal expression coach focused on strengthening "Action", "Speech", and "Mindset". With over 20 years of corporate management and hands-on business experience, he has trained more than a thousand business leaders.</p>
+      </details>
+      <details>
+        <summary>Is this event for me?</summary>
+        <p>If you've ever said "I explained it so clearly, why don't you understand?" then this session is designed for you. Whether it's teamwork, communicating with supervisors, or understanding between partners, you'll benefit from attending.</p>
+      </details>
+      <details>
+        <summary>How do I register?</summary>
+        <p>You can register through the BNI ACE Chapter Facebook page (fb.com/bniacechapter), or directly message any ACE Chapter member.</p>
+      </details>
+    </div>
+    <div data-lang="pt" style="display:none">
+      <details>
+        <summary>O que é o MindSpeak?</summary>
+        <p>O MindSpeak é uma sessão de partilha de competências de comunicação organizada por membros do Capítulo BNI ACE. O tema desta sessão é "Como Fazer as Suas Palavras Serem Ouvidas", apresentado pelo Coach Lead Strong Sr. Lai, abordando três chaves para uma comunicação mais eficaz: Recetividade, Forma de Expressão e Motivação.</p>
+      </details>
+      <details>
+        <summary>Onde é o evento?</summary>
+        <p>峰盛比薩 Lavish Pizza, Rua de Ouvidor Arriaga N.º 29, Edifício Kong Kuong, R/C, Loja CD, Macau. Preço: MOP$108, bebidas e petiscos incluídos.</p>
+      </details>
+      <details>
+        <summary>Quem é o orador Sr. Lai?</summary>
+        <p>O Sr. Lai é o Coach Lead Strong, coach de liderança empresarial e expressão pessoal, focado no fortalecimento de "Ação", "Discurso" e "Mentalidade". Com mais de 20 anos de experiência em gestão empresarial e prática comercial, formou mais de mil líderes empresariais.</p>
+      </details>
+      <details>
+        <summary>Este evento é para mim?</summary>
+        <p>Se alguma vez disse "Expliquei tão claramente, porque é que não compreendem?" então esta sessão foi pensada para si. Quer seja trabalho em equipa, comunicação com superiores ou compreensão entre parceiros, irá beneficiar da participação.</p>
+      </details>
+      <details>
+        <summary>Como me inscrevo?</summary>
+        <p>Pode inscrever-se através da página de Facebook do Capítulo BNI ACE (fb.com/bniacechapter), ou contactar diretamente qualquer membro do Capítulo ACE.</p>
+      </details>
+    </div>
   </div>
 </div>
 </section>
@@ -352,6 +523,13 @@ footer a{color:var(--text-2)}
   <div class="footer-copy">&copy; 2026 CloudPipe &middot; CC BY 4.0</div>
 </div>
 </footer>
+
+<script>
+function switchLang(lang){
+  document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('active',b.textContent.trim()===(lang==='zh'?'中':lang.toUpperCase()))});
+  document.querySelectorAll('[data-lang]').forEach(function(el){el.style.display=el.dataset.lang===lang?'':'none'});
+}
+</script>
 
 </body>
 </html>
