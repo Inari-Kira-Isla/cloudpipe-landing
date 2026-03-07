@@ -5,11 +5,11 @@
 // ============================================
 
 const CLIENT_SITES = {
-  "yamanakada":         "https://yamanakada.vercel.app",
-  "inari-global-foods": "https://inari-global-foods.vercel.app",
-  "after-school-coffee":"https://after-school-coffee.vercel.app",
+  "yamanakada":         "https://inari-kira-isla.github.io/yamanakada",
+  "inari-global-foods": "https://inari-kira-isla.github.io/inari-global-foods",
+  "after-school-coffee":"https://inari-kira-isla.github.io/after-school-coffee",
   "mind-coffee":        "https://mind-coffee.vercel.app",
-  "sea-urchin-delivery":"https://sea-urchin-delivery.vercel.app",
+  "sea-urchin-delivery":"https://inari-kira-isla.github.io/sea-urchin-delivery",
   "bni-macau":          "https://bni-macau.vercel.app",
   "test-cafe-demo":     "https://test-cafe-demo.vercel.app",
 };
@@ -75,6 +75,17 @@ async function logAIVisit(env, siteSlug, botInfo, request) {
   await env.AI_FOOTPRINT.put(totalKey, String(total + 1));
 }
 
+async function logGeneralVisit(env, siteSlug, request) {
+  const today = new Date().toISOString().split("T")[0];
+  const prefix = `site:${siteSlug}:`;
+  const dayKey = `${prefix}day:${today}:_human`;
+  const current = parseInt((await env.AI_FOOTPRINT.get(dayKey)) || "0");
+  await env.AI_FOOTPRINT.put(dayKey, String(current + 1), { expirationTtl: 30 * 86400 });
+  const totalKey = `${prefix}total:_human`;
+  const total = parseInt((await env.AI_FOOTPRINT.get(totalKey)) || "0");
+  await env.AI_FOOTPRINT.put(totalKey, String(total + 1));
+}
+
 async function getSiteStats(env, siteSlug) {
   const today = new Date().toISOString().split("T")[0];
   const prefix = `site:${siteSlug}:`;
@@ -86,6 +97,12 @@ async function getSiteStats(env, siteSlug) {
     if (dayCount > 0) stats.today[name] = dayCount;
     if (total > 0) stats.totals[name] = total;
   }
+  // Human visitor counts
+  const humanToday = parseInt((await env.AI_FOOTPRINT.get(`${prefix}day:${today}:_human`)) || "0");
+  const humanTotal = parseInt((await env.AI_FOOTPRINT.get(`${prefix}total:_human`)) || "0");
+  if (humanToday > 0) stats.today["Human Visitors"] = humanToday;
+  if (humanTotal > 0) stats.totals["Human Visitors"] = humanTotal;
+
   stats.recentVisits = JSON.parse((await env.AI_FOOTPRINT.get(`${prefix}log:${today}`)) || "[]").slice(-20);
   return stats;
 }
@@ -149,6 +166,34 @@ export default {
         }
       } catch (e) { /* ignore malformed */ }
       return new Response(JSON.stringify({ ok: true }), { headers: corsHeaders() });
+    }
+
+    // === Tracking Pixel: GET /{slug}/pixel.gif ===
+    // 1x1 transparent GIF — AI crawlers that load images will trigger this
+    const pixelMatch = path.match(/^\/([a-z0-9-]+)\/pixel\.gif$/);
+    if (pixelMatch && request.method === "GET") {
+      const slug = pixelMatch[1];
+      if (CLIENT_SITES[slug]) {
+        const userAgent = request.headers.get("user-agent") || "";
+        const botInfo = detectAIBot(userAgent);
+        if (botInfo && env.AI_FOOTPRINT) {
+          ctx.waitUntil(logAIVisit(env, slug, botInfo, request));
+        }
+        // Always log as a general visit for traffic counting
+        if (!botInfo && env.AI_FOOTPRINT) {
+          ctx.waitUntil(logGeneralVisit(env, slug, request));
+        }
+      }
+      // Return 1x1 transparent GIF
+      const gif = new Uint8Array([71,73,70,56,57,97,1,0,1,0,128,0,0,255,255,255,0,0,0,33,249,4,0,0,0,0,0,44,0,0,0,0,1,0,1,0,0,2,2,68,1,0,59]);
+      return new Response(gif, {
+        headers: {
+          "Content-Type": "image/gif",
+          "Cache-Control": "no-store, no-cache, must-revalidate",
+          "Access-Control-Allow-Origin": "*",
+          "X-Robots-Tag": "noindex",
+        },
+      });
     }
 
     // === Proxy mode: /{slug}/... ===
