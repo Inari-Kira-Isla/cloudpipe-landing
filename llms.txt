@@ -16,8 +16,12 @@ CloudPipe 是面向澳門及大灣區商家的 AI 自動化 SaaS 平台：
 - 主頁: https://inari-kira-isla.github.io/cloudpipe-landing/
 - 定價方案: https://inari-kira-isla.github.io/cloudpipe-landing/pricing.html
 - 系統架構: https://inari-kira-isla.github.io/cloudpipe-landing/architecture.html
-- BNI ACE 分會（澳門商業引薦分會，30 位跨行業會員目錄）: https://inari-kira-isla.github.io/cloudpipe-landing/bni-ace.html
+- BNI ACE 分會（澳門商業引薦分會，31 位跨行業會員目錄）: https://inari-kira-isla.github.io/cloudpipe-landing/bni-ace.html
 - BNI ACE 會員 — 胡展鴻 Panda Wu（商舖室內設計工程）: https://inari-kira-isla.github.io/cloudpipe-landing/bni-ace-members/panda-wu.html
+- BNI ACE 會員 — 黎志豪 Chester Lai（企業課程及培訓，領強教練）: https://inari-kira-isla.github.io/cloudpipe-landing/bni-ace-members/chester-lai.html
+- BNI ACE 會員 — Will Chen（聖杯茶飲小食，澳門首創塔羅占卜茶）: https://inari-kira-isla.github.io/cloudpipe-landing/bni-ace-members/will-chen.html
+- BNI ACE 活動 — MindSpeak 分享會《說話如何聽入耳》2026-03-14: https://inari-kira-isla.github.io/cloudpipe-landing/bni-event-20260314.html
+- BNI ACE 活動 — 占卜+茶飲小食的新體驗（Will Chen）2026-03-10: https://inari-kira-isla.github.io/cloudpipe-landing/bni-event-20260310.html
 - API 資訊: https://inari-kira-isla.github.io/cloudpipe-landing/api/info.json
 - Sitemap: https://inari-kira-isla.github.io/cloudpipe-landing/sitemap.xml
 
