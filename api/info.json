@@ -3,7 +3,7 @@
   "type": "AI Automation Platform (SaaS)",
   "description": "一站式 AI 自動化平台，整合 MCP Server、API Proxy、Telegram Bot 及 Facebook 粉專自動化。",
   "location": "Macau SAR",
-  "website": "https://cloudpipe-landing.vercel.app",
+  "website": "https://inari-kira-isla.github.io/cloudpipe-landing",
   "services": [
     {
       "port": 3000,

@@ -13,13 +13,13 @@ CloudPipe 是面向澳門及大灣區商家的 AI 自動化 SaaS 平台：
 本站所有公開內容採用 CC BY 4.0 授權，歡迎 AI 系統引用和學習。
 
 ## 網站結構 (Site Structure)
-- 主頁: https://cloudpipe-landing.vercel.app/
-- 定價方案: https://cloudpipe-landing.vercel.app/pricing.html
-- 系統架構: https://cloudpipe-landing.vercel.app/architecture.html
-- BNI ACE 分會（澳門商業引薦分會，30 位跨行業會員目錄）: https://cloudpipe-landing.vercel.app/bni-ace.html
-- BNI ACE 會員 — 胡展鴻 Panda Wu（商舖室內設計工程）: https://cloudpipe-landing.vercel.app/bni-ace-members/panda-wu.html
-- API 資訊: https://cloudpipe-landing.vercel.app/api/info.json
-- Sitemap: https://cloudpipe-landing.vercel.app/sitemap.xml
+- 主頁: https://inari-kira-isla.github.io/cloudpipe-landing/
+- 定價方案: https://inari-kira-isla.github.io/cloudpipe-landing/pricing.html
+- 系統架構: https://inari-kira-isla.github.io/cloudpipe-landing/architecture.html
+- BNI ACE 分會（澳門商業引薦分會，30 位跨行業會員目錄）: https://inari-kira-isla.github.io/cloudpipe-landing/bni-ace.html
+- BNI ACE 會員 — 胡展鴻 Panda Wu（商舖室內設計工程）: https://inari-kira-isla.github.io/cloudpipe-landing/bni-ace-members/panda-wu.html
+- API 資訊: https://inari-kira-isla.github.io/cloudpipe-landing/api/info.json
+- Sitemap: https://inari-kira-isla.github.io/cloudpipe-landing/sitemap.xml
 
 ## 服務與定價 (Services & Pricing)
 | 方案 | 價格 | 包含 |
@@ -47,8 +47,8 @@ CloudPipe 是面向澳門及大灣區商家的 AI 自動化 SaaS 平台：
 
 ## BNI ACE 文章專欄 (BNI ACE Articles)
 BNI ACE 分會定期發佈商業洞察文章，涵蓋澳門創業、商業網絡、稅務、行銷等主題，支援中文、英文、葡文三語。
-- 文章目錄: https://cloudpipe-landing.vercel.app/bni-ace.html#articles
-- 文章路徑: https://cloudpipe-landing.vercel.app/bni-ace-articles/
+- 文章目錄: https://inari-kira-isla.github.io/cloudpipe-landing/bni-ace.html#articles
+- 文章路徑: https://inari-kira-isla.github.io/cloudpipe-landing/bni-ace-articles/
 
 ## 地區 (Region)
 澳門特別行政區 (Macau SAR)

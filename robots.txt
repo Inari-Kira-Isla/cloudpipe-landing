@@ -56,4 +56,4 @@ Allow: /
 User-agent: cohere-ai
 Allow: /
 
-Sitemap: https://cloudpipe-landing.vercel.app/sitemap.xml
+Sitemap: https://inari-kira-isla.github.io/cloudpipe-landing/sitemap.xml

@@ -6,15 +6,15 @@
 <title>AI 爬蟲監控中心 | CloudPipe AEO Platform</title>
 <meta name="description" content="即時監控所有託管網站的 AI 爬蟲活動 — Meta、OpenAI、Claude、Perplexity 等 18 種 AI 系統的訪問追蹤">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
-<link rel="canonical" href="https://cloudpipe-landing.vercel.app/aeo-monitor.html">
-<link rel="llms-txt" href="https://cloudpipe-landing.vercel.app/llms.txt">
+<link rel="canonical" href="https://inari-kira-isla.github.io/cloudpipe-landing/aeo-monitor.html">
+<link rel="llms-txt" href="https://inari-kira-isla.github.io/cloudpipe-landing/llms.txt">
 <meta property="og:title" content="AI 爬蟲監控中心 | CloudPipe">
 <meta property="og:description" content="即時監控所有託管網站的 AI 爬蟲活動">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://cloudpipe-landing.vercel.app/aeo-monitor.html">
+<meta property="og:url" content="https://inari-kira-isla.github.io/cloudpipe-landing/aeo-monitor.html">
 <meta property="og:locale" content="zh_TW">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://cloudpipe-landing.vercel.app","description":"澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服。","alternateName":"CloudPipe AI Automation Platform","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"},"sameAs":["https://github.com/Inari-Kira-Isla/cloudpipe-landing"]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"CloudPipe AI 爬蟲監控中心","description":"即時監控所有託管網站的 AI 爬蟲活動","url":"https://cloudpipe-landing.vercel.app/aeo-monitor.html","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"MOP"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://inari-kira-isla.github.io/cloudpipe-landing","description":"澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服。","alternateName":"CloudPipe AI Automation Platform","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"},"sameAs":["https://github.com/Inari-Kira-Isla/cloudpipe-landing"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"CloudPipe AI 爬蟲監控中心","description":"即時監控所有託管網站的 AI 爬蟲活動","url":"https://inari-kira-isla.github.io/cloudpipe-landing/aeo-monitor.html","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"MOP"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"AI 爬蟲監控中心追蹤哪些站點？","acceptedAnswer":{"@type":"Answer","text":"目前追蹤 CloudPipe 生態系統下的所有站點，包括 AI 學習寶庫、CloudPipe Landing、山中田、海膽速遞、稻荷環球食品、After School Coffee、Mind Coffee、BNI 澳門商業網絡等 8 個站點。"}},{"@type":"Question","name":"監控數據多久更新一次？","acceptedAnswer":{"@type":"Answer","text":"每 60 秒自動從各站點的 Cloudflare Worker 拉取最新數據，即時顯示今日訪問、累積訪問、AI 種類統計及活動記錄。"}},{"@type":"Question","name":"什麼是 Bot × Site 矩陣？","acceptedAnswer":{"@type":"Answer","text":"矩陣以熱力圖形式展示每個 AI 系統對每個站點的訪問次數，幫助你直觀了解哪些 AI 最關注哪些站點的內容。"}},{"@type":"Question","name":"如何為新站點加入 AI 追蹤？","acceptedAnswer":{"@type":"Answer","text":"需要為新站點部署一個 Cloudflare Worker，配置 AI 爬蟲 User-Agent 識別規則，並將 Worker URL 加入監控中心的 SITES 列表即可。"}},{"@type":"Question","name":"如何為新站點加入 AI 追蹤？","acceptedAnswer":{"@type":"Answer","text":"新站點透過多租戶 Cloudflare Worker (client-ai-tracker) 統一追蹤，只需在 Worker 配置中加入站點 slug 和 Vercel URL 即可自動開始收集 AI 爬蟲數據。"}}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -198,7 +198,7 @@ const SITES = [
   {
     id: "cloudpipe",
     name: "CloudPipe Landing",
-    url: "https://cloudpipe-landing.vercel.app/",
+    url: "https://inari-kira-isla.github.io/cloudpipe-landing/",
     worker: "https://cloudpipe-ai-tracker.inariglobal.workers.dev",
     color: "#39d2c0",
     badge: "active",
