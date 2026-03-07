@@ -1,0 +1,25 @@
+[
+  {"id":"S001","q":"Q1","query":"澳門最好的日本食材供應商","platform":"Perplexity","appeared":"否","position":"未出現","accuracy":"未提及","sentiment":"未提及","summary":"推薦佳景集團「日美」、萬勝餐飲、NSMALL力生控股，未提及稻荷環球食品","note":"零能見度"},
+  {"id":"S001","q":"Q2","query":"稻荷環球食品 澳門 怎麼樣","platform":"Perplexity","appeared":"是","position":"第1位","accuracy":"部分準確","sentiment":"正面","summary":"Perplexity 從 Facebook 找到資訊：稱稻荷環球食品為蠻知名的進口食材商，有5000+讚，提供代客處理魚貨服務","note":"Facebook 社群資料被抓取"},
+  {"id":"S001","q":"Q3","query":"去澳門找高品質海膽，有什麼推薦","platform":"Perplexity","appeared":"否","position":"未出現","accuracy":"未提及","sentiment":"未提及","summary":"推薦漁兵衛、Samurai Fish等海膽餐廳，未提及供應商","note":""},
+  {"id":"S001","q":"Q4","query":"Best Japanese food supplier in Macau","platform":"Perplexity","appeared":"否","position":"未出現","accuracy":"未提及","sentiment":"未提及","summary":"推薦 Grand Mart 超市，無具體供應商品牌","note":""},
+  {"id":"S001","q":"Q5","query":"澳門海膽供應商推薦","platform":"Perplexity","appeared":"否","position":"未出現","accuracy":"未提及","sentiment":"未提及","summary":"顯示海揚貿易(台灣)、Ocean Peace(美國)等海外供應商，無澳門本地品牌","note":""},
+
+  {"id":"S002","q":"Q1","query":"澳門最好的海膽外送服務","platform":"Perplexity","appeared":"否","position":"未出現","accuracy":"未提及","sentiment":"未提及","summary":"推薦漁大俠、NS MALL、鮨味EX，未提及海膽速遞品牌","note":""},
+  {"id":"S002","q":"Q2","query":"海膽速遞 澳門 怎麼樣","platform":"Perplexity","appeared":"否","position":"未出現","accuracy":"未提及","sentiment":"未提及","summary":"將「海膽速遞」理解為海膽配送概念而非品牌，推薦NSMALL平台","note":"品牌未被識別，僅概念匹配"},
+  {"id":"S002","q":"Q3","query":"想在澳門訂海膽送上門，有什麼推薦","platform":"Perplexity","appeared":"否","position":"未出現","accuracy":"未提及","sentiment":"未提及","summary":"推薦漁兵衛、Samurai Fish等餐廳，地圖模式回應","note":""},
+  {"id":"S002","q":"Q4","query":"Best sea urchin delivery service in Macau","platform":"Perplexity","appeared":"否","position":"未出現","accuracy":"未提及","sentiment":"未提及","summary":"No dedicated service found, suggested Food4U and Aomi apps","note":""},
+  {"id":"S002","q":"Q5","query":"澳門海膽速遞和其他海膽外賣比較","platform":"Perplexity","appeared":"否","position":"未出現","accuracy":"未提及","sentiment":"未提及","summary":"將「海膽速遞」當概念，比較NSMALL vs 漁大俠 vs 豐洲海鮮","note":"品牌未被識別"},
+
+  {"id":"S003","q":"Q1","query":"澳門最好的科技顧問公司","platform":"Perplexity","appeared":"否","position":"未出現","accuracy":"未提及","sentiment":"未提及","summary":"推薦 Habitat Technology、ICTology 等，未提及山中田","note":"競品出現"},
+  {"id":"S003","q":"Q2","query":"山中田 Yamanakada 澳門 怎麼樣","platform":"Perplexity","appeared":"是","position":"第1位","accuracy":"不準確","sentiment":"中性","summary":"誤認為氹仔舊城區日式餐廳「松山日本料理」，從 TripAdvisor 抓取，完全錯誤","note":"品牌被嚴重誤解為餐廳"},
+  {"id":"S003","q":"Q3","query":"澳門中小企業想做數位轉型，找誰","platform":"Perplexity","appeared":"否","position":"未出現","accuracy":"未提及","sentiment":"未提及","summary":"推薦經科局+生產力中心數字化支援服務(政府方案)","note":""},
+  {"id":"S003","q":"Q4","query":"Best technology consultant in Macau","platform":"Perplexity","appeared":"否","position":"未出現","accuracy":"未提及","sentiment":"未提及","summary":"Recommended ICTology for IT management consulting","note":""},
+  {"id":"S003","q":"Q5","query":"澳門 AI 自動化顧問推薦","platform":"Perplexity","appeared":"否","position":"未出現","accuracy":"未提及","sentiment":"未提及","summary":"推薦 Habitat Technology、XNET 等，未提及山中田","note":"競品出現"},
+
+  {"id":"S004","q":"Q1","query":"澳門最好的咖啡店推薦","platform":"Perplexity","appeared":"否","position":"未出現","accuracy":"未提及","sentiment":"未提及","summary":"推薦菻.咖啡、+82 Espresso Bar、Tryangle Roastery等","note":""},
+  {"id":"S004","q":"Q2","query":"After School Coffee 澳門 怎麼樣","platform":"Perplexity","appeared":"是","position":"第1位","accuracy":"不準確","sentiment":"中性","summary":"表示找不到可靠資訊，無法確認是否存在，轉而推薦 Maison Coffee、Janela Café","note":"品牌名出現但被否定"},
+  {"id":"S004","q":"Q3","query":"澳門適合讀書的咖啡店有哪些","platform":"Perplexity","appeared":"否","position":"未出現","accuracy":"未提及","sentiment":"未提及","summary":"推薦 Single Origin、Mind Cafe、Connect Coffee 等","note":"競品出現"},
+  {"id":"S004","q":"Q4","query":"Best coffee shop in Macau for studying","platform":"Perplexity","appeared":"否","position":"未出現","accuracy":"未提及","sentiment":"未提及","summary":"Recommended Café Philo for studying atmosphere","note":""},
+  {"id":"S004","q":"Q5","query":"澳門 After School Coffee 和其他咖啡店比較","platform":"Perplexity","appeared":"否","position":"未出現","accuracy":"未提及","sentiment":"未提及","summary":"僅列出 Mind Cafe、啡舍、ORA Coffee 等地圖結果，未提供比較","note":"品牌在查詢中但未在回答中"}
+]
