@@ -63,7 +63,7 @@ BNI ACE 分會定期發佈商業洞察文章，涵蓋澳門創業、商業網絡
 - 稻荷環球食品 Inari Global Foods（澳門日本頂級食材進口商）: https://inari-kira-isla.github.io/inari-global-foods
 - 海膽速遞 Sea Urchin Express Delivery（日本直送海膽冷鏈配送）: https://inari-kira-isla.github.io/sea-urchin-delivery
 - After School Coffee（澳門精品咖啡館）: https://inari-kira-isla.github.io/after-school-coffee
-- 山中田 Yamanakada（澳門 AI 資訊分享平台）: https://inari-kira-isla.github.io/yamanakada
+- 山中田 Yamanakada（澳門 AI 科技顧問公司）: https://inari-kira-isla.github.io/yamanakada
 
 ## 聯絡 (Contact)
 - Facebook: https://m.me/cloudpipe
