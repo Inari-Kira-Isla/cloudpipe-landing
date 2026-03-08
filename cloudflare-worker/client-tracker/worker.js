@@ -55,6 +55,70 @@ function detectAIBot(userAgent) {
   return null;
 }
 
+// Bot name → owner mapping for Supabase
+const BOT_OWNERS = {
+  "GPTBot": "OpenAI", "ChatGPT-User": "OpenAI", "OAI-SearchBot": "OpenAI",
+  "anthropic-ai": "Anthropic", "ClaudeBot": "Anthropic", "claude-web": "Anthropic",
+  "PerplexityBot": "Perplexity", "Google-Extended": "Google", "Googlebot": "Google",
+  "Bingbot": "Microsoft", "CCBot": "Common Crawl", "Bytespider": "ByteDance",
+  "YouBot": "You.com", "cohere-ai": "Cohere", "Applebot": "Apple",
+  "meta-externalagent": "Meta", "FacebookBot": "Meta", "ia_archiver": "Internet Archive",
+};
+
+async function hashIP(ip) {
+  const data = new TextEncoder().encode(ip + "cloudpipe-salt-2026");
+  const hash = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 16);
+}
+
+async function writeToSupabase(env, siteSlug, botInfo, request) {
+  if (!env.SUPABASE_URL || !env.SUPABASE_KEY) return;
+  try {
+    const url = new URL(request.url);
+    const path = url.pathname.replace(`/${siteSlug}`, "") || "/";
+    const referer = request.headers.get("referer") || null;
+    const ip = request.headers.get("cf-connecting-ip") || request.headers.get("x-forwarded-for") || "0.0.0.0";
+    const ipHash = await hashIP(ip);
+    const today = new Date().toISOString().split("T")[0];
+
+    // Detect if this is a cross-site visit from the spider web
+    let fromSite = null;
+    if (referer) {
+      for (const slug of Object.keys(CLIENT_SITES)) {
+        if (referer.includes(slug) || referer.includes(CLIENT_SITES[slug])) {
+          fromSite = slug;
+          break;
+        }
+      }
+    }
+
+    const row = {
+      bot_name: botInfo.pattern,
+      bot_owner: BOT_OWNERS[botInfo.pattern] || "Unknown",
+      path: path,
+      referer: referer,
+      ip_hash: ipHash,
+      session_id: `${ipHash}-${botInfo.pattern}-${today}`,
+      ua_raw: (request.headers.get("user-agent") || "").substring(0, 500),
+      site: siteSlug,
+      page_type: fromSite ? "spider-web" : (path === "/" ? "home" : "page"),
+      industry: fromSite || null,
+      category: null,
+    };
+
+    await fetch(`${env.SUPABASE_URL}/rest/v1/crawler_visits`, {
+      method: "POST",
+      headers: {
+        "apikey": env.SUPABASE_KEY,
+        "Authorization": `Bearer ${env.SUPABASE_KEY}`,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal",
+      },
+      body: JSON.stringify(row),
+    });
+  } catch (e) { /* silently ignore */ }
+}
+
 async function logAIVisit(env, siteSlug, botInfo, request) {
   const today = new Date().toISOString().split("T")[0];
   const url = new URL(request.url);
@@ -82,6 +146,9 @@ async function logAIVisit(env, siteSlug, botInfo, request) {
   const totalKey = `${prefix}total:${botInfo.pattern}`;
   const total = parseInt((await env.AI_FOOTPRINT.get(totalKey)) || "0");
   await env.AI_FOOTPRINT.put(totalKey, String(total + 1));
+
+  // 方案 A: Also write to Supabase for cross-site tracking
+  writeToSupabase(env, siteSlug, botInfo, request);
 }
 
 async function logGeneralVisit(env, siteSlug, request) {
