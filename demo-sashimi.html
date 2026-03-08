@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>刺身と雲丹 — Sashimi & Uni</title>
+<meta name="description" content="A visual journey through the art of Japanese sashimi and the golden treasure of the sea — uni.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,500;0,700;1,300;1,500&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --sumi: #1a1714;
+  --sumi-light: #2a2520;
+  --kinshu: #c6a355;
+  --kinshu-dim: #9a7d3a;
+  --beni: #8b2500;
+  --beni-soft: #a63d20;
+  --shiro: #f5f0e8;
+  --shiro-warm: #ebe4d6;
+  --stone: #7a7268;
+  --stone-light: #9e958a;
+  --ink: #3d3830;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--kinshu-dim) var(--sumi);
+}
+
+body {
+  font-family: 'Cormorant Garamond', 'Noto Serif JP', serif;
+  background: var(--sumi);
+  color: var(--shiro);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Grain overlay ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── Navigation ── */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.5rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.5s, backdrop-filter 0.5s;
+}
+
+nav.scrolled {
+  background: rgba(26, 23, 20, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.nav-brand {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 200;
+  font-size: 1.1rem;
+  letter-spacing: 0.3em;
+  color: var(--kinshu);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--shiro-warm);
+  text-decoration: none;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--kinshu);
+  transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.nav-links a:hover { color: var(--kinshu); }
+.nav-links a:hover::after { width: 100%; }
+
+/* ── Hero ── */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.35) saturate(0.8);
+  transform: scale(1.08);
+  animation: heroZoom 20s ease-out forwards;
+}
+
+@keyframes heroZoom {
+  to { transform: scale(1); }
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(26,23,20,0.4) 0%, transparent 30%, transparent 60%, rgba(26,23,20,0.9) 100%),
+    linear-gradient(90deg, rgba(26,23,20,0.3) 0%, transparent 50%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  opacity: 0;
+  animation: fadeUp 1.5s 0.5s ease-out forwards;
+}
+
+.hero-jp {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 200;
+  font-size: clamp(3rem, 8vw, 7rem);
+  letter-spacing: 0.25em;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+}
+
+.hero-en {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(1rem, 2.5vw, 1.6rem);
+  letter-spacing: 0.4em;
+  color: var(--kinshu);
+  text-transform: uppercase;
+}
+
+.hero-line {
+  width: 60px;
+  height: 1px;
+  background: var(--kinshu);
+  margin: 2rem auto;
+  opacity: 0;
+  animation: lineGrow 1s 1.5s ease-out forwards;
+}
+
+.hero-sub {
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  color: var(--stone-light);
+  font-weight: 300;
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  animation: fadeUp 1s 2s ease-out forwards;
+}
+
+.scroll-hint span {
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--kinshu), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 1; transform: scaleY(1); }
+  50% { opacity: 0.3; transform: scaleY(0.6); }
+}
+
+/* ── Section styling ── */
+section {
+  position: relative;
+  padding: 8rem 3rem;
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.section-label::before {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--kinshu);
+}
+
+.section-label span {
+  font-size: 0.7rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--kinshu);
+}
+
+.section-title-jp {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.section-title-en {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  color: var(--stone-light);
+  letter-spacing: 0.15em;
+  margin-bottom: 3rem;
+}
+
+/* ── About section ── */
+.about {
+  background: var(--sumi);
+}
+
+.about-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+}
+
+.about-text p {
+  font-size: 1.05rem;
+  line-height: 2;
+  color: var(--shiro-warm);
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+}
+
+.about-text p:first-of-type::first-letter {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 3.5rem;
+  float: left;
+  line-height: 1;
+  margin-right: 0.5rem;
+  margin-top: 0.2rem;
+  color: var(--kinshu);
+  font-weight: 900;
+}
+
+.about-img-wrap {
+  position: relative;
+}
+
+.about-img-wrap::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--kinshu-dim);
+  opacity: 0.4;
+}
+
+.about-img-wrap img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.85);
+  transition: filter 0.6s;
+}
+
+.about-img-wrap:hover img {
+  filter: saturate(1);
+}
+
+/* ── Vertical kanji decoration ── */
+.kanji-deco {
+  position: absolute;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 900;
+  font-size: 8rem;
+  writing-mode: vertical-rl;
+  color: var(--kinshu);
+  opacity: 0.04;
+  pointer-events: none;
+  line-height: 1;
+}
+
+/* ── Gallery section ── */
+.gallery {
+  background: var(--sumi-light);
+  overflow: hidden;
+}
+
+.gallery-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  gap: 1.5rem;
+}
+
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.gallery-item:nth-child(1) {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.6s;
+  filter: saturate(0.8) brightness(0.9);
+}
+
+.gallery-item:hover img {
+  transform: scale(1.06);
+  filter: saturate(1) brightness(1);
+}
+
+.gallery-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(26,23,20,0.6) 100%);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.gallery-item:hover::after { opacity: 1; }
+
+.gallery-item .caption {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 2;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  color: var(--shiro);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s 0.1s, transform 0.4s 0.1s;
+}
+
+.gallery-item:hover .caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gallery-item:nth-child(n+2) { height: 280px; }
+.gallery-item:nth-child(1) { height: 576px; }
+
+/* ── Uni Spotlight ── */
+.uni-section {
+  background: var(--sumi);
+  position: relative;
+  overflow: hidden;
+}
+
+.uni-section .kanji-deco {
+  right: 5%;
+  top: 10%;
+  font-size: 12rem;
+}
+
+.uni-intro {
+  max-width: 700px;
+  margin: 0 auto 5rem;
+  text-align: center;
+}
+
+.uni-intro p {
+  font-size: 1.1rem;
+  line-height: 2;
+  color: var(--shiro-warm);
+  font-weight: 300;
+}
+
+.uni-grid {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 320px 320px;
+  gap: 1.5rem;
+}
+
+.uni-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.uni-card:nth-child(1) { grid-column: 1 / 6; }
+.uni-card:nth-child(2) { grid-column: 6 / 9; }
+.uni-card:nth-child(3) { grid-column: 9 / 13; }
+.uni-card:nth-child(4) { grid-column: 1 / 5; }
+.uni-card:nth-child(5) { grid-column: 5 / 13; }
+
+.uni-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.6s;
+  filter: saturate(0.75) brightness(0.85);
+}
+
+.uni-card:hover img {
+  transform: scale(1.08);
+  filter: saturate(1) brightness(1);
+}
+
+.uni-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(26,23,20,0.8) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.uni-card:hover .uni-card-overlay { opacity: 1; }
+
+.uni-card-overlay h3 {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 400;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.3rem;
+}
+
+.uni-card-overlay p {
+  font-size: 0.75rem;
+  color: var(--stone-light);
+  letter-spacing: 0.1em;
+  font-style: italic;
+}
+
+/* ── Types / Knowledge ── */
+.types {
+  background: var(--shiro);
+  color: var(--ink);
+}
+
+.types .section-label span { color: var(--beni); }
+.types .section-label::before { background: var(--beni); }
+.types .section-title-jp { color: var(--sumi); }
+.types .section-title-en { color: var(--stone); }
+
+.types-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+}
+
+.type-card {
+  padding: 2.5rem 2rem;
+  border: 1px solid rgba(26,23,20,0.08);
+  position: relative;
+  transition: border-color 0.4s, transform 0.4s;
+}
+
+.type-card:hover {
+  border-color: var(--beni-soft);
+  transform: translateY(-4px);
+}
+
+.type-card::before {
+  content: attr(data-num);
+  position: absolute;
+  top: -0.8rem;
+  left: 2rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--beni);
+  background: var(--shiro);
+  padding: 0 0.5rem;
+}
+
+.type-card h3 {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+  color: var(--sumi);
+}
+
+.type-card .en {
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--stone);
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.type-card p {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: var(--ink);
+  font-weight: 300;
+}
+
+/* ── Parallax divider ── */
+.divider {
+  height: 50vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.divider img {
+  position: absolute;
+  inset: -20% 0;
+  width: 100%;
+  height: 140%;
+  object-fit: cover;
+  filter: brightness(0.3) saturate(0.6);
+}
+
+.divider-text {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.divider-text .jp {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 200;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  letter-spacing: 0.3em;
+}
+
+.divider-text .en {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--kinshu);
+  letter-spacing: 0.2em;
+}
+
+/* ── Footer ── */
+footer {
+  background: var(--sumi);
+  padding: 4rem 3rem 2rem;
+  border-top: 1px solid rgba(198, 163, 85, 0.15);
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.footer-brand {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 200;
+  font-size: 1.2rem;
+  letter-spacing: 0.2em;
+  color: var(--kinshu);
+  margin-bottom: 1rem;
+}
+
+.footer-desc {
+  font-size: 0.8rem;
+  color: var(--stone);
+  line-height: 1.8;
+  max-width: 350px;
+}
+
+.footer-credits {
+  text-align: right;
+}
+
+.footer-credits p {
+  font-size: 0.75rem;
+  color: var(--stone);
+  line-height: 2;
+}
+
+.footer-credits a {
+  color: var(--stone-light);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s, color 0.3s;
+}
+
+.footer-credits a:hover {
+  color: var(--kinshu);
+  border-color: var(--kinshu);
+}
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 3rem auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(198, 163, 85, 0.08);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--stone);
+  letter-spacing: 0.1em;
+}
+
+/* ── Lightbox ── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(10, 8, 6, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s;
+  cursor: zoom-out;
+}
+
+.lightbox.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lightbox img {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  transform: scale(0.9);
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.lightbox.active img { transform: scale(1); }
+
+.lightbox-close {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-close::before,
+.lightbox-close::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 1px;
+  background: var(--shiro);
+  transition: background 0.3s;
+}
+
+.lightbox-close::before { transform: rotate(45deg); }
+.lightbox-close::after { transform: rotate(-45deg); }
+.lightbox-close:hover::before,
+.lightbox-close:hover::after { background: var(--kinshu); }
+
+/* ── Scroll reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Animations ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes lineGrow {
+  from { opacity: 0; width: 0; }
+  to { opacity: 1; width: 60px; }
+}
+
+/* ── Mobile nav toggle ── */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 30px;
+  height: 20px;
+  position: relative;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--shiro);
+  position: absolute;
+  left: 0;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.nav-toggle span:nth-child(1) { top: 0; }
+.nav-toggle span:nth-child(2) { top: 50%; }
+.nav-toggle span:nth-child(3) { bottom: 0; }
+
+.nav-toggle.open span:nth-child(1) { transform: translateY(10px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-10px) rotate(-45deg); }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .about-img-wrap::before { display: none; }
+  .gallery-grid { grid-template-columns: 1fr 1fr; }
+  .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 1; height: 350px; }
+  .gallery-item:nth-child(n+2) { height: 240px; }
+  .uni-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+  .uni-card:nth-child(1) { grid-column: span 2; }
+  .uni-card:nth-child(2),
+  .uni-card:nth-child(3),
+  .uni-card:nth-child(4) { grid-column: span 1; }
+  .uni-card:nth-child(5) { grid-column: span 2; }
+  .types-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  section { padding: 5rem 1.5rem; }
+  nav { padding: 1rem 1.5rem; }
+
+  .nav-toggle { display: block; }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70vw;
+    max-width: 320px;
+    height: 100vh;
+    background: var(--sumi);
+    flex-direction: column;
+    padding: 5rem 2rem;
+    gap: 2rem;
+    transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-left: 1px solid rgba(198,163,85,0.1);
+  }
+
+  .nav-links.open { right: 0; }
+
+  .gallery-grid { grid-template-columns: 1fr; }
+  .gallery-item:nth-child(1) { grid-column: span 1; height: 280px; }
+  .gallery-item:nth-child(n+2) { height: 220px; }
+
+  .uni-grid { grid-template-columns: 1fr; }
+  .uni-card:nth-child(1),
+  .uni-card:nth-child(5) { grid-column: span 1; }
+  .uni-grid { grid-template-rows: auto; }
+
+  .types-grid { grid-template-columns: 1fr; }
+
+  .footer-inner { flex-direction: column; }
+  .footer-credits { text-align: left; }
+  .footer-bottom { flex-direction: column; gap: 0.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav id="nav">
+  <div class="nav-brand">刺身と雲丹</div>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#uni">Uni</a></li>
+    <li><a href="#types">Types</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <img class="hero-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Sashimi_Moriawase.JPG/1280px-Sashimi_Moriawase.JPG" alt="Sashimi Moriawase — a traditional assorted sashimi platter">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="hero-jp">刺身と雲丹</h1>
+    <div class="hero-line"></div>
+    <p class="hero-en">Sashimi & Uni</p>
+    <br>
+    <p class="hero-sub">日本料理の真髄 — The Essence of Japanese Cuisine</p>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- About -->
+<section class="about" id="about">
+  <div class="kanji-deco" style="left: 3%; top: 15%;">刺<br>身</div>
+  <div class="about-grid reveal">
+    <div class="about-text">
+      <div class="section-label"><span>About</span></div>
+      <h2 class="section-title-jp">刺身について</h2>
+      <p class="section-title-en">The Art of Raw Perfection</p>
+      <p>刺身は日本料理の中で最も純粋な表現です。新鮮な魚介を薄く切り、素材そのものの味わいを楽しむ — それは職人の技と自然の恵みが出会う瞬間です。</p>
+      <p>Sashimi represents the purest expression of Japanese cuisine. Thinly sliced fresh seafood, celebrated for its natural flavour — a moment where artisan craft meets nature's bounty. Each cut reveals the knife skill honed over decades, each arrangement reflects the season's beauty.</p>
+      <p>醤油とわさびを添えて、大葉や大根のつまとともに。簡素でありながら、その一切れに日本の美意識が凝縮されています。</p>
+    </div>
+    <div class="about-img-wrap">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/A_sashimi_plate_with_five_selection.jpg/1280px-A_sashimi_plate_with_five_selection.jpg" alt="A beautifully arranged sashimi plate with five selections" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- Divider -->
+<div class="divider">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/141230_Sashimi_in_Shibuya_-_Flickr_-_odako1.jpg/1280px-141230_Sashimi_in_Shibuya_-_Flickr_-_odako1.jpg" alt="Sashimi platter in Shibuya" loading="lazy">
+  <div class="divider-text">
+    <p class="jp">「一期一会」</p>
+    <p class="en">One encounter, one chance — Ichi-go ichi-e</p>
+  </div>
+</div>
+
+<!-- Gallery -->
+<section class="gallery" id="gallery">
+  <div class="gallery-inner">
+    <div class="section-label reveal"><span>Gallery</span></div>
+    <h2 class="section-title-jp reveal">刺身の美</h2>
+    <p class="section-title-en reveal">Beauty in Every Slice</p>
+
+    <div class="gallery-grid reveal">
+      <div class="gallery-item" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/4_selections_of_Sashimi.jpg/1280px-4_selections_of_Sashimi.jpg">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/4_selections_of_Sashimi.jpg/1280px-4_selections_of_Sashimi.jpg" alt="Four selections of sashimi" loading="lazy">
+        <span class="caption">四種盛り — Four Selections</span>
+      </div>
+      <div class="gallery-item" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/A_Plate_of_Sashimi_at_The_Verandah.jpg/1280px-A_Plate_of_Sashimi_at_The_Verandah.jpg">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/A_Plate_of_Sashimi_at_The_Verandah.jpg/1280px-A_Plate_of_Sashimi_at_The_Verandah.jpg" alt="Elegant sashimi platter" loading="lazy">
+        <span class="caption">盛り合わせ — Assortment</span>
+      </div>
+      <div class="gallery-item" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/A_sashimi_plate_with_five_selection.jpg/1280px-A_sashimi_plate_with_five_selection.jpg">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/A_sashimi_plate_with_five_selection.jpg/1280px-A_sashimi_plate_with_five_selection.jpg" alt="Five selection sashimi plate" loading="lazy">
+        <span class="caption">五種盛り — Five Selections</span>
+      </div>
+      <div class="gallery-item" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/140321_Azumaen_Unzen_Nagasaki_pref_Japan03s.jpg/1280px-140321_Azumaen_Unzen_Nagasaki_pref_Japan03s.jpg">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/140321_Azumaen_Unzen_Nagasaki_pref_Japan03s.jpg/1280px-140321_Azumaen_Unzen_Nagasaki_pref_Japan03s.jpg" alt="Sashimi from Nagasaki" loading="lazy">
+        <span class="caption">長崎 — Nagasaki Style</span>
+      </div>
+      <div class="gallery-item" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Sashimi_Moriawase.JPG/1280px-Sashimi_Moriawase.JPG">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Sashimi_Moriawase.JPG/1280px-Sashimi_Moriawase.JPG" alt="Sashimi Moriawase" loading="lazy">
+        <span class="caption">盛り合わせ — Moriawase</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Uni Spotlight -->
+<section class="uni-section" id="uni">
+  <div class="kanji-deco" style="right: 5%; top: 8%;">雲<br>丹</div>
+
+  <div class="section-label reveal"><span>Spotlight</span></div>
+  <h2 class="section-title-jp reveal">雲丹 — 海の宝石</h2>
+  <p class="section-title-en reveal">Uni — Golden Treasure of the Sea</p>
+
+  <div class="uni-intro reveal">
+    <p>雲丹（うに）は海の宝石と称される日本料理の至宝。濃厚でクリーミーな味わいは、海の甘みと磯の香りが絶妙に調和した唯一無二の体験です。北海道のバフンウニから三陸のムラサキウニまで、産地ごとに異なる個性が楽しめます。</p>
+    <br>
+    <p>Uni — the golden custard of the sea. Its rich, creamy sweetness balanced with oceanic brine creates an experience unlike any other. From Hokkaido's prized <em>bafun-uni</em> to Sanriku's elegant <em>murasaki-uni</em>, each origin tells its own story.</p>
+  </div>
+
+  <div class="uni-grid reveal">
+    <div class="uni-card" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Uni-no-Sashimi.JPG/1280px-Uni-no-Sashimi.JPG">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Uni-no-Sashimi.JPG/1280px-Uni-no-Sashimi.JPG" alt="Uni sashimi" loading="lazy">
+      <div class="uni-card-overlay">
+        <h3>雲丹の刺身</h3>
+        <p>Uni Sashimi — Pure & Unadorned</p>
+      </div>
+    </div>
+    <div class="uni-card" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Uniryori.jpg/1280px-Uniryori.jpg">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Uniryori.jpg/1280px-Uniryori.jpg" alt="Uni ryori — uni cuisine" loading="lazy">
+      <div class="uni-card-overlay">
+        <h3>雲丹料理</h3>
+        <p>Uni Ryori — Culinary Artistry</p>
+      </div>
+    </div>
+    <div class="uni-card" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Grilled_Sea_Urchin_Japanese_YakiUni.jp.jpg/1280px-Grilled_Sea_Urchin_Japanese_YakiUni.jp.jpg">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Grilled_Sea_Urchin_Japanese_YakiUni.jp.jpg/1280px-Grilled_Sea_Urchin_Japanese_YakiUni.jp.jpg" alt="Grilled sea urchin — yaki uni" loading="lazy">
+      <div class="uni-card-overlay">
+        <h3>焼き雲丹</h3>
+        <p>Yaki Uni — Grilled to Perfection</p>
+      </div>
+    </div>
+    <div class="uni-card" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Sea_urchin_and_quail_egg_sushi.JPG/1280px-Sea_urchin_and_quail_egg_sushi.JPG">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Sea_urchin_and_quail_egg_sushi.JPG/1280px-Sea_urchin_and_quail_egg_sushi.JPG" alt="Sea urchin and quail egg sushi" loading="lazy">
+      <div class="uni-card-overlay">
+        <h3>雲丹の軍艦巻き</h3>
+        <p>Gunkan — With Quail Egg</p>
+      </div>
+    </div>
+    <div class="uni-card" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Chirashizushi_by_The_Wong_Family_Pictures_in_Hokkaido.jpg/1280px-Chirashizushi_by_The_Wong_Family_Pictures_in_Hokkaido.jpg">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Chirashizushi_by_The_Wong_Family_Pictures_in_Hokkaido.jpg/1280px-Chirashizushi_by_The_Wong_Family_Pictures_in_Hokkaido.jpg" alt="Chirashizushi with uni from Hokkaido" loading="lazy">
+      <div class="uni-card-overlay">
+        <h3>北海道のちらし寿司</h3>
+        <p>Hokkaido Chirashi — Sea Urchin Bowl</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Divider 2 -->
+<div class="divider">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Uniryori.jpg/1280px-Uniryori.jpg" alt="Uni cuisine" loading="lazy">
+  <div class="divider-text">
+    <p class="jp">「旬を味わう」</p>
+    <p class="en">Savour the season — Shun wo ajiwau</p>
+  </div>
+</div>
+
+<!-- Types -->
+<section class="types" id="types">
+  <div class="section-label reveal"><span>Knowledge</span></div>
+  <h2 class="section-title-jp reveal">刺身の種類</h2>
+  <p class="section-title-en reveal">A Guide to Sashimi Varieties</p>
+
+  <div class="types-grid reveal">
+    <div class="type-card" data-num="壱">
+      <h3>鮪 — マグロ</h3>
+      <p class="en">Maguro — Tuna</p>
+      <p>刺身の王様。赤身の爽やかさから、中トロの絶妙なバランス、大トロの口どけまで、一尾で三つの世界を味わえます。</p>
+    </div>
+    <div class="type-card" data-num="弐">
+      <h3>鮭 — サーモン</h3>
+      <p class="en">Sake — Salmon</p>
+      <p>脂の甘みと鮮やかなオレンジ色が特徴。現代の刺身文化で最も人気のある魚の一つです。</p>
+    </div>
+    <div class="type-card" data-num="参">
+      <h3>鯛 — タイ</h3>
+      <p class="en">Tai — Sea Bream</p>
+      <p>淡白で上品な白身魚の代表格。祝いの席に欠かせない縁起物であり、その透き通る美しさは刺身の芸術です。</p>
+    </div>
+    <div class="type-card" data-num="肆">
+      <h3>甘海老 — アマエビ</h3>
+      <p class="en">Amaebi — Sweet Shrimp</p>
+      <p>名前の通り自然な甘みが魅力。とろける食感と海の香りが口の中で広がります。</p>
+    </div>
+    <div class="type-card" data-num="伍">
+      <h3>帆立 — ホタテ</h3>
+      <p class="en">Hotate — Scallop</p>
+      <p>北海道産の大粒帆立は、甘くクリーミーな味わいと歯応えのある食感が特徴です。</p>
+    </div>
+    <div class="type-card" data-num="陸">
+      <h3>雲丹 — ウニ</h3>
+      <p class="en">Uni — Sea Urchin</p>
+      <p>海の宝石。濃厚でクリーミー、磯の香りと甘みが絶妙に調和する最高の珍味です。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">刺身と雲丹</div>
+      <p class="footer-desc">
+        日本の食文化の美しさを伝えるデモサイトです。<br>
+        A demo site celebrating the beauty of Japanese food culture.
+      </p>
+    </div>
+    <div class="footer-credits">
+      <p>All photographs sourced from <a href="https://commons.wikimedia.org/" target="_blank" rel="noopener">Wikimedia Commons</a></p>
+      <p>Licensed under <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a> / <a href="https://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener">CC BY 2.5</a></p>
+      <p>Built as a design demo by <a href="https://cloudpipe-landing.vercel.app" target="_blank" rel="noopener">CloudPipe</a></p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>DEMO — 刺身と雲丹 2026</span>
+    <span>Images: Wikimedia Commons CC</span>
+  </div>
+</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" aria-label="Close"></button>
+  <img src="" alt="Enlarged view">
+</div>
+
+<script>
+(function() {
+  /* ── Nav scroll effect ── */
+  var nav = document.getElementById('nav');
+  var lastScroll = 0;
+
+  window.addEventListener('scroll', function() {
+    nav.classList.toggle('scrolled', window.scrollY > 80);
+    lastScroll = window.scrollY;
+  }, { passive: true });
+
+  /* ── Mobile nav ── */
+  var toggle = document.getElementById('navToggle');
+  var links = document.getElementById('navLinks');
+
+  toggle.addEventListener('click', function() {
+    toggle.classList.toggle('open');
+    links.classList.toggle('open');
+  });
+
+  links.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      toggle.classList.remove('open');
+      links.classList.remove('open');
+    });
+  });
+
+  /* ── Scroll reveal ── */
+  var reveals = document.querySelectorAll('.reveal');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+  reveals.forEach(function(el) { observer.observe(el); });
+
+  /* ── Lightbox ── */
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = lightbox.querySelector('img');
+
+  function openLightbox(src, alt) {
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || '';
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+    setTimeout(function() { lightboxImg.src = ''; }, 400);
+  }
+
+  document.querySelectorAll('.gallery-item, .uni-card').forEach(function(item) {
+    item.addEventListener('click', function() {
+      var src = item.getAttribute('data-full') || item.querySelector('img').src;
+      var alt = item.querySelector('img').alt;
+      openLightbox(src, alt);
+    });
+  });
+
+  lightbox.addEventListener('click', function(e) {
+    if (e.target !== lightboxImg) closeLightbox();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  /* ── Parallax on dividers ── */
+  var dividers = document.querySelectorAll('.divider img');
+  window.addEventListener('scroll', function() {
+    var scrollY = window.scrollY;
+    dividers.forEach(function(img) {
+      var rect = img.parentElement.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        var progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+        img.style.transform = 'translateY(' + ((progress - 0.5) * 60) + 'px)';
+      }
+    });
+  }, { passive: true });
+})();
+</script>
+
+</body>
+</html>
