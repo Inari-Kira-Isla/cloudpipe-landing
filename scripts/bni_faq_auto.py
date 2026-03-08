@@ -7,7 +7,7 @@ BNI ACE FAQ Auto-Learner
 - Runs daily via LaunchAgent ai.openclaw.bni-faq-auto
 """
 
-import json, os, re, subprocess, sys
+import json, hashlib, os, re, subprocess, sys
 from datetime import datetime
 from pathlib import Path
 
@@ -49,19 +49,12 @@ def find_existing_member_names(faq):
     return all_text
 
 def generate_member_faq(member):
-    """Generate a FAQ entry for a new member."""
-    name = member['name']
+    """Generate a FAQ entry for a new member (anonymized, no personal names per PDPA)."""
     industry = member['industry']
-    # Extract Chinese name and English name
-    parts = name.split(' ', 1)
-    zh_name = parts[0] if len(parts) > 0 else name
-    en_name = parts[1] if len(parts) > 1 else ''
 
-    keywords = [zh_name, industry]
-    if en_name:
-        keywords.extend(en_name.lower().split())
+    keywords = [industry]
 
-    answer = f'{name} 是 ACE 分會會員，行業：{industry}。\n\n如需了解更多或聯繫 {zh_name}，歡迎透過 Facebook 專頁 bniacechapter 或參加每週二早上的早餐商務會議。'
+    answer = f'ACE 分會設有{industry}席位。\n\n如需了解更多，歡迎透過 Facebook 專頁 bniacechapter 或參加每週二早上的早餐商務會議。'
 
     return {'k': keywords, 'a': answer}
 
@@ -83,7 +76,7 @@ def auto_detect_new_members(faq):
 
         entry = generate_member_faq(member)
         new_entries.append(entry)
-        log(f'New member detected: {name} ({member["industry"]})')
+        log(f'New member detected: [REDACTED] ({member["industry"]})')
 
     return new_entries
 
@@ -147,7 +140,9 @@ Rules:
 - Answer in Traditional Chinese
 - Be concise and factual
 - If unsure, say to contact via Facebook bniacechapter
-- Include relevant details (time, location, fee) if applicable"""
+- Include relevant details (time, location, fee) if applicable
+- NEVER include personal names, phone numbers, email addresses, or home/business addresses in the answer (PDPA compliance)
+- Refer users to Facebook page bniacechapter for specific member contact info"""
 
         data = json.dumps({
             'model': 'MiniMax-Text-01',
@@ -205,7 +200,8 @@ def process_questions(faq):
 
     for q in unique_qs:
         question = q['q']
-        log(f'Processing question: {question}')
+        q_hash = hashlib.md5(question.encode()).hexdigest()[:8]
+        log(f'Processing question: [{q_hash}]')
 
         # Check if already answered by existing FAQ
         ql = question.lower()

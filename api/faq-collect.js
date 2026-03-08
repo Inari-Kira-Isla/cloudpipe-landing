@@ -4,6 +4,22 @@
 
 const REPO = 'Inari-Kira-Isla/cloudpipe-landing';
 
+// PII patterns to strip before storing
+const PII_PATTERNS = [
+  /[\w.-]+@[\w.-]+\.\w{2,}/g,                    // email
+  /\+?\d[\d\s\-()]{7,}\d/g,                       // phone numbers
+  /[\u4e00-\u9fff]{1,2}[\u4e00-\u9fff]\s*[A-Z][a-z]+/g, // Chinese name + English name
+  /[A-Z][a-z]+\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?/g,     // English full names (2-3 words)
+];
+
+function stripPII(text) {
+  let cleaned = text;
+  for (const pat of PII_PATTERNS) {
+    cleaned = cleaned.replace(pat, '[REDACTED]');
+  }
+  return cleaned;
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -22,8 +38,11 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid JSON' });
   }
 
-  const question = (body.q || '').trim();
-  if (!question || question.length > 500) return res.status(400).json({ error: 'Invalid question' });
+  const rawQuestion = (body.q || '').trim();
+  if (!rawQuestion || rawQuestion.length > 500) return res.status(400).json({ error: 'Invalid question' });
+
+  // Strip PII before storing (PDPA compliance)
+  const question = stripPII(rawQuestion);
 
   const issueNumber = process.env.FAQ_ISSUE_NUMBER || await findOrCreateIssue(token);
   if (!issueNumber) return res.status(500).json({ error: 'Cannot find/create issue' });
