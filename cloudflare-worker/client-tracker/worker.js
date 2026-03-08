@@ -15,6 +15,8 @@ const CLIENT_SITES = {
   "aeo-demo-finance":     "https://inari-kira-isla.github.io/aeo-demo-finance",
   "aeo-demo-luxury":      "https://inari-kira-isla.github.io/aeo-demo-luxury",
   "aeo-demo-travel-food": "https://inari-kira-isla.github.io/aeo-demo-travel-food",
+  // === 澳門百科 ===
+  "cloudpipe-macao-app":  "https://cloudpipe-macao-app.vercel.app",
   // === 其他 ===
   "mind-coffee":          "https://mind-coffee.vercel.app",
   "bni-macau":            "https://bni-macau.vercel.app",
