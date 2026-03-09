@@ -191,6 +191,10 @@ async function logGeneralVisit(env, siteSlug, request) {
   await env.AI_FOOTPRINT.put(totalKey, String(total + 1));
 }
 
+async function safeKVGet(kv, key) {
+  try { return await kv.get(key); } catch (e) { return null; }
+}
+
 async function getSiteStats(env, siteSlug) {
   const today = new Date().toISOString().split("T")[0];
   const prefix = `site:${siteSlug}:`;
@@ -201,28 +205,50 @@ async function getSiteStats(env, siteSlug) {
     generatedAt: new Date().toISOString(), site: siteSlug
   };
 
-  for (const [pattern, name] of Object.entries(AI_BOTS)) {
-    const dayCount = parseInt((await env.AI_FOOTPRINT.get(`${prefix}day:${today}:${pattern}`)) || "0");
-    const total = parseInt((await env.AI_FOOTPRINT.get(`${prefix}total:${pattern}`)) || "0");
-    if (dayCount > 0) stats.today[name] = dayCount;
-    if (total > 0) stats.totals[name] = total;
-    // Region breakdown
-    const region = BOT_REGIONS[pattern] || "International";
-    if (region === "CN") {
-      if (dayCount > 0) stats.cnAI.today[name] = dayCount;
-      if (total > 0) stats.cnAI.totals[name] = total;
-    } else {
-      if (dayCount > 0) stats.intlAI.today[name] = dayCount;
-      if (total > 0) stats.intlAI.totals[name] = total;
-    }
-  }
-  // Human visitor counts
-  const humanToday = parseInt((await env.AI_FOOTPRINT.get(`${prefix}day:${today}:_human`)) || "0");
-  const humanTotal = parseInt((await env.AI_FOOTPRINT.get(`${prefix}total:_human`)) || "0");
-  if (humanToday > 0) stats.today["Human Visitors"] = humanToday;
-  if (humanTotal > 0) stats.totals["Human Visitors"] = humanTotal;
+  if (!env.AI_FOOTPRINT) return stats;
 
-  stats.recentVisits = JSON.parse((await env.AI_FOOTPRINT.get(`${prefix}log:${today}`)) || "[]").slice(-20);
+  try {
+    // Build all KV keys and fetch in parallel
+    const entries = Object.entries(AI_BOTS);
+    const dayKeys = entries.map(([p]) => `${prefix}day:${today}:${p}`);
+    const totalKeys = entries.map(([p]) => `${prefix}total:${p}`);
+    const allKeys = [...dayKeys, ...totalKeys];
+
+    const results = await Promise.allSettled(allKeys.map(k => env.AI_FOOTPRINT.get(k)));
+
+    for (let i = 0; i < entries.length; i++) {
+      const [pattern, name] = entries[i];
+      const dayVal = results[i].status === "fulfilled" ? results[i].value : null;
+      const totalVal = results[i + entries.length].status === "fulfilled" ? results[i + entries.length].value : null;
+      const dayCount = parseInt(dayVal || "0");
+      const total = parseInt(totalVal || "0");
+      if (dayCount > 0) stats.today[name] = dayCount;
+      if (total > 0) stats.totals[name] = total;
+      const region = BOT_REGIONS[pattern] || "International";
+      if (region === "CN") {
+        if (dayCount > 0) stats.cnAI.today[name] = dayCount;
+        if (total > 0) stats.cnAI.totals[name] = total;
+      } else {
+        if (dayCount > 0) stats.intlAI.today[name] = dayCount;
+        if (total > 0) stats.intlAI.totals[name] = total;
+      }
+    }
+
+    // Human visitor counts
+    const [humanTodayR, humanTotalR] = await Promise.allSettled([
+      env.AI_FOOTPRINT.get(`${prefix}day:${today}:_human`),
+      env.AI_FOOTPRINT.get(`${prefix}total:_human`),
+    ]);
+    const humanToday = parseInt((humanTodayR.status === "fulfilled" ? humanTodayR.value : null) || "0");
+    const humanTotal = parseInt((humanTotalR.status === "fulfilled" ? humanTotalR.value : null) || "0");
+    if (humanToday > 0) stats.today["Human Visitors"] = humanToday;
+    if (humanTotal > 0) stats.totals["Human Visitors"] = humanTotal;
+
+    const logVal = await safeKVGet(env.AI_FOOTPRINT, `${prefix}log:${today}`);
+    stats.recentVisits = JSON.parse(logVal || "[]").slice(-20);
+  } catch (e) {
+    stats._error = e.message;
+  }
   return stats;
 }
 
@@ -236,6 +262,12 @@ function corsHeaders() {
 
 export default {
   async fetch(request, env, ctx) {
+    try { return await handleRequest(request, env, ctx); }
+    catch (e) { return new Response(JSON.stringify({ error: e.message, stack: e.stack?.split("\n").slice(0,3) }), { status: 500, headers: corsHeaders() }); }
+  },
+};
+
+async function handleRequest(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
 
@@ -369,5 +401,4 @@ export default {
       },
       sites: Object.keys(CLIENT_SITES),
     }, null, 2), { headers: corsHeaders() });
-  },
-};
+}

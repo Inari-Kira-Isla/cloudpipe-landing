@@ -513,7 +513,10 @@ function renderSummary(){
   if(topCount===0)SITES.forEach(site=>{const d=allData[site.id]||{totals:{}};Object.entries(d.totals||{}).forEach(([b,v])=>{if(b!=="Human Visitors"&&v>topCount){topBot=b;topCount=v}})});
   document.getElementById("g-today").textContent=todayAll;document.getElementById("g-today-sub").textContent=`${Object.keys(todayByBot).length} 種 AI`;
   document.getElementById("g-total").textContent=totalAll;document.getElementById("g-types").textContent=allBots.size;
-  document.getElementById("g-sites").textContent=activeSites+"/"+SITES.length;document.getElementById("g-top").textContent=topBot;
+  document.getElementById("g-sites").textContent=activeSites+"/"+SITES.length;
+  if(activeSites===0){document.getElementById("g-sites").style.color="var(--red)";document.getElementById("g-today-sub").textContent="⚠ Workers KV 連線異常"}
+  else{document.getElementById("g-sites").style.color="var(--blue)"}
+  document.getElementById("g-top").textContent=topBot;
   document.getElementById("g-top-sub").textContent=topCount>0?`累積 ${topCount}次`:"等待數據";
   const rd=computeRegionData();const hd=computeHumanData();
   document.getElementById("g-cn").textContent=rd.cnToday;document.getElementById("g-cn-sub").textContent=`累積 ${rd.cnTotal.toLocaleString()}`;
@@ -624,7 +627,7 @@ async function loadAll(){
 renderTopologySummary();renderAdjacencyMatrix();renderNodeCards();renderRecommendations();
 
 loadAll();
-setInterval(loadAll,60000);
+setInterval(loadAll,300000); // 5 分鐘刷新一次（減少 KV 讀取壓力）
 window.addEventListener('resize',()=>{if(document.querySelector('[data-tab="topology"]').classList.contains('active'))renderTopologyGraph()});
 </script>
 </body>
