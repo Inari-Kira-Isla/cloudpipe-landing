@@ -148,15 +148,35 @@ async function writeToSupabase(env, siteSlug, botInfo, request) {
   } catch (e) { /* silently ignore */ }
 }
 
+// === Aggregated KV storage ===
+// Instead of 59 individual KV keys per site, store everything in 1 JSON blob
+// Key: site:{slug}:agg → { _date: "YYYY-MM-DD", today: {pattern: count}, totals: {pattern: count} }
+// This reduces KV reads from 59 to 1 per site (saves 100K daily quota)
+
+async function getAggStats(env, siteSlug) {
+  const key = `site:${siteSlug}:agg`;
+  try {
+    const raw = await env.AI_FOOTPRINT.get(key);
+    return raw ? JSON.parse(raw) : { _date: "", today: {}, totals: {} };
+  } catch (e) { return { _date: "", today: {}, totals: {} }; }
+}
+
+async function putAggStats(env, siteSlug, agg) {
+  const key = `site:${siteSlug}:agg`;
+  await env.AI_FOOTPRINT.put(key, JSON.stringify(agg));
+}
+
 async function logAIVisit(env, siteSlug, botInfo, request) {
   const today = new Date().toISOString().split("T")[0];
   const url = new URL(request.url);
   const prefix = `site:${siteSlug}:`;
 
-  // Increment daily counter
-  const dayKey = `${prefix}day:${today}:${botInfo.pattern}`;
-  const current = parseInt((await env.AI_FOOTPRINT.get(dayKey)) || "0");
-  await env.AI_FOOTPRINT.put(dayKey, String(current + 1), { expirationTtl: 30 * 86400 });
+  // Update aggregated stats blob (1 read + 1 write instead of 4 reads + 3 writes)
+  const agg = await getAggStats(env, siteSlug);
+  if (agg._date !== today) { agg.today = {}; agg._date = today; }
+  agg.today[botInfo.pattern] = (agg.today[botInfo.pattern] || 0) + 1;
+  agg.totals[botInfo.pattern] = (agg.totals[botInfo.pattern] || 0) + 1;
+  await putAggStats(env, siteSlug, agg);
 
   // Store visit log
   const logKey = `${prefix}log:${today}`;
@@ -171,28 +191,19 @@ async function logAIVisit(env, siteSlug, botInfo, request) {
   if (existing.length > 500) existing.shift();
   await env.AI_FOOTPRINT.put(logKey, JSON.stringify(existing), { expirationTtl: 30 * 86400 });
 
-  // Update total counter
-  const totalKey = `${prefix}total:${botInfo.pattern}`;
-  const total = parseInt((await env.AI_FOOTPRINT.get(totalKey)) || "0");
-  await env.AI_FOOTPRINT.put(totalKey, String(total + 1));
-
-  // 方案 A: Also write to Supabase for cross-site tracking
+  // Write to Supabase for cross-site tracking
   writeToSupabase(env, siteSlug, botInfo, request);
 }
 
 async function logGeneralVisit(env, siteSlug, request) {
   const today = new Date().toISOString().split("T")[0];
-  const prefix = `site:${siteSlug}:`;
-  const dayKey = `${prefix}day:${today}:_human`;
-  const current = parseInt((await env.AI_FOOTPRINT.get(dayKey)) || "0");
-  await env.AI_FOOTPRINT.put(dayKey, String(current + 1), { expirationTtl: 30 * 86400 });
-  const totalKey = `${prefix}total:_human`;
-  const total = parseInt((await env.AI_FOOTPRINT.get(totalKey)) || "0");
-  await env.AI_FOOTPRINT.put(totalKey, String(total + 1));
-}
 
-async function safeKVGet(kv, key) {
-  try { return await kv.get(key); } catch (e) { return null; }
+  // Update aggregated stats blob
+  const agg = await getAggStats(env, siteSlug);
+  if (agg._date !== today) { agg.today = {}; agg._date = today; }
+  agg.today["_human"] = (agg.today["_human"] || 0) + 1;
+  agg.totals["_human"] = (agg.totals["_human"] || 0) + 1;
+  await putAggStats(env, siteSlug, agg);
 }
 
 async function getSiteStats(env, siteSlug) {
@@ -208,20 +219,14 @@ async function getSiteStats(env, siteSlug) {
   if (!env.AI_FOOTPRINT) return stats;
 
   try {
-    // Build all KV keys and fetch in parallel
-    const entries = Object.entries(AI_BOTS);
-    const dayKeys = entries.map(([p]) => `${prefix}day:${today}:${p}`);
-    const totalKeys = entries.map(([p]) => `${prefix}total:${p}`);
-    const allKeys = [...dayKeys, ...totalKeys];
+    // Read aggregated blob: 1 KV read instead of 59
+    const agg = await getAggStats(env, siteSlug);
+    const todayData = (agg._date === today) ? agg.today : {};
+    const totalData = agg.totals || {};
 
-    const results = await Promise.allSettled(allKeys.map(k => env.AI_FOOTPRINT.get(k)));
-
-    for (let i = 0; i < entries.length; i++) {
-      const [pattern, name] = entries[i];
-      const dayVal = results[i].status === "fulfilled" ? results[i].value : null;
-      const totalVal = results[i + entries.length].status === "fulfilled" ? results[i + entries.length].value : null;
-      const dayCount = parseInt(dayVal || "0");
-      const total = parseInt(totalVal || "0");
+    for (const [pattern, name] of Object.entries(AI_BOTS)) {
+      const dayCount = todayData[pattern] || 0;
+      const total = totalData[pattern] || 0;
       if (dayCount > 0) stats.today[name] = dayCount;
       if (total > 0) stats.totals[name] = total;
       const region = BOT_REGIONS[pattern] || "International";
@@ -234,18 +239,17 @@ async function getSiteStats(env, siteSlug) {
       }
     }
 
-    // Human visitor counts
-    const [humanTodayR, humanTotalR] = await Promise.allSettled([
-      env.AI_FOOTPRINT.get(`${prefix}day:${today}:_human`),
-      env.AI_FOOTPRINT.get(`${prefix}total:_human`),
-    ]);
-    const humanToday = parseInt((humanTodayR.status === "fulfilled" ? humanTodayR.value : null) || "0");
-    const humanTotal = parseInt((humanTotalR.status === "fulfilled" ? humanTotalR.value : null) || "0");
+    // Human visitors
+    const humanToday = todayData["_human"] || 0;
+    const humanTotal = totalData["_human"] || 0;
     if (humanToday > 0) stats.today["Human Visitors"] = humanToday;
     if (humanTotal > 0) stats.totals["Human Visitors"] = humanTotal;
 
-    const logVal = await safeKVGet(env.AI_FOOTPRINT, `${prefix}log:${today}`);
-    stats.recentVisits = JSON.parse(logVal || "[]").slice(-20);
+    // Recent visits log: 1 more KV read
+    try {
+      const logVal = await env.AI_FOOTPRINT.get(`${prefix}log:${today}`);
+      stats.recentVisits = JSON.parse(logVal || "[]").slice(-20);
+    } catch (e) {}
   } catch (e) {
     stats._error = e.message;
   }
@@ -271,6 +275,36 @@ async function handleRequest(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
 
+    // === Migrate legacy KV keys to aggregated blob (one-time) ===
+    if (path === "/migrate-agg") {
+      if (!env.AI_FOOTPRINT) return new Response("No KV", { status: 500 });
+      const results = {};
+      const today = new Date().toISOString().split("T")[0];
+      for (const slug of Object.keys(CLIENT_SITES)) {
+        const prefix = `site:${slug}:`;
+        const agg = { _date: today, today: {}, totals: {} };
+        // Read individual total keys
+        for (const [pattern] of Object.entries(AI_BOTS)) {
+          try {
+            const tv = await env.AI_FOOTPRINT.get(`${prefix}total:${pattern}`);
+            if (tv) agg.totals[pattern] = parseInt(tv);
+            const dv = await env.AI_FOOTPRINT.get(`${prefix}day:${today}:${pattern}`);
+            if (dv) agg.today[pattern] = parseInt(dv);
+          } catch (e) { /* quota hit, skip */ }
+        }
+        // Human
+        try {
+          const ht = await env.AI_FOOTPRINT.get(`${prefix}total:_human`);
+          if (ht) agg.totals["_human"] = parseInt(ht);
+          const hd = await env.AI_FOOTPRINT.get(`${prefix}day:${today}:_human`);
+          if (hd) agg.today["_human"] = parseInt(hd);
+        } catch (e) {}
+        await env.AI_FOOTPRINT.put(`site:${slug}:agg`, JSON.stringify(agg));
+        results[slug] = { totals: Object.keys(agg.totals).length, today: Object.keys(agg.today).length };
+      }
+      return new Response(JSON.stringify({ migrated: results }, null, 2), { headers: corsHeaders() });
+    }
+
     // === List all tracked sites ===
     if (path === "/sites.json") {
       return new Response(JSON.stringify({
@@ -279,7 +313,7 @@ async function handleRequest(request, env, ctx) {
       }, null, 2), { headers: corsHeaders() });
     }
 
-    // === All sites combined stats (cached 120s) ===
+    // === All sites combined stats (cached 900s = 15 min) ===
     if (path === "/all-stats.json") {
       const cache = caches.default;
       const cacheKey = new Request(request.url, { method: "GET" });
@@ -289,8 +323,10 @@ async function handleRequest(request, env, ctx) {
       for (const slug of Object.keys(CLIENT_SITES)) {
         allStats[slug] = await getSiteStats(env, slug);
       }
+      const hasData = Object.values(allStats).some(s => Object.keys(s.totals || {}).length > 0);
+      const ttl = hasData ? 900 : 60;
       const resp = new Response(JSON.stringify(allStats, null, 2), {
-        headers: { ...corsHeaders(), "Cache-Control": "public, max-age=120" },
+        headers: { ...corsHeaders(), "Cache-Control": `public, max-age=${ttl}` },
       });
       ctx.waitUntil(cache.put(cacheKey, resp.clone()));
       return resp;
@@ -305,14 +341,16 @@ async function handleRequest(request, env, ctx) {
           status: 404, headers: corsHeaders(),
         });
       }
-      // Cache API: serve from cache if fresh (120s TTL)
+      // Cache API: serve from cache if fresh (900s = 15 min TTL)
       const cache = caches.default;
       const cacheKey = new Request(request.url, { method: "GET" });
       const cached = await cache.match(cacheKey);
       if (cached) return cached;
       const stats = await getSiteStats(env, slug);
+      const hasData = Object.keys(stats.totals || {}).length > 0;
+      const ttl = hasData ? 900 : 60;
       const resp = new Response(JSON.stringify(stats, null, 2), {
-        headers: { ...corsHeaders(), "Cache-Control": "public, max-age=120" },
+        headers: { ...corsHeaders(), "Cache-Control": `public, max-age=${ttl}` },
       });
       ctx.waitUntil(cache.put(cacheKey, resp.clone()));
       return resp;

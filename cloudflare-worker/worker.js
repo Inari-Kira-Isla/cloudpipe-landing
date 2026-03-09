@@ -1,6 +1,7 @@
 // ============================================
 // CloudPipe AI Footprint Tracker
 // Cloudflare Worker — Proxy to Vercel
+// Aggregated KV storage (1 read instead of 59)
 // ============================================
 
 const VERCEL_URL = "https://cloudpipe-landing.vercel.app";
@@ -37,14 +38,26 @@ function detectAIBot(userAgent) {
   return null;
 }
 
+// Aggregated stats blob
+const AGG_KEY = "agg-stats";
+
+async function getAgg(env) {
+  try {
+    const raw = await env.AI_FOOTPRINT.get(AGG_KEY);
+    return raw ? JSON.parse(raw) : { _date: "", today: {}, totals: {} };
+  } catch (e) { return { _date: "", today: {}, totals: {} }; }
+}
+
 async function logAIVisit(env, botInfo, request) {
   const today = new Date().toISOString().split("T")[0];
   const url = new URL(request.url);
 
-  // Increment daily counter
-  const dayKey = `day:${today}:${botInfo.pattern}`;
-  const current = parseInt((await env.AI_FOOTPRINT.get(dayKey)) || "0");
-  await env.AI_FOOTPRINT.put(dayKey, String(current + 1), { expirationTtl: 30 * 86400 });
+  // Update aggregated blob (1 read + 1 write)
+  const agg = await getAgg(env);
+  if (agg._date !== today) { agg.today = {}; agg._date = today; }
+  agg.today[botInfo.pattern] = (agg.today[botInfo.pattern] || 0) + 1;
+  agg.totals[botInfo.pattern] = (agg.totals[botInfo.pattern] || 0) + 1;
+  await env.AI_FOOTPRINT.put(AGG_KEY, JSON.stringify(agg));
 
   // Store visit log
   const logKey = `log:${today}`;
@@ -58,70 +71,111 @@ async function logAIVisit(env, botInfo, request) {
   });
   if (existing.length > 500) existing.shift();
   await env.AI_FOOTPRINT.put(logKey, JSON.stringify(existing), { expirationTtl: 30 * 86400 });
-
-  // Update total counter
-  const totalKey = `total:${botInfo.pattern}`;
-  const total = parseInt((await env.AI_FOOTPRINT.get(totalKey)) || "0");
-  await env.AI_FOOTPRINT.put(totalKey, String(total + 1));
 }
 
 export default {
   async fetch(request, env, ctx) {
-    const url = new URL(request.url);
+    try {
+      const url = new URL(request.url);
 
-    // === AI Stats API endpoint (cached 120s) ===
-    if (url.pathname === "/ai-stats.json") {
-      const cache = caches.default;
-      const cacheKey = new Request(request.url, { method: "GET" });
-      const cached = await cache.match(cacheKey);
-      if (cached) return cached;
-      const today = new Date().toISOString().split("T")[0];
-      const stats = { today: {}, totals: {}, recentVisits: [], generatedAt: new Date().toISOString() };
-      const ch = {"Content-Type":"application/json","Access-Control-Allow-Origin":"*","Cache-Control":"public, max-age=120"};
-      if (!env.AI_FOOTPRINT) return new Response(JSON.stringify(stats, null, 2), { headers: ch });
-      try {
-        const entries = Object.entries(AI_BOTS);
-        const dayKeys = entries.map(([p]) => `day:${today}:${p}`);
-        const totalKeys = entries.map(([p]) => `total:${p}`);
-        const results = await Promise.allSettled([...dayKeys, ...totalKeys].map(k => env.AI_FOOTPRINT.get(k)));
-        for (let i = 0; i < entries.length; i++) {
-          const [, name] = entries[i];
-          const dayCount = parseInt((results[i].status==="fulfilled"?results[i].value:null) || "0");
-          const total = parseInt((results[i+entries.length].status==="fulfilled"?results[i+entries.length].value:null) || "0");
-          if (dayCount > 0) stats.today[name] = dayCount;
-          if (total > 0) stats.totals[name] = total;
+      // === Migrate legacy keys to aggregated blob ===
+      if (url.pathname === "/migrate-agg") {
+        if (!env.AI_FOOTPRINT) return new Response("No KV", { status: 500 });
+        const today = new Date().toISOString().split("T")[0];
+        const agg = { _date: today, today: {}, totals: {} };
+        for (const [pattern] of Object.entries(AI_BOTS)) {
+          try {
+            const tv = await env.AI_FOOTPRINT.get(`total:${pattern}`);
+            if (tv) agg.totals[pattern] = parseInt(tv);
+            const dv = await env.AI_FOOTPRINT.get(`day:${today}:${pattern}`);
+            if (dv) agg.today[pattern] = parseInt(dv);
+          } catch (e) {}
         }
-        try { stats.recentVisits = JSON.parse((await env.AI_FOOTPRINT.get(`log:${today}`)) || "[]").slice(-20); } catch(e) {}
-      } catch(e) { stats._error = e.message; }
-      const resp = new Response(JSON.stringify(stats, null, 2), { headers: ch });
-      ctx.waitUntil(cache.put(cacheKey, resp.clone()));
-      return resp;
+        try {
+          const ht = await env.AI_FOOTPRINT.get(`total:_human`);
+          if (ht) agg.totals["_human"] = parseInt(ht);
+        } catch (e) {}
+        await env.AI_FOOTPRINT.put(AGG_KEY, JSON.stringify(agg));
+        return new Response(JSON.stringify({ migrated: agg }, null, 2), {
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+        });
+      }
+
+      // === AI Stats API endpoint (cached 900s) ===
+      if (url.pathname === "/ai-stats.json") {
+        const cache = caches.default;
+        const cacheKey = new Request(request.url, { method: "GET" });
+        const cached = await cache.match(cacheKey);
+        if (cached) return cached;
+
+        const today = new Date().toISOString().split("T")[0];
+        const stats = { today: {}, totals: {}, recentVisits: [], generatedAt: new Date().toISOString() };
+
+        if (!env.AI_FOOTPRINT) {
+          return new Response(JSON.stringify(stats, null, 2), {
+            headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*", "Cache-Control": "public, max-age=60" },
+          });
+        }
+
+        try {
+          // 1 KV read for all stats
+          const agg = await getAgg(env);
+          const todayData = (agg._date === today) ? agg.today : {};
+          const totalData = agg.totals || {};
+
+          for (const [pattern, name] of Object.entries(AI_BOTS)) {
+            const dc = todayData[pattern] || 0;
+            const tc = totalData[pattern] || 0;
+            if (dc > 0) stats.today[name] = dc;
+            if (tc > 0) stats.totals[name] = tc;
+          }
+
+          // 1 more KV read for recent visits
+          try {
+            const logVal = await env.AI_FOOTPRINT.get(`log:${today}`);
+            stats.recentVisits = JSON.parse(logVal || "[]").slice(-20);
+          } catch (e) {}
+        } catch (e) { stats._error = e.message; }
+
+        const hasData = Object.keys(stats.totals).length > 0;
+        const ttl = hasData ? 900 : 60;
+        const resp = new Response(JSON.stringify(stats, null, 2), {
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*", "Cache-Control": `public, max-age=${ttl}` },
+        });
+        ctx.waitUntil(cache.put(cacheKey, resp.clone()));
+        return resp;
+      }
+
+      // === Proxy to Vercel ===
+      const targetUrl = VERCEL_URL + url.pathname + url.search;
+      const userAgent = request.headers.get("user-agent") || "";
+      const botInfo = detectAIBot(userAgent);
+
+      if (botInfo && env.AI_FOOTPRINT) {
+        ctx.waitUntil(logAIVisit(env, botInfo, request));
+      }
+
+      const response = await fetch(targetUrl, {
+        method: request.method,
+        headers: {
+          "User-Agent": userAgent,
+          "Accept": request.headers.get("accept") || "*/*",
+          "Accept-Encoding": request.headers.get("accept-encoding") || "",
+        },
+      });
+
+      const newHeaders = new Headers(response.headers);
+      newHeaders.set("Access-Control-Allow-Origin", "*");
+
+      return new Response(response.body, {
+        status: response.status,
+        headers: newHeaders,
+      });
+    } catch (e) {
+      return new Response(JSON.stringify({ error: e.message }), {
+        status: 500,
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+      });
     }
-
-    // === Proxy to Vercel ===
-    const targetUrl = VERCEL_URL + url.pathname + url.search;
-    const userAgent = request.headers.get("user-agent") || "";
-    const botInfo = detectAIBot(userAgent);
-
-    if (botInfo && env.AI_FOOTPRINT) {
-      ctx.waitUntil(logAIVisit(env, botInfo, request));
-    }
-
-    const response = await fetch(targetUrl, {
-      method: request.method,
-      headers: {
-        "User-Agent": userAgent,
-        "Accept": request.headers.get("accept") || "*/*",
-        "Accept-Encoding": request.headers.get("accept-encoding") || "",
-      },
-    });
-
-    const newHeaders = new Headers(response.headers);
-    newHeaders.set("Access-Control-Allow-Origin", "*");
-
-    return new Response(response.body, {
-      status: response.status,
-      headers: newHeaders,
-    });
   },
 };

@@ -1,8 +1,22 @@
 #!/bin/bash
 # Cloudflare Pages 鏡像批量部署腳本
-# 用法: 先在終端執行 wrangler login，然後 bash deploy-cf-mirrors.sh
+# 用法: bash deploy-cf-mirrors.sh (自動讀取持久 API Token)
 
 set -e
+
+# === 自動載入持久 API Token ===
+TOKEN_FILE="$HOME/.cloudflare/api-token"
+if [ -z "$CLOUDFLARE_API_TOKEN" ] && [ -f "$TOKEN_FILE" ]; then
+    export CLOUDFLARE_API_TOKEN=$(cat "$TOKEN_FILE")
+    echo "✓ 使用持久 API Token"
+fi
+
+if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+    echo "⚠ 未找到 API Token"
+    echo "  設置: bash ~/.openclaw/workspace/scripts/setup-cf-token.sh <token>"
+    echo "  取得: https://dash.cloudflare.com/profile/api-tokens"
+    exit 1
+fi
 
 echo "=== Cloudflare Pages 鏡像部署 ==="
 echo ""

@@ -1,8 +1,25 @@
 #!/bin/bash
 # 修復所有 3 個 Cloudflare Workers（KV 讀取錯誤處理）
-# 用法: wrangler login && bash fix-workers.sh
+# 用法: bash fix-workers.sh
+# Token: 自動讀取 ~/.cloudflare/api-token，不需要 wrangler login
 
 set -e
+
+# === 自動載入持久 API Token ===
+TOKEN_FILE="$HOME/.cloudflare/api-token"
+if [ -z "$CLOUDFLARE_API_TOKEN" ] && [ -f "$TOKEN_FILE" ]; then
+    export CLOUDFLARE_API_TOKEN=$(cat "$TOKEN_FILE")
+    echo "✓ 使用持久 API Token"
+fi
+
+if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+    echo "⚠ 未找到 API Token"
+    echo "  方案 A: bash ~/.openclaw/workspace/scripts/setup-cf-token.sh <token>"
+    echo "  方案 B: wrangler login"
+    echo ""
+    echo "取得 Token: https://dash.cloudflare.com/profile/api-tokens"
+    exit 1
+fi
 
 echo "=== 部署修復後的 Workers ==="
 
