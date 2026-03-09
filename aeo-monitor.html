@@ -154,9 +154,10 @@ footer a{color:var(--cyan);text-decoration:none}
   <!-- Header -->
   <div class="header">
     <div class="header-left">
-      <h1 class="logo">CloudPipe <span>AI 爬蟲監控中心</span></h1>
+      <h1 class="logo">CloudPipe <span>AI 爬蟲監控中心 — <span id="region-label">澳門區</span></span></h1>
     </div>
     <div class="header-right">
+      <button id="region-toggle" onclick="toggleRegion()" style="padding:.35rem .75rem;background:var(--card-2);border:1px solid var(--border);border-radius:20px;font-size:.75rem;color:var(--dim);cursor:pointer;font-family:inherit;transition:all .2s">顯示全部站點</button>
       <div class="live-badge"><div class="live-dot"></div>即時監控中</div>
       <div class="refresh-info" id="last-refresh">連接中...</div>
     </div>
@@ -320,21 +321,28 @@ footer a{color:var(--cyan);text-decoration:none}
 
 const CLIENT_TRACKER = "https://client-ai-tracker.inariglobal.workers.dev";
 
-const SITES = [
-  { id: "ai-learning", name: "AI 學習寶庫", url: "https://inari-kira-isla.github.io/Openclaw/", worker: "https://openclaw-ai-tracker.inariglobal.workers.dev", color: "#bc8cff", badge: "active", industry: "教育知識" },
-  { id: "cloudpipe", name: "CloudPipe Landing", url: "https://inari-kira-isla.github.io/cloudpipe-landing/", worker: "https://cloudpipe-ai-tracker.inariglobal.workers.dev", color: "#39d2c0", badge: "active", industry: "SaaS 平台" },
-  { id: "cloudpipe-macao-app", name: "澳門商戶百科", url: "https://cloudpipe-macao-app.vercel.app/", worker: CLIENT_TRACKER, workerSlug: "cloudpipe-macao-app", color: "#f85149", badge: "active", industry: "澳門商戶目錄" },
-  { id: "yamanakada", name: "山中田", url: "https://inari-kira-isla.github.io/yamanakada/", worker: CLIENT_TRACKER, workerSlug: "yamanakada", color: "#3fb950", badge: "active", industry: "科技顧問" },
-  { id: "sea-urchin-delivery", name: "海膽速遞", url: "https://inari-kira-isla.github.io/sea-urchin-delivery/", worker: CLIENT_TRACKER, workerSlug: "sea-urchin-delivery", color: "#f0883e", badge: "active", industry: "外送服務" },
-  { id: "inari-global-foods", name: "稻荷環球食品", url: "https://inari-kira-isla.github.io/inari-global-foods/", worker: CLIENT_TRACKER, workerSlug: "inari-global-foods", color: "#58a6ff", badge: "active", industry: "食品貿易" },
-  { id: "after-school-coffee", name: "After School Coffee", url: "https://inari-kira-isla.github.io/after-school-coffee/", worker: CLIENT_TRACKER, workerSlug: "after-school-coffee", color: "#f778ba", badge: "active", industry: "咖啡店" },
-  { id: "mind-coffee", name: "Mind Coffee", url: "https://mind-coffee.vercel.app/", worker: CLIENT_TRACKER, workerSlug: "mind-coffee", color: "#d29922", badge: "active", industry: "咖啡店" },
-  { id: "bni-macau", name: "BNI 澳門商業網絡", url: "https://bni-macau.vercel.app/", worker: CLIENT_TRACKER, workerSlug: "bni-macau", color: "#f85149", badge: "active", industry: "商業網絡" },
-  { id: "aeo-demo-education", name: "AEO Demo — 教育", url: "https://inari-kira-isla.github.io/aeo-demo-education/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-education", color: "#9f7aea", badge: "new", industry: "教育機構" },
-  { id: "aeo-demo-finance", name: "AEO Demo — 金融", url: "https://inari-kira-isla.github.io/aeo-demo-finance/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-finance", color: "#48bb78", badge: "new", industry: "金融服務" },
-  { id: "aeo-demo-luxury", name: "AEO Demo — 奢侈品", url: "https://inari-kira-isla.github.io/aeo-demo-luxury/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-luxury", color: "#ecc94b", badge: "new", industry: "奢侈品牌" },
-  { id: "aeo-demo-travel-food", name: "AEO Demo — 旅遊美食", url: "https://inari-kira-isla.github.io/aeo-demo-travel-food/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-travel-food", color: "#ed8936", badge: "new", industry: "旅遊美食" }
+const ALL_SITES = [
+  // === 澳門區 ===
+  { id: "cloudpipe-macao-app", name: "澳門商戶百科", url: "https://cloudpipe-macao-app.vercel.app/", worker: CLIENT_TRACKER, workerSlug: "cloudpipe-macao-app", color: "#f85149", badge: "active", industry: "澳門商戶目錄", region: "macau" },
+  { id: "yamanakada", name: "山中田 Yamanakada", url: "https://inari-kira-isla.github.io/yamanakada/", worker: CLIENT_TRACKER, workerSlug: "yamanakada", color: "#3fb950", badge: "active", industry: "AI 資訊平台", region: "macau" },
+  { id: "sea-urchin-delivery", name: "海膽速遞", url: "https://inari-kira-isla.github.io/sea-urchin-delivery/", worker: CLIENT_TRACKER, workerSlug: "sea-urchin-delivery", color: "#f0883e", badge: "active", industry: "海膽冷鏈配送", region: "macau" },
+  { id: "inari-global-foods", name: "稻荷環球食品", url: "https://inari-kira-isla.github.io/inari-global-foods/", worker: CLIENT_TRACKER, workerSlug: "inari-global-foods", color: "#58a6ff", badge: "active", industry: "日本食材進口", region: "macau" },
+  { id: "after-school-coffee", name: "After School Coffee", url: "https://inari-kira-isla.github.io/after-school-coffee/", worker: CLIENT_TRACKER, workerSlug: "after-school-coffee", color: "#f778ba", badge: "active", industry: "精品咖啡館", region: "macau" },
+  { id: "mind-coffee", name: "Mind Coffee", url: "https://mind-coffee.vercel.app/", worker: CLIENT_TRACKER, workerSlug: "mind-coffee", color: "#d29922", badge: "active", industry: "咖啡店", region: "macau" },
+  { id: "bni-macau", name: "BNI 澳門商業網絡", url: "https://bni-macau.vercel.app/", worker: CLIENT_TRACKER, workerSlug: "bni-macau", color: "#f85149", badge: "active", industry: "商業網絡", region: "macau" },
+  // === 其他 ===
+  { id: "ai-learning", name: "AI 學習寶庫", url: "https://inari-kira-isla.github.io/Openclaw/", worker: "https://openclaw-ai-tracker.inariglobal.workers.dev", color: "#bc8cff", badge: "active", industry: "教育知識", region: "other" },
+  { id: "cloudpipe", name: "CloudPipe Landing", url: "https://inari-kira-isla.github.io/cloudpipe-landing/", worker: "https://cloudpipe-ai-tracker.inariglobal.workers.dev", color: "#39d2c0", badge: "active", industry: "SaaS 平台", region: "other" },
+  { id: "aeo-demo-education", name: "AEO Demo — 教育", url: "https://inari-kira-isla.github.io/aeo-demo-education/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-education", color: "#9f7aea", badge: "new", industry: "教育機構", region: "other" },
+  { id: "aeo-demo-finance", name: "AEO Demo — 金融", url: "https://inari-kira-isla.github.io/aeo-demo-finance/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-finance", color: "#48bb78", badge: "new", industry: "金融服務", region: "other" },
+  { id: "aeo-demo-luxury", name: "AEO Demo — 奢侈品", url: "https://inari-kira-isla.github.io/aeo-demo-luxury/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-luxury", color: "#ecc94b", badge: "new", industry: "奢侈品牌", region: "other" },
+  { id: "aeo-demo-travel-food", name: "AEO Demo — 旅遊美食", url: "https://inari-kira-isla.github.io/aeo-demo-travel-food/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-travel-food", color: "#ed8936", badge: "new", industry: "旅遊美食", region: "other" }
 ];
+
+let showAllSites = false;
+function getActiveSites() { return showAllSites ? ALL_SITES : ALL_SITES.filter(s => s.region === "macau"); }
+// SITES is a dynamic getter for backward compat
+let SITES = getActiveSites();
 
 const BOT_COLORS = {
   "OpenAI GPT":"#58a6ff","ChatGPT Browser":"#58a6ff","OpenAI Search":"#58a6ff",
@@ -370,6 +378,20 @@ const BOT_OWNER_MAP = {
 };
 
 let allData = {};
+
+// ============================================
+// Region toggle (Macau focus vs All)
+// ============================================
+function toggleRegion() {
+  showAllSites = !showAllSites;
+  SITES = getActiveSites();
+  document.getElementById("region-label").textContent = showAllSites ? "全部站點" : "澳門區";
+  const btn = document.getElementById("region-toggle");
+  btn.textContent = showAllSites ? "只看澳門區" : "顯示全部站點";
+  btn.style.color = showAllSites ? "var(--cyan)" : "var(--dim)";
+  btn.style.borderColor = showAllSites ? "var(--cyan)" : "var(--border)";
+  renderSummary(); renderSiteCards(); renderHeatmap(); renderFeed(); renderCnVsIntl(); renderAiVsHuman();
+}
 
 // ============================================
 // Tab switching
@@ -749,7 +771,7 @@ function renderSummary() {
 // Load all data
 // ============================================
 async function loadAll() {
-  await Promise.allSettled(SITES.map(async site => {
+  await Promise.allSettled(ALL_SITES.map(async site => {
     allData[site.id] = await fetchSiteData(site);
   }));
 
