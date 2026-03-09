@@ -120,9 +120,9 @@ body{font-family:'Noto Sans TC',-apple-system,BlinkMacSystemFont,sans-serif;back
 .feed-site{font-size:.7rem;padding:.15rem .4rem;border-radius:4px;text-align:center}
 
 /* Bot Heatmap */
-.heatmap{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-bottom:1.5rem}
+.heatmap{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-bottom:1.5rem;overflow-x:auto}
 .heatmap h2{font-size:.9rem;color:var(--cyan);margin-bottom:1rem}
-.hm-grid{display:grid;grid-template-columns:160px repeat(var(--cols,6),1fr);gap:2px;font-size:.75rem}
+.hm-grid{display:grid;grid-template-columns:160px repeat(var(--cols,6),1fr);gap:2px;font-size:.72rem}
 .hm-header{padding:.4rem;text-align:center;color:var(--dim);font-weight:500}
 .hm-bot{padding:.4rem;color:var(--text);font-weight:500;display:flex;align-items:center}
 .hm-cell{padding:.4rem;text-align:center;border-radius:4px;min-height:32px;display:flex;align-items:center;justify-content:center}
@@ -139,7 +139,7 @@ body{font-family:'Noto Sans TC',-apple-system,BlinkMacSystemFont,sans-serif;back
   .sites{grid-template-columns:1fr}
   .feed-item{grid-template-columns:80px 100px 1fr}
   .feed-item>:last-child{display:none}
-  .hm-grid{font-size:.65rem}
+.hm-grid{font-size:.55rem;overflow-x:auto}
   .comparison-row{grid-template-columns:1fr}
   .tab-btn{padding:.6rem .8rem;font-size:.8rem}
   .bar-label{width:100px;font-size:.7rem}
@@ -213,7 +213,7 @@ footer a{color:var(--cyan);text-decoration:none}
   <div class="tab-content active" id="tab-all">
     <div class="sites" id="site-cards"></div>
     <div class="heatmap">
-      <h2>AI 系統 × 站點 矩陣</h2>
+      <h2>AI 系統 × 站點 矩陣 — 28 種 AI + 人類（全部 13 站）</h2>
       <div class="hm-grid" id="heatmap-grid" style="--cols:2">
         <div class="hm-header"></div>
         <div class="hm-header">載入中...</div>
@@ -572,25 +572,32 @@ function renderSiteCards() {
   }).join("");
 }
 
+// All 28 monitored bot names (always show in heatmap even with 0 data)
+const INTL_BOT_NAMES = [
+  "OpenAI GPT","ChatGPT Browser","OpenAI Search",
+  "Anthropic Claude","Claude Crawler","Claude Web",
+  "Perplexity AI","Google Gemini Training","Google Search",
+  "Microsoft Bing AI","Meta AI","Meta AI Bot",
+  "Common Crawl","You.com AI","Cohere AI","Apple AI","Internet Archive"
+];
+const CN_BOT_NAMES = [
+  "ByteDance AI","Baidu/Ernie AI","Sogou AI","ChatGLM/Zhipu AI",
+  "360 AI","Tencent Hunyuan","SenseChat AI",
+  "Spark/iFlytek AI","Kimi/Moonshot AI","Doubao AI","XiaoIce AI"
+];
+
 function renderHeatmap() {
-  const trackedSites = SITES.filter(s => s.worker);
-  const allBots = new Set();
-  trackedSites.forEach(s => {
-    const d = allData[s.id] || { totals: {} };
-    Object.keys(d.totals || {}).forEach(b => { if (d.totals[b] > 0 && b !== "Human Visitors") allBots.add(b); });
-  });
-  const bots = [...allBots].sort();
-  if (bots.length === 0) bots.push("(等待數據)");
+  // Always use ALL 13 sites in the heatmap
+  const trackedSites = ALL_SITES.filter(s => s.worker);
 
   const grid = document.getElementById("heatmap-grid");
   grid.style.setProperty("--cols", trackedSites.length);
 
   let html = '<div class="hm-header"></div>';
-  trackedSites.forEach(s => { html += `<div class="hm-header" style="color:${s.color}">${s.name}</div>`; });
+  trackedSites.forEach(s => { html += `<div class="hm-header" style="color:${s.color};font-size:.68rem;writing-mode:vertical-lr;text-orientation:mixed;height:90px;display:flex;align-items:flex-end;justify-content:center">${s.name}</div>`; });
 
-  bots.forEach(bot => {
-    const isCN = CN_BOTS.has(bot);
-    html += `<div class="hm-bot" style="${isCN ? 'color:var(--red)' : ''}">${bot}${isCN ? ' <span style="font-size:.6rem;margin-left:.3rem;color:var(--red)">CN</span>' : ''}</div>`;
+  function renderBotRow(bot, isCN) {
+    html += `<div class="hm-bot" style="${isCN ? 'color:var(--red)' : ''}">${bot}</div>`;
     trackedSites.forEach(s => {
       const d = allData[s.id] || { totals: {} };
       const val = d.totals?.[bot] || 0;
@@ -598,7 +605,20 @@ function renderHeatmap() {
       if (val >= 20) cls = "hm-4"; else if (val >= 10) cls = "hm-3"; else if (val >= 3) cls = "hm-2"; else if (val >= 1) cls = "hm-1";
       html += `<div class="hm-cell ${cls}">${val}</div>`;
     });
-  });
+  }
+
+  // Section: 國際 AI
+  html += `<div class="hm-bot" style="grid-column:1/-1;background:var(--card-2);color:var(--blue);font-weight:700;font-size:.78rem;padding:.5rem .75rem;border-radius:4px;margin:.4rem 0 .2rem">🌐 國際 AI（${INTL_BOT_NAMES.length} 種）</div>`;
+  INTL_BOT_NAMES.forEach(bot => renderBotRow(bot, false));
+
+  // Section: 中國 AI
+  html += `<div class="hm-bot" style="grid-column:1/-1;background:#f8514915;color:var(--red);font-weight:700;font-size:.78rem;padding:.5rem .75rem;border-radius:4px;margin:.6rem 0 .2rem">🇨🇳 中國 AI（${CN_BOT_NAMES.length} 種）</div>`;
+  CN_BOT_NAMES.forEach(bot => renderBotRow(bot, true));
+
+  // Section: 人類
+  html += `<div class="hm-bot" style="grid-column:1/-1;background:#f0883e15;color:var(--orange);font-weight:700;font-size:.78rem;padding:.5rem .75rem;border-radius:4px;margin:.6rem 0 .2rem">👤 人類訪客</div>`;
+  renderBotRow("Human Visitors", false);
+
   grid.innerHTML = html;
 }
 
