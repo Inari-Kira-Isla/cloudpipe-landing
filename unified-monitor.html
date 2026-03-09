@@ -221,10 +221,10 @@ footer a{color:var(--cyan);text-decoration:none}
 <div class="container">
   <div class="header">
     <div class="header-left">
-      <h1 class="logo">CloudPipe <span>AI 統一監控中心 — <span id="region-label">澳門區</span></span></h1>
+      <h1 class="logo">CloudPipe <span>AI 統一監控中心 — <span id="region-label">全部站點</span></span></h1>
     </div>
     <div class="header-right">
-      <button class="toggle-btn" id="region-toggle" onclick="toggleRegion()">顯示全部站點</button>
+      <button class="toggle-btn" id="region-toggle" onclick="toggleRegion()">只看澳門區</button>
       <div class="live-badge"><div class="live-dot"></div>即時監控</div>
       <div class="refresh-info" id="last-refresh">連接中...</div>
     </div>
@@ -360,7 +360,7 @@ const ALL_SITES = [
   {id:"aeo-demo-travel-food",name:"AEO Demo — 旅遊美食",url:"https://inari-kira-isla.github.io/aeo-demo-travel-food/",worker:CLIENT_TRACKER,workerSlug:"aeo-demo-travel-food",color:"#ed8936",badge:"new",industry:"旅遊美食",region:"other"}
 ];
 
-let showAllSites = false;
+let showAllSites = true;
 function getActiveSites() { return showAllSites ? ALL_SITES : ALL_SITES.filter(s => s.region === "macau"); }
 let SITES = getActiveSites();
 
