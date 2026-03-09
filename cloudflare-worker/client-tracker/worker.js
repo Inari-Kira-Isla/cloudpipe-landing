@@ -42,6 +42,17 @@ const AI_BOTS = {
   "meta-externalagent": "Meta AI",
   "FacebookBot": "Meta AI Bot",
   "ia_archiver": "Internet Archive",
+  // Chinese AI Bots
+  "Baiduspider": "Baidu/Ernie AI",
+  "Sogou": "Sogou AI",
+  "ChatGLM": "ChatGLM/Zhipu AI",
+  "360Spider": "360 AI",
+  "HunyuanBot": "Tencent Hunyuan",
+  "SenseChat": "SenseChat AI",
+  "SparkBot": "Spark/iFlytek AI",
+  "Kimi": "Kimi/Moonshot AI",
+  "Doubao": "Doubao AI",
+  "XiaoIce": "XiaoIce AI",
 };
 
 function detectAIBot(userAgent) {
@@ -63,6 +74,24 @@ const BOT_OWNERS = {
   "Bingbot": "Microsoft", "CCBot": "Common Crawl", "Bytespider": "ByteDance",
   "YouBot": "You.com", "cohere-ai": "Cohere", "Applebot": "Apple",
   "meta-externalagent": "Meta", "FacebookBot": "Meta", "ia_archiver": "Internet Archive",
+  // Chinese AI
+  "Baiduspider": "Baidu", "Sogou": "Sogou", "ChatGLM": "Zhipu AI",
+  "360Spider": "Qihoo 360", "HunyuanBot": "Tencent", "SenseChat": "SenseTime",
+  "SparkBot": "iFlytek", "Kimi": "Moonshot AI", "Doubao": "ByteDance", "XiaoIce": "XiaoIce",
+};
+
+// Bot region mapping for CN vs International comparison
+const BOT_REGIONS = {
+  "GPTBot": "International", "ChatGPT-User": "International", "OAI-SearchBot": "International",
+  "anthropic-ai": "International", "ClaudeBot": "International", "claude-web": "International",
+  "PerplexityBot": "International", "Google-Extended": "International", "Googlebot": "International",
+  "Bingbot": "International", "CCBot": "International",
+  "YouBot": "International", "cohere-ai": "International", "Applebot": "International",
+  "meta-externalagent": "International", "FacebookBot": "International", "ia_archiver": "International",
+  // Chinese AI
+  "Bytespider": "CN", "Baiduspider": "CN", "Sogou": "CN", "ChatGLM": "CN",
+  "360Spider": "CN", "HunyuanBot": "CN", "SenseChat": "CN",
+  "SparkBot": "CN", "Kimi": "CN", "Doubao": "CN", "XiaoIce": "CN",
 };
 
 async function hashIP(ip) {
@@ -165,13 +194,27 @@ async function logGeneralVisit(env, siteSlug, request) {
 async function getSiteStats(env, siteSlug) {
   const today = new Date().toISOString().split("T")[0];
   const prefix = `site:${siteSlug}:`;
-  const stats = { today: {}, totals: {}, recentVisits: [], generatedAt: new Date().toISOString(), site: siteSlug };
+  const stats = {
+    today: {}, totals: {}, recentVisits: [],
+    cnAI: { today: {}, totals: {} },
+    intlAI: { today: {}, totals: {} },
+    generatedAt: new Date().toISOString(), site: siteSlug
+  };
 
   for (const [pattern, name] of Object.entries(AI_BOTS)) {
     const dayCount = parseInt((await env.AI_FOOTPRINT.get(`${prefix}day:${today}:${pattern}`)) || "0");
     const total = parseInt((await env.AI_FOOTPRINT.get(`${prefix}total:${pattern}`)) || "0");
     if (dayCount > 0) stats.today[name] = dayCount;
     if (total > 0) stats.totals[name] = total;
+    // Region breakdown
+    const region = BOT_REGIONS[pattern] || "International";
+    if (region === "CN") {
+      if (dayCount > 0) stats.cnAI.today[name] = dayCount;
+      if (total > 0) stats.cnAI.totals[name] = total;
+    } else {
+      if (dayCount > 0) stats.intlAI.today[name] = dayCount;
+      if (total > 0) stats.intlAI.totals[name] = total;
+    }
   }
   // Human visitor counts
   const humanToday = parseInt((await env.AI_FOOTPRINT.get(`${prefix}day:${today}:_human`)) || "0");

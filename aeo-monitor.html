@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI 爬蟲監控中心 | CloudPipe AEO Platform</title>
-<meta name="description" content="即時監控所有託管網站的 AI 爬蟲活動 — Meta、OpenAI、Claude、Perplexity 等 18 種 AI 系統的訪問追蹤">
+<meta name="description" content="即時監控所有託管網站的 AI 爬蟲活動 — 中國 AI、國際 AI、人類搜尋三方比對追蹤">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
 <link rel="canonical" href="https://inari-kira-isla.github.io/cloudpipe-landing/aeo-monitor.html">
 <link rel="llms-txt" href="https://inari-kira-isla.github.io/cloudpipe-landing/llms.txt">
 <meta property="og:title" content="AI 爬蟲監控中心 | CloudPipe">
-<meta property="og:description" content="即時監控所有託管網站的 AI 爬蟲活動">
+<meta property="og:description" content="即時監控所有託管網站的 AI 爬蟲活動 — 中國 AI vs 國際 AI vs 人類搜尋">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://inari-kira-isla.github.io/cloudpipe-landing/aeo-monitor.html">
 <meta property="og:locale" content="zh_TW">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://inari-kira-isla.github.io/cloudpipe-landing","description":"澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服。","alternateName":"CloudPipe AI Automation Platform","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"},"sameAs":["https://github.com/Inari-Kira-Isla/cloudpipe-landing"]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"CloudPipe AI 爬蟲監控中心","description":"即時監控所有託管網站的 AI 爬蟲活動","url":"https://inari-kira-isla.github.io/cloudpipe-landing/aeo-monitor.html","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"MOP"}}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"AI 爬蟲監控中心追蹤哪些站點？","acceptedAnswer":{"@type":"Answer","text":"目前追蹤 CloudPipe 生態系統下的所有站點，包括 AI 學習寶庫、CloudPipe Landing、山中田、海膽速遞、稻荷環球食品、After School Coffee、Mind Coffee、BNI 澳門商業網絡等 8 個站點。"}},{"@type":"Question","name":"監控數據多久更新一次？","acceptedAnswer":{"@type":"Answer","text":"每 60 秒自動從各站點的 Cloudflare Worker 拉取最新數據，即時顯示今日訪問、累積訪問、AI 種類統計及活動記錄。"}},{"@type":"Question","name":"什麼是 Bot × Site 矩陣？","acceptedAnswer":{"@type":"Answer","text":"矩陣以熱力圖形式展示每個 AI 系統對每個站點的訪問次數，幫助你直觀了解哪些 AI 最關注哪些站點的內容。"}},{"@type":"Question","name":"如何為新站點加入 AI 追蹤？","acceptedAnswer":{"@type":"Answer","text":"需要為新站點部署一個 Cloudflare Worker，配置 AI 爬蟲 User-Agent 識別規則，並將 Worker URL 加入監控中心的 SITES 列表即可。"}},{"@type":"Question","name":"如何為新站點加入 AI 追蹤？","acceptedAnswer":{"@type":"Answer","text":"新站點透過多租戶 Cloudflare Worker (client-ai-tracker) 統一追蹤，只需在 Worker 配置中加入站點 slug 和 Vercel URL 即可自動開始收集 AI 爬蟲數據。"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"AI 爬蟲監控中心追蹤哪些站點？","acceptedAnswer":{"@type":"Answer","text":"目前追蹤 CloudPipe 生態系統下的所有站點，包括 AI 學習寶庫、CloudPipe Landing、山中田、海膽速遞、稻荷環球食品、After School Coffee、Mind Coffee、BNI 澳門商業網絡等 13 個站點。"}},{"@type":"Question","name":"監控數據多久更新一次？","acceptedAnswer":{"@type":"Answer","text":"每 60 秒自動從各站點的 Cloudflare Worker 拉取最新數據，即時顯示今日訪問、累積訪問、AI 種類統計及活動記錄。"}},{"@type":"Question","name":"什麼是中國 AI vs 國際 AI 比對？","acceptedAnswer":{"@type":"Answer","text":"監控中心可區分來自中國（百度、騰訊混元、智譜 ChatGLM、科大訊飛等）和國際（OpenAI、Anthropic、Google、Perplexity 等）的 AI 爬蟲，以圓餅圖和條形圖呈現比例。"}},{"@type":"Question","name":"如何追蹤 AI 與人類訪客的比例？","acceptedAnswer":{"@type":"Answer","text":"透過 Cloudflare Worker 的 User-Agent 偵測，自動區分 AI 爬蟲和人類瀏覽器訪問，提供即時的 AI vs 人類流量比對數據。"}},{"@type":"Question","name":"如何為新站點加入 AI 追蹤？","acceptedAnswer":{"@type":"Answer","text":"新站點透過多租戶 Cloudflare Worker (client-ai-tracker) 統一追蹤，只需在 Worker 配置中加入站點 slug 和 URL 即可自動開始收集數據。"}}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -38,11 +38,57 @@ body{font-family:'Noto Sans TC',-apple-system,BlinkMacSystemFont,sans-serif;back
 .refresh-info{color:var(--dim);font-size:.75rem}
 
 /* Summary Cards */
-.summary{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-bottom:1.5rem}
-.s-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem}
-.s-card .label{font-size:.7rem;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem}
-.s-card .value{font-size:1.8rem;font-weight:700;line-height:1}
-.s-card .sub{font-size:.75rem;color:var(--dim);margin-top:.35rem}
+.summary{display:grid;grid-template-columns:repeat(7,1fr);gap:.75rem;margin-bottom:1.5rem}
+.s-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem}
+.s-card .label{font-size:.65rem;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+.s-card .value{font-size:1.6rem;font-weight:700;line-height:1}
+.s-card .sub{font-size:.7rem;color:var(--dim);margin-top:.3rem}
+
+/* Tab Bar */
+.tab-bar{display:flex;gap:0;margin-bottom:1.5rem;border-bottom:2px solid var(--border)}
+.tab-btn{padding:.75rem 1.5rem;background:none;border:none;color:var(--dim);font-size:.9rem;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;font-family:inherit;transition:color .2s}
+.tab-btn.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+.tab-btn:hover{color:var(--text)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* Comparison layouts */
+.comparison-row{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
+.comp-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem}
+.comp-card h3{font-size:1rem;margin-bottom:1rem}
+.comp-big-num{font-size:2.5rem;font-weight:700;line-height:1}
+.comp-sub{font-size:.85rem;color:var(--dim);margin-top:.5rem}
+.comp-bot-list{margin-top:1rem;display:flex;flex-wrap:wrap;gap:.4rem}
+
+/* CSS Pie Chart */
+.pie-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem;text-align:center}
+.pie-wrap h3{font-size:.9rem;color:var(--cyan);margin-bottom:1.5rem}
+.pie-chart{width:180px;height:180px;border-radius:50%;margin:0 auto 1.25rem;position:relative}
+.pie-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:90px;height:90px;border-radius:50%;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pie-center .pct{font-size:1.2rem;font-weight:700}
+.pie-center .plbl{font-size:.6rem;color:var(--dim)}
+.pie-legend{display:flex;justify-content:center;gap:2rem;font-size:.85rem}
+.pie-legend .dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:.4rem;vertical-align:middle}
+
+/* Stacked Bar Chart */
+.bar-chart{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem}
+.bar-chart h3{font-size:.9rem;color:var(--cyan);margin-bottom:1.25rem}
+.bar-row{display:flex;align-items:center;margin-bottom:.6rem}
+.bar-label{width:140px;font-size:.78rem;color:var(--dim);flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{flex:1;height:22px;border-radius:4px;overflow:hidden;display:flex;background:var(--card-2)}
+.bar-segment{height:100%;transition:width .3s;min-width:0}
+.bar-values{width:100px;text-align:right;font-size:.72rem;color:var(--dim);margin-left:.5rem;flex-shrink:0}
+
+/* Detail Table */
+.detail-table{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem}
+.detail-table h3{font-size:.9rem;color:var(--cyan);margin-bottom:1rem}
+.detail-table table{width:100%;border-collapse:collapse;font-size:.82rem}
+.detail-table th{text-align:left;padding:.5rem .75rem;color:var(--dim);font-weight:500;border-bottom:1px solid var(--border);font-size:.72rem;text-transform:uppercase}
+.detail-table td{padding:.5rem .75rem;border-bottom:1px solid var(--border)}
+.detail-table tr:last-child td{border-bottom:none}
+.region-badge{font-size:.65rem;padding:.15rem .4rem;border-radius:4px;font-weight:600}
+.region-cn{background:#f8514915;color:var(--red);border:1px solid #f8514930}
+.region-intl{background:#58a6ff15;color:var(--blue);border:1px solid #58a6ff30}
 
 /* Site Cards */
 .sites{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:1rem;margin-bottom:1.5rem}
@@ -89,11 +135,14 @@ body{font-family:'Noto Sans TC',-apple-system,BlinkMacSystemFont,sans-serif;back
 /* Responsive */
 @media(max-width:768px){
   .summary{grid-template-columns:repeat(2,1fr)}
-  .summary .s-card:last-child{grid-column:span 2}
+  .summary .s-card:nth-child(7){grid-column:span 2}
   .sites{grid-template-columns:1fr}
   .feed-item{grid-template-columns:80px 100px 1fr}
   .feed-item>:last-child{display:none}
   .hm-grid{font-size:.65rem}
+  .comparison-row{grid-template-columns:1fr}
+  .tab-btn{padding:.6rem .8rem;font-size:.8rem}
+  .bar-label{width:100px;font-size:.7rem}
 }
 
 footer{text-align:center;padding:2rem 0 1rem;color:var(--dim);font-size:.8rem;border-top:1px solid var(--border);margin-top:1rem}
@@ -113,10 +162,10 @@ footer a{color:var(--cyan);text-decoration:none}
     </div>
   </div>
 
-  <!-- Summary -->
+  <!-- Summary Cards (7) -->
   <div class="summary">
     <div class="s-card">
-      <div class="label">今日全站 AI 訪問</div>
+      <div class="label">今日 AI 訪問</div>
       <div class="value" id="g-today" style="color:var(--cyan)">—</div>
       <div class="sub" id="g-today-sub">載入中</div>
     </div>
@@ -126,9 +175,9 @@ footer a{color:var(--cyan);text-decoration:none}
       <div class="sub">所有站點合計</div>
     </div>
     <div class="s-card">
-      <div class="label">已偵測 AI 種類</div>
+      <div class="label">AI 種類</div>
       <div class="value" id="g-types" style="color:var(--purple)">—</div>
-      <div class="sub">/ 18 種支援</div>
+      <div class="sub">/ 28 種支援</div>
     </div>
     <div class="s-card">
       <div class="label">託管站點</div>
@@ -140,27 +189,112 @@ footer a{color:var(--cyan);text-decoration:none}
       <div class="value" id="g-top" style="color:var(--gold);font-size:1rem;padding-top:.4rem">—</div>
       <div class="sub" id="g-top-sub">全站最多訪問</div>
     </div>
-  </div>
-
-  <!-- Site Cards -->
-  <div class="sites" id="site-cards">
-    <!-- Dynamically populated -->
-  </div>
-
-  <!-- Bot × Site Heatmap -->
-  <div class="heatmap">
-    <h2>AI 系統 × 站點 矩陣</h2>
-    <div class="hm-grid" id="heatmap-grid" style="--cols:2">
-      <div class="hm-header"></div>
-      <div class="hm-header">載入中...</div>
+    <div class="s-card">
+      <div class="label">中國 AI 訪問</div>
+      <div class="value" id="g-cn" style="color:var(--red)">—</div>
+      <div class="sub" id="g-cn-sub">今日合計</div>
+    </div>
+    <div class="s-card">
+      <div class="label">人類訪客</div>
+      <div class="value" id="g-human" style="color:var(--orange)">—</div>
+      <div class="sub" id="g-human-sub">今日合計</div>
     </div>
   </div>
 
-  <!-- Activity Feed -->
-  <div class="feed">
-    <h2>全站即時活動記錄</h2>
-    <div class="feed-list" id="feed-list">
-      <div style="text-align:center;color:var(--dim);padding:2rem">載入中...</div>
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="all" onclick="switchTab('all')">全部</button>
+    <button class="tab-btn" data-tab="cn-vs-intl" onclick="switchTab('cn-vs-intl')">中國 AI vs 國際 AI</button>
+    <button class="tab-btn" data-tab="ai-vs-human" onclick="switchTab('ai-vs-human')">AI vs 人類</button>
+  </div>
+
+  <!-- Tab 1: All (existing views) -->
+  <div class="tab-content active" id="tab-all">
+    <div class="sites" id="site-cards"></div>
+    <div class="heatmap">
+      <h2>AI 系統 × 站點 矩陣</h2>
+      <div class="hm-grid" id="heatmap-grid" style="--cols:2">
+        <div class="hm-header"></div>
+        <div class="hm-header">載入中...</div>
+      </div>
+    </div>
+    <div class="feed">
+      <h2>全站即時活動記錄</h2>
+      <div class="feed-list" id="feed-list">
+        <div style="text-align:center;color:var(--dim);padding:2rem">載入中...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 2: CN vs International AI -->
+  <div class="tab-content" id="tab-cn-vs-intl">
+    <div class="comparison-row">
+      <div class="comp-card">
+        <h3 style="color:var(--red)">中國 AI</h3>
+        <div class="comp-big-num" id="cn-today-num" style="color:var(--red)">0</div>
+        <div class="comp-sub" id="cn-today-sub">今日訪問</div>
+        <div style="margin-top:.5rem;font-size:.85rem;color:var(--dim)" id="cn-total-text">累積: 0</div>
+        <div class="comp-bot-list" id="cn-bot-list"></div>
+      </div>
+      <div class="comp-card">
+        <h3 style="color:var(--blue)">國際 AI</h3>
+        <div class="comp-big-num" id="intl-today-num" style="color:var(--blue)">0</div>
+        <div class="comp-sub" id="intl-today-sub">今日訪問</div>
+        <div style="margin-top:.5rem;font-size:.85rem;color:var(--dim)" id="intl-total-text">累積: 0</div>
+        <div class="comp-bot-list" id="intl-bot-list"></div>
+      </div>
+    </div>
+    <div class="pie-wrap">
+      <h3>中國 AI vs 國際 AI — 累積比例</h3>
+      <div id="cn-intl-pie"></div>
+    </div>
+    <div class="bar-chart">
+      <h3>各站點 — 中國 AI vs 國際 AI</h3>
+      <div id="cn-intl-bars"></div>
+    </div>
+    <div class="detail-table">
+      <h3>所有 AI 爬蟲明細</h3>
+      <div style="overflow-x:auto">
+        <table id="cn-intl-table">
+          <thead><tr><th>Bot</th><th>所屬</th><th>地區</th><th>今日</th><th>累積</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 3: AI vs Human -->
+  <div class="tab-content" id="tab-ai-vs-human">
+    <div class="comparison-row">
+      <div class="comp-card">
+        <h3 style="color:var(--purple)">AI 爬蟲</h3>
+        <div class="comp-big-num" id="ai-total-num" style="color:var(--purple)">0</div>
+        <div class="comp-sub" id="ai-total-sub">今日 AI 訪問</div>
+        <div style="margin-top:.5rem;font-size:.85rem;color:var(--dim)" id="ai-cum-text">累積: 0</div>
+      </div>
+      <div class="comp-card">
+        <h3 style="color:var(--green)">人類訪客</h3>
+        <div class="comp-big-num" id="human-total-num" style="color:var(--green)">0</div>
+        <div class="comp-sub" id="human-total-sub">今日人類訪問</div>
+        <div style="margin-top:.5rem;font-size:.85rem;color:var(--dim)" id="human-cum-text">累積: 0</div>
+      </div>
+    </div>
+    <div class="pie-wrap">
+      <h3>AI 爬蟲 vs 人類訪客 — 累積比例</h3>
+      <div id="ai-human-pie"></div>
+    </div>
+    <div class="bar-chart">
+      <h3>各站點 — AI vs 人類流量</h3>
+      <div id="ai-human-bars"></div>
+    </div>
+    <div class="detail-table">
+      <h3>各站點 AI/人類 比率</h3>
+      <div style="overflow-x:auto">
+        <table id="ai-human-table">
+          <thead><tr><th>站點</th><th>AI 今日</th><th>人類今日</th><th>AI 佔比</th><th>AI 累積</th><th>人類累積</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -180,140 +314,26 @@ footer a{color:var(--cyan);text-decoration:none}
 
 <script>
 // ============================================
-// Multi-Site AI Crawler Monitor
+// Multi-Site AI Crawler Monitor v2.0
+// With CN vs International + AI vs Human tabs
 // ============================================
 
 const CLIENT_TRACKER = "https://client-ai-tracker.inariglobal.workers.dev";
 
 const SITES = [
-  {
-    id: "ai-learning",
-    name: "AI 學習寶庫",
-    url: "https://inari-kira-isla.github.io/Openclaw/",
-    worker: "https://openclaw-ai-tracker.inariglobal.workers.dev",
-    color: "#bc8cff",
-    badge: "active",
-    industry: "教育知識"
-  },
-  {
-    id: "cloudpipe",
-    name: "CloudPipe Landing",
-    url: "https://inari-kira-isla.github.io/cloudpipe-landing/",
-    worker: "https://cloudpipe-ai-tracker.inariglobal.workers.dev",
-    color: "#39d2c0",
-    badge: "active",
-    industry: "SaaS 平台"
-  },
-  {
-    id: "cloudpipe-macao-app",
-    name: "澳門商戶 AI 百科",
-    url: "https://cloudpipe-macao-app.vercel.app/",
-    worker: CLIENT_TRACKER,
-    workerSlug: "cloudpipe-macao-app",
-    color: "#f85149",
-    badge: "active",
-    industry: "澳門商戶目錄"
-  },
-  {
-    id: "yamanakada",
-    name: "山中田 Yamanakada",
-    url: "https://inari-kira-isla.github.io/yamanakada/",
-    worker: CLIENT_TRACKER,
-    workerSlug: "yamanakada",
-    color: "#3fb950",
-    badge: "active",
-    industry: "科技顧問"
-  },
-  {
-    id: "sea-urchin-delivery",
-    name: "海膽速遞",
-    url: "https://inari-kira-isla.github.io/sea-urchin-delivery/",
-    worker: CLIENT_TRACKER,
-    workerSlug: "sea-urchin-delivery",
-    color: "#f0883e",
-    badge: "active",
-    industry: "外送服務"
-  },
-  {
-    id: "inari-global-foods",
-    name: "稻荷環球食品",
-    url: "https://inari-kira-isla.github.io/inari-global-foods/",
-    worker: CLIENT_TRACKER,
-    workerSlug: "inari-global-foods",
-    color: "#58a6ff",
-    badge: "active",
-    industry: "食品貿易"
-  },
-  {
-    id: "after-school-coffee",
-    name: "After School Coffee",
-    url: "https://inari-kira-isla.github.io/after-school-coffee/",
-    worker: CLIENT_TRACKER,
-    workerSlug: "after-school-coffee",
-    color: "#f778ba",
-    badge: "active",
-    industry: "咖啡店"
-  },
-  {
-    id: "mind-coffee",
-    name: "Mind Coffee",
-    url: "https://mind-coffee.vercel.app/",
-    worker: CLIENT_TRACKER,
-    workerSlug: "mind-coffee",
-    color: "#d29922",
-    badge: "active",
-    industry: "咖啡店"
-  },
-  {
-    id: "bni-macau",
-    name: "BNI 澳門商業網絡",
-    url: "https://bni-macau.vercel.app/",
-    worker: CLIENT_TRACKER,
-    workerSlug: "bni-macau",
-    color: "#f85149",
-    badge: "active",
-    industry: "商業網絡"
-  },
-  {
-    id: "aeo-demo-education",
-    name: "AEO Demo — 教育",
-    url: "https://inari-kira-isla.github.io/aeo-demo-education/",
-    worker: CLIENT_TRACKER,
-    workerSlug: "aeo-demo-education",
-    color: "#9f7aea",
-    badge: "new",
-    industry: "教育機構"
-  },
-  {
-    id: "aeo-demo-finance",
-    name: "AEO Demo — 金融",
-    url: "https://inari-kira-isla.github.io/aeo-demo-finance/",
-    worker: CLIENT_TRACKER,
-    workerSlug: "aeo-demo-finance",
-    color: "#48bb78",
-    badge: "new",
-    industry: "金融服務"
-  },
-  {
-    id: "aeo-demo-luxury",
-    name: "AEO Demo — 奢侈品",
-    url: "https://inari-kira-isla.github.io/aeo-demo-luxury/",
-    worker: CLIENT_TRACKER,
-    workerSlug: "aeo-demo-luxury",
-    color: "#ecc94b",
-    badge: "new",
-    industry: "奢侈品牌"
-  },
-  {
-    id: "aeo-demo-travel-food",
-    name: "AEO Demo — 旅遊美食",
-    url: "https://inari-kira-isla.github.io/aeo-demo-travel-food/",
-    worker: CLIENT_TRACKER,
-    workerSlug: "aeo-demo-travel-food",
-    color: "#ed8936",
-    badge: "new",
-    industry: "旅遊美食"
-  }
+  { id: "ai-learning", name: "AI 學習寶庫", url: "https://inari-kira-isla.github.io/Openclaw/", worker: "https://openclaw-ai-tracker.inariglobal.workers.dev", color: "#bc8cff", badge: "active", industry: "教育知識" },
+  { id: "cloudpipe", name: "CloudPipe Landing", url: "https://inari-kira-isla.github.io/cloudpipe-landing/", worker: "https://cloudpipe-ai-tracker.inariglobal.workers.dev", color: "#39d2c0", badge: "active", industry: "SaaS 平台" },
+  { id: "cloudpipe-macao-app", name: "澳門商戶百科", url: "https://cloudpipe-macao-app.vercel.app/", worker: CLIENT_TRACKER, workerSlug: "cloudpipe-macao-app", color: "#f85149", badge: "active", industry: "澳門商戶目錄" },
+  { id: "yamanakada", name: "山中田", url: "https://inari-kira-isla.github.io/yamanakada/", worker: CLIENT_TRACKER, workerSlug: "yamanakada", color: "#3fb950", badge: "active", industry: "科技顧問" },
+  { id: "sea-urchin-delivery", name: "海膽速遞", url: "https://inari-kira-isla.github.io/sea-urchin-delivery/", worker: CLIENT_TRACKER, workerSlug: "sea-urchin-delivery", color: "#f0883e", badge: "active", industry: "外送服務" },
+  { id: "inari-global-foods", name: "稻荷環球食品", url: "https://inari-kira-isla.github.io/inari-global-foods/", worker: CLIENT_TRACKER, workerSlug: "inari-global-foods", color: "#58a6ff", badge: "active", industry: "食品貿易" },
+  { id: "after-school-coffee", name: "After School Coffee", url: "https://inari-kira-isla.github.io/after-school-coffee/", worker: CLIENT_TRACKER, workerSlug: "after-school-coffee", color: "#f778ba", badge: "active", industry: "咖啡店" },
+  { id: "mind-coffee", name: "Mind Coffee", url: "https://mind-coffee.vercel.app/", worker: CLIENT_TRACKER, workerSlug: "mind-coffee", color: "#d29922", badge: "active", industry: "咖啡店" },
+  { id: "bni-macau", name: "BNI 澳門商業網絡", url: "https://bni-macau.vercel.app/", worker: CLIENT_TRACKER, workerSlug: "bni-macau", color: "#f85149", badge: "active", industry: "商業網絡" },
+  { id: "aeo-demo-education", name: "AEO Demo — 教育", url: "https://inari-kira-isla.github.io/aeo-demo-education/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-education", color: "#9f7aea", badge: "new", industry: "教育機構" },
+  { id: "aeo-demo-finance", name: "AEO Demo — 金融", url: "https://inari-kira-isla.github.io/aeo-demo-finance/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-finance", color: "#48bb78", badge: "new", industry: "金融服務" },
+  { id: "aeo-demo-luxury", name: "AEO Demo — 奢侈品", url: "https://inari-kira-isla.github.io/aeo-demo-luxury/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-luxury", color: "#ecc94b", badge: "new", industry: "奢侈品牌" },
+  { id: "aeo-demo-travel-food", name: "AEO Demo — 旅遊美食", url: "https://inari-kira-isla.github.io/aeo-demo-travel-food/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-travel-food", color: "#ed8936", badge: "new", industry: "旅遊美食" }
 ];
 
 const BOT_COLORS = {
@@ -321,16 +341,52 @@ const BOT_COLORS = {
   "Anthropic Claude":"#bc8cff","Claude Crawler":"#bc8cff","Claude Web":"#bc8cff",
   "Perplexity AI":"#39d2c0","Google Gemini Training":"#3fb950","Google Search":"#3fb950",
   "Microsoft Bing AI":"#79c0ff","Meta AI":"#58a6ff","Meta AI Bot":"#58a6ff",
-  "ByteDance AI":"#8b949e","Common Crawl":"#8b949e","You.com AI":"#8b949e",
-  "Cohere AI":"#8b949e","Apple AI":"#8b949e","Internet Archive":"#8b949e"
+  "ByteDance AI":"#f85149","Common Crawl":"#8b949e","You.com AI":"#8b949e",
+  "Cohere AI":"#8b949e","Apple AI":"#8b949e","Internet Archive":"#8b949e",
+  // Chinese AI
+  "Baidu/Ernie AI":"#de4343","Sogou AI":"#ff6b35","ChatGLM/Zhipu AI":"#7c3aed",
+  "360 AI":"#22c55e","Tencent Hunyuan":"#0ea5e9","SenseChat AI":"#f97316",
+  "Spark/iFlytek AI":"#ec4899","Kimi/Moonshot AI":"#14b8a6","Doubao AI":"#8b5cf6",
+  "XiaoIce AI":"#06b6d4"
+};
+
+// Chinese AI bot names (display names)
+const CN_BOTS = new Set([
+  "ByteDance AI", "Baidu/Ernie AI", "Sogou AI", "ChatGLM/Zhipu AI",
+  "360 AI", "Tencent Hunyuan", "SenseChat AI", "Spark/iFlytek AI",
+  "Kimi/Moonshot AI", "Doubao AI", "XiaoIce AI"
+]);
+
+const BOT_OWNER_MAP = {
+  "OpenAI GPT":"OpenAI","ChatGPT Browser":"OpenAI","OpenAI Search":"OpenAI",
+  "Anthropic Claude":"Anthropic","Claude Crawler":"Anthropic","Claude Web":"Anthropic",
+  "Perplexity AI":"Perplexity","Google Gemini Training":"Google","Google Search":"Google",
+  "Microsoft Bing AI":"Microsoft","Meta AI":"Meta","Meta AI Bot":"Meta",
+  "ByteDance AI":"ByteDance","Common Crawl":"Common Crawl","You.com AI":"You.com",
+  "Cohere AI":"Cohere","Apple AI":"Apple","Internet Archive":"Internet Archive",
+  "Baidu/Ernie AI":"Baidu","Sogou AI":"Sogou","ChatGLM/Zhipu AI":"Zhipu AI",
+  "360 AI":"Qihoo 360","Tencent Hunyuan":"Tencent","SenseChat AI":"SenseTime",
+  "Spark/iFlytek AI":"iFlytek","Kimi/Moonshot AI":"Moonshot AI","Doubao AI":"ByteDance","XiaoIce AI":"XiaoIce"
 };
 
 let allData = {};
 
+// ============================================
+// Tab switching
+// ============================================
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+  document.getElementById(`tab-${tabId}`).classList.add('active');
+}
+
+// ============================================
+// Data fetching
+// ============================================
 async function fetchSiteData(site) {
   if (!site.worker) return { today: {}, totals: {}, recentVisits: [], error: false, noWorker: true };
   try {
-    // Multi-tenant worker uses /{slug}/ai-stats.json, single-tenant uses /ai-stats.json
     const statsUrl = site.workerSlug
       ? site.worker + "/" + site.workerSlug + "/ai-stats.json"
       : site.worker + "/ai-stats.json";
@@ -342,12 +398,121 @@ async function fetchSiteData(site) {
   }
 }
 
+// ============================================
+// Region & Human data computation
+// ============================================
+function computeRegionData() {
+  let cnToday = 0, cnTotal = 0, intlToday = 0, intlTotal = 0;
+  const cnBotTotals = {}, intlBotTotals = {}, cnBotToday = {}, intlBotToday = {};
+  const perSite = {};
+
+  SITES.forEach(site => {
+    const d = allData[site.id] || { today: {}, totals: {} };
+    let sCnT = 0, sCnC = 0, sIntlT = 0, sIntlC = 0;
+
+    Object.entries(d.today || {}).forEach(([bot, v]) => {
+      if (bot === "Human Visitors") return;
+      if (CN_BOTS.has(bot)) { sCnT += v; cnToday += v; cnBotToday[bot] = (cnBotToday[bot]||0) + v; }
+      else { sIntlT += v; intlToday += v; intlBotToday[bot] = (intlBotToday[bot]||0) + v; }
+    });
+    Object.entries(d.totals || {}).forEach(([bot, v]) => {
+      if (bot === "Human Visitors") return;
+      if (CN_BOTS.has(bot)) { sCnC += v; cnTotal += v; cnBotTotals[bot] = (cnBotTotals[bot]||0) + v; }
+      else { sIntlC += v; intlTotal += v; intlBotTotals[bot] = (intlBotTotals[bot]||0) + v; }
+    });
+
+    perSite[site.id] = { cnToday: sCnT, cnTotal: sCnC, intlToday: sIntlT, intlTotal: sIntlC, name: site.name, color: site.color };
+  });
+
+  return { cnToday, cnTotal, intlToday, intlTotal, cnBotTotals, intlBotTotals, cnBotToday, intlBotToday, perSite };
+}
+
+function computeHumanData() {
+  let aiToday = 0, aiTotal = 0, humanToday = 0, humanTotal = 0;
+  const perSite = {};
+
+  SITES.forEach(site => {
+    const d = allData[site.id] || { today: {}, totals: {} };
+    let sAiT = 0, sAiC = 0, sHT = 0, sHC = 0;
+
+    Object.entries(d.today || {}).forEach(([bot, v]) => {
+      if (bot === "Human Visitors") { sHT += v; humanToday += v; }
+      else { sAiT += v; aiToday += v; }
+    });
+    Object.entries(d.totals || {}).forEach(([bot, v]) => {
+      if (bot === "Human Visitors") { sHC += v; humanTotal += v; }
+      else { sAiC += v; aiTotal += v; }
+    });
+
+    perSite[site.id] = { aiToday: sAiT, aiTotal: sAiC, humanToday: sHT, humanTotal: sHC, name: site.name, color: site.color };
+  });
+
+  return { aiToday, aiTotal, humanToday, humanTotal, perSite };
+}
+
+// ============================================
+// Pie chart renderer (CSS conic-gradient)
+// ============================================
+function renderPie(containerId, val1, val2, color1, color2, label1, label2) {
+  const total = val1 + val2;
+  const pct1 = total > 0 ? (val1 / total * 100) : 0;
+  const pct2 = total > 0 ? (val2 / total * 100) : 0;
+  const container = document.getElementById(containerId);
+
+  if (total === 0) {
+    container.innerHTML = '<div style="color:var(--dim);padding:2rem">尚無數據</div>';
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="pie-chart" style="background:conic-gradient(${color1} 0% ${pct1}%, ${color2} ${pct1}% 100%)">
+      <div class="pie-center">
+        <div class="pct" style="color:${color1}">${pct1.toFixed(1)}%</div>
+        <div class="plbl">${label1}</div>
+      </div>
+    </div>
+    <div class="pie-legend">
+      <span><span class="dot" style="background:${color1}"></span>${label1}: ${val1.toLocaleString()} (${pct1.toFixed(1)}%)</span>
+      <span><span class="dot" style="background:${color2}"></span>${label2}: ${val2.toLocaleString()} (${pct2.toFixed(1)}%)</span>
+    </div>
+  `;
+}
+
+// ============================================
+// Stacked bar chart renderer
+// ============================================
+function renderBars(containerId, data, color1, color2, label1, label2) {
+  const container = document.getElementById(containerId);
+  const entries = SITES.map(s => {
+    const d = data[s.id];
+    if (!d) return null;
+    return { name: s.name, v1: d.v1 || 0, v2: d.v2 || 0, color: s.color };
+  }).filter(Boolean);
+
+  if (entries.length === 0) {
+    container.innerHTML = '<div style="color:var(--dim);padding:1rem">尚無數據</div>';
+    return;
+  }
+
+  container.innerHTML = entries.map(e => {
+    const total = e.v1 + e.v2;
+    const pct1 = total > 0 ? (e.v1 / total * 100) : 0;
+    const pct2 = total > 0 ? (e.v2 / total * 100) : 0;
+    return `<div class="bar-row">
+      <div class="bar-label">${e.name}</div>
+      <div class="bar-track">
+        ${total > 0 ? `<div class="bar-segment" style="width:${pct1}%;background:${color1}"></div><div class="bar-segment" style="width:${pct2}%;background:${color2}"></div>` : ''}
+      </div>
+      <div class="bar-values">${e.v1} / ${e.v2}</div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================
+// Tab 1: Original renders
+// ============================================
 function badgeHTML(type) {
-  const map = {
-    active: '<span class="site-badge badge-active">追蹤中</span>',
-    pending: '<span class="site-badge badge-pending">待部署</span>',
-    new: '<span class="site-badge badge-new">新站點</span>'
-  };
+  const map = { active: '<span class="site-badge badge-active">追蹤中</span>', pending: '<span class="site-badge badge-pending">待部署</span>', new: '<span class="site-badge badge-new">新站點</span>' };
   return map[type] || map.pending;
 }
 
@@ -355,10 +520,9 @@ function renderSiteCards() {
   const container = document.getElementById("site-cards");
   container.innerHTML = SITES.map(site => {
     const d = allData[site.id] || { today: {}, totals: {}, recentVisits: [] };
-    const todayTotal = Object.values(d.today || {}).reduce((s, v) => s + v, 0);
-    const cumTotal = Object.values(d.totals || {}).reduce((s, v) => s + v, 0);
-    const botCount = Object.keys(d.totals || {}).filter(k => d.totals[k] > 0).length;
-    const activeBots = Object.keys(d.totals || {}).filter(k => d.totals[k] > 0);
+    const todayTotal = Object.entries(d.today || {}).reduce((s, [k, v]) => k === "Human Visitors" ? s : s + v, 0);
+    const cumTotal = Object.entries(d.totals || {}).reduce((s, [k, v]) => k === "Human Visitors" ? s : s + v, 0);
+    const activeBots = Object.keys(d.totals || {}).filter(k => d.totals[k] > 0 && k !== "Human Visitors");
     const noWorker = d.noWorker;
 
     return `<div class="site-card">
@@ -371,23 +535,14 @@ function renderSiteCards() {
       </div>
       <div class="site-body">
         <div class="site-stats">
-          <div class="site-stat">
-            <div class="num" style="color:${site.color}">${noWorker ? '—' : todayTotal}</div>
-            <div class="lbl">今日訪問</div>
-          </div>
-          <div class="site-stat">
-            <div class="num">${noWorker ? '—' : cumTotal}</div>
-            <div class="lbl">累積訪問</div>
-          </div>
-          <div class="site-stat">
-            <div class="num">${noWorker ? '—' : botCount}</div>
-            <div class="lbl">AI 種類</div>
-          </div>
+          <div class="site-stat"><div class="num" style="color:${site.color}">${noWorker ? '—' : todayTotal}</div><div class="lbl">今日 AI</div></div>
+          <div class="site-stat"><div class="num">${noWorker ? '—' : cumTotal}</div><div class="lbl">累積 AI</div></div>
+          <div class="site-stat"><div class="num">${noWorker ? '—' : activeBots.length}</div><div class="lbl">AI 種類</div></div>
         </div>
         <div class="site-bots">
           ${noWorker ? '<span style="font-size:.72rem;color:var(--dim)">待部署 Cloudflare Worker 追蹤</span>' :
             (activeBots.length > 0
-              ? activeBots.map(b => `<span class="bot-chip active">${b}</span>`).join('')
+              ? activeBots.map(b => `<span class="bot-chip active" style="${CN_BOTS.has(b)?'color:var(--red);border-color:var(--red)':''}">${b}</span>`).join('')
               : '<span style="font-size:.72rem;color:var(--dim)">尚無 AI 訪問記錄</span>')}
         </div>
       </div>
@@ -400,36 +555,28 @@ function renderHeatmap() {
   const allBots = new Set();
   trackedSites.forEach(s => {
     const d = allData[s.id] || { totals: {} };
-    Object.keys(d.totals || {}).forEach(b => { if (d.totals[b] > 0) allBots.add(b); });
+    Object.keys(d.totals || {}).forEach(b => { if (d.totals[b] > 0 && b !== "Human Visitors") allBots.add(b); });
   });
   const bots = [...allBots].sort();
-  if (bots.length === 0 && trackedSites.length > 0) {
-    bots.push("(等待數據)");
-  }
+  if (bots.length === 0) bots.push("(等待數據)");
 
   const grid = document.getElementById("heatmap-grid");
-  const cols = trackedSites.length;
-  grid.style.setProperty("--cols", cols);
+  grid.style.setProperty("--cols", trackedSites.length);
 
   let html = '<div class="hm-header"></div>';
-  trackedSites.forEach(s => {
-    html += `<div class="hm-header" style="color:${s.color}">${s.name}</div>`;
-  });
+  trackedSites.forEach(s => { html += `<div class="hm-header" style="color:${s.color}">${s.name}</div>`; });
 
   bots.forEach(bot => {
-    html += `<div class="hm-bot">${bot}</div>`;
+    const isCN = CN_BOTS.has(bot);
+    html += `<div class="hm-bot" style="${isCN ? 'color:var(--red)' : ''}">${bot}${isCN ? ' <span style="font-size:.6rem;margin-left:.3rem;color:var(--red)">CN</span>' : ''}</div>`;
     trackedSites.forEach(s => {
       const d = allData[s.id] || { totals: {} };
       const val = d.totals?.[bot] || 0;
       let cls = "hm-0";
-      if (val >= 20) cls = "hm-4";
-      else if (val >= 10) cls = "hm-3";
-      else if (val >= 3) cls = "hm-2";
-      else if (val >= 1) cls = "hm-1";
+      if (val >= 20) cls = "hm-4"; else if (val >= 10) cls = "hm-3"; else if (val >= 3) cls = "hm-2"; else if (val >= 1) cls = "hm-1";
       html += `<div class="hm-cell ${cls}">${val}</div>`;
     });
   });
-
   grid.innerHTML = html;
 }
 
@@ -437,34 +584,120 @@ function renderFeed() {
   const allVisits = [];
   SITES.forEach(site => {
     const d = allData[site.id] || { recentVisits: [] };
-    (d.recentVisits || []).forEach(v => {
-      allVisits.push({ ...v, site });
-    });
+    (d.recentVisits || []).forEach(v => { allVisits.push({ ...v, site }); });
   });
-
   allVisits.sort((a, b) => b.ts - a.ts);
   const recent = allVisits.slice(0, 30);
-
   const container = document.getElementById("feed-list");
-  if (recent.length === 0) {
-    container.innerHTML = '<div style="text-align:center;color:var(--dim);padding:2rem">尚無即時活動記錄</div>';
-    return;
-  }
-
+  if (recent.length === 0) { container.innerHTML = '<div style="text-align:center;color:var(--dim);padding:2rem">尚無即時活動記錄</div>'; return; }
   container.innerHTML = recent.map(v => {
     const t = new Date(v.ts).toLocaleTimeString("zh-TW");
     const d = new Date(v.ts).toLocaleDateString("zh-TW");
     const path = (v.path || "/").length > 35 ? v.path.substring(0, 35) + "..." : v.path;
     const botColor = BOT_COLORS[v.bot] || "var(--dim)";
+    const isCN = CN_BOTS.has(v.bot);
     return `<div class="feed-item">
       <div class="feed-time">${d} ${t}</div>
-      <div class="feed-bot" style="color:${botColor}">${v.bot}</div>
+      <div class="feed-bot" style="color:${botColor}">${v.bot}${isCN ? ' <span style="font-size:.6rem;color:var(--red)">CN</span>' : ''}</div>
       <div class="feed-page">${path}</div>
       <div class="feed-site" style="background:${v.site.color}15;color:${v.site.color};border:1px solid ${v.site.color}30;border-radius:4px">${v.site.name}</div>
     </div>`;
   }).join("");
 }
 
+// ============================================
+// Tab 2: CN vs International
+// ============================================
+function renderCnVsIntl() {
+  const rd = computeRegionData();
+
+  document.getElementById("cn-today-num").textContent = rd.cnToday.toLocaleString();
+  document.getElementById("cn-today-sub").textContent = `今日 ${Object.keys(rd.cnBotToday).length} 種中國 AI`;
+  document.getElementById("cn-total-text").textContent = `累積: ${rd.cnTotal.toLocaleString()}`;
+  document.getElementById("intl-today-num").textContent = rd.intlToday.toLocaleString();
+  document.getElementById("intl-today-sub").textContent = `今日 ${Object.keys(rd.intlBotToday).length} 種國際 AI`;
+  document.getElementById("intl-total-text").textContent = `累積: ${rd.intlTotal.toLocaleString()}`;
+
+  // Bot lists
+  document.getElementById("cn-bot-list").innerHTML = Object.entries(rd.cnBotTotals)
+    .sort((a, b) => b[1] - a[1])
+    .map(([b, v]) => `<span class="bot-chip active" style="color:var(--red);border-color:var(--red)">${b} (${v})</span>`).join('') || '<span style="font-size:.72rem;color:var(--dim)">尚無中國 AI 訪問</span>';
+  document.getElementById("intl-bot-list").innerHTML = Object.entries(rd.intlBotTotals)
+    .sort((a, b) => b[1] - a[1])
+    .map(([b, v]) => `<span class="bot-chip active">${b} (${v})</span>`).join('') || '<span style="font-size:.72rem;color:var(--dim)">尚無國際 AI 訪問</span>';
+
+  // Pie chart
+  renderPie("cn-intl-pie", rd.cnTotal, rd.intlTotal, "var(--red)", "var(--blue)", "中國 AI", "國際 AI");
+
+  // Bar chart
+  const barData = {};
+  SITES.forEach(s => {
+    const ps = rd.perSite[s.id];
+    if (ps) barData[s.id] = { v1: ps.cnTotal, v2: ps.intlTotal };
+  });
+  renderBars("cn-intl-bars", barData, "var(--red)", "var(--blue)", "中國 AI", "國際 AI");
+
+  // Detail table
+  const allBotEntries = [];
+  Object.entries(rd.cnBotTotals).forEach(([b, t]) => allBotEntries.push({ bot: b, owner: BOT_OWNER_MAP[b]||"?", region: "CN", today: rd.cnBotToday[b]||0, total: t }));
+  Object.entries(rd.intlBotTotals).forEach(([b, t]) => allBotEntries.push({ bot: b, owner: BOT_OWNER_MAP[b]||"?", region: "International", today: rd.intlBotToday[b]||0, total: t }));
+  allBotEntries.sort((a, b) => b.total - a.total);
+
+  document.querySelector("#cn-intl-table tbody").innerHTML = allBotEntries.map(e =>
+    `<tr>
+      <td style="color:${BOT_COLORS[e.bot]||'var(--dim)'}">${e.bot}</td>
+      <td>${e.owner}</td>
+      <td><span class="region-badge ${e.region === 'CN' ? 'region-cn' : 'region-intl'}">${e.region === 'CN' ? '中國' : '國際'}</span></td>
+      <td>${e.today}</td>
+      <td>${e.total.toLocaleString()}</td>
+    </tr>`
+  ).join('');
+}
+
+// ============================================
+// Tab 3: AI vs Human
+// ============================================
+function renderAiVsHuman() {
+  const hd = computeHumanData();
+
+  document.getElementById("ai-total-num").textContent = hd.aiToday.toLocaleString();
+  document.getElementById("ai-total-sub").textContent = `今日 AI 訪問`;
+  document.getElementById("ai-cum-text").textContent = `累積: ${hd.aiTotal.toLocaleString()}`;
+  document.getElementById("human-total-num").textContent = hd.humanToday.toLocaleString();
+  document.getElementById("human-total-sub").textContent = `今日人類訪問`;
+  document.getElementById("human-cum-text").textContent = `累積: ${hd.humanTotal.toLocaleString()}`;
+
+  // Pie chart
+  renderPie("ai-human-pie", hd.aiTotal, hd.humanTotal, "var(--purple)", "var(--green)", "AI 爬蟲", "人類訪客");
+
+  // Bar chart
+  const barData = {};
+  SITES.forEach(s => {
+    const ps = hd.perSite[s.id];
+    if (ps) barData[s.id] = { v1: ps.aiTotal, v2: ps.humanTotal };
+  });
+  renderBars("ai-human-bars", barData, "var(--purple)", "var(--green)", "AI 爬蟲", "人類訪客");
+
+  // Ratio table
+  document.querySelector("#ai-human-table tbody").innerHTML = SITES.map(s => {
+    const ps = hd.perSite[s.id];
+    if (!ps) return '';
+    const todayTotal = ps.aiToday + ps.humanToday;
+    const aiPct = todayTotal > 0 ? (ps.aiToday / todayTotal * 100).toFixed(1) + '%' : '—';
+    return `<tr>
+      <td style="color:${s.color}">${s.name}</td>
+      <td>${ps.aiToday}</td>
+      <td>${ps.humanToday}</td>
+      <td>${aiPct}</td>
+      <td>${ps.aiTotal.toLocaleString()}</td>
+      <td>${ps.humanTotal.toLocaleString()}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ============================================
+// Summary cards
+// ============================================
 function renderSummary() {
   let todayAll = 0, totalAll = 0;
   const allBots = new Set();
@@ -476,25 +709,22 @@ function renderSummary() {
     const d = allData[site.id] || { today: {}, totals: {} };
     if (!d.noWorker && !d.error) activeSites++;
     Object.entries(d.today || {}).forEach(([b, v]) => {
+      if (b === "Human Visitors") return;
       todayAll += v;
       todayByBot[b] = (todayByBot[b] || 0) + v;
     });
     Object.entries(d.totals || {}).forEach(([b, v]) => {
+      if (b === "Human Visitors") return;
       totalAll += v;
       if (v > 0) allBots.add(b);
     });
   });
 
-  Object.entries(todayByBot).forEach(([b, v]) => {
-    if (v > topCount) { topBot = b; topCount = v; }
-  });
+  Object.entries(todayByBot).forEach(([b, v]) => { if (v > topCount) { topBot = b; topCount = v; } });
   if (topCount === 0 && allBots.size > 0) {
-    // Use total if no today data
     SITES.forEach(site => {
       const d = allData[site.id] || { totals: {} };
-      Object.entries(d.totals || {}).forEach(([b, v]) => {
-        if (v > topCount) { topBot = b; topCount = v; }
-      });
+      Object.entries(d.totals || {}).forEach(([b, v]) => { if (b !== "Human Visitors" && v > topCount) { topBot = b; topCount = v; } });
     });
   }
 
@@ -505,22 +735,32 @@ function renderSummary() {
   document.getElementById("g-sites").textContent = activeSites + " / " + SITES.length;
   document.getElementById("g-top").textContent = topBot;
   document.getElementById("g-top-sub").textContent = topCount > 0 ? `累積 ${topCount} 次` : "等待數據";
+
+  // CN AI + Human cards
+  const rd = computeRegionData();
+  const hd = computeHumanData();
+  document.getElementById("g-cn").textContent = rd.cnToday;
+  document.getElementById("g-cn-sub").textContent = `累積 ${rd.cnTotal.toLocaleString()}`;
+  document.getElementById("g-human").textContent = hd.humanToday;
+  document.getElementById("g-human-sub").textContent = `累積 ${hd.humanTotal.toLocaleString()}`;
 }
 
+// ============================================
+// Load all data
+// ============================================
 async function loadAll() {
-  const results = await Promise.allSettled(SITES.map(async site => {
-    const data = await fetchSiteData(site);
-    allData[site.id] = data;
+  await Promise.allSettled(SITES.map(async site => {
+    allData[site.id] = await fetchSiteData(site);
   }));
 
   renderSummary();
   renderSiteCards();
   renderHeatmap();
   renderFeed();
+  renderCnVsIntl();
+  renderAiVsHuman();
 
-  const now = new Date();
-  document.getElementById("last-refresh").textContent =
-    "更新：" + now.toLocaleTimeString("zh-TW");
+  document.getElementById("last-refresh").textContent = "更新：" + new Date().toLocaleTimeString("zh-TW");
 }
 
 loadAll();
