@@ -521,7 +521,7 @@ function renderSummary(){
   document.getElementById("g-today").textContent=todayAll;document.getElementById("g-today-sub").textContent=`${Object.keys(todayByBot).length} 種 AI`;
   document.getElementById("g-total").textContent=totalAll;document.getElementById("g-types").textContent=allBots.size;
   document.getElementById("g-sites").textContent=activeSites+"/"+SITES.length;
-  if(activeSites===0){document.getElementById("g-sites").style.color="var(--red)";document.getElementById("g-today-sub").textContent="⚠ Workers KV 連線異常"}
+  if(activeSites===0){document.getElementById("g-sites").style.color="var(--red)";document.getElementById("g-today-sub").textContent="⚠ KV 配額耗盡，08:00 CST 自動恢復"}
   else{document.getElementById("g-sites").style.color="var(--blue)"}
   document.getElementById("g-top").textContent=topBot;
   document.getElementById("g-top-sub").textContent=topCount>0?`累積 ${topCount}次`:"等待數據";
