@@ -44,7 +44,6 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-# ByteDance AI
 # You.com AI
 User-agent: YouBot
 Allow: /
@@ -53,25 +52,40 @@ Allow: /
 User-agent: cohere-ai
 Allow: /
 
-
-# === 中國 AI 訓練爬蟲 — 封鎖 (防止內容被用於模型訓練) ===
-User-agent: Bytespider
-Disallow: /
-
-User-agent: TikTokSpider
-Disallow: /
-
-User-agent: ChatGLM-Spider
-Disallow: /
-
-User-agent: 360Spider
-Disallow: /
-
-# === 中國搜索引擎 — 允許 (保留市場曝光價值) ===
+# === 中國 AI 爬蟲 — 全面歡迎 ===
+# 百度搜索 + 文心一言
 User-agent: Baiduspider
 Allow: /
 
+# 字節跳動（豆包/抖音）
+User-agent: Bytespider
+Allow: /
+
+User-agent: TikTokSpider
+Allow: /
+
+# 智譜清言 ChatGLM
+User-agent: ChatGLM-Spider
+Allow: /
+
+# 360 搜索
+User-agent: 360Spider
+Allow: /
+
+# 搜狗搜索（微信搜索）
 User-agent: Sogou
+Allow: /
+
+# 華為盤古 / 花瓣搜索
+User-agent: PetalBot
+Allow: /
+
+# DeepSeek AI
+User-agent: DeepSeekBot
+Allow: /
+
+# 神馬搜索（阿里）
+User-agent: YisouSpider
 Allow: /
 
 Sitemap: https://inari-kira-isla.github.io/cloudpipe-landing/sitemap.xml
