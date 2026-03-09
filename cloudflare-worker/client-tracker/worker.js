@@ -279,16 +279,24 @@ async function handleRequest(request, env, ctx) {
       }, null, 2), { headers: corsHeaders() });
     }
 
-    // === All sites combined stats ===
+    // === All sites combined stats (cached 120s) ===
     if (path === "/all-stats.json") {
+      const cache = caches.default;
+      const cacheKey = new Request(request.url, { method: "GET" });
+      const cached = await cache.match(cacheKey);
+      if (cached) return cached;
       const allStats = {};
       for (const slug of Object.keys(CLIENT_SITES)) {
         allStats[slug] = await getSiteStats(env, slug);
       }
-      return new Response(JSON.stringify(allStats, null, 2), { headers: corsHeaders() });
+      const resp = new Response(JSON.stringify(allStats, null, 2), {
+        headers: { ...corsHeaders(), "Cache-Control": "public, max-age=120" },
+      });
+      ctx.waitUntil(cache.put(cacheKey, resp.clone()));
+      return resp;
     }
 
-    // === Per-site stats: /{slug}/ai-stats.json ===
+    // === Per-site stats: /{slug}/ai-stats.json (with Cache API) ===
     const statsMatch = path.match(/^\/([a-z0-9-]+)\/ai-stats\.json$/);
     if (statsMatch) {
       const slug = statsMatch[1];
@@ -297,8 +305,17 @@ async function handleRequest(request, env, ctx) {
           status: 404, headers: corsHeaders(),
         });
       }
+      // Cache API: serve from cache if fresh (120s TTL)
+      const cache = caches.default;
+      const cacheKey = new Request(request.url, { method: "GET" });
+      const cached = await cache.match(cacheKey);
+      if (cached) return cached;
       const stats = await getSiteStats(env, slug);
-      return new Response(JSON.stringify(stats, null, 2), { headers: corsHeaders() });
+      const resp = new Response(JSON.stringify(stats, null, 2), {
+        headers: { ...corsHeaders(), "Cache-Control": "public, max-age=120" },
+      });
+      ctx.waitUntil(cache.put(cacheKey, resp.clone()));
+      return resp;
     }
 
     // === Beacon endpoint: POST /{slug}/beacon ===

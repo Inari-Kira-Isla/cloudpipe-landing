@@ -69,26 +69,33 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    // === AI Stats API endpoint ===
+    // === AI Stats API endpoint (cached 120s) ===
     if (url.pathname === "/ai-stats.json") {
+      const cache = caches.default;
+      const cacheKey = new Request(request.url, { method: "GET" });
+      const cached = await cache.match(cacheKey);
+      if (cached) return cached;
       const today = new Date().toISOString().split("T")[0];
       const stats = { today: {}, totals: {}, recentVisits: [], generatedAt: new Date().toISOString() };
-
-      for (const [pattern, name] of Object.entries(AI_BOTS)) {
-        const dayCount = parseInt((await env.AI_FOOTPRINT.get(`day:${today}:${pattern}`)) || "0");
-        const total = parseInt((await env.AI_FOOTPRINT.get(`total:${pattern}`)) || "0");
-        if (dayCount > 0) stats.today[name] = dayCount;
-        if (total > 0) stats.totals[name] = total;
-      }
-      stats.recentVisits = JSON.parse((await env.AI_FOOTPRINT.get(`log:${today}`)) || "[]").slice(-20);
-
-      return new Response(JSON.stringify(stats, null, 2), {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "Cache-Control": "no-cache",
-        },
-      });
+      const ch = {"Content-Type":"application/json","Access-Control-Allow-Origin":"*","Cache-Control":"public, max-age=120"};
+      if (!env.AI_FOOTPRINT) return new Response(JSON.stringify(stats, null, 2), { headers: ch });
+      try {
+        const entries = Object.entries(AI_BOTS);
+        const dayKeys = entries.map(([p]) => `day:${today}:${p}`);
+        const totalKeys = entries.map(([p]) => `total:${p}`);
+        const results = await Promise.allSettled([...dayKeys, ...totalKeys].map(k => env.AI_FOOTPRINT.get(k)));
+        for (let i = 0; i < entries.length; i++) {
+          const [, name] = entries[i];
+          const dayCount = parseInt((results[i].status==="fulfilled"?results[i].value:null) || "0");
+          const total = parseInt((results[i+entries.length].status==="fulfilled"?results[i+entries.length].value:null) || "0");
+          if (dayCount > 0) stats.today[name] = dayCount;
+          if (total > 0) stats.totals[name] = total;
+        }
+        try { stats.recentVisits = JSON.parse((await env.AI_FOOTPRINT.get(`log:${today}`)) || "[]").slice(-20); } catch(e) {}
+      } catch(e) { stats._error = e.message; }
+      const resp = new Response(JSON.stringify(stats, null, 2), { headers: ch });
+      ctx.waitUntil(cache.put(cacheKey, resp.clone()));
+      return resp;
     }
 
     // === Proxy to Vercel ===

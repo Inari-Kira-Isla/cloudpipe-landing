@@ -421,15 +421,22 @@ function switchTab(tabId) {
   if (tabId === 'topology') { requestAnimationFrame(() => renderTopologyGraph()); }
 }
 
-// ======================== KV Data Fetch ========================
+// ======================== KV Data Fetch + localStorage Fallback ========================
+const LS_KEY = "unified-monitor-cache";
+const LS_TS_KEY = "unified-monitor-cache-ts";
+function saveToLS() { try { localStorage.setItem(LS_KEY, JSON.stringify(allData)); localStorage.setItem(LS_TS_KEY, String(Date.now())); } catch(e){} }
+function loadFromLS() { try { const d = localStorage.getItem(LS_KEY); return d ? JSON.parse(d) : null; } catch(e){ return null; } }
+function getLSAge() { try { const t = localStorage.getItem(LS_TS_KEY); return t ? Math.round((Date.now()-parseInt(t))/60000) : null; } catch(e){ return null; } }
+let usingCache = false;
+
 async function fetchSiteData(site) {
   if (!site.worker) return { today:{}, totals:{}, recentVisits:[], noWorker:true };
   try {
     const url = site.workerSlug ? site.worker+"/"+site.workerSlug+"/ai-stats.json" : site.worker+"/ai-stats.json";
     const r = await fetch(url);
-    if (!r.ok) throw new Error();
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
     return await r.json();
-  } catch(e) { return { today:{}, totals:{}, recentVisits:[], error:true }; }
+  } catch(e) { return { today:{}, totals:{}, recentVisits:[], error:true, errorMsg:e.message }; }
 }
 
 // ======================== Region + Human computation ========================
@@ -620,8 +627,27 @@ function renderRecommendations(){
 // ======================== Init ========================
 async function loadAll(){
   await Promise.allSettled(ALL_SITES.map(async site=>{allData[site.id]=await fetchSiteData(site)}));
+  // Check if all sites failed
+  const allFailed = SITES.every(s=>{const d=allData[s.id];return !d||d.error||d.noWorker});
+  if(allFailed){
+    const cached=loadFromLS();
+    if(cached){
+      allData=cached;usingCache=true;
+      const age=getLSAge();
+      document.getElementById("last-refresh").textContent=`⚠ Workers 離線，顯示 ${age} 分鐘前的快取`;
+      document.getElementById("last-refresh").style.color="var(--orange)";
+    } else {
+      document.getElementById("last-refresh").textContent="⚠ Workers 離線，無快取可用";
+      document.getElementById("last-refresh").style.color="var(--red)";
+    }
+  } else {
+    usingCache=false;
+    saveToLS(); // 成功時存入 localStorage
+    document.getElementById("last-refresh").textContent="更新："+new Date().toLocaleTimeString("zh-TW");
+    document.getElementById("last-refresh").style.color="";
+  }
   renderSummary();renderSiteCards();renderHeatmap();renderFeed();renderCnVsIntl();renderAiVsHuman();
-  document.getElementById("last-refresh").textContent="更新："+new Date().toLocaleTimeString("zh-TW")}
+}
 
 // Topology renders once (static data)
 renderTopologySummary();renderAdjacencyMatrix();renderNodeCards();renderRecommendations();
