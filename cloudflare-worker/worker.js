@@ -38,6 +38,45 @@ function detectAIBot(userAgent) {
   return null;
 }
 
+// === Supabase write (unified tracking) ===
+async function hashIP(ip) {
+  const data = new TextEncoder().encode(ip + "cloudpipe-salt-2026");
+  const hash = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 16);
+}
+
+async function writeToSupabase(env, botInfo, request) {
+  if (!env.SUPABASE_URL || !env.SUPABASE_KEY) return;
+  try {
+    const url = new URL(request.url);
+    const ip = request.headers.get("cf-connecting-ip") || "0.0.0.0";
+    const ipHash = await hashIP(ip);
+    const today = new Date().toISOString().split("T")[0];
+    await fetch(`${env.SUPABASE_URL}/rest/v1/crawler_visits`, {
+      method: "POST",
+      headers: {
+        "apikey": env.SUPABASE_KEY,
+        "Authorization": `Bearer ${env.SUPABASE_KEY}`,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal",
+      },
+      body: JSON.stringify({
+        bot_name: botInfo.pattern,
+        bot_owner: "Unknown",
+        path: url.pathname,
+        referer: request.headers.get("referer") || null,
+        ip_hash: ipHash,
+        session_id: `${ipHash}-${botInfo.pattern}-${today}`,
+        ua_raw: (request.headers.get("user-agent") || "").substring(0, 500),
+        site: "cloudpipe-landing",
+        page_type: url.pathname === "/" ? "home" : "page",
+        industry: null,
+        category: null,
+      }),
+    });
+  } catch (e) { /* silently ignore */ }
+}
+
 // Aggregated stats blob
 const AGG_KEY = "agg-stats";
 
@@ -153,6 +192,7 @@ export default {
 
       if (botInfo && env.AI_FOOTPRINT) {
         ctx.waitUntil(logAIVisit(env, botInfo, request));
+        ctx.waitUntil(writeToSupabase(env, botInfo, request));
       }
 
       const response = await fetch(targetUrl, {

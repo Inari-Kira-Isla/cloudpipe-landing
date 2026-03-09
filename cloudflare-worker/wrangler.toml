@@ -5,3 +5,7 @@ compatibility_date = "2024-09-23"
 [[kv_namespaces]]
 binding = "AI_FOOTPRINT"
 id = "7f69d88e4ab64867877a9761afa3c8cc"
+
+[vars]
+SUPABASE_URL = "https://yitmabzsxfgbchhhjjef.supabase.co"
+# SUPABASE_KEY is set via `wrangler secret put SUPABASE_KEY`
