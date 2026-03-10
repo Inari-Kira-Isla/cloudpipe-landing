@@ -410,11 +410,17 @@ function switchTab(tabId) {
 // Bot pattern → display name mapping (Supabase uses patterns, monitor uses display names)
 const SUPABASE_BOT_MAP = {
   "GPTBot": "OpenAI GPT", "ChatGPT-User": "ChatGPT Browser", "OAI-SearchBot": "OpenAI Search",
-  "ClaudeBot": "Claude Crawler", "anthropic-ai": "Anthropic Claude",
+  "ClaudeBot": "Claude Crawler", "anthropic-ai": "Anthropic Claude", "Claude-Web": "Claude Web",
   "PerplexityBot": "Perplexity AI", "Google-Extended": "Google Gemini Training",
   "Googlebot": "Google Search", "Bingbot": "Microsoft Bing AI",
   "meta-externalagent": "Meta AI", "FacebookBot": "Meta AI Bot",
-  "Bytespider": "ByteDance AI", "Applebot": "Apple AI",
+  "Bytespider": "ByteDance AI", "Applebot": "Apple AI", "Applebot-Extended": "Apple AI",
+  "CCBot": "Common Crawl", "YouBot": "You.com AI", "cohere-ai": "Cohere AI",
+  "ia_archiver": "Internet Archive",
+  "Baiduspider": "Baidu/Ernie AI", "Sogou": "Sogou AI", "ChatGLM": "ChatGLM/Zhipu AI",
+  "360Spider": "360 AI", "HunyuanBot": "Tencent Hunyuan", "SenseChat": "SenseChat AI",
+  "SparkBot": "Spark/iFlytek AI", "Kimi": "Kimi/Moonshot AI", "Doubao": "Doubao AI",
+  "XiaoIce": "XiaoIce AI",
 };
 
 // Sites with Supabase crawler-stats API (Next.js middleware tracking, much higher accuracy)
