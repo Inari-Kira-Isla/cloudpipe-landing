@@ -455,6 +455,27 @@ async function fetchSiteData(site) {
   } catch(e) { return { today:{}, totals:{}, recentVisits:[], error:true, errorMsg:e.message }; }
 }
 
+// ======================== Supabase → KV Merge ========================
+const PATTERN_TO_NAME = {"GPTBot":"OpenAI GPT","ChatGPT-User":"ChatGPT Browser","OAI-SearchBot":"OpenAI Search","anthropic-ai":"Anthropic Claude","ClaudeBot":"Claude Crawler","claude-web":"Claude Web","PerplexityBot":"Perplexity AI","Google-Extended":"Google Gemini Training","Googlebot":"Google Search","Bingbot":"Microsoft Bing AI","CCBot":"Common Crawl","Bytespider":"ByteDance AI","YouBot":"You.com AI","cohere-ai":"Cohere AI","Applebot":"Apple AI","meta-externalagent":"Meta AI","FacebookBot":"Meta AI Bot","ia_archiver":"Internet Archive","Baiduspider":"Baidu/Ernie AI","Sogou":"Sogou AI","ChatGLM":"ChatGLM/Zhipu AI","360Spider":"360 AI","HunyuanBot":"Tencent Hunyuan","SenseChat":"SenseChat AI","SparkBot":"Spark/iFlytek AI","Kimi":"Kimi/Moonshot AI","Doubao":"Doubao AI","XiaoIce":"XiaoIce AI"};
+
+async function mergeSupabaseIntoAllData() {
+  try {
+    const sb = await fetchSB('summary');
+    if (!sb || !sb.bots) return;
+    const siteId = "cloudpipe-macao-app";
+    const existing = allData[siteId] || { today:{}, totals:{}, recentVisits:[] };
+    for (const [botPattern, info] of Object.entries(sb.bots)) {
+      const displayName = PATTERN_TO_NAME[botPattern] || botPattern;
+      const sbCount = info.count || 0;
+      const kvCount = existing.totals[displayName] || 0;
+      existing.totals[displayName] = Math.max(kvCount, sbCount);
+    }
+    existing._hasSB = true;
+    existing._sbTotal = sb.total_visits || 0;
+    allData[siteId] = existing;
+  } catch(e) { /* silently ignore */ }
+}
+
 // ======================== Region + Human computation ========================
 function computeRegionData() {
   let cnToday=0,cnTotal=0,intlToday=0,intlTotal=0;
@@ -487,7 +508,7 @@ function renderBars(id,data,c1,c2,l1,l2){const el=document.getElementById(id);co
 function badgeHTML(t){return t==='active'?'<span class="site-badge badge-active">追蹤中</span>':'<span class="site-badge badge-new">新站點</span>'}
 function renderSiteCards(){
   document.getElementById("site-cards").innerHTML=SITES.map(site=>{const d=allData[site.id]||{today:{},totals:{},recentVisits:[]};const todayT=Object.entries(d.today||{}).reduce((s,[k,v])=>k==="Human Visitors"?s:s+v,0);const cumT=Object.entries(d.totals||{}).reduce((s,[k,v])=>k==="Human Visitors"?s:s+v,0);const bots=Object.keys(d.totals||{}).filter(k=>d.totals[k]>0&&k!=="Human Visitors");
-  return`<div class="site-card"><div class="site-header"><div><div class="site-name" style="color:${site.color}">${site.name}</div><div style="font-size:.7rem;color:var(--dim);margin-top:.2rem">${site.industry}</div></div>${badgeHTML(d.noWorker?'new':site.badge)}</div><div class="site-body"><div class="site-stats"><div class="site-stat"><div class="num" style="color:${site.color}">${d.noWorker?'—':todayT}</div><div class="lbl">今日 AI</div></div><div class="site-stat"><div class="num">${d.noWorker?'—':cumT}</div><div class="lbl">累積</div></div><div class="site-stat"><div class="num">${d.noWorker?'—':bots.length}</div><div class="lbl">AI 種類</div></div></div><div class="site-bots">${d.noWorker?'<span style="font-size:.72rem;color:var(--dim)">待部署</span>':(bots.length>0?bots.map(b=>`<span class="bot-chip active" style="${CN_BOTS.has(b)?'color:var(--red);border-color:var(--red)':''}">${b}</span>`).join(''):'<span style="font-size:.72rem;color:var(--dim)">尚無 AI 訪問</span>')}</div></div></div>`}).join("")}
+  return`<div class="site-card"><div class="site-header"><div><div class="site-name" style="color:${site.color}">${site.name}</div><div style="font-size:.7rem;color:var(--dim);margin-top:.2rem">${site.industry}</div></div>${badgeHTML(d.noWorker?'new':site.badge)}${d._hasSB?'<span class="site-badge" style="background:#3fb95020;color:#3fb950;border:1px solid #3fb95040;margin-left:.3rem">Supabase</span>':''}</div><div class="site-body"><div class="site-stats"><div class="site-stat"><div class="num" style="color:${site.color}">${d.noWorker?'—':todayT}</div><div class="lbl">今日 AI</div></div><div class="site-stat"><div class="num">${d.noWorker?'—':cumT}</div><div class="lbl">累積</div></div><div class="site-stat"><div class="num">${d.noWorker?'—':bots.length}</div><div class="lbl">AI 種類</div></div></div><div class="site-bots">${d.noWorker?'<span style="font-size:.72rem;color:var(--dim)">待部署</span>':(bots.length>0?bots.map(b=>`<span class="bot-chip active" style="${CN_BOTS.has(b)?'color:var(--red);border-color:var(--red)':''}">${b}</span>`).join(''):'<span style="font-size:.72rem;color:var(--dim)">尚無 AI 訪問</span>')}</div></div></div>`}).join("")}
 
 function renderHeatmap(){
   const trackedSites=ALL_SITES.filter(s=>s.worker);const grid=document.getElementById("heatmap-grid");grid.style.setProperty("--cols",trackedSites.length);
@@ -643,6 +664,8 @@ function renderRecommendations(){
 // ======================== Init ========================
 async function loadAll(){
   await Promise.allSettled(ALL_SITES.map(async site=>{allData[site.id]=await fetchSiteData(site)}));
+  // Merge Supabase data into cloudpipe-macao-app (takes max of KV vs Supabase per bot)
+  await mergeSupabaseIntoAllData();
   // Check if all sites failed
   const allFailed = SITES.every(s=>{const d=allData[s.id];return !d||d.error||d.noWorker});
   if(allFailed){
@@ -659,7 +682,7 @@ async function loadAll(){
   } else {
     usingCache=false;
     saveToLS(); // 成功時存入 localStorage
-    document.getElementById("last-refresh").textContent="更新："+new Date().toLocaleTimeString("zh-TW");
+    document.getElementById("last-refresh").textContent="更新："+new Date().toLocaleTimeString("zh-TW")+(allData["cloudpipe-macao-app"]?._hasSB?" (含 Supabase)":"");
     document.getElementById("last-refresh").style.color="";
   }
   renderSummary();renderSiteCards();renderHeatmap();renderFeed();renderCnVsIntl();renderAiVsHuman();
