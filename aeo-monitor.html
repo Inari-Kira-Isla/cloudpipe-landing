@@ -404,20 +404,79 @@ function switchTab(tabId) {
 }
 
 // ============================================
-// Data fetching
+// Data fetching (Worker KV + Supabase hybrid)
 // ============================================
+
+// Bot pattern → display name mapping (Supabase uses patterns, monitor uses display names)
+const SUPABASE_BOT_MAP = {
+  "GPTBot": "OpenAI GPT", "ChatGPT-User": "ChatGPT Browser", "OAI-SearchBot": "OpenAI Search",
+  "ClaudeBot": "Claude Crawler", "anthropic-ai": "Anthropic Claude",
+  "PerplexityBot": "Perplexity AI", "Google-Extended": "Google Gemini Training",
+  "Googlebot": "Google Search", "Bingbot": "Microsoft Bing AI",
+  "meta-externalagent": "Meta AI", "FacebookBot": "Meta AI Bot",
+  "Bytespider": "ByteDance AI", "Applebot": "Apple AI",
+};
+
+// Sites with Supabase crawler-stats API (Next.js middleware tracking, much higher accuracy)
+const SUPABASE_SITES = {
+  "cloudpipe-macao-app": "https://cloudpipe-macao-app.vercel.app/api/v1/crawler-stats",
+};
+
+async function fetchSupabaseStats(apiUrl) {
+  try {
+    const [summaryRes, todayRes] = await Promise.all([
+      fetch(apiUrl + "?view=summary&days=30"),
+      fetch(apiUrl + "?view=summary&days=1"),
+    ]);
+    if (!summaryRes.ok || !todayRes.ok) return null;
+    const [summary, today] = await Promise.all([summaryRes.json(), todayRes.json()]);
+    const result = { today: {}, totals: {}, recentVisits: [], _supabase: true };
+    // Map bot patterns to display names for totals
+    for (const [pattern, info] of Object.entries(summary.bots || {})) {
+      const displayName = SUPABASE_BOT_MAP[pattern] || pattern;
+      result.totals[displayName] = info.count;
+    }
+    // Map bot patterns for today
+    for (const [pattern, info] of Object.entries(today.bots || {})) {
+      const displayName = SUPABASE_BOT_MAP[pattern] || pattern;
+      result.today[displayName] = info.count;
+    }
+    return result;
+  } catch (e) { return null; }
+}
+
 async function fetchSiteData(site) {
   if (!site.worker) return { today: {}, totals: {}, recentVisits: [], error: false, noWorker: true };
-  try {
-    const statsUrl = site.workerSlug
-      ? site.worker + "/" + site.workerSlug + "/ai-stats.json"
-      : site.worker + "/ai-stats.json";
-    const r = await fetch(statsUrl);
-    if (!r.ok) throw new Error("fetch failed");
-    return await r.json();
-  } catch (e) {
-    return { today: {}, totals: {}, recentVisits: [], error: true };
+
+  // Fetch from both sources in parallel
+  const workerPromise = (async () => {
+    try {
+      const statsUrl = site.workerSlug
+        ? site.worker + "/" + site.workerSlug + "/ai-stats.json"
+        : site.worker + "/ai-stats.json";
+      const r = await fetch(statsUrl);
+      if (!r.ok) throw new Error("fetch failed");
+      return await r.json();
+    } catch (e) {
+      return { today: {}, totals: {}, recentVisits: [], error: true };
+    }
+  })();
+
+  const supabaseUrl = SUPABASE_SITES[site.id];
+  const supabasePromise = supabaseUrl ? fetchSupabaseStats(supabaseUrl) : Promise.resolve(null);
+
+  const [workerData, supabaseData] = await Promise.all([workerPromise, supabasePromise]);
+
+  // If Supabase data available and has more visits, prefer it (merge with Worker recentVisits)
+  if (supabaseData) {
+    const workerTotal = Object.values(workerData.totals || {}).reduce((a, b) => a + b, 0);
+    const supaTotal = Object.values(supabaseData.totals || {}).reduce((a, b) => a + b, 0);
+    if (supaTotal > workerTotal) {
+      supabaseData.recentVisits = workerData.recentVisits || [];
+      return supabaseData;
+    }
   }
+  return workerData;
 }
 
 // ============================================
