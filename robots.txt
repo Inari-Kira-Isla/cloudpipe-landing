@@ -88,4 +88,4 @@ Allow: /
 User-agent: YisouSpider
 Allow: /
 
-Sitemap: https://inari-kira-isla.github.io/cloudpipe-landing/sitemap.xml
+Sitemap: https://cloudpipe-landing.vercel.app/sitemap.xml

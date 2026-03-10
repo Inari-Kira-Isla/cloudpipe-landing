@@ -1,91 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://inari-kira-isla.github.io/cloudpipe-landing/</loc>
+    <loc>https://cloudpipe-landing.vercel.app/</loc>
     <lastmod>2026-03-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://inari-kira-isla.github.io/cloudpipe-landing/pricing.html</loc>
+    <loc>https://cloudpipe-landing.vercel.app/pricing.html</loc>
     <lastmod>2026-03-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://inari-kira-isla.github.io/cloudpipe-landing/architecture.html</loc>
+    <loc>https://cloudpipe-landing.vercel.app/architecture.html</loc>
     <lastmod>2026-03-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://inari-kira-isla.github.io/cloudpipe-landing/llms.txt</loc>
+    <loc>https://cloudpipe-landing.vercel.app/llms.txt</loc>
     <lastmod>2026-03-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://inari-kira-isla.github.io/cloudpipe-landing/aeo-monitor.html</loc>
+    <loc>https://cloudpipe-landing.vercel.app/aeo-monitor.html</loc>
     <lastmod>2026-03-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://inari-kira-isla.github.io/cloudpipe-landing/aeo-score.html</loc>
+    <loc>https://cloudpipe-landing.vercel.app/aeo-score.html</loc>
     <lastmod>2026-03-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://inari-kira-isla.github.io/cloudpipe-landing/ai-footprint.html</loc>
+    <loc>https://cloudpipe-landing.vercel.app/ai-footprint.html</loc>
     <lastmod>2026-03-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://inari-kira-isla.github.io/cloudpipe-landing/brand-ai-agent.html</loc>
+    <loc>https://cloudpipe-landing.vercel.app/brand-ai-agent.html</loc>
     <lastmod>2026-03-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://inari-kira-isla.github.io/cloudpipe-landing/api/info.json</loc>
+    <loc>https://cloudpipe-landing.vercel.app/api/info.json</loc>
     <lastmod>2026-03-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://inari-kira-isla.github.io/cloudpipe-landing/aeo-reports/2026-03-06.html</loc>
+    <loc>https://cloudpipe-landing.vercel.app/aeo-reports/2026-03-06.html</loc>
     <lastmod>2026-03-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://inari-kira-isla.github.io/cloudpipe-landing/aeo-reports/latest.html</loc>
+    <loc>https://cloudpipe-landing.vercel.app/aeo-reports/latest.html</loc>
     <lastmod>2026-03-07</lastmod>
     <changefreq>always</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://inari-kira-isla.github.io/cloudpipe-landing/intake.html</loc>
+    <loc>https://cloudpipe-landing.vercel.app/intake.html</loc>
     <lastmod>2026-03-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://inari-kira-isla.github.io/cloudpipe-landing/aeo-platform.html</loc>
+    <loc>https://cloudpipe-landing.vercel.app/aeo-platform.html</loc>
     <lastmod>2026-03-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://inari-kira-isla.github.io/cloudpipe-landing/case-studies.html</loc>
+    <loc>https://cloudpipe-landing.vercel.app/case-studies.html</loc>
     <lastmod>2026-03-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://inari-kira-isla.github.io/cloudpipe-landing/aeo-reports/2026-03-07.html</loc>
+    <loc>https://cloudpipe-landing.vercel.app/aeo-reports/2026-03-07.html</loc>
     <lastmod>2026-03-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

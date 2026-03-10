@@ -6,15 +6,15 @@
 <title>AI 爬蟲監控中心 | CloudPipe AEO Platform</title>
 <meta name="description" content="即時監控所有託管網站的 AI 爬蟲活動 — 中國 AI、國際 AI、人類搜尋三方比對追蹤">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
-<link rel="canonical" href="https://inari-kira-isla.github.io/cloudpipe-landing/aeo-monitor.html">
-<link rel="llms-txt" href="https://inari-kira-isla.github.io/cloudpipe-landing/llms.txt">
+<link rel="canonical" href="https://cloudpipe-landing.vercel.app/aeo-monitor.html">
+<link rel="llms-txt" href="https://cloudpipe-landing.vercel.app/llms.txt">
 <meta property="og:title" content="AI 爬蟲監控中心 | CloudPipe">
 <meta property="og:description" content="即時監控所有託管網站的 AI 爬蟲活動 — 中國 AI vs 國際 AI vs 人類搜尋">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://inari-kira-isla.github.io/cloudpipe-landing/aeo-monitor.html">
+<meta property="og:url" content="https://cloudpipe-landing.vercel.app/aeo-monitor.html">
 <meta property="og:locale" content="zh_TW">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://inari-kira-isla.github.io/cloudpipe-landing","description":"澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服。","alternateName":"CloudPipe AI Automation Platform","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"},"sameAs":["https://github.com/Inari-Kira-Isla/cloudpipe-landing"]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"CloudPipe AI 爬蟲監控中心","description":"即時監控所有託管網站的 AI 爬蟲活動","url":"https://inari-kira-isla.github.io/cloudpipe-landing/aeo-monitor.html","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"MOP"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://cloudpipe-landing.vercel.app","description":"澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服。","alternateName":"CloudPipe AI Automation Platform","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"},"sameAs":["https://github.com/Inari-Kira-Isla/cloudpipe-landing"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"CloudPipe AI 爬蟲監控中心","description":"即時監控所有託管網站的 AI 爬蟲活動","url":"https://cloudpipe-landing.vercel.app/aeo-monitor.html","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"MOP"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"AI 爬蟲監控中心追蹤哪些站點？","acceptedAnswer":{"@type":"Answer","text":"目前追蹤 CloudPipe 生態系統下的所有站點，包括 AI 學習寶庫、CloudPipe Landing、山中田、海膽速遞、稻荷環球食品、After School Coffee、Mind Coffee、BNI 澳門商業網絡等 13 個站點。"}},{"@type":"Question","name":"監控數據多久更新一次？","acceptedAnswer":{"@type":"Answer","text":"每 60 秒自動從各站點的 Cloudflare Worker 拉取最新數據，即時顯示今日訪問、累積訪問、AI 種類統計及活動記錄。"}},{"@type":"Question","name":"什麼是中國 AI vs 國際 AI 比對？","acceptedAnswer":{"@type":"Answer","text":"監控中心可區分來自中國（百度、騰訊混元、智譜 ChatGLM、科大訊飛等）和國際（OpenAI、Anthropic、Google、Perplexity 等）的 AI 爬蟲，以圓餅圖和條形圖呈現比例。"}},{"@type":"Question","name":"如何追蹤 AI 與人類訪客的比例？","acceptedAnswer":{"@type":"Answer","text":"透過 Cloudflare Worker 的 User-Agent 偵測，自動區分 AI 爬蟲和人類瀏覽器訪問，提供即時的 AI vs 人類流量比對數據。"}},{"@type":"Question","name":"如何為新站點加入 AI 追蹤？","acceptedAnswer":{"@type":"Answer","text":"新站點透過多租戶 Cloudflare Worker (client-ai-tracker) 統一追蹤，只需在 Worker 配置中加入站點 slug 和 URL 即可自動開始收集數據。"}}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -332,7 +332,7 @@ const ALL_SITES = [
   { id: "bni-macau", name: "BNI 澳門商業網絡", url: "https://bni-macau.vercel.app/", worker: CLIENT_TRACKER, workerSlug: "bni-macau", color: "#f85149", badge: "active", industry: "商業網絡", region: "macau" },
   // === 其他 ===
   { id: "ai-learning", name: "AI 學習寶庫", url: "https://inari-kira-isla.github.io/Openclaw/", worker: "https://openclaw-ai-tracker.inariglobal.workers.dev", color: "#bc8cff", badge: "active", industry: "教育知識", region: "other" },
-  { id: "cloudpipe", name: "CloudPipe Landing", url: "https://inari-kira-isla.github.io/cloudpipe-landing/", worker: "https://cloudpipe-ai-tracker.inariglobal.workers.dev", color: "#39d2c0", badge: "active", industry: "SaaS 平台", region: "other" },
+  { id: "cloudpipe", name: "CloudPipe Landing", url: "https://cloudpipe-landing.vercel.app/", worker: "https://cloudpipe-ai-tracker.inariglobal.workers.dev", color: "#39d2c0", badge: "active", industry: "SaaS 平台", region: "other" },
   { id: "aeo-demo-education", name: "AEO Demo — 教育", url: "https://inari-kira-isla.github.io/aeo-demo-education/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-education", color: "#9f7aea", badge: "new", industry: "教育機構", region: "other" },
   { id: "aeo-demo-finance", name: "AEO Demo — 金融", url: "https://inari-kira-isla.github.io/aeo-demo-finance/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-finance", color: "#48bb78", badge: "new", industry: "金融服務", region: "other" },
   { id: "aeo-demo-luxury", name: "AEO Demo — 奢侈品", url: "https://inari-kira-isla.github.io/aeo-demo-luxury/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-luxury", color: "#ecc94b", badge: "new", industry: "奢侈品牌", region: "other" },

@@ -1,4 +1,4 @@
 Contact: mailto:security@cloudpipe.app
 Preferred-Languages: zh-Hant, en
-Canonical: https://inari-kira-isla.github.io/cloudpipe-landing/.well-known/security.txt
+Canonical: https://cloudpipe-landing.vercel.app/.well-known/security.txt
 Expires: 2027-03-02T00:00:00.000Z
