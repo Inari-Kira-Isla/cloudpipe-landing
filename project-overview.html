@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CloudPipe 全景儀表板 — 項目全貌</title>
+<style>
+:root {
+  --bg: #0d1117; --bg2: #161b22; --bg3: #21262d; --border: #30363d;
+  --text: #e6edf3; --text2: #8b949e; --text3: #484f58;
+  --red: #f85149; --green: #3fb950; --blue: #58a6ff; --purple: #bc8cff;
+  --orange: #d29922; --cyan: #39d353; --pink: #f778ba; --yellow: #e3b341;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Header */
+.header { padding: 24px 32px 0; max-width: 1400px; margin: 0 auto; }
+.header h1 { font-size: 26px; font-weight: 700; }
+.header p { color: var(--text2); font-size: 14px; margin-top: 4px; }
+.header .snapshot { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+/* Tabs */
+.tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin: 16px 32px 0; max-width: 1400px; margin-left: auto; margin-right: auto; overflow-x: auto; }
+.tab { padding: 10px 20px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text2); border-bottom: 2px solid transparent; white-space: nowrap; transition: all .15s; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--text); border-bottom-color: var(--blue); }
+
+/* Content */
+.content { max-width: 1400px; margin: 0 auto; padding: 24px 32px 48px; }
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* Cards */
+.hero-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.hero-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+.hero-card .num { font-size: 36px; font-weight: 800; }
+.hero-card .label { font-size: 12px; color: var(--text2); margin-top: 4px; }
+
+/* Section */
+.section { margin-bottom: 28px; }
+.section-title { font-size: 15px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.section-title .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* Project Cards */
+.proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.proj-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; transition: border-color .2s; }
+.proj-card:hover { border-color: var(--blue); }
+.proj-card .name { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.proj-card .name .status { width: 8px; height: 8px; border-radius: 50%; }
+.proj-card .desc { font-size: 12px; color: var(--text2); margin-top: 4px; }
+.proj-card .tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
+.proj-card .tag { font-size: 10px; padding: 2px 7px; border-radius: 12px; background: var(--bg3); color: var(--text2); }
+.proj-card .url { font-size: 11px; margin-top: 6px; }
+
+/* Donut Chart */
+.chart-row { display: flex; gap: 24px; flex-wrap: wrap; }
+.donut-wrap { text-align: center; }
+.donut-wrap .legend { margin-top: 10px; text-align: left; }
+.donut-wrap .legend-item { font-size: 11px; display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+.donut-wrap .legend-item .swatch { width: 10px; height: 10px; border-radius: 2px; }
+
+/* Tech Tags */
+.tech-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+.tech-tag { padding: 5px 14px; border-radius: 16px; font-size: 12px; font-weight: 500; }
+
+/* Bar Chart */
+.bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 12px; }
+.bar-row .bar-label { width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text2); }
+.bar-row .bar-track { flex: 1; height: 8px; background: var(--bg3); border-radius: 4px; }
+.bar-row .bar-fill { height: 100%; border-radius: 4px; transition: width .5s; }
+.bar-row .bar-val { width: 60px; text-align: right; font-weight: 600; font-size: 11px; }
+
+/* Topology Canvas */
+#topoCanvas { width: 100%; height: 600px; background: var(--bg2); border-radius: 12px; border: 1px solid var(--border); cursor: grab; }
+.topo-legend { display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap; }
+.topo-legend span { font-size: 11px; color: var(--text2); display: flex; align-items: center; gap: 4px; }
+.topo-legend .tl-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+/* Automation Clock */
+.clock-wrap { display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start; }
+#clockCanvas { width: 420px; height: 420px; background: var(--bg2); border-radius: 12px; border: 1px solid var(--border); }
+.auto-list { flex: 1; min-width: 300px; }
+.auto-item { display: flex; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.auto-item .time { width: 60px; font-weight: 600; color: var(--text2); }
+.auto-item .aname { flex: 1; }
+.auto-item .acat { font-size: 10px; padding: 1px 6px; border-radius: 8px; }
+
+/* Wave Progress */
+.wave-row { display: flex; gap: 0; margin-bottom: 20px; }
+.wave-step { flex: 1; text-align: center; padding: 14px 8px; position: relative; }
+.wave-step .wnum { font-size: 24px; font-weight: 800; }
+.wave-step .wlabel { font-size: 11px; color: var(--text2); margin-top: 2px; }
+.wave-step .wstatus { font-size: 10px; margin-top: 4px; }
+.wave-step.done { background: rgba(63,185,80,.15); border-radius: 8px; }
+.wave-step.pending { background: var(--bg2); border-radius: 8px; }
+
+/* Treemap */
+.treemap { display: flex; flex-wrap: wrap; gap: 4px; }
+.treemap-cell { border-radius: 6px; padding: 10px; display: flex; flex-direction: column; justify-content: center; min-height: 60px; }
+.treemap-cell .tc-name { font-size: 12px; font-weight: 600; }
+.treemap-cell .tc-num { font-size: 18px; font-weight: 800; margin-top: 2px; }
+
+/* Repo List */
+.repo-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 8px; }
+.repo-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
+.repo-item .rname { font-weight: 600; }
+.repo-item .rtype { font-size: 10px; padding: 1px 6px; border-radius: 8px; }
+
+@media (max-width: 768px) {
+  .header, .tabs, .content { padding-left: 16px; padding-right: 16px; }
+  .hero-grid { grid-template-columns: repeat(3, 1fr); }
+  .hero-card .num { font-size: 24px; }
+  .proj-grid { grid-template-columns: 1fr; }
+  #topoCanvas { height: 400px; }
+  #clockCanvas { width: 300px; height: 300px; }
+  .chart-row { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>CloudPipe 全景儀表板</h1>
+  <p>14 個活躍項目 · 41 GitHub Repos · 完整工作生態系統一覽</p>
+  <div class="snapshot">靜態快照 — 2026-03-11 · Joe Cheok</div>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab active" data-tab="overview">總覽</div>
+  <div class="tab" data-tab="projects">項目矩陣</div>
+  <div class="tab" data-tab="topology">網路拓撲</div>
+  <div class="tab" data-tab="automation">自動化引擎</div>
+  <div class="tab" data-tab="business">商業化進度</div>
+  <div class="tab" data-tab="repos">GitHub 生態</div>
+</div>
+
+<div class="content">
+
+<!-- ==================== TAB 1: OVERVIEW ==================== -->
+<div class="panel active" id="panel-overview">
+  <div class="hero-grid">
+    <div class="hero-card"><div class="num" style="color:var(--blue)">14</div><div class="label">活躍項目</div></div>
+    <div class="hero-card"><div class="num" style="color:var(--purple)">41</div><div class="label">GitHub Repos</div></div>
+    <div class="hero-card"><div class="num" style="color:var(--green)">45</div><div class="label">自動化任務</div></div>
+    <div class="hero-card"><div class="num" style="color:var(--orange)">21</div><div class="label">SQLite 數據庫</div></div>
+    <div class="hero-card"><div class="num" style="color:var(--cyan)">1.85M</div><div class="label">企業目錄</div></div>
+    <div class="hero-card"><div class="num" style="color:var(--pink)">350</div><div class="label">澳門商戶</div></div>
+  </div>
+
+  <div class="chart-row">
+    <div class="donut-wrap">
+      <canvas id="donutChart" width="220" height="220"></canvas>
+      <div class="legend">
+        <div class="legend-item"><div class="swatch" style="background:var(--red)"></div>核心商業 (4)</div>
+        <div class="legend-item"><div class="swatch" style="background:var(--blue)"></div>AI 平台 (3)</div>
+        <div class="legend-item"><div class="swatch" style="background:var(--green)"></div>品牌站點 (8)</div>
+        <div class="legend-item"><div class="swatch" style="background:var(--orange)"></div>基礎工具 (5)</div>
+      </div>
+    </div>
+    <div style="flex:1;min-width:300px">
+      <div class="section-title">技術棧</div>
+      <div class="tech-cloud">
+        <span class="tech-tag" style="background:#0070f3;color:#fff">Next.js 16</span>
+        <span class="tech-tag" style="background:#f38020;color:#fff">Cloudflare Workers</span>
+        <span class="tech-tag" style="background:#3fcf8e;color:#000">Supabase</span>
+        <span class="tech-tag" style="background:#003b57;color:#fff">SQLite</span>
+        <span class="tech-tag" style="background:#000;color:#fff;border:1px solid var(--border)">Vercel</span>
+        <span class="tech-tag" style="background:#222;color:#fff;border:1px solid var(--border)">GitHub Pages</span>
+        <span class="tech-tag" style="background:#3178c6;color:#fff">TypeScript</span>
+        <span class="tech-tag" style="background:#06b6d4;color:#000">Tailwind CSS</span>
+        <span class="tech-tag" style="background:#339933;color:#fff">Node.js</span>
+        <span class="tech-tag" style="background:#3776ab;color:#fff">Python</span>
+        <span class="tech-tag" style="background:#0088cc;color:#fff">Telegram Bot</span>
+        <span class="tech-tag" style="background:#4285f4;color:#fff">Google Sheets</span>
+        <span class="tech-tag" style="background:#d29922;color:#000">D1 Edge SQL</span>
+        <span class="tech-tag" style="background:#f85149;color:#fff">Canvas API</span>
+      </div>
+
+      <div class="section-title" style="margin-top:20px">外部服務</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px">
+        <div>🟢 Supabase (Singapore)</div>
+        <div>🟢 Cloudflare D1 (APAC)</div>
+        <div>🟢 Vercel (8 站)</div>
+        <div>🟢 GitHub Pages (8 站)</div>
+        <div>🟢 Google Sheets (8 tabs)</div>
+        <div>🟢 Telegram Bot (2 帳戶)</div>
+        <div>🟢 Facebook (6 粉專)</div>
+        <div>🟢 Tailscale SSH</div>
+        <div>🔴 Notion (已棄用)</div>
+        <div>🟡 n8n (已安裝)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 2: PROJECTS ==================== -->
+<div class="panel" id="panel-projects">
+  <!-- 核心商業 -->
+  <div class="section">
+    <div class="section-title"><div class="dot" style="background:var(--red)"></div>核心商業</div>
+    <div class="proj-grid">
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--green)"></div>CloudPipe 澳門百科</div>
+        <div class="desc">350 家商戶、6 大行業、20 子類。AI 友善、Schema.org、爬蟲追蹤。★ 核心產品</div>
+        <div class="tags"><span class="tag">Next.js 16</span><span class="tag">Supabase</span><span class="tag">TypeScript</span><span class="tag">Tailwind</span></div>
+        <div class="url"><a href="https://cloudpipe-macao-app.vercel.app" target="_blank">cloudpipe-macao-app.vercel.app</a></div>
+      </div>
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--green)"></div>CloudPipe Landing</div>
+        <div class="desc">統一監控中心 (631 行)、AEO 工具、6 tabs。Cloudflare KV + Supabase 數據。</div>
+        <div class="tags"><span class="tag">Vercel</span><span class="tag">Static HTML</span><span class="tag">Canvas</span></div>
+        <div class="url"><a href="https://cloudpipe-landing.vercel.app" target="_blank">cloudpipe-landing.vercel.app</a></div>
+      </div>
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--green)"></div>CloudPipe Directory</div>
+        <div class="desc">1,853,260 筆企業目錄。台灣 1.76M、日本 70K、香港 17K。AEO 優化。</div>
+        <div class="tags"><span class="tag">Vercel</span><span class="tag">SQLite</span><span class="tag">Schema.org</span></div>
+        <div class="url"><a href="https://cloudpipe-directory.vercel.app" target="_blank">cloudpipe-directory.vercel.app</a></div>
+      </div>
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--green)"></div>CloudPipe Dev</div>
+        <div class="desc">AI 自動化 Monorepo：Core (4000)、API Proxy (4002)、TG Bot (4003)、Threads (4005)、MCP (21 tools)</div>
+        <div class="tags"><span class="tag">Node.js</span><span class="tag">Fastify</span><span class="tag">SQLite</span><span class="tag">PM2</span></div>
+        <div class="url" style="color:var(--text3)">localhost:4000-4005</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI 平台 -->
+  <div class="section">
+    <div class="section-title"><div class="dot" style="background:var(--blue)"></div>AI 平台</div>
+    <div class="proj-grid">
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--green)"></div>OpenClaw (Official)</div>
+        <div class="desc">v2026.2.23 · 28 Agents · 84 Skills (45 eligible) · Kira 治理 · 66 memory files</div>
+        <div class="tags"><span class="tag">npm</span><span class="tag">Port 18789</span><span class="tag">LaunchAgent</span><span class="tag">SQLite-vec</span></div>
+        <div class="url" style="color:var(--text3)">~/.openclaw/ (本地)</div>
+      </div>
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--green)"></div>AI 學習寶庫</div>
+        <div class="desc">每日 24 篇自動生成。5 分類 × 20 主題。MiniMax M2.1 API。</div>
+        <div class="tags"><span class="tag">GitHub Pages</span><span class="tag">gh-pages</span><span class="tag">Auto-push</span></div>
+        <div class="url"><a href="https://inari-kira-isla.github.io/Openclaw/" target="_blank">AI 學習寶庫</a></div>
+      </div>
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--orange)"></div>Claude OpenClaw</div>
+        <div class="desc">自建版 Claude Code 多智能體系統。Python + Fastify + React。</div>
+        <div class="tags"><span class="tag">Python</span><span class="tag">Port 19001</span><span class="tag">React</span></div>
+        <div class="url" style="color:var(--text3)">~/Documents/Claude openclaw/</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 品牌站點 -->
+  <div class="section">
+    <div class="section-title"><div class="dot" style="background:var(--green)"></div>品牌站點</div>
+    <div class="proj-grid">
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--green)"></div>稻荷環球食品</div>
+        <div class="desc">食品進口商。AEO + llms.txt + FAQPage schema。</div>
+        <div class="tags"><span class="tag">GitHub Pages</span><span class="tag">AEO</span></div>
+        <div class="url"><a href="https://inari-kira-isla.github.io/inari-global-foods" target="_blank">inari-global-foods</a></div>
+      </div>
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--green)"></div>海膽速遞</div>
+        <div class="desc">海膽專賣。AEO + 蜘蛛網跨站追蹤。</div>
+        <div class="tags"><span class="tag">GitHub Pages</span><span class="tag">AEO</span></div>
+        <div class="url"><a href="https://inari-kira-isla.github.io/sea-urchin-delivery" target="_blank">sea-urchin-delivery</a></div>
+      </div>
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--green)"></div>After School Coffee</div>
+        <div class="desc">外帶咖啡店。AEO + spider-track beacon。</div>
+        <div class="tags"><span class="tag">GitHub Pages</span><span class="tag">AEO</span></div>
+        <div class="url"><a href="https://inari-kira-isla.github.io/after-school-coffee" target="_blank">after-school-coffee</a></div>
+      </div>
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--green)"></div>山中田</div>
+        <div class="desc">日本料理餐廳。AEO + 蜘蛛網。</div>
+        <div class="tags"><span class="tag">GitHub Pages</span><span class="tag">AEO</span></div>
+        <div class="url"><a href="https://inari-kira-isla.github.io/yamanakada" target="_blank">yamanakada</a></div>
+      </div>
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--green)"></div>Mind Coffee</div>
+        <div class="desc">咖啡專賣店一頁式網站。</div>
+        <div class="tags"><span class="tag">Vercel</span></div>
+        <div class="url"><a href="https://mind-coffee.vercel.app" target="_blank">mind-coffee.vercel.app</a></div>
+      </div>
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--green)"></div>4 AEO Demo 站</div>
+        <div class="desc">Education · Finance · Travel-Food · Luxury — AEO 展示模板</div>
+        <div class="tags"><span class="tag">GitHub Pages</span><span class="tag">AEO Template</span></div>
+        <div class="url" style="color:var(--text3)">4 個獨立 repo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 基礎工具 -->
+  <div class="section">
+    <div class="section-title"><div class="dot" style="background:var(--orange)"></div>基礎工具</div>
+    <div class="proj-grid">
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--green)"></div>BNI 系統</div>
+        <div class="desc">會員管理、推薦追蹤、Checkin、自動提醒 (4 排程)。SQLite 去 Notion 化。</div>
+        <div class="tags"><span class="tag">SQLite</span><span class="tag">Python</span><span class="tag">LaunchAgent</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--green)"></div>CS 客服系統</div>
+        <div class="desc">Webhook (port 18793) + 3 Agents + GitHub 同步 (每 15 分)。6 品牌 FB token。</div>
+        <div class="tags"><span class="tag">Flask</span><span class="tag">SQLite</span><span class="tag">GitHub Sync</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--green)"></div>Knowledge Hub</div>
+        <div class="desc">Google Sheets ↔ SQLite 雙向同步。艾賓浩斯複習曲線。GAS Web App。</div>
+        <div class="tags"><span class="tag">Google Sheets</span><span class="tag">SQLite</span><span class="tag">GAS</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--orange)"></div>OpenClawASR</div>
+        <div class="desc">中文語音轉文字。faster-whisper 本地模型。</div>
+        <div class="tags"><span class="tag">Python</span><span class="tag">faster-whisper</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="name"><div class="status" style="background:var(--orange)"></div>Backup System</div>
+        <div class="desc">21 個 DB 每日備份。17 → GitHub, 2 → 本地壓縮。Telegram 通知。</div>
+        <div class="tags"><span class="tag">Bash</span><span class="tag">LaunchAgent</span><span class="tag">03:00+15:00</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 3: TOPOLOGY ==================== -->
+<div class="panel" id="panel-topology">
+  <canvas id="topoCanvas"></canvas>
+  <div class="topo-legend">
+    <span><div class="tl-dot" style="background:var(--green)"></div>GitHub Pages</span>
+    <span><div class="tl-dot" style="background:var(--blue)"></div>Vercel</span>
+    <span><div class="tl-dot" style="background:var(--orange)"></div>Cloudflare Workers</span>
+    <span><div class="tl-dot" style="background:var(--purple)"></div>Supabase / API</span>
+    <span><div class="tl-dot" style="background:var(--red)"></div>本地服務</span>
+    <span><div class="tl-dot" style="background:var(--cyan)"></div>D1 Edge SQL</span>
+  </div>
+</div>
+
+<!-- ==================== TAB 4: AUTOMATION ==================== -->
+<div class="panel" id="panel-automation">
+  <div class="clock-wrap">
+    <canvas id="clockCanvas"></canvas>
+    <div class="auto-list">
+      <div class="section-title">自動化任務時間表</div>
+      <div class="auto-item"><div class="time">每小時</div><div class="aname">site-articles 文章生成</div><div class="acat" style="background:rgba(63,185,80,.2);color:var(--green)">內容</div></div>
+      <div class="auto-item"><div class="time">每小時</div><div class="aname">sheets-sync Google Sheets</div><div class="acat" style="background:rgba(88,166,255,.2);color:var(--blue)">同步</div></div>
+      <div class="auto-item"><div class="time">每小時</div><div class="aname">aeo-collector 企業收集</div><div class="acat" style="background:rgba(88,166,255,.2);color:var(--blue)">同步</div></div>
+      <div class="auto-item"><div class="time">每 15 分</div><div class="aname">cs-github-sync 客服同步</div><div class="acat" style="background:rgba(88,166,255,.2);color:var(--blue)">同步</div></div>
+      <div class="auto-item"><div class="time">每 30 分</div><div class="aname">knowledge-hub 知識庫</div><div class="acat" style="background:rgba(88,166,255,.2);color:var(--blue)">同步</div></div>
+      <div class="auto-item"><div class="time">03:00</div><div class="aname">db-backup 數據庫備份</div><div class="acat" style="background:rgba(188,140,255,.2);color:var(--purple)">備份</div></div>
+      <div class="auto-item"><div class="time">06:00</div><div class="aname">aeo-macao-content 行業文章</div><div class="acat" style="background:rgba(63,185,80,.2);color:var(--green)">內容</div></div>
+      <div class="auto-item"><div class="time">06:30</div><div class="aname">bni-reminders 週二提醒</div><div class="acat" style="background:rgba(210,153,34,.2);color:var(--orange)">提醒</div></div>
+      <div class="auto-item"><div class="time">08:00</div><div class="aname">daily-briefing 每日簡報</div><div class="acat" style="background:rgba(210,153,34,.2);color:var(--orange)">監控</div></div>
+      <div class="auto-item"><div class="time">09:00</div><div class="aname">bni-followup 跟進提醒</div><div class="acat" style="background:rgba(210,153,34,.2);color:var(--orange)">提醒</div></div>
+      <div class="auto-item"><div class="time">15:00</div><div class="aname">db-backup 午間備份</div><div class="acat" style="background:rgba(188,140,255,.2);color:var(--purple)">備份</div></div>
+      <div class="auto-item"><div class="time">17:00</div><div class="aname">bni-weekly 週五總結</div><div class="acat" style="background:rgba(210,153,34,.2);color:var(--orange)">提醒</div></div>
+      <div class="auto-item"><div class="time">22:00</div><div class="aname">site-report 每日報告</div><div class="acat" style="background:rgba(210,153,34,.2);color:var(--orange)">監控</div></div>
+      <div class="auto-item"><div class="time">23:00</div><div class="aname">cron-health 健康檢查</div><div class="acat" style="background:rgba(210,153,34,.2);color:var(--orange)">監控</div></div>
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:28px">
+    <div class="section-title">SQLite 數據庫大小分佈</div>
+    <div id="dbBars"></div>
+  </div>
+</div>
+
+<!-- ==================== TAB 5: BUSINESS ==================== -->
+<div class="panel" id="panel-business">
+  <div class="section">
+    <div class="section-title">實施波次進度</div>
+    <div class="wave-row">
+      <div class="wave-step done"><div class="wnum">W1</div><div class="wlabel">BNI + 提醒</div><div class="wstatus" style="color:var(--green)">✅ 完成</div></div>
+      <div class="wave-step pending"><div class="wnum">W2</div><div class="wlabel">Life OS</div><div class="wstatus" style="color:var(--orange)">⏳ 待開始</div></div>
+      <div class="wave-step pending"><div class="wnum">W3</div><div class="wlabel">Facebook 自動化</div><div class="wstatus" style="color:var(--orange)">⏳ 待開始</div></div>
+      <div class="wave-step pending"><div class="wnum">W4</div><div class="wlabel">WhatsApp + WeChat</div><div class="wstatus" style="color:var(--orange)">⏳ 待開始</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">澳門百科 — 350 商戶行業分佈</div>
+    <div class="treemap">
+      <div class="treemap-cell" style="background:rgba(248,81,73,.25);flex:3"><div class="tc-name">餐飲 Dining</div><div class="tc-num">142</div></div>
+      <div class="treemap-cell" style="background:rgba(88,166,255,.25);flex:2"><div class="tc-name">酒店 Hotels</div><div class="tc-num">58</div></div>
+      <div class="treemap-cell" style="background:rgba(63,185,80,.25);flex:2"><div class="tc-name">旅遊景點</div><div class="tc-num">52</div></div>
+      <div class="treemap-cell" style="background:rgba(188,140,255,.25);flex:1.5"><div class="tc-name">生活服務</div><div class="tc-num">38</div></div>
+      <div class="treemap-cell" style="background:rgba(210,153,34,.25);flex:1.5"><div class="tc-name">購物 Shopping</div><div class="tc-num">35</div></div>
+      <div class="treemap-cell" style="background:rgba(247,120,186,.25);flex:1"><div class="tc-name">食品貿易</div><div class="tc-num">25</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">企業目錄 — 1,853,260 筆地區分佈</div>
+    <div id="dirBars"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">AI 爬蟲偵測 — 28 Bot Types</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div>
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px;color:var(--blue)">國際 AI (17)</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8">
+          GPTBot · ChatGPT-User · OAI-SearchBot · ClaudeBot · anthropic-ai · claude-web · PerplexityBot · Google-Extended · Googlebot · Bingbot · CCBot · YouBot · cohere-ai · Applebot · meta-externalagent · FacebookBot · ia_archiver
+        </div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px;color:var(--red)">中國 AI (11)</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8">
+          Baiduspider · Sogou · ChatGLM · 360Spider · HunyuanBot · SenseChat · SparkBot · Kimi · Doubao · XiaoIce · Bytespider
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 6: REPOS ==================== -->
+<div class="panel" id="panel-repos">
+  <div class="hero-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px">
+    <div class="hero-card"><div class="num" style="color:var(--blue)">37</div><div class="label">公開 Repos</div></div>
+    <div class="hero-card"><div class="num" style="color:var(--purple)">4</div><div class="label">私有 Repos</div></div>
+    <div class="hero-card"><div class="num" style="color:var(--green)">8</div><div class="label">品牌站</div></div>
+    <div class="hero-card"><div class="num" style="color:var(--orange)">14</div><div class="label">AEO Demo</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><div class="dot" style="background:var(--red)"></div>核心項目</div>
+    <div class="repo-list" id="repoCore"></div>
+  </div>
+  <div class="section">
+    <div class="section-title"><div class="dot" style="background:var(--green)"></div>品牌站點</div>
+    <div class="repo-list" id="repoBrand"></div>
+  </div>
+  <div class="section">
+    <div class="section-title"><div class="dot" style="background:var(--blue)"></div>AEO Demo</div>
+    <div class="repo-list" id="repoDemo"></div>
+  </div>
+  <div class="section">
+    <div class="section-title"><div class="dot" style="background:var(--orange)"></div>百科 & 其他</div>
+    <div class="repo-list" id="repoOther"></div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+// === Tab switching ===
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('panel-' + t.dataset.tab).classList.add('active');
+    if (t.dataset.tab === 'topology') drawTopology();
+    if (t.dataset.tab === 'automation') drawClock();
+  });
+});
+
+// === Donut Chart ===
+function drawDonut() {
+  const c = document.getElementById('donutChart');
+  const ctx = c.getContext('2d');
+  const cx = 110, cy = 110, r = 80, lw = 28;
+  const data = [
+    { val: 4, color: '#f85149' },
+    { val: 3, color: '#58a6ff' },
+    { val: 8, color: '#3fb950' },
+    { val: 5, color: '#d29922' },
+  ];
+  const total = data.reduce((s, d) => s + d.val, 0);
+  let angle = -Math.PI / 2;
+  data.forEach(d => {
+    const sweep = (d.val / total) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, angle, angle + sweep);
+    ctx.strokeStyle = d.color;
+    ctx.lineWidth = lw;
+    ctx.stroke();
+    angle += sweep;
+  });
+  ctx.fillStyle = '#e6edf3';
+  ctx.font = 'bold 28px -apple-system';
+  ctx.textAlign = 'center';
+  ctx.fillText('20', cx, cy + 4);
+  ctx.font = '11px -apple-system';
+  ctx.fillStyle = '#8b949e';
+  ctx.fillText('項目', cx, cy + 20);
+}
+drawDonut();
+
+// === Topology ===
+function drawTopology() {
+  const canvas = document.getElementById('topoCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth * 2;
+  canvas.height = canvas.offsetHeight * 2;
+  ctx.scale(2, 2);
+  const W = canvas.offsetWidth, H = canvas.offsetHeight;
+  ctx.clearRect(0, 0, W, H);
+
+  const nodes = [
+    // Center
+    { x: W/2, y: H/2, r: 28, color: '#f85149', label: 'OpenClaw\nGateway', sub: 'port 18789' },
+    // Ring 1: Products
+    { x: W/2, y: H/2-140, r: 22, color: '#58a6ff', label: 'Macao App', sub: 'Vercel' },
+    { x: W/2+130, y: H/2-80, r: 18, color: '#58a6ff', label: 'Landing', sub: 'Vercel' },
+    { x: W/2+140, y: H/2+60, r: 18, color: '#58a6ff', label: 'Directory', sub: 'Vercel' },
+    { x: W/2-130, y: H/2-80, r: 18, color: '#3fb950', label: '學習寶庫', sub: 'GH Pages' },
+    { x: W/2-140, y: H/2+60, r: 16, color: '#3fb950', label: '品牌站 ×4', sub: 'GH Pages' },
+    // Ring 2: Workers
+    { x: W/2+60, y: H/2+160, r: 16, color: '#d29922', label: 'openclaw\ntracker', sub: 'Worker' },
+    { x: W/2-60, y: H/2+160, r: 16, color: '#d29922', label: 'client\ntracker', sub: 'Worker' },
+    { x: W/2, y: H/2+200, r: 14, color: '#39d353', label: 'D1', sub: 'Edge SQL' },
+    // Ring 3: Services
+    { x: W/2+200, y: H/2+160, r: 16, color: '#bc8cff', label: 'Supabase', sub: 'Singapore' },
+    { x: W/2-200, y: H/2+160, r: 14, color: '#bc8cff', label: 'Google\nSheets', sub: '8 tabs' },
+    { x: W/2-200, y: H/2-20, r: 14, color: '#0088cc', label: 'Telegram', sub: '2 bots' },
+    { x: W/2+200, y: H/2-20, r: 14, color: '#0668E1', label: 'Facebook', sub: '6 pages' },
+    // Dev
+    { x: W/2, y: H/2+260, r: 14, color: '#f85149', label: 'CloudPipe\nDev', sub: '4000-4005' },
+  ];
+
+  const edges = [
+    [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], // Gateway → Products
+    [1, 6], [1, 7], [2, 6], [5, 7], // Products → Workers
+    [6, 8], [7, 8], // Workers → D1
+    [1, 9], [7, 9], // Macao App + client → Supabase
+    [0, 10], [0, 11], [0, 12], // Gateway → Sheets, Telegram, Facebook
+    [0, 13], // Gateway → Dev
+    [13, 9], // Dev → Supabase
+  ];
+
+  // Draw edges
+  edges.forEach(([a, b]) => {
+    ctx.beginPath();
+    ctx.moveTo(nodes[a].x, nodes[a].y);
+    ctx.lineTo(nodes[b].x, nodes[b].y);
+    ctx.strokeStyle = 'rgba(139,148,158,0.2)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+
+  // Draw nodes
+  nodes.forEach(n => {
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+    ctx.fillStyle = n.color + '30';
+    ctx.fill();
+    ctx.strokeStyle = n.color;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.fillStyle = '#e6edf3';
+    ctx.font = `bold ${n.r > 20 ? 11 : 9}px -apple-system`;
+    ctx.textAlign = 'center';
+    const lines = n.label.split('\n');
+    lines.forEach((line, i) => {
+      ctx.fillText(line, n.x, n.y - (lines.length - 1) * 6 + i * 13 + 3);
+    });
+    ctx.font = '8px -apple-system';
+    ctx.fillStyle = '#8b949e';
+    ctx.fillText(n.sub, n.x, n.y + n.r + 12);
+  });
+}
+
+// === Clock ===
+function drawClock() {
+  const canvas = document.getElementById('clockCanvas');
+  const ctx = canvas.getContext('2d');
+  const size = Math.min(canvas.offsetWidth, canvas.offsetHeight);
+  canvas.width = size * 2;
+  canvas.height = size * 2;
+  ctx.scale(2, 2);
+  const cx = size/2, cy = size/2, r = size/2 - 40;
+
+  // Clock face
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.strokeStyle = '#30363d';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Hour marks
+  for (let i = 0; i < 24; i++) {
+    const angle = (i / 24) * Math.PI * 2 - Math.PI / 2;
+    const x1 = cx + Math.cos(angle) * (r - 8);
+    const y1 = cy + Math.sin(angle) * (r - 8);
+    const x2 = cx + Math.cos(angle) * r;
+    const y2 = cy + Math.sin(angle) * r;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.strokeStyle = '#484f58';
+    ctx.lineWidth = i % 6 === 0 ? 2 : 1;
+    ctx.stroke();
+    if (i % 3 === 0) {
+      ctx.fillStyle = '#8b949e';
+      ctx.font = '10px -apple-system';
+      ctx.textAlign = 'center';
+      const tx = cx + Math.cos(angle) * (r - 18);
+      const ty = cy + Math.sin(angle) * (r - 18) + 3;
+      ctx.fillText(i.toString().padStart(2, '0'), tx, ty);
+    }
+  }
+
+  // Tasks on clock
+  const tasks = [
+    { hour: 0, span: 24, color: '#3fb950', label: '每小時 文章生成' },
+    { hour: 0, span: 24, color: '#58a6ff', label: '每小時 Sheets同步' },
+    { hour: 3, span: 1, color: '#bc8cff', label: '03:00 備份' },
+    { hour: 6, span: 1, color: '#3fb950', label: '06:00 行業文章' },
+    { hour: 8, span: 1, color: '#d29922', label: '08:00 簡報' },
+    { hour: 15, span: 1, color: '#bc8cff', label: '15:00 備份' },
+    { hour: 22, span: 1, color: '#d29922', label: '22:00 報告' },
+    { hour: 23, span: 1, color: '#d29922', label: '23:00 健康' },
+  ];
+
+  tasks.forEach((t, i) => {
+    if (t.span === 24) {
+      // Full circle — inner ring
+      const ir = r - 30 - i * 8;
+      ctx.beginPath();
+      ctx.arc(cx, cy, ir, 0, Math.PI * 2);
+      ctx.strokeStyle = t.color + '60';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+    } else {
+      const a1 = (t.hour / 24) * Math.PI * 2 - Math.PI / 2;
+      const a2 = ((t.hour + t.span) / 24) * Math.PI * 2 - Math.PI / 2;
+      const ir = r - 50;
+      ctx.beginPath();
+      ctx.arc(cx, cy, ir, a1, a2);
+      ctx.strokeStyle = t.color;
+      ctx.lineWidth = 6;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+      // Dot
+      const dx = cx + Math.cos(a1) * ir;
+      const dy = cy + Math.sin(a1) * ir;
+      ctx.beginPath();
+      ctx.arc(dx, dy, 4, 0, Math.PI * 2);
+      ctx.fillStyle = t.color;
+      ctx.fill();
+    }
+  });
+
+  // Center text
+  ctx.fillStyle = '#e6edf3';
+  ctx.font = 'bold 20px -apple-system';
+  ctx.textAlign = 'center';
+  ctx.fillText('45', cx, cy);
+  ctx.font = '10px -apple-system';
+  ctx.fillStyle = '#8b949e';
+  ctx.fillText('自動化任務', cx, cy + 16);
+}
+
+// === DB Bars ===
+(function() {
+  const dbs = [
+    { name: 'aeo_business_directory.db', size: 918000 },
+    { name: 'memory.db', size: 35000 },
+    { name: 'content_hub.db', size: 840 },
+    { name: 'client_sites.db', size: 436 },
+    { name: 'ai_news_collector.db', size: 204 },
+    { name: 'aeo_authority_sources.db', size: 124 },
+    { name: 'macao_content.db', size: 112 },
+    { name: 'aeo_demo_articles.db', size: 92 },
+    { name: 'bni.db', size: 80 },
+    { name: 'knowledge_hub.db', size: 72 },
+    { name: 'site_articles.db', size: 72 },
+    { name: 'cs_customers.db', size: 60 },
+    { name: 'article_evolution.db', size: 48 },
+    { name: 'worker_health.db', size: 44 },
+    { name: 'crawler_stats.db', size: 32 },
+    { name: 'claude_tg_bot.db', size: 20 },
+    { name: 'brand_articles.db', size: 20 },
+    { name: 'competitor_analysis.db', size: 16 },
+  ];
+  const max = dbs[0].size;
+  const el = document.getElementById('dbBars');
+  dbs.forEach(d => {
+    const pct = Math.max((d.size / max) * 100, 1);
+    const sizeStr = d.size >= 1000 ? (d.size / 1000).toFixed(0) + ' MB' : d.size + ' KB';
+    el.innerHTML += `<div class="bar-row">
+      <div class="bar-label">${d.name}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${d.size > 10000 ? 'var(--red)' : d.size > 100 ? 'var(--blue)' : 'var(--green)'}"></div></div>
+      <div class="bar-val">${sizeStr}</div>
+    </div>`;
+  });
+})();
+
+// === Directory Bars ===
+(function() {
+  const regions = [
+    { name: '台灣 Taiwan', count: 1760000, color: 'var(--blue)' },
+    { name: '日本 Japan', count: 70000, color: 'var(--red)' },
+    { name: '香港 Hong Kong', count: 17000, color: 'var(--orange)' },
+    { name: '澳門 Macau', count: 326, color: 'var(--green)' },
+    { name: '中國 China', count: 166, color: 'var(--purple)' },
+  ];
+  const max = regions[0].count;
+  const el = document.getElementById('dirBars');
+  regions.forEach(r => {
+    const pct = Math.max(Math.log10(r.count) / Math.log10(max) * 100, 5);
+    const countStr = r.count >= 1000000 ? (r.count / 1000000).toFixed(2) + 'M' : r.count >= 1000 ? (r.count / 1000).toFixed(0) + 'K' : r.count.toString();
+    el.innerHTML += `<div class="bar-row">
+      <div class="bar-label">${r.name}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${r.color}"></div></div>
+      <div class="bar-val">${countStr}</div>
+    </div>`;
+  });
+})();
+
+// === Repo List ===
+(function() {
+  const repos = {
+    core: [
+      { name: 'cloudpipe-macao-app', type: 'Next.js', color: 'var(--blue)' },
+      { name: 'cloudpipe-landing', type: 'Vercel', color: 'var(--blue)' },
+      { name: 'cloudpipe-directory', type: 'Vercel', color: 'var(--blue)' },
+      { name: 'Openclaw', type: 'GH Pages', color: 'var(--green)' },
+      { name: 'cloudpipe-backup', type: 'Private', color: 'var(--purple)' },
+      { name: 'work-dashboard', type: 'Private', color: 'var(--purple)' },
+      { name: 'openclaw-workspace', type: 'Private', color: 'var(--purple)' },
+    ],
+    brand: [
+      { name: 'inari-global-foods', type: 'GH Pages', color: 'var(--green)' },
+      { name: 'sea-urchin-delivery', type: 'GH Pages', color: 'var(--green)' },
+      { name: 'after-school-coffee', type: 'GH Pages', color: 'var(--green)' },
+      { name: 'yamanakada', type: 'GH Pages', color: 'var(--green)' },
+      { name: 'mind-coffee', type: 'Vercel', color: 'var(--blue)' },
+      { name: 'bni-ace-web', type: 'Vercel', color: 'var(--blue)' },
+      { name: 'test-cafe-demo', type: 'Vercel', color: 'var(--blue)' },
+    ],
+    demo: [
+      'education', 'finance', 'travel-food', 'luxury',
+      'retail', 'media', 'hr', 'accounting', 'insurance',
+      'fitness', 'pet', 'wedding', 'logistics', 'home',
+      'auto', 'beauty', 'tech', 'legal', 'healthcare', 'realestate',
+    ].map(d => ({ name: 'aeo-demo-' + d, type: 'Demo', color: 'var(--orange)' })),
+    other: [
+      { name: 'world-encyclopedia', type: 'GH Pages', color: 'var(--green)' },
+      { name: 'japan-encyclopedia', type: 'GH Pages', color: 'var(--green)' },
+      { name: 'Inari-Kira-Isla.github.io', type: 'Domain', color: 'var(--text3)' },
+      { name: 'Ai-Api', type: 'Tool', color: 'var(--text3)' },
+      { name: 'Inari', type: 'Legacy', color: 'var(--text3)' },
+      { name: 'lazy-uni-shop', type: 'Legacy', color: 'var(--text3)' },
+      { name: 'Inari_2026', type: 'Private', color: 'var(--purple)' },
+    ],
+  };
+
+  function renderRepos(containerId, list) {
+    const el = document.getElementById(containerId);
+    list.forEach(r => {
+      el.innerHTML += `<div class="repo-item">
+        <span class="rname"><a href="https://github.com/Inari-Kira-Isla/${r.name}" target="_blank">${r.name}</a></span>
+        <span class="rtype" style="background:${r.color}20;color:${r.color}">${r.type}</span>
+      </div>`;
+    });
+  }
+  renderRepos('repoCore', repos.core);
+  renderRepos('repoBrand', repos.brand);
+  renderRepos('repoDemo', repos.demo);
+  renderRepos('repoOther', repos.other);
+})();
+</script>
+
+</body>
+</html>

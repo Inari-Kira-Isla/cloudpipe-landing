@@ -1,6 +1,6 @@
 // ============================================
 // CloudPipe Client Sites AI Tracker
-// Multi-tenant Cloudflare Worker
+// Multi-tenant Cloudflare Worker — D1 storage
 // Tracks AI bot visits for all client sites
 // ============================================
 
@@ -110,7 +110,6 @@ async function writeToSupabase(env, siteSlug, botInfo, request) {
     const ipHash = await hashIP(ip);
     const today = new Date().toISOString().split("T")[0];
 
-    // Detect if this is a cross-site visit from the spider web
     let fromSite = null;
     if (referer) {
       for (const slug of Object.keys(CLIENT_SITES)) {
@@ -148,108 +147,77 @@ async function writeToSupabase(env, siteSlug, botInfo, request) {
   } catch (e) { /* silently ignore */ }
 }
 
-// === Aggregated KV storage ===
-// Instead of 59 individual KV keys per site, store everything in 1 JSON blob
-// Key: site:{slug}:agg → { _date: "YYYY-MM-DD", today: {pattern: count}, totals: {pattern: count} }
-// This reduces KV reads from 59 to 1 per site (saves 100K daily quota)
-
-async function getAggStats(env, siteSlug) {
-  const key = `site:${siteSlug}:agg`;
-  try {
-    const raw = await env.AI_FOOTPRINT.get(key);
-    return raw ? JSON.parse(raw) : { _date: "", today: {}, totals: {} };
-  } catch (e) { return { _date: "", today: {}, totals: {} }; }
-}
-
-async function putAggStats(env, siteSlug, agg) {
-  const key = `site:${siteSlug}:agg`;
-  await env.AI_FOOTPRINT.put(key, JSON.stringify(agg));
-}
-
 async function logAIVisit(env, siteSlug, botInfo, request) {
   const today = new Date().toISOString().split("T")[0];
-  const url = new URL(request.url);
-  const prefix = `site:${siteSlug}:`;
-
-  // Update aggregated stats blob (1 read + 1 write instead of 4 reads + 3 writes)
-  const agg = await getAggStats(env, siteSlug);
-  if (agg._date !== today) { agg.today = {}; agg._date = today; }
-  agg.today[botInfo.pattern] = (agg.today[botInfo.pattern] || 0) + 1;
-  agg.totals[botInfo.pattern] = (agg.totals[botInfo.pattern] || 0) + 1;
-  await putAggStats(env, siteSlug, agg);
-
-  // Store visit log
-  const logKey = `${prefix}log:${today}`;
-  const existing = JSON.parse((await env.AI_FOOTPRINT.get(logKey)) || "[]");
-  existing.push({
-    ts: Date.now(),
-    bot: botInfo.name,
-    ua: (request.headers.get("user-agent") || "").substring(0, 100),
-    path: url.pathname.replace(`/${siteSlug}`, "") || "/",
-    ref: request.headers.get("referer") || "",
-  });
-  if (existing.length > 500) existing.shift();
-  await env.AI_FOOTPRINT.put(logKey, JSON.stringify(existing), { expirationTtl: 30 * 86400 });
-
-  // Write to Supabase for cross-site tracking
+  const path = new URL(request.url).pathname.replace(`/${siteSlug}`, "") || "/";
+  await env.DB.batch([
+    env.DB.prepare(
+      `INSERT INTO ai_visit_counts (site_slug, visit_date, bot_pattern, count_today)
+       VALUES (?, ?, ?, 1)
+       ON CONFLICT(site_slug, visit_date, bot_pattern)
+       DO UPDATE SET count_today=count_today+1, updated_at=CURRENT_TIMESTAMP`
+    ).bind(siteSlug, today, botInfo.pattern),
+    env.DB.prepare(
+      `INSERT INTO ai_visit_logs (site_slug, visit_date, timestamp_ms, bot_pattern, bot_name, ua, page_path, referer, source, bot_owner, bot_region)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'proxy', ?, ?)`
+    ).bind(
+      siteSlug, today, Date.now(), botInfo.pattern, botInfo.name,
+      (request.headers.get("user-agent") || "").substring(0, 200),
+      path, request.headers.get("referer") || "",
+      BOT_OWNERS[botInfo.pattern] || "Unknown",
+      BOT_REGIONS[botInfo.pattern] || "International"
+    ),
+  ]);
   writeToSupabase(env, siteSlug, botInfo, request);
-}
-
-async function logGeneralVisit(env, siteSlug, request) {
-  const today = new Date().toISOString().split("T")[0];
-
-  // Update aggregated stats blob
-  const agg = await getAggStats(env, siteSlug);
-  if (agg._date !== today) { agg.today = {}; agg._date = today; }
-  agg.today["_human"] = (agg.today["_human"] || 0) + 1;
-  agg.totals["_human"] = (agg.totals["_human"] || 0) + 1;
-  await putAggStats(env, siteSlug, agg);
 }
 
 async function getSiteStats(env, siteSlug) {
   const today = new Date().toISOString().split("T")[0];
-  const prefix = `site:${siteSlug}:`;
   const stats = {
     today: {}, totals: {}, recentVisits: [],
     cnAI: { today: {}, totals: {} },
     intlAI: { today: {}, totals: {} },
-    generatedAt: new Date().toISOString(), site: siteSlug
+    generatedAt: new Date().toISOString(), site: siteSlug,
   };
 
-  if (!env.AI_FOOTPRINT) return stats;
+  if (!env.DB) return stats;
 
   try {
-    // Read aggregated blob: 1 KV read instead of 59
-    const agg = await getAggStats(env, siteSlug);
-    const todayData = (agg._date === today) ? agg.today : {};
-    const totalData = agg.totals || {};
+    const [todayCounts, totalCounts, logs] = await env.DB.batch([
+      env.DB.prepare(
+        `SELECT bot_pattern, count_today FROM ai_visit_counts WHERE site_slug=? AND visit_date=?`
+      ).bind(siteSlug, today),
+      env.DB.prepare(
+        `SELECT bot_pattern, SUM(count_today) as total FROM ai_visit_counts WHERE site_slug=? GROUP BY bot_pattern`
+      ).bind(siteSlug),
+      env.DB.prepare(
+        `SELECT timestamp_ms as ts, bot_name as bot, ua, page_path as path, referer as ref, source as src
+         FROM ai_visit_logs WHERE site_slug=? AND visit_date=?
+         ORDER BY timestamp_ms DESC LIMIT 20`
+      ).bind(siteSlug, today),
+    ]);
 
-    for (const [pattern, name] of Object.entries(AI_BOTS)) {
-      const dayCount = todayData[pattern] || 0;
-      const total = totalData[pattern] || 0;
-      if (dayCount > 0) stats.today[name] = dayCount;
-      if (total > 0) stats.totals[name] = total;
-      const region = BOT_REGIONS[pattern] || "International";
-      if (region === "CN") {
-        if (dayCount > 0) stats.cnAI.today[name] = dayCount;
-        if (total > 0) stats.cnAI.totals[name] = total;
-      } else {
-        if (dayCount > 0) stats.intlAI.today[name] = dayCount;
-        if (total > 0) stats.intlAI.totals[name] = total;
-      }
+    for (const row of todayCounts.results || []) {
+      const name = AI_BOTS[row.bot_pattern];
+      if (!name || row.count_today <= 0) continue;
+      stats.today[name] = row.count_today;
+      const region = BOT_REGIONS[row.bot_pattern] || "International";
+      if (region === "CN") stats.cnAI.today[name] = row.count_today;
+      else stats.intlAI.today[name] = row.count_today;
     }
 
-    // Human visitors
-    const humanToday = todayData["_human"] || 0;
-    const humanTotal = totalData["_human"] || 0;
-    if (humanToday > 0) stats.today["Human Visitors"] = humanToday;
-    if (humanTotal > 0) stats.totals["Human Visitors"] = humanTotal;
+    for (const row of totalCounts.results || []) {
+      const name = AI_BOTS[row.bot_pattern];
+      if (!name || row.total <= 0) continue;
+      stats.totals[name] = row.total;
+      const region = BOT_REGIONS[row.bot_pattern] || "International";
+      if (region === "CN") stats.cnAI.totals[name] = row.total;
+      else stats.intlAI.totals[name] = row.total;
+    }
 
-    // Recent visits log: 1 more KV read
-    try {
-      const logVal = await env.AI_FOOTPRINT.get(`${prefix}log:${today}`);
-      stats.recentVisits = JSON.parse(logVal || "[]").slice(-20);
-    } catch (e) {}
+    stats.recentVisits = (logs.results || []).map(r => ({
+      ts: r.ts, bot: r.bot, ua: r.ua, path: r.path, ref: r.ref, src: r.src,
+    }));
   } catch (e) {
     stats._error = e.message;
   }
@@ -267,7 +235,7 @@ function corsHeaders() {
 export default {
   async fetch(request, env, ctx) {
     try { return await handleRequest(request, env, ctx); }
-    catch (e) { return new Response(JSON.stringify({ error: e.message, stack: e.stack?.split("\n").slice(0,3) }), { status: 500, headers: corsHeaders() }); }
+    catch (e) { return new Response(JSON.stringify({ error: e.message, stack: e.stack?.split("\n").slice(0, 3) }), { status: 500, headers: corsHeaders() }); }
   },
 };
 
@@ -275,33 +243,70 @@ async function handleRequest(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    // === Migrate legacy KV keys to aggregated blob (one-time) ===
-    if (path === "/migrate-agg") {
-      if (!env.AI_FOOTPRINT) return new Response("No KV", { status: 500 });
-      const results = {};
+    // === Migrate KV data to D1 (one-time) ===
+    if (path === "/migrate-kv-to-d1") {
+      if (!env.AI_FOOTPRINT || !env.DB) return new Response("Need both KV and D1 bindings", { status: 500 });
       const today = new Date().toISOString().split("T")[0];
+      const results = {};
+
       for (const slug of Object.keys(CLIENT_SITES)) {
-        const prefix = `site:${slug}:`;
-        const agg = { _date: today, today: {}, totals: {} };
-        // Read individual total keys
-        for (const [pattern] of Object.entries(AI_BOTS)) {
-          try {
-            const tv = await env.AI_FOOTPRINT.get(`${prefix}total:${pattern}`);
-            if (tv) agg.totals[pattern] = parseInt(tv);
-            const dv = await env.AI_FOOTPRINT.get(`${prefix}day:${today}:${pattern}`);
-            if (dv) agg.today[pattern] = parseInt(dv);
-          } catch (e) { /* quota hit, skip */ }
+        const key = `site:${slug}:agg`;
+        const raw = await env.AI_FOOTPRINT.get(key);
+        const agg = raw ? JSON.parse(raw) : { _date: "", today: {}, totals: {} };
+        const stmts = [];
+        let counts = 0;
+
+        for (const [pattern, total] of Object.entries(agg.totals || {})) {
+          if (pattern === "_human") continue;
+          const todayCount = (agg._date === today && agg.today[pattern]) ? agg.today[pattern] : 0;
+          stmts.push(
+            env.DB.prepare(
+              `INSERT INTO ai_visit_counts (site_slug, visit_date, bot_pattern, count_today)
+               VALUES (?, ?, ?, ?)
+               ON CONFLICT(site_slug, visit_date, bot_pattern)
+               DO UPDATE SET count_today=MAX(count_today, excluded.count_today)`
+            ).bind(slug, today, pattern, todayCount)
+          );
+          const histCount = total - todayCount;
+          if (histCount > 0) {
+            stmts.push(
+              env.DB.prepare(
+                `INSERT INTO ai_visit_counts (site_slug, visit_date, bot_pattern, count_today)
+                 VALUES (?, '2026-01-01', ?, ?)
+                 ON CONFLICT(site_slug, visit_date, bot_pattern)
+                 DO UPDATE SET count_today=MAX(count_today, excluded.count_today)`
+              ).bind(slug, pattern, histCount)
+            );
+          }
+          counts++;
         }
-        // Human
+
+        // Migrate logs
+        let logCount = 0;
         try {
-          const ht = await env.AI_FOOTPRINT.get(`${prefix}total:_human`);
-          if (ht) agg.totals["_human"] = parseInt(ht);
-          const hd = await env.AI_FOOTPRINT.get(`${prefix}day:${today}:_human`);
-          if (hd) agg.today["_human"] = parseInt(hd);
+          const logVal = await env.AI_FOOTPRINT.get(`site:${slug}:log:${today}`);
+          const logs = JSON.parse(logVal || "[]");
+          for (const log of logs.slice(-100)) {
+            const botPattern = Object.entries(AI_BOTS).find(([, n]) => n === log.bot)?.[0] || log.bot;
+            stmts.push(
+              env.DB.prepare(
+                `INSERT INTO ai_visit_logs (site_slug, visit_date, timestamp_ms, bot_pattern, bot_name, ua, page_path, referer, source, bot_owner, bot_region)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'proxy', ?, ?)`
+              ).bind(slug, today, log.ts, botPattern, log.bot, (log.ua || "").substring(0, 200),
+                log.path || "/", log.ref || "",
+                BOT_OWNERS[botPattern] || "Unknown", BOT_REGIONS[botPattern] || "International")
+            );
+            logCount++;
+          }
         } catch (e) {}
-        await env.AI_FOOTPRINT.put(`site:${slug}:agg`, JSON.stringify(agg));
-        results[slug] = { totals: Object.keys(agg.totals).length, today: Object.keys(agg.today).length };
+
+        // Execute in batches
+        for (let i = 0; i < stmts.length; i += 50) {
+          await env.DB.batch(stmts.slice(i, i + 50));
+        }
+        results[slug] = { counts, logs: logCount };
       }
+
       return new Response(JSON.stringify({ migrated: results }, null, 2), { headers: corsHeaders() });
     }
 
@@ -341,7 +346,6 @@ async function handleRequest(request, env, ctx) {
           status: 404, headers: corsHeaders(),
         });
       }
-      // Cache API: serve from cache if fresh (900s = 15 min TTL)
       const cache = caches.default;
       const cacheKey = new Request(request.url, { method: "GET" });
       const cached = await cache.match(cacheKey);
@@ -357,7 +361,6 @@ async function handleRequest(request, env, ctx) {
     }
 
     // === Beacon endpoint: POST /{slug}/beacon ===
-    // Client-side JS can POST here to report AI bot visits detected on-page
     const beaconMatch = path.match(/^\/([a-z0-9-]+)\/beacon$/);
     if (beaconMatch && request.method === "POST") {
       const slug = beaconMatch[1];
@@ -375,22 +378,16 @@ async function handleRequest(request, env, ctx) {
     }
 
     // === Tracking Pixel: GET /{slug}/pixel.gif ===
-    // 1x1 transparent GIF — AI crawlers that load images will trigger this
     const pixelMatch = path.match(/^\/([a-z0-9-]+)\/pixel\.gif$/);
     if (pixelMatch && request.method === "GET") {
       const slug = pixelMatch[1];
       if (CLIENT_SITES[slug]) {
         const userAgent = request.headers.get("user-agent") || "";
         const botInfo = detectAIBot(userAgent);
-        if (botInfo && env.AI_FOOTPRINT) {
+        if (botInfo && env.DB) {
           ctx.waitUntil(logAIVisit(env, slug, botInfo, request));
         }
-        // Always log as a general visit for traffic counting
-        if (!botInfo && env.AI_FOOTPRINT) {
-          ctx.waitUntil(logGeneralVisit(env, slug, request));
-        }
       }
-      // Return 1x1 transparent GIF
       const gif = new Uint8Array([71,73,70,56,57,97,1,0,1,0,128,0,0,255,255,255,0,0,0,33,249,4,0,0,0,0,0,44,0,0,0,0,1,0,1,0,0,2,2,68,1,0,59]);
       return new Response(gif, {
         headers: {
@@ -420,7 +417,7 @@ async function handleRequest(request, env, ctx) {
       const userAgent = request.headers.get("user-agent") || "";
       const botInfo = detectAIBot(userAgent);
 
-      if (botInfo && env.AI_FOOTPRINT) {
+      if (botInfo && env.DB) {
         ctx.waitUntil(logAIVisit(env, slug, botInfo, request));
       }
 
@@ -446,7 +443,8 @@ async function handleRequest(request, env, ctx) {
     // === Root: API info ===
     return new Response(JSON.stringify({
       name: "CloudPipe Client AI Tracker",
-      version: "1.0.0",
+      version: "2.0.0",
+      storage: "D1 (Edge SQLite)",
       endpoints: {
         "/sites.json": "List all tracked sites",
         "/all-stats.json": "Combined stats for all sites",

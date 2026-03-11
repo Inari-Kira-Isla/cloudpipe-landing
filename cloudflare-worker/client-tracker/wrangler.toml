@@ -6,6 +6,11 @@ compatibility_date = "2024-09-23"
 binding = "AI_FOOTPRINT"
 id = "76980172adfc4973b821e183c6cacfc9"
 
+[[d1_databases]]
+binding = "DB"
+database_name = "ai-tracker"
+database_id = "f4d9c5d2-29f1-42b0-9f1a-3cfe8a320ba6"
+
 [vars]
 SUPABASE_URL = "https://yitmabzsxfgbchhhjjef.supabase.co"
 # SUPABASE_KEY is set via `wrangler secret put SUPABASE_KEY`
