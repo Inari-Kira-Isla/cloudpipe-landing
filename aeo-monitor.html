@@ -213,7 +213,7 @@ footer a{color:var(--cyan);text-decoration:none}
   <div class="tab-content active" id="tab-all">
     <div class="sites" id="site-cards"></div>
     <div class="heatmap">
-      <h2>AI 系統 × 站點 矩陣 — 28 種 AI + 人類（全部 13 站）</h2>
+      <h2>AI 系統 × 站點 矩陣 — 28 種 AI + 人類（全部站點）</h2>
       <div class="hm-grid" id="heatmap-grid" style="--cols:2">
         <div class="hm-header"></div>
         <div class="hm-header">載入中...</div>
@@ -321,9 +321,37 @@ footer a{color:var(--cyan);text-decoration:none}
 
 const CLIENT_TRACKER = "https://client-ai-tracker.inariglobal.workers.dev";
 
+// 澳門百科 20 行業 — 從 Supabase crawler-stats 取得各行業爬蟲數據
+const MACAO_INDUSTRIES = [
+  { slug: "dining", name: "餐飲美食", color: "#f85149" },
+  { slug: "attractions", name: "景區觀光", color: "#58a6ff" },
+  { slug: "hotels", name: "酒店住宿", color: "#d29922" },
+  { slug: "shopping", name: "購物零售", color: "#f778ba" },
+  { slug: "food-supply", name: "食品供應", color: "#f0883e" },
+  { slug: "wellness", name: "健康養生", color: "#3fb950" },
+  { slug: "professional-services", name: "專業服務", color: "#39d2c0" },
+  { slug: "community", name: "社區服務", color: "#bc8cff" },
+  { slug: "luxury", name: "奢侈品牌", color: "#ecc94b" },
+  { slug: "nightlife", name: "夜生活", color: "#f778ba" },
+  { slug: "transport", name: "交通運輸", color: "#79c0ff" },
+  { slug: "government", name: "政府機構", color: "#8b949e" },
+  { slug: "finance", name: "金融服務", color: "#48bb78" },
+  { slug: "events", name: "活動會展", color: "#ed8936" },
+  { slug: "media", name: "媒體傳播", color: "#9f7aea" },
+  { slug: "education", name: "教育培訓", color: "#58a6ff" },
+  { slug: "real-estate", name: "房地產", color: "#d29922" },
+  { slug: "tech", name: "科技創新", color: "#39d2c0" },
+  { slug: "gaming", name: "博彩娛樂", color: "#f85149" },
+  { slug: "heritage", name: "文化遺產", color: "#bc8cff" },
+];
+
 const ALL_SITES = [
-  // === 澳門區 ===
-  { id: "cloudpipe-macao-app", name: "澳門商戶百科", url: "https://cloudpipe-macao-app.vercel.app/", worker: CLIENT_TRACKER, workerSlug: "cloudpipe-macao-app", color: "#f85149", badge: "active", industry: "澳門商戶目錄", region: "macau" },
+  // === 澳門百科 20 行業 ===
+  ...MACAO_INDUSTRIES.map(ind => ({
+    id: "macao-" + ind.slug, name: ind.name, url: "https://cloudpipe-macao-app.vercel.app/macao/" + ind.slug,
+    worker: null, color: ind.color, badge: "active", industry: "澳門商戶百科", region: "macau", macaoIndustry: ind.slug
+  })),
+  // === 品牌站 ===
   { id: "yamanakada", name: "山中田 Yamanakada", url: "https://inari-kira-isla.github.io/yamanakada/", worker: CLIENT_TRACKER, workerSlug: "yamanakada", color: "#3fb950", badge: "active", industry: "AI 資訊平台", region: "macau" },
   { id: "sea-urchin-delivery", name: "海膽速遞", url: "https://inari-kira-isla.github.io/sea-urchin-delivery/", worker: CLIENT_TRACKER, workerSlug: "sea-urchin-delivery", color: "#f0883e", badge: "active", industry: "海膽冷鏈配送", region: "macau" },
   { id: "inari-global-foods", name: "稻荷環球食品", url: "https://inari-kira-isla.github.io/inari-global-foods/", worker: CLIENT_TRACKER, workerSlug: "inari-global-foods", color: "#58a6ff", badge: "active", industry: "日本食材進口", region: "macau" },
@@ -469,7 +497,46 @@ async function fetchSupabaseStats(apiUrl) {
   } catch (e) { return null; }
 }
 
+// Cache for macao industry data (fetched once, shared by 20 industry cards)
+let _macaoCache = null;
+let _macaoCacheTime = 0;
+async function getMacaoIndustryData() {
+  if (_macaoCache && Date.now() - _macaoCacheTime < 120000) return _macaoCache;
+  try {
+    const sep = SUPABASE_API.includes("?") ? "&" : "?";
+    const [summaryRes, todayRes] = await Promise.all([
+      fetch(SUPABASE_API + sep + "view=summary&days=30&site=cloudpipe-macao-app"),
+      fetch(SUPABASE_API + sep + "view=summary&days=1&site=cloudpipe-macao-app"),
+    ]);
+    if (!summaryRes.ok || !todayRes.ok) return null;
+    const [summary, today] = await Promise.all([summaryRes.json(), todayRes.json()]);
+    _macaoCache = { summary, today };
+    _macaoCacheTime = Date.now();
+    return _macaoCache;
+  } catch (e) { return null; }
+}
+
 async function fetchSiteData(site) {
+  // Macao industry entries — extract per-industry data from cached summary
+  if (site.macaoIndustry) {
+    const cached = await getMacaoIndustryData();
+    if (!cached) return { today: {}, totals: {}, recentVisits: [], error: false };
+    const slug = site.macaoIndustry;
+    const cumCount = (cached.summary.industries || {})[slug] || 0;
+    const todayCount = (cached.today.industries || {})[slug] || 0;
+    // Map bots from main summary (shared across all industries)
+    const result = { today: {}, totals: {}, recentVisits: [], _industry: slug, _industryTotal: cumCount, _industryToday: todayCount };
+    for (const [pattern, info] of Object.entries(cached.summary.bots || {})) {
+      const displayName = SUPABASE_BOT_MAP[pattern] || pattern;
+      result.totals[displayName] = info.count;
+    }
+    for (const [pattern, info] of Object.entries(cached.today.bots || {})) {
+      const displayName = SUPABASE_BOT_MAP[pattern] || pattern;
+      result.today[displayName] = info.count;
+    }
+    return result;
+  }
+
   // Sites without a Cloudflare Worker — use Supabase only
   if (!site.worker) {
     const supabaseUrl = SUPABASE_SITES[site.id];
@@ -633,8 +700,10 @@ function renderSiteCards() {
   const container = document.getElementById("site-cards");
   container.innerHTML = SITES.map(site => {
     const d = allData[site.id] || { today: {}, totals: {}, recentVisits: [] };
-    const todayTotal = Object.entries(d.today || {}).reduce((s, [k, v]) => k === "Human Visitors" ? s : s + v, 0);
-    const cumTotal = Object.entries(d.totals || {}).reduce((s, [k, v]) => k === "Human Visitors" ? s : s + v, 0);
+    // For macao industry entries, use industry-specific counts
+    const isMacaoInd = !!site.macaoIndustry;
+    const todayTotal = isMacaoInd ? (d._industryToday || 0) : Object.entries(d.today || {}).reduce((s, [k, v]) => k === "Human Visitors" ? s : s + v, 0);
+    const cumTotal = isMacaoInd ? (d._industryTotal || 0) : Object.entries(d.totals || {}).reduce((s, [k, v]) => k === "Human Visitors" ? s : s + v, 0);
     const activeBots = Object.keys(d.totals || {}).filter(k => d.totals[k] > 0 && k !== "Human Visitors");
     const noWorker = d.noWorker;
 
@@ -650,10 +719,11 @@ function renderSiteCards() {
         <div class="site-stats">
           <div class="site-stat"><div class="num" style="color:${site.color}">${noWorker ? '—' : todayTotal}</div><div class="lbl">今日 AI</div></div>
           <div class="site-stat"><div class="num">${noWorker ? '—' : cumTotal}</div><div class="lbl">累積 AI</div></div>
-          <div class="site-stat"><div class="num">${noWorker ? '—' : activeBots.length}</div><div class="lbl">AI 種類</div></div>
+          <div class="site-stat"><div class="num">${noWorker ? '—' : isMacaoInd ? activeBots.length : activeBots.length}</div><div class="lbl">${isMacaoInd ? '共用 Bot' : 'AI 種類'}</div></div>
         </div>
         <div class="site-bots">
-          ${noWorker ? '<span style="font-size:.72rem;color:var(--dim)">待部署 Cloudflare Worker 追蹤</span>' :
+          ${noWorker ? '<span style="font-size:.72rem;color:var(--dim)">待部署追蹤</span>' :
+            isMacaoInd ? `<span style="font-size:.72rem;color:var(--dim)">澳門商戶百科 · ${cumTotal} 次 AI 爬蟲訪問</span>` :
             (activeBots.length > 0
               ? activeBots.map(b => `<span class="bot-chip active" style="${CN_BOTS.has(b)?'color:var(--red);border-color:var(--red)':''}">${b}</span>`).join('')
               : '<span style="font-size:.72rem;color:var(--dim)">尚無 AI 訪問記錄</span>')}
@@ -678,8 +748,8 @@ const CN_BOT_NAMES = [
 ];
 
 function renderHeatmap() {
-  // Always use ALL 13 sites in the heatmap
-  const trackedSites = ALL_SITES.filter(s => s.worker);
+  // Show sites with worker OR Supabase data (exclude macao industry sub-entries to avoid duplication)
+  const trackedSites = ALL_SITES.filter(s => !s.macaoIndustry && (s.worker || SUPABASE_SITES[s.id]));
 
   const grid = document.getElementById("heatmap-grid");
   grid.style.setProperty("--cols", trackedSites.length);
