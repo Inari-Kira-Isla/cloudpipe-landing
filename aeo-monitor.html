@@ -586,9 +586,35 @@ function computeRegionData() {
   const cnBotTotals = {}, intlBotTotals = {}, cnBotToday = {}, intlBotToday = {};
   const perSite = {};
 
+  let macaoCompHandled = false;
   SITES.forEach(site => {
     const d = allData[site.id] || { today: {}, totals: {} };
     let sCnT = 0, sCnC = 0, sIntlT = 0, sIntlC = 0;
+
+    if (site.macaoIndustry) {
+      // Use industry-specific totals; only count bots once for macao
+      const indTotal = d._industryTotal || 0;
+      const indToday = d._industryToday || 0;
+      sIntlC = indTotal; sIntlT = indToday;
+      intlTotal += indTotal; intlToday += indToday;
+      if (!macaoCompHandled) {
+        Object.entries(d.totals || {}).forEach(([bot, v]) => {
+          if (bot !== "Human Visitors") {
+            if (CN_BOTS.has(bot)) cnBotTotals[bot] = (cnBotTotals[bot]||0) + v;
+            else intlBotTotals[bot] = (intlBotTotals[bot]||0) + v;
+          }
+        });
+        Object.entries(d.today || {}).forEach(([bot, v]) => {
+          if (bot !== "Human Visitors") {
+            if (CN_BOTS.has(bot)) cnBotToday[bot] = (cnBotToday[bot]||0) + v;
+            else intlBotToday[bot] = (intlBotToday[bot]||0) + v;
+          }
+        });
+        macaoCompHandled = true;
+      }
+      perSite[site.id] = { cnToday: sCnT, cnTotal: sCnC, intlToday: sIntlT, intlTotal: sIntlC, name: site.name, color: site.color };
+      return;
+    }
 
     Object.entries(d.today || {}).forEach(([bot, v]) => {
       if (bot === "Human Visitors") return;
@@ -611,9 +637,17 @@ function computeHumanData() {
   let aiToday = 0, aiTotal = 0, humanToday = 0, humanTotal = 0;
   const perSite = {};
 
+  let macaoHumanHandled = false;
   SITES.forEach(site => {
     const d = allData[site.id] || { today: {}, totals: {} };
     let sAiT = 0, sAiC = 0, sHT = 0, sHC = 0;
+
+    if (site.macaoIndustry) {
+      sAiC = d._industryTotal || 0; sAiT = d._industryToday || 0;
+      aiTotal += sAiC; aiToday += sAiT;
+      perSite[site.id] = { aiToday: sAiT, aiTotal: sAiC, humanToday: 0, humanTotal: 0, name: site.name, color: site.color };
+      return;
+    }
 
     Object.entries(d.today || {}).forEach(([bot, v]) => {
       if (bot === "Human Visitors") { sHT += v; humanToday += v; }
@@ -908,9 +942,28 @@ function renderSummary() {
   const todayByBot = {};
   let activeSites = 0;
 
+  let macaoHandled = false;
   SITES.forEach(site => {
     const d = allData[site.id] || { today: {}, totals: {} };
     if (!d.noWorker && !d.error) activeSites++;
+
+    // For macao industry entries: only count industry-specific totals, and add bots once
+    if (site.macaoIndustry) {
+      todayAll += d._industryToday || 0;
+      totalAll += d._industryTotal || 0;
+      if (!macaoHandled) {
+        // Add bot names once (shared across all 20 industries)
+        Object.entries(d.totals || {}).forEach(([b, v]) => {
+          if (b !== "Human Visitors" && v > 0) allBots.add(b);
+        });
+        Object.entries(d.today || {}).forEach(([b, v]) => {
+          if (b !== "Human Visitors") todayByBot[b] = (todayByBot[b] || 0) + v;
+        });
+        macaoHandled = true;
+      }
+      return;
+    }
+
     Object.entries(d.today || {}).forEach(([b, v]) => {
       if (b === "Human Visitors") return;
       todayAll += v;
