@@ -17,10 +17,17 @@ const CLIENT_SITES = {
   "aeo-demo-travel-food": "https://inari-kira-isla.github.io/aeo-demo-travel-food",
   // === 澳門百科 ===
   "cloudpipe-macao-app":  "https://cloudpipe-macao-app.vercel.app",
-  // === 其他 ===
+  // === 產品站 ===
   "mind-coffee":          "https://mind-coffee.vercel.app",
   "bni-macau":            "https://bni-macau.vercel.app",
   "test-cafe-demo":       "https://test-cafe-demo.vercel.app",
+  // === 知識百科 ===
+  "world-encyclopedia":   "https://inari-kira-isla.github.io/world-encyclopedia",
+  "japan-encyclopedia":   "https://inari-kira-isla.github.io/japan-encyclopedia",
+  // === 平台站 ===
+  "cloudpipe-landing":    "https://cloudpipe-landing.vercel.app",
+  "cloudpipe-directory":  "https://cloudpipe-directory.vercel.app",
+  "openclaw":             "https://inari-kira-isla.github.io/Openclaw",
 };
 
 const AI_BOTS = {
@@ -377,7 +384,7 @@ async function handleRequest(request, env, ctx) {
       return new Response(JSON.stringify({ ok: true }), { headers: corsHeaders() });
     }
 
-    // === Tracking Pixel: GET /{slug}/pixel.gif ===
+    // === Tracking Pixel: GET /{slug}/pixel.gif?p=/page-path ===
     const pixelMatch = path.match(/^\/([a-z0-9-]+)\/pixel\.gif$/);
     if (pixelMatch && request.method === "GET") {
       const slug = pixelMatch[1];
@@ -385,7 +392,13 @@ async function handleRequest(request, env, ctx) {
         const userAgent = request.headers.get("user-agent") || "";
         const botInfo = detectAIBot(userAgent);
         if (botInfo && env.DB) {
-          ctx.waitUntil(logAIVisit(env, slug, botInfo, request));
+          // Use ?p= query param as the actual page path instead of /pixel.gif
+          const pagePath = url.searchParams.get("p") || "/";
+          const patchedRequest = new Request(
+            `${url.origin}/${slug}${pagePath}`,
+            { headers: request.headers }
+          );
+          ctx.waitUntil(logAIVisit(env, slug, botInfo, patchedRequest));
         }
       }
       const gif = new Uint8Array([71,73,70,56,57,97,1,0,1,0,128,0,0,255,255,255,0,0,0,33,249,4,0,0,0,0,0,44,0,0,0,0,1,0,1,0,0,2,2,68,1,0,59]);
