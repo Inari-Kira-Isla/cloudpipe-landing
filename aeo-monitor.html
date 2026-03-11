@@ -330,9 +330,14 @@ const ALL_SITES = [
   { id: "after-school-coffee", name: "After School Coffee", url: "https://inari-kira-isla.github.io/after-school-coffee/", worker: CLIENT_TRACKER, workerSlug: "after-school-coffee", color: "#f778ba", badge: "active", industry: "精品咖啡館", region: "macau" },
   { id: "mind-coffee", name: "Mind Coffee", url: "https://mind-coffee.vercel.app/", worker: CLIENT_TRACKER, workerSlug: "mind-coffee", color: "#d29922", badge: "active", industry: "咖啡店", region: "macau" },
   { id: "bni-macau", name: "BNI 澳門商業網絡", url: "https://bni-macau.vercel.app/", worker: CLIENT_TRACKER, workerSlug: "bni-macau", color: "#f85149", badge: "active", industry: "商業網絡", region: "macau" },
-  // === 其他 ===
+  // === 百科 & 知識站 ===
+  { id: "world-encyclopedia", name: "世界百科", url: "https://world-encyclopedia.vercel.app/", worker: null, color: "#d4a574", badge: "active", industry: "世界建築百科", region: "other" },
+  { id: "japan-encyclopedia", name: "日本百科", url: "https://japan-encyclopedia.vercel.app/", worker: null, color: "#c73e1d", badge: "active", industry: "日本旅遊百科", region: "other" },
   { id: "ai-learning", name: "AI 學習寶庫", url: "https://inari-kira-isla.github.io/Openclaw/", worker: "https://openclaw-ai-tracker.inariglobal.workers.dev", color: "#bc8cff", badge: "active", industry: "教育知識", region: "other" },
+  // === 平台 ===
   { id: "cloudpipe", name: "CloudPipe Landing", url: "https://cloudpipe-landing.vercel.app/", worker: "https://cloudpipe-ai-tracker.inariglobal.workers.dev", color: "#39d2c0", badge: "active", industry: "SaaS 平台", region: "other" },
+  { id: "cloudpipe-directory", name: "企業目錄", url: "https://cloudpipe-directory.vercel.app/", worker: null, color: "#48bb78", badge: "active", industry: "AEO 企業目錄", region: "other" },
+  // === AEO Demo ===
   { id: "aeo-demo-education", name: "AEO Demo — 教育", url: "https://inari-kira-isla.github.io/aeo-demo-education/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-education", color: "#9f7aea", badge: "new", industry: "教育機構", region: "other" },
   { id: "aeo-demo-finance", name: "AEO Demo — 金融", url: "https://inari-kira-isla.github.io/aeo-demo-finance/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-finance", color: "#48bb78", badge: "new", industry: "金融服務", region: "other" },
   { id: "aeo-demo-luxury", name: "AEO Demo — 奢侈品", url: "https://inari-kira-isla.github.io/aeo-demo-luxury/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-luxury", color: "#ecc94b", badge: "new", industry: "奢侈品牌", region: "other" },
@@ -424,15 +429,28 @@ const SUPABASE_BOT_MAP = {
 };
 
 // Sites with Supabase crawler-stats API (Next.js middleware tracking, much higher accuracy)
+const SUPABASE_API = "https://cloudpipe-macao-app.vercel.app/api/v1/crawler-stats";
 const SUPABASE_SITES = {
-  "cloudpipe-macao-app": "https://cloudpipe-macao-app.vercel.app/api/v1/crawler-stats",
+  "cloudpipe-macao-app": SUPABASE_API,
+  "world-encyclopedia": SUPABASE_API + "?site=world-encyclopedia",
+  "japan-encyclopedia": SUPABASE_API + "?site=japan-encyclopedia",
+  "cloudpipe-directory": SUPABASE_API + "?site=cloudpipe-directory",
+  "ai-learning": SUPABASE_API + "?site=Openclaw",
+  "cloudpipe": SUPABASE_API + "?site=cloudpipe-landing",
+  "yamanakada": SUPABASE_API + "?site=yamanakada",
+  "sea-urchin-delivery": SUPABASE_API + "?site=sea-urchin-delivery",
+  "inari-global-foods": SUPABASE_API + "?site=inari-global-foods",
+  "after-school-coffee": SUPABASE_API + "?site=after-school-coffee",
+  "mind-coffee": SUPABASE_API + "?site=mind-coffee",
+  "bni-macau": SUPABASE_API + "?site=bni-macau",
 };
 
 async function fetchSupabaseStats(apiUrl) {
   try {
+    const sep = apiUrl.includes("?") ? "&" : "?";
     const [summaryRes, todayRes] = await Promise.all([
-      fetch(apiUrl + "?view=summary&days=30"),
-      fetch(apiUrl + "?view=summary&days=1"),
+      fetch(apiUrl + sep + "view=summary&days=30"),
+      fetch(apiUrl + sep + "view=summary&days=1"),
     ]);
     if (!summaryRes.ok || !todayRes.ok) return null;
     const [summary, today] = await Promise.all([summaryRes.json(), todayRes.json()]);
@@ -452,7 +470,15 @@ async function fetchSupabaseStats(apiUrl) {
 }
 
 async function fetchSiteData(site) {
-  if (!site.worker) return { today: {}, totals: {}, recentVisits: [], error: false, noWorker: true };
+  // Sites without a Cloudflare Worker — use Supabase only
+  if (!site.worker) {
+    const supabaseUrl = SUPABASE_SITES[site.id];
+    if (supabaseUrl) {
+      const data = await fetchSupabaseStats(supabaseUrl);
+      return data || { today: {}, totals: {}, recentVisits: [], error: false };
+    }
+    return { today: {}, totals: {}, recentVisits: [], error: false, noWorker: true };
+  }
 
   // Fetch from both sources in parallel
   const workerPromise = (async () => {
