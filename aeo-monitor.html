@@ -132,6 +132,27 @@ body{font-family:'Noto Sans TC',-apple-system,BlinkMacSystemFont,sans-serif;back
 .hm-3{background:#3fb95060;color:#fff}
 .hm-4{background:#3fb95080;color:#fff}
 
+/* Time Trends Tab */
+.trend-controls{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.trend-controls label{font-size:.8rem;color:var(--dim)}
+.trend-select{background:var(--card-2);border:1px solid var(--border);border-radius:6px;padding:.4rem .75rem;color:var(--text);font-size:.82rem;font-family:inherit;cursor:pointer}
+.trend-select:focus{outline:none;border-color:var(--cyan)}
+.day-btn{padding:.35rem .75rem;background:var(--card-2);border:1px solid var(--border);border-radius:20px;font-size:.75rem;color:var(--dim);cursor:pointer;font-family:inherit;transition:all .2s}
+.day-btn.active{color:var(--cyan);border-color:var(--cyan);background:#39d2c015}
+.trend-chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem;position:relative}
+.trend-chart-wrap h3{font-size:.9rem;color:var(--cyan);margin-bottom:1.25rem}
+.trend-canvas{width:100%;height:350px;cursor:crosshair}
+.trend-tooltip{position:absolute;background:var(--card-2);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;font-size:.78rem;color:var(--text);pointer-events:none;z-index:10;display:none;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.trend-legend{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1rem;justify-content:center}
+.trend-legend-item{display:flex;align-items:center;gap:.35rem;font-size:.78rem;color:var(--dim);cursor:pointer;transition:opacity .2s}
+.trend-legend-item.disabled{opacity:.3}
+.trend-legend-dot{width:10px;height:10px;border-radius:50%}
+.trend-table{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem}
+.trend-table h3{font-size:.9rem;color:var(--cyan);margin-bottom:1rem}
+.trend-table table{width:100%;border-collapse:collapse;font-size:.8rem}
+.trend-table th{text-align:left;padding:.4rem .6rem;color:var(--dim);font-weight:500;border-bottom:1px solid var(--border);font-size:.7rem;text-transform:uppercase}
+.trend-table td{padding:.4rem .6rem;border-bottom:1px solid var(--border)}
+
 /* Responsive */
 @media(max-width:768px){
   .summary{grid-template-columns:repeat(2,1fr)}
@@ -142,6 +163,8 @@ body{font-family:'Noto Sans TC',-apple-system,BlinkMacSystemFont,sans-serif;back
 .hm-grid{font-size:.55rem;overflow-x:auto}
   .comparison-row{grid-template-columns:1fr}
   .tab-btn{padding:.6rem .8rem;font-size:.8rem}
+  .trend-canvas{height:250px}
+  .trend-controls{gap:.5rem}
   .bar-label{width:100px;font-size:.7rem}
 }
 
@@ -207,6 +230,7 @@ footer a{color:var(--cyan);text-decoration:none}
     <button class="tab-btn active" data-tab="all" onclick="switchTab('all')">全部</button>
     <button class="tab-btn" data-tab="cn-vs-intl" onclick="switchTab('cn-vs-intl')">中國 AI vs 國際 AI</button>
     <button class="tab-btn" data-tab="ai-vs-human" onclick="switchTab('ai-vs-human')">AI vs 人類</button>
+    <button class="tab-btn" data-tab="time-trends" onclick="switchTab('time-trends')">時間趨勢</button>
   </div>
 
   <!-- Tab 1: All (existing views) -->
@@ -294,6 +318,37 @@ footer a{color:var(--cyan);text-decoration:none}
         <table id="ai-human-table">
           <thead><tr><th>站點</th><th>AI 今日</th><th>人類今日</th><th>AI 佔比</th><th>AI 累積</th><th>人類累積</th></tr></thead>
           <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 4: Time Trends -->
+  <div class="tab-content" id="tab-time-trends">
+    <div class="trend-controls">
+      <label>時間範圍:</label>
+      <button class="day-btn" data-days="7" onclick="setTrendDays(7)">7 天</button>
+      <button class="day-btn" data-days="14" onclick="setTrendDays(14)">14 天</button>
+      <button class="day-btn active" data-days="30" onclick="setTrendDays(30)">30 天</button>
+      <button class="day-btn" data-days="90" onclick="setTrendDays(90)">90 天</button>
+      <label style="margin-left:auto">分組:</label>
+      <select class="trend-select" id="trend-group" onchange="loadTrendData()">
+        <option value="owner">Bot 所有者</option>
+        <option value="site">站點</option>
+      </select>
+    </div>
+    <div class="trend-chart-wrap">
+      <h3 id="trend-title">每日 AI 爬蟲訪問趨勢 — 按所有者 (30 天)</h3>
+      <canvas class="trend-canvas" id="trend-canvas"></canvas>
+      <div class="trend-tooltip" id="trend-tip"></div>
+      <div class="trend-legend" id="trend-legend"></div>
+    </div>
+    <div class="trend-table">
+      <h3>每日數據明細</h3>
+      <div style="overflow-x:auto">
+        <table>
+          <thead id="trend-thead"><tr><th>日期</th><th>合計</th></tr></thead>
+          <tbody id="trend-tbody"></tbody>
         </table>
       </div>
     </div>
@@ -434,7 +489,178 @@ function switchTab(tabId) {
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
   document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
   document.getElementById(`tab-${tabId}`).classList.add('active');
+  if (tabId === 'time-trends' && !trendData) loadTrendData();
 }
+
+// ============================================
+// Tab 4: Time Trends — Canvas stacked area chart
+// ============================================
+let trendDays = 30, trendData = null;
+const trendDisabled = new Set();
+
+const OWNER_COLORS = {
+  "OpenAI":"#58a6ff","Anthropic":"#bc8cff","Google":"#3fb950","Perplexity":"#39d2c0",
+  "Microsoft":"#79c0ff","Meta":"#0668E1","ByteDance":"#f85149","Apple":"#8b949e",
+  "Baidu":"#de4343","Unknown":"#8b949e"
+};
+const SITE_COLORS_MAP = {};
+ALL_SITES.forEach(s => { SITE_COLORS_MAP[s.id] = s.color; });
+
+function setTrendDays(d) {
+  trendDays = d;
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.toggle('active', parseInt(b.dataset.days) === d));
+  loadTrendData();
+}
+
+async function loadTrendData() {
+  const group = document.getElementById('trend-group').value;
+  document.getElementById('trend-title').textContent =
+    `每日 AI 爬蟲訪問趨勢 — 按${group === 'owner' ? '所有者' : '站點'} (${trendDays} 天)`;
+  try {
+    const res = await fetch(SUPABASE_API + `?view=daily&days=${trendDays}`);
+    if (!res.ok) throw new Error('API error');
+    trendData = await res.json();
+    trendDisabled.clear();
+    renderTrendChart();
+    renderTrendLegend();
+    renderTrendTable();
+  } catch (e) {
+    console.error('Trend load error', e);
+  }
+}
+
+function niceStep(max) {
+  const rough = max / 5;
+  const mag = Math.pow(10, Math.floor(Math.log10(rough)));
+  const norm = rough / mag;
+  return norm <= 1 ? mag : norm <= 2 ? 2*mag : norm <= 5 ? 5*mag : 10*mag;
+}
+
+function renderTrendChart() {
+  if (!trendData || !trendData.daily.length) return;
+  const canvas = document.getElementById('trend-canvas');
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  canvas.width = w * dpr; canvas.height = h * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const group = document.getElementById('trend-group').value;
+  const daily = trendData.daily;
+  const allKeys = group === 'owner' ? trendData.owners : trendData.sites;
+  const keys = allKeys.filter(k => !trendDisabled.has(k));
+  const colors = group === 'owner' ? OWNER_COLORS : SITE_COLORS_MAP;
+
+  const ml = 55, mr = 20, mt = 10, mb = 55;
+  const cw = w - ml - mr, ch = h - mt - mb;
+  const n = daily.length;
+  if (n < 1) return;
+
+  // Build stacked data
+  const stacked = daily.map(d => {
+    const src = group === 'owner' ? d.by_owner : d.by_site;
+    let cum = 0;
+    const vals = {};
+    keys.forEach(k => { const v = src[k] || 0; vals[k] = { b: cum, t: cum + v }; cum += v; });
+    return { date: d.date, vals, total: cum };
+  });
+  const maxY = Math.max(1, ...stacked.map(s => s.total));
+  const yStep = niceStep(maxY);
+
+  ctx.clearRect(0, 0, w, h);
+
+  // Y gridlines
+  ctx.strokeStyle = '#21262d'; ctx.lineWidth = 1;
+  ctx.font = '11px JetBrains Mono,monospace'; ctx.fillStyle = '#8b949e'; ctx.textAlign = 'right';
+  for (let y = 0; y <= maxY; y += yStep) {
+    const py = mt + ch - (y / maxY) * ch;
+    ctx.beginPath(); ctx.moveTo(ml, py); ctx.lineTo(ml + cw, py); ctx.stroke();
+    ctx.fillText(y.toString(), ml - 8, py + 4);
+  }
+
+  // Stacked areas
+  const xStep = n > 1 ? cw / (n - 1) : cw;
+  const px = i => ml + i * xStep;
+  const py = (v) => mt + ch - (v / maxY) * ch;
+
+  [...keys].reverse().forEach(k => {
+    const c = colors[k] || '#8b949e';
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) { const x = px(i), y2 = py(stacked[i].vals[k]?.t || 0); i === 0 ? ctx.moveTo(x, y2) : ctx.lineTo(x, y2); }
+    for (let i = n - 1; i >= 0; i--) { ctx.lineTo(px(i), py(stacked[i].vals[k]?.b || 0)); }
+    ctx.closePath();
+    ctx.fillStyle = c + '60'; ctx.fill();
+    // Top line
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) { const x = px(i), y2 = py(stacked[i].vals[k]?.t || 0); i === 0 ? ctx.moveTo(x, y2) : ctx.lineTo(x, y2); }
+    ctx.strokeStyle = c; ctx.lineWidth = 1.5; ctx.stroke();
+  });
+
+  // X labels
+  ctx.fillStyle = '#8b949e'; ctx.font = '10px JetBrains Mono,monospace'; ctx.textAlign = 'center';
+  const every = n > 60 ? 7 : n > 20 ? 3 : 1;
+  daily.forEach((d, i) => {
+    if (i % every !== 0 && i !== n - 1) return;
+    ctx.save(); ctx.translate(px(i), mt + ch + 12); ctx.rotate(Math.PI / 6);
+    ctx.fillText(d.date.slice(5), 0, 0); ctx.restore();
+  });
+
+  // Axis lines
+  ctx.strokeStyle = '#30363d'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(ml, mt); ctx.lineTo(ml, mt + ch); ctx.lineTo(ml + cw, mt + ch); ctx.stroke();
+
+  // Hover
+  const tip = document.getElementById('trend-tip');
+  canvas.onmousemove = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const idx = Math.min(n - 1, Math.max(0, Math.round((mx - ml) / xStep)));
+    const d = daily[idx];
+    const src = group === 'owner' ? d.by_owner : d.by_site;
+    let html = `<div style="font-weight:700;margin-bottom:.35rem;color:var(--cyan)">${d.date}</div>`;
+    html += `<div style="margin-bottom:.25rem">合計: <b>${d.total}</b></div>`;
+    Object.entries(src).sort((a, b) => b[1] - a[1]).forEach(([k, v]) => {
+      const c = colors[k] || '#8b949e';
+      html += `<div><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${c};margin-right:.35rem;vertical-align:middle"></span>${k}: ${v}</div>`;
+    });
+    tip.innerHTML = html; tip.style.display = 'block';
+    tip.style.left = Math.min(mx + 15, w - 220) + 'px'; tip.style.top = '40px';
+  };
+  canvas.onmouseleave = () => { tip.style.display = 'none'; };
+}
+
+function renderTrendLegend() {
+  if (!trendData) return;
+  const group = document.getElementById('trend-group').value;
+  const keys = group === 'owner' ? trendData.owners : trendData.sites;
+  const colors = group === 'owner' ? OWNER_COLORS : SITE_COLORS_MAP;
+  document.getElementById('trend-legend').innerHTML = keys.map(k => {
+    const c = colors[k] || '#8b949e';
+    const dis = trendDisabled.has(k) ? ' disabled' : '';
+    return `<div class="trend-legend-item${dis}" onclick="toggleTrendSeries('${k}')"><div class="trend-legend-dot" style="background:${c}"></div>${k}</div>`;
+  }).join('');
+}
+
+function toggleTrendSeries(key) {
+  trendDisabled.has(key) ? trendDisabled.delete(key) : trendDisabled.add(key);
+  renderTrendChart(); renderTrendLegend();
+}
+
+function renderTrendTable() {
+  if (!trendData) return;
+  const group = document.getElementById('trend-group').value;
+  const keys = group === 'owner' ? trendData.owners : trendData.sites;
+  const colors = group === 'owner' ? OWNER_COLORS : SITE_COLORS_MAP;
+  document.getElementById('trend-thead').innerHTML = `<tr><th>日期</th><th>合計</th>${keys.map(k => `<th style="color:${colors[k]||'var(--dim)'}">${k}</th>`).join('')}</tr>`;
+  document.getElementById('trend-tbody').innerHTML = [...trendData.daily].reverse().map(d => {
+    const src = group === 'owner' ? d.by_owner : d.by_site;
+    return `<tr><td class="mono">${d.date}</td><td style="font-weight:700">${d.total}</td>${keys.map(k => `<td>${src[k]||0}</td>`).join('')}</tr>`;
+  }).join('');
+}
+
+window.addEventListener('resize', () => {
+  if (document.getElementById('tab-time-trends')?.classList.contains('active') && trendData) renderTrendChart();
+});
 
 // ============================================
 // Data fetching (Worker KV + Supabase hybrid)
