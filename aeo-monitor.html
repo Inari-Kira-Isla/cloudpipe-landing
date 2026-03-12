@@ -794,14 +794,11 @@ async function fetchSiteData(site) {
 
   const [workerData, supabaseData] = await Promise.all([workerPromise, supabasePromise]);
 
-  // If Supabase data available and has more visits, prefer it (merge with Worker recentVisits)
+  // Prefer Supabase as single source of truth (consistent calendar-day "today")
+  // Fall back to Worker only if Supabase unavailable
   if (supabaseData) {
-    const workerTotal = Object.values(workerData.totals || {}).reduce((a, b) => a + b, 0);
-    const supaTotal = Object.values(supabaseData.totals || {}).reduce((a, b) => a + b, 0);
-    if (supaTotal > workerTotal) {
-      supabaseData.recentVisits = workerData.recentVisits || [];
-      return supabaseData;
-    }
+    supabaseData.recentVisits = workerData.recentVisits || [];
+    return supabaseData;
   }
   return workerData;
 }
