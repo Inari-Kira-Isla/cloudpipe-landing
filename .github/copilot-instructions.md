@@ -1,35 +1,32 @@
-# CloudPipe AI Landing
+# CloudPipe Landing
 
 ## Project
-Company landing page with AEO optimization, unified monitoring dashboards, and Cloudflare Workers for AI crawler tracking. Tech stack: Next.js, Cloudflare Workers, D1 SQLite, KV, Supabase, Canvas.
+CloudPipe AI company landing page with AEO optimization, unified monitoring dashboards, and Cloudflare Workers for AI crawler tracking. Tech: Vercel, Cloudflare Workers (D1), Supabase, Canvas.
 
 ## Conventions
-- Use functional components with TypeScript
-- Prefer Server Components over Client Components where possible
-- Keep HTML semantic and accessible
-- Use CSS modules or inline styles for component isolation
-- Include Schema.org structured data for AEO
+- Use semantic HTML with Schema.org markup
+- Implement AEO patterns: Organization schema, FAQPage, llms.txt
+- Follow Cloudflare Workers best practices for edge functions
+- Keep dashboard UIs clean with consistent 6-tab layouts
 
 ## Naming
-- Use kebab-case for HTML files (e.g., `unified-monitor.html`)
-- Use camelCase for JavaScript/TypeScript functions and variables
-- Use PascalCase for React components
-- Prefix worker files with descriptive purpose (e.g., `openclaw-ai-tracker`)
+- Use kebab-case for HTML files (unified-monitor.html, aeo-monitor.html)
+- Use camelCase for JavaScript functions
+- Name Workers descriptively (openclaw-ai-tracker, client-ai-tracker)
 
 ## Architecture
-- Landing page served via Vercel
-- AI tracking Workers run on Cloudflare Edge with D1 SQLite
+- Landing page hosted on Vercel
+- AI bot tracking via Cloudflare Workers with D1 SQLite storage
 - 28 AI bot detection patterns for crawler identification
-- llms.txt generated for AI crawler optimization
-- Schema.org Organization and FAQPage for search visibility
+- Dashboard data sourced from Cloudflare KV + Supabase + Canvas topology
 
 ## Commands
 - `vercel deploy` — Deploy to Vercel
 - `wrangler deploy` — Deploy Cloudflare Workers
-- `wrangler d1 execute` — Run D1 database queries
+- `wrangler d1 execute` — Run D1 database commands
 
 ## Do Not
-- Do not commit sensitive API keys or secrets
-- Do not bypass AEO structured data requirements
-- Do not use client-side tracking without Worker fallback
-- Do not modify worker routes without testing on Edge
+- Remove Schema.org structured data from landing pages
+- Disable llms.txt or robots.txt AI-friendly directives
+- Expose sensitive data in Worker responses
+- Hardcode API keys in client-side code
