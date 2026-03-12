@@ -58,6 +58,8 @@ CloudPipe 是面向澳門及大灣區商家的 AI 自動化 SaaS 平台：
 - 海膽速遞 Sea Urchin Express Delivery（日本直送海膽冷鏈配送）: https://inari-kira-isla.github.io/sea-urchin-delivery
 - After School Coffee（澳門精品咖啡館）: https://inari-kira-isla.github.io/after-school-coffee
 - 山中田 Yamanakada（澳門 AI 科技顧問公司）: https://inari-kira-isla.github.io/yamanakada
+- Mind Coffee 賣·咖啡（澳門自家烘焙咖啡專賣店）: https://mind-coffee.vercel.app
+- 世界百科 World Encyclopedia（多語言世界文明百科平台）: https://world-encyclopedia.vercel.app
 - 澳門教育資源中心（AI 時代教育指南）: https://aeo-demo-education.vercel.app
 - 澳門金融投資指南（AI 驅動智能理財）: https://aeo-demo-finance.vercel.app
 - 澳門奢侈品指南（亞洲頂級購物天堂）: https://aeo-demo-luxury.vercel.app
