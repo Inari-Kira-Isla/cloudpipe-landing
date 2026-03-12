@@ -401,6 +401,8 @@ const MACAO_INDUSTRIES = [
 ];
 
 const ALL_SITES = [
+  // === 澳門百科主頁 ===
+  { id: "cloudpipe-macao-app", name: "澳門商戶百科（主頁）", url: "https://cloudpipe-macao-app.vercel.app/", worker: null, color: "#f0883e", badge: "active", industry: "澳門商戶百科", region: "macau", macaoMain: true },
   // === 澳門百科 20 行業 ===
   ...MACAO_INDUSTRIES.map(ind => ({
     id: "macao-" + ind.slug, name: ind.name, url: "https://cloudpipe-macao-app.vercel.app/macao/" + ind.slug,
@@ -817,6 +819,7 @@ function computeRegionData() {
     const d = allData[site.id] || { today: {}, totals: {} };
     let sCnT = 0, sCnC = 0, sIntlT = 0, sIntlC = 0;
 
+    if (site.macaoMain) return;
     if (site.macaoIndustry) {
       // Use industry-specific totals; only count bots once for macao
       const indTotal = d._industryTotal || 0;
@@ -868,6 +871,7 @@ function computeHumanData() {
     const d = allData[site.id] || { today: {}, totals: {} };
     let sAiT = 0, sAiC = 0, sHT = 0, sHC = 0;
 
+    if (site.macaoMain) return;
     if (site.macaoIndustry) {
       sAiC = d._industryTotal || 0; sAiT = d._industryToday || 0;
       aiTotal += sAiC; aiToday += sAiT;
@@ -1173,6 +1177,8 @@ function renderSummary() {
     const d = allData[site.id] || { today: {}, totals: {} };
     if (!d.noWorker && !d.error) activeSites++;
 
+    // Macao main page: skip from global summary (industries already cover it)
+    if (site.macaoMain) return;
     // For macao industry entries: only count industry-specific totals, and add bots once
     if (site.macaoIndustry) {
       todayAll += d._industryToday || 0;
