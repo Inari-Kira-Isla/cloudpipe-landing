@@ -462,48 +462,52 @@ const PATTERN_TO_NAME = {"GPTBot":"OpenAI GPT","ChatGPT-User":"ChatGPT Browser",
 
 async function mergeSupabaseIntoAllData() {
   try {
-    // Fetch all-time and today's data from Supabase in parallel
-    const [sbAll, sbToday] = await Promise.all([
-      fetch(`${SUPABASE_API}?view=summary&days=9999`).then(r=>r.ok?r.json():null).catch(()=>null),
-      fetch(`${SUPABASE_API}?view=summary&days=1`).then(r=>r.ok?r.json():null).catch(()=>null)
-    ]);
+    // Supabase site name → our site ID mapping
+    const SB_SITE_MAP = {"Openclaw":"ai-learning","cloudpipe-macao-app":"cloudpipe-macao-app","cloudpipe-landing":"cloudpipe-landing"};
 
-    // Merge all-time totals per-site
-    if (sbAll && sbAll.sites) {
-      for (const [siteId, siteCount] of Object.entries(sbAll.sites)) {
-        // Map Supabase site names to our site IDs (e.g. "Openclaw" → "ai-learning")
-        const mappedId = siteId === "Openclaw" ? "ai-learning" : siteId;
-        const existing = allData[mappedId];
-        if (!existing) continue;
-        existing._hasSB = true;
-        existing._sbTotal = siteCount;
-      }
-    }
+    // First: discover which sites have Supabase data
+    const sbGlobal = await fetch(`${SUPABASE_API}?view=summary&days=9999`).then(r=>r.ok?r.json():null).catch(()=>null);
+    if (!sbGlobal || !sbGlobal.sites) return;
 
-    // Merge all-time bot totals into cloudpipe-macao-app (primary Supabase site)
-    if (sbAll && sbAll.bots) {
-      const existing = allData["cloudpipe-macao-app"] || { today:{}, totals:{}, recentVisits:[] };
-      for (const [botPattern, info] of Object.entries(sbAll.bots)) {
-        const displayName = PATTERN_TO_NAME[botPattern] || botPattern;
-        const sbCount = info.count || 0;
-        const kvCount = existing.totals[displayName] || 0;
-        existing.totals[displayName] = Math.max(kvCount, sbCount);
+    // Fetch per-site data in parallel for each Supabase site
+    const sbSiteNames = Object.keys(sbGlobal.sites);
+    const perSitePromises = sbSiteNames.map(async (sbName) => {
+      const [allTime, today] = await Promise.all([
+        fetch(`${SUPABASE_API}?view=summary&days=9999&site=${encodeURIComponent(sbName)}`).then(r=>r.ok?r.json():null).catch(()=>null),
+        fetch(`${SUPABASE_API}?view=summary&days=1&site=${encodeURIComponent(sbName)}`).then(r=>r.ok?r.json():null).catch(()=>null)
+      ]);
+      return { sbName, allTime, today };
+    });
+    const perSiteResults = await Promise.all(perSitePromises);
+
+    // Merge each site's own Supabase data
+    for (const { sbName, allTime, today } of perSiteResults) {
+      const siteId = SB_SITE_MAP[sbName] || sbName;
+      const existing = allData[siteId];
+      if (!existing) continue;
+
+      // Merge all-time bot totals
+      if (allTime && allTime.bots) {
+        for (const [botPattern, info] of Object.entries(allTime.bots)) {
+          const displayName = PATTERN_TO_NAME[botPattern] || botPattern;
+          const sbCount = info.count || 0;
+          const kvCount = existing.totals[displayName] || 0;
+          existing.totals[displayName] = Math.max(kvCount, sbCount);
+        }
       }
+
+      // Merge today's bot data
+      if (today && today.bots) {
+        for (const [botPattern, info] of Object.entries(today.bots)) {
+          const displayName = PATTERN_TO_NAME[botPattern] || botPattern;
+          const sbCount = info.count || 0;
+          const kvCount = existing.today[displayName] || 0;
+          existing.today[displayName] = Math.max(kvCount, sbCount);
+        }
+      }
+
       existing._hasSB = true;
-      existing._sbTotal = sbAll.total_visits || 0;
-      allData["cloudpipe-macao-app"] = existing;
-    }
-
-    // Merge today's bot data into cloudpipe-macao-app
-    if (sbToday && sbToday.bots) {
-      const existing = allData["cloudpipe-macao-app"] || { today:{}, totals:{}, recentVisits:[] };
-      for (const [botPattern, info] of Object.entries(sbToday.bots)) {
-        const displayName = PATTERN_TO_NAME[botPattern] || botPattern;
-        const sbCount = info.count || 0;
-        const kvCount = existing.today[displayName] || 0;
-        existing.today[displayName] = Math.max(kvCount, sbCount);
-      }
-      allData["cloudpipe-macao-app"] = existing;
+      existing._sbTotal = allTime ? allTime.total_visits || 0 : 0;
     }
   } catch(e) { /* silently ignore */ }
 }
