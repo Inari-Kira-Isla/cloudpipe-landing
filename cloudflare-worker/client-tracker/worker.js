@@ -175,7 +175,7 @@ async function logAIVisit(env, siteSlug, botInfo, request) {
       BOT_REGIONS[botInfo.pattern] || "International"
     ),
   ]);
-  writeToSupabase(env, siteSlug, botInfo, request);
+  await writeToSupabase(env, siteSlug, botInfo, request);
 }
 
 async function getSiteStats(env, siteSlug) {
@@ -250,7 +250,65 @@ async function handleRequest(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    // === Migrate KV data to D1 (one-time) ===
+    // === Recover KV data to D1 (safe, uses MAX) ===
+    if (path === "/recover-kv") {
+      if (!env.AI_FOOTPRINT || !env.DB) return new Response("Need both KV and D1 bindings", { status: 500 });
+      const doWrite = url.searchParams.get("write") === "true";
+      const results = {};
+
+      for (const slug of Object.keys(CLIENT_SITES)) {
+        const key = `site:${slug}:agg`;
+        const raw = await env.AI_FOOTPRINT.get(key);
+        if (!raw) { results[slug] = { kv: null }; continue; }
+        const agg = JSON.parse(raw);
+        const kvTotals = agg.totals || {};
+        const kvToday = agg.today || {};
+        const kvDate = agg._date || "";
+
+        // Read current D1 totals for comparison
+        let d1Totals = {};
+        try {
+          const d1Rows = await env.DB.prepare(
+            `SELECT bot_pattern, SUM(count_today) as total FROM ai_visit_counts WHERE site_slug=? GROUP BY bot_pattern`
+          ).bind(slug).all();
+          for (const r of d1Rows.results || []) {
+            d1Totals[r.bot_pattern] = r.total;
+          }
+        } catch (e) {}
+
+        const entry = { kv: { date: kvDate, today: kvToday, totals: kvTotals }, d1: d1Totals, written: false };
+
+        if (doWrite) {
+          const stmts = [];
+          for (const [pattern, total] of Object.entries(kvTotals)) {
+            if (pattern === "_human") continue;
+            const d1Val = d1Totals[pattern] || 0;
+            if (total > d1Val) {
+              stmts.push(
+                env.DB.prepare(
+                  `INSERT INTO ai_visit_counts (site_slug, visit_date, bot_pattern, count_today)
+                   VALUES (?, '2026-01-01', ?, ?)
+                   ON CONFLICT(site_slug, visit_date, bot_pattern)
+                   DO UPDATE SET count_today=MAX(count_today, excluded.count_today)`
+                ).bind(slug, pattern, total)
+              );
+            }
+          }
+          if (stmts.length > 0) {
+            for (let i = 0; i < stmts.length; i += 50) {
+              await env.DB.batch(stmts.slice(i, i + 50));
+            }
+            entry.written = true;
+            entry.stmts = stmts.length;
+          }
+        }
+        results[slug] = entry;
+      }
+
+      return new Response(JSON.stringify({ mode: doWrite ? "write" : "dry-run", results }, null, 2), { headers: corsHeaders() });
+    }
+
+    // === Migrate KV data to D1 (one-time, legacy) ===
     if (path === "/migrate-kv-to-d1") {
       if (!env.AI_FOOTPRINT || !env.DB) return new Response("Need both KV and D1 bindings", { status: 500 });
       const today = new Date().toISOString().split("T")[0];

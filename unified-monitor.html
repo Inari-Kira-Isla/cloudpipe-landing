@@ -462,19 +462,49 @@ const PATTERN_TO_NAME = {"GPTBot":"OpenAI GPT","ChatGPT-User":"ChatGPT Browser",
 
 async function mergeSupabaseIntoAllData() {
   try {
-    const sb = await fetchSB('summary');
-    if (!sb || !sb.bots) return;
-    const siteId = "cloudpipe-macao-app";
-    const existing = allData[siteId] || { today:{}, totals:{}, recentVisits:[] };
-    for (const [botPattern, info] of Object.entries(sb.bots)) {
-      const displayName = PATTERN_TO_NAME[botPattern] || botPattern;
-      const sbCount = info.count || 0;
-      const kvCount = existing.totals[displayName] || 0;
-      existing.totals[displayName] = Math.max(kvCount, sbCount);
+    // Fetch all-time and today's data from Supabase in parallel
+    const [sbAll, sbToday] = await Promise.all([
+      fetch(`${SUPABASE_API}?view=summary&days=9999`).then(r=>r.ok?r.json():null).catch(()=>null),
+      fetch(`${SUPABASE_API}?view=summary&days=1`).then(r=>r.ok?r.json():null).catch(()=>null)
+    ]);
+
+    // Merge all-time totals per-site
+    if (sbAll && sbAll.sites) {
+      for (const [siteId, siteCount] of Object.entries(sbAll.sites)) {
+        // Map Supabase site names to our site IDs (e.g. "Openclaw" → "ai-learning")
+        const mappedId = siteId === "Openclaw" ? "ai-learning" : siteId;
+        const existing = allData[mappedId];
+        if (!existing) continue;
+        existing._hasSB = true;
+        existing._sbTotal = siteCount;
+      }
     }
-    existing._hasSB = true;
-    existing._sbTotal = sb.total_visits || 0;
-    allData[siteId] = existing;
+
+    // Merge all-time bot totals into cloudpipe-macao-app (primary Supabase site)
+    if (sbAll && sbAll.bots) {
+      const existing = allData["cloudpipe-macao-app"] || { today:{}, totals:{}, recentVisits:[] };
+      for (const [botPattern, info] of Object.entries(sbAll.bots)) {
+        const displayName = PATTERN_TO_NAME[botPattern] || botPattern;
+        const sbCount = info.count || 0;
+        const kvCount = existing.totals[displayName] || 0;
+        existing.totals[displayName] = Math.max(kvCount, sbCount);
+      }
+      existing._hasSB = true;
+      existing._sbTotal = sbAll.total_visits || 0;
+      allData["cloudpipe-macao-app"] = existing;
+    }
+
+    // Merge today's bot data into cloudpipe-macao-app
+    if (sbToday && sbToday.bots) {
+      const existing = allData["cloudpipe-macao-app"] || { today:{}, totals:{}, recentVisits:[] };
+      for (const [botPattern, info] of Object.entries(sbToday.bots)) {
+        const displayName = PATTERN_TO_NAME[botPattern] || botPattern;
+        const sbCount = info.count || 0;
+        const kvCount = existing.today[displayName] || 0;
+        existing.today[displayName] = Math.max(kvCount, sbCount);
+      }
+      allData["cloudpipe-macao-app"] = existing;
+    }
   } catch(e) { /* silently ignore */ }
 }
 
