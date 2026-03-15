@@ -705,7 +705,7 @@ async function fetchSupabaseStats(apiUrl) {
   try {
     const sep = apiUrl.includes("?") ? "&" : "?";
     const [summaryRes, todayRes] = await Promise.all([
-      fetch(apiUrl + sep + "view=summary&days=30"),
+      fetch(apiUrl + sep + "view=summary&days=3650"),
       fetch(apiUrl + sep + "view=summary&days=1"),
     ]);
     if (!summaryRes.ok || !todayRes.ok) return null;
@@ -733,7 +733,7 @@ async function getMacaoIndustryData() {
   try {
     const sep = SUPABASE_API.includes("?") ? "&" : "?";
     const [summaryRes, todayRes] = await Promise.all([
-      fetch(SUPABASE_API + sep + "view=summary&days=30&site=cloudpipe-macao-app"),
+      fetch(SUPABASE_API + sep + "view=summary&days=3650&site=cloudpipe-macao-app"),
       fetch(SUPABASE_API + sep + "view=summary&days=1&site=cloudpipe-macao-app"),
     ]);
     if (!summaryRes.ok || !todayRes.ok) return null;
@@ -794,13 +794,18 @@ async function fetchSiteData(site) {
 
   const [workerData, supabaseData] = await Promise.all([workerPromise, supabasePromise]);
 
-  // Prefer Supabase as single source of truth (consistent calendar-day "today")
-  // Fall back to Worker only if Supabase unavailable
-  if (supabaseData) {
+  // Prefer Supabase when it has data; fall back to Worker if Supabase empty or unavailable
+  if (supabaseData && Object.keys(supabaseData.totals || {}).length > 0) {
     supabaseData.recentVisits = workerData.recentVisits || [];
     return supabaseData;
   }
-  return workerData;
+  // Worker data available — use it (Supabase was empty or unavailable)
+  if (!workerData.error) {
+    workerData.recentVisits = workerData.recentVisits || [];
+    return workerData;
+  }
+  // Both empty — return Supabase shell
+  return supabaseData || workerData;
 }
 
 // ============================================
@@ -816,29 +821,24 @@ function computeRegionData() {
     const d = allData[site.id] || { today: {}, totals: {} };
     let sCnT = 0, sCnC = 0, sIntlT = 0, sIntlC = 0;
 
-    if (site.macaoMain) return;
-    if (site.macaoIndustry) {
-      // Use industry-specific totals; only count bots once for macao
-      const indTotal = d._industryTotal || 0;
-      const indToday = d._industryToday || 0;
-      sIntlC = indTotal; sIntlT = indToday;
-      intlTotal += indTotal; intlToday += indToday;
-      if (!macaoCompHandled) {
-        Object.entries(d.totals || {}).forEach(([bot, v]) => {
-          if (bot !== "Human Visitors") {
-            if (CN_BOTS.has(bot)) cnBotTotals[bot] = (cnBotTotals[bot]||0) + v;
-            else intlBotTotals[bot] = (intlBotTotals[bot]||0) + v;
-          }
-        });
-        Object.entries(d.today || {}).forEach(([bot, v]) => {
-          if (bot !== "Human Visitors") {
-            if (CN_BOTS.has(bot)) cnBotToday[bot] = (cnBotToday[bot]||0) + v;
-            else intlBotToday[bot] = (intlBotToday[bot]||0) + v;
-          }
-        });
-        macaoCompHandled = true;
-      }
+    // Macao main page: use full site totals for region breakdown
+    if (site.macaoMain) {
+      Object.entries(d.today || {}).forEach(([bot, v]) => {
+        if (bot === "Human Visitors") return;
+        if (CN_BOTS.has(bot)) { sCnT += v; cnToday += v; cnBotToday[bot] = (cnBotToday[bot]||0) + v; }
+        else { sIntlT += v; intlToday += v; intlBotToday[bot] = (intlBotToday[bot]||0) + v; }
+      });
+      Object.entries(d.totals || {}).forEach(([bot, v]) => {
+        if (bot === "Human Visitors") return;
+        if (CN_BOTS.has(bot)) { sCnC += v; cnTotal += v; cnBotTotals[bot] = (cnBotTotals[bot]||0) + v; }
+        else { sIntlC += v; intlTotal += v; intlBotTotals[bot] = (intlBotTotals[bot]||0) + v; }
+      });
       perSite[site.id] = { cnToday: sCnT, cnTotal: sCnC, intlToday: sIntlT, intlTotal: sIntlC, name: site.name, color: site.color };
+      return;
+    }
+    // Macao industry entries: skip in region data (macaoMain covers full site)
+    if (site.macaoIndustry) {
+      perSite[site.id] = { cnToday: 0, cnTotal: 0, intlToday: d._industryToday || 0, intlTotal: d._industryTotal || 0, name: site.name, color: site.color };
       return;
     }
 
@@ -868,11 +868,22 @@ function computeHumanData() {
     const d = allData[site.id] || { today: {}, totals: {} };
     let sAiT = 0, sAiC = 0, sHT = 0, sHC = 0;
 
-    if (site.macaoMain) return;
+    // Macao main page: use full site totals for human vs AI
+    if (site.macaoMain) {
+      Object.entries(d.today || {}).forEach(([bot, v]) => {
+        if (bot === "Human Visitors") { sHT += v; humanToday += v; }
+        else { sAiT += v; aiToday += v; }
+      });
+      Object.entries(d.totals || {}).forEach(([bot, v]) => {
+        if (bot === "Human Visitors") { sHC += v; humanTotal += v; }
+        else { sAiC += v; aiTotal += v; }
+      });
+      perSite[site.id] = { aiToday: sAiT, aiTotal: sAiC, humanToday: sHT, humanTotal: sHC, name: site.name, color: site.color };
+      return;
+    }
+    // Macao industry entries: skip (macaoMain covers full site)
     if (site.macaoIndustry) {
-      sAiC = d._industryTotal || 0; sAiT = d._industryToday || 0;
-      aiTotal += sAiC; aiToday += sAiT;
-      perSite[site.id] = { aiToday: sAiT, aiTotal: sAiC, humanToday: 0, humanTotal: 0, name: site.name, color: site.color };
+      perSite[site.id] = { aiToday: d._industryToday || 0, aiTotal: d._industryTotal || 0, humanToday: 0, humanTotal: 0, name: site.name, color: site.color };
       return;
     }
 
@@ -1169,29 +1180,26 @@ function renderSummary() {
   const todayByBot = {};
   let activeSites = 0;
 
-  let macaoHandled = false;
   SITES.forEach(site => {
     const d = allData[site.id] || { today: {}, totals: {} };
     if (!d.noWorker && !d.error) activeSites++;
 
-    // Macao main page: skip from global summary (industries already cover it)
-    if (site.macaoMain) return;
-    // For macao industry entries: only count industry-specific totals, and add bots once
-    if (site.macaoIndustry) {
-      todayAll += d._industryToday || 0;
-      totalAll += d._industryTotal || 0;
-      if (!macaoHandled) {
-        // Add bot names once (shared across all 20 industries)
-        Object.entries(d.totals || {}).forEach(([b, v]) => {
-          if (b !== "Human Visitors" && v > 0) allBots.add(b);
-        });
-        Object.entries(d.today || {}).forEach(([b, v]) => {
-          if (b !== "Human Visitors") todayByBot[b] = (todayByBot[b] || 0) + v;
-        });
-        macaoHandled = true;
-      }
+    // Macao main page: use full site totals (includes all industry + non-industry pages)
+    if (site.macaoMain) {
+      Object.entries(d.today || {}).forEach(([b, v]) => {
+        if (b === "Human Visitors") return;
+        todayAll += v;
+        todayByBot[b] = (todayByBot[b] || 0) + v;
+      });
+      Object.entries(d.totals || {}).forEach(([b, v]) => {
+        if (b === "Human Visitors") return;
+        totalAll += v;
+        if (v > 0) allBots.add(b);
+      });
       return;
     }
+    // Macao industry entries: skip in summary (macaoMain already covers full site)
+    if (site.macaoIndustry) return;
 
     Object.entries(d.today || {}).forEach(([b, v]) => {
       if (b === "Human Visitors") return;
