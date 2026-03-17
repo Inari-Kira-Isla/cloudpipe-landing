@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CloudPipe AI 自動化平台</title>
+    <link>https://cloudpipe-landing.vercel.app</link>
+    <description>澳門 AI 自動化 SaaS 平台 — 社群管理、客服自動化、AEO 優化</description>
+    <language>zh-Hant</language>
+    <atom:link href="https://cloudpipe-landing.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>CloudPipe AI 澳門商戶百科上線</title>
+      <link>https://cloudpipe-macao-app.vercel.app</link>
+      <description>940+ 家澳門商戶百科，支援 AI 搜尋與 Schema.org 結構化數據</description>
+      <pubDate>2026-03-01T00:00:00+08:00</pubDate>
+    </item>
+    <item>
+      <title>CloudPipe AEO 企業目錄</title>
+      <link>https://cloudpipe-directory.vercel.app</link>
+      <description>1.85M+ 筆企業資料，AI 友善的結構化商業目錄</description>
+      <pubDate>2026-03-05T00:00:00+08:00</pubDate>
+    </item>
+  </channel>
+</rss>
