@@ -688,98 +688,110 @@ const SUPABASE_BOT_MAP = {
 
 // Sites with Supabase crawler-stats API (Next.js middleware tracking, much higher accuracy)
 const SUPABASE_API = "https://cloudpipe-macao-app.vercel.app/api/v1/crawler-stats";
-const SUPABASE_SITES = {
-  "cloudpipe-macao-app": SUPABASE_API,
-  "world-encyclopedia": SUPABASE_API + "?site=world-encyclopedia",
-  "japan-encyclopedia": SUPABASE_API + "?site=japan-encyclopedia",
-  "taiwan-encyclopedia": SUPABASE_API + "?site=taiwan-encyclopedia",
-  "hongkong-encyclopedia": SUPABASE_API + "?site=hongkong-encyclopedia",
-  "cloudpipe-directory": SUPABASE_API + "?site=cloudpipe-directory",
-  "ai-learning": SUPABASE_API + "?site=Openclaw",
-  "cloudpipe": SUPABASE_API + "?site=cloudpipe-landing",
-  "yamanakada": SUPABASE_API + "?site=yamanakada",
-  "sea-urchin-delivery": SUPABASE_API + "?site=sea-urchin-delivery",
-  "inari-global-foods": SUPABASE_API + "?site=inari-global-foods",
-  "after-school-coffee": SUPABASE_API + "?site=after-school-coffee",
-  "mind-coffee": SUPABASE_API + "?site=mind-coffee",
-  "bni-macau": SUPABASE_API + "?site=bni-macau",
+
+// Supabase site ID mapping (monitor id → Supabase site column value)
+const SUPABASE_SITE_MAP = {
+  "cloudpipe-macao-app": "cloudpipe-macao-app",
+  "world-encyclopedia": "world-encyclopedia",
+  "japan-encyclopedia": "japan-encyclopedia",
+  "taiwan-encyclopedia": "taiwan-encyclopedia",
+  "hongkong-encyclopedia": "hongkong-encyclopedia",
+  "cloudpipe-directory": "cloudpipe-directory",
+  "ai-learning": "Openclaw",
+  "cloudpipe": "cloudpipe-landing",
+  "yamanakada": "yamanakada",
+  "sea-urchin-delivery": "sea-urchin-delivery",
+  "inari-global-foods": "inari-global-foods",
+  "after-school-coffee": "after-school-coffee",
+  "mind-coffee": "mind-coffee",
+  "bni-macau": "bni-macau",
 };
 
-async function fetchSupabaseStats(apiUrl) {
+// === Unified Supabase data — fetched ONCE, distributed to all cards ===
+let _supabaseAll = null;      // { summary, today } for ALL sites combined
+let _supabaseMacao = null;    // { summary, today } for cloudpipe-macao-app only (industries)
+let _supabaseLoaded = false;
+
+async function loadSupabaseData() {
+  if (_supabaseLoaded) return;
+  _supabaseLoaded = true;
   try {
-    const sep = apiUrl.includes("?") ? "&" : "?";
-    const [summaryRes, todayRes] = await Promise.all([
-      fetch(apiUrl + sep + "view=summary&days=3650"),
-      fetch(apiUrl + sep + "view=summary&days=1"),
+    // Only 4 API calls total (was ~30 before)
+    const [allSumRes, allTodayRes, macaoSumRes, macaoTodayRes] = await Promise.all([
+      fetch(SUPABASE_API + "?view=summary&days=3650"),
+      fetch(SUPABASE_API + "?view=summary&days=1"),
+      fetch(SUPABASE_API + "?view=summary&days=3650&site=cloudpipe-macao-app"),
+      fetch(SUPABASE_API + "?view=summary&days=1&site=cloudpipe-macao-app"),
     ]);
-    if (!summaryRes.ok || !todayRes.ok) return null;
-    const [summary, today] = await Promise.all([summaryRes.json(), todayRes.json()]);
-    const result = { today: {}, totals: {}, recentVisits: [], _supabase: true };
-    // Map bot patterns to display names for totals
-    for (const [pattern, info] of Object.entries(summary.bots || {})) {
-      const displayName = SUPABASE_BOT_MAP[pattern] || pattern;
-      result.totals[displayName] = info.count;
+    if (allSumRes.ok && allTodayRes.ok) {
+      _supabaseAll = {
+        summary: await allSumRes.json(),
+        today: await allTodayRes.json(),
+      };
     }
-    // Map bot patterns for today
-    for (const [pattern, info] of Object.entries(today.bots || {})) {
-      const displayName = SUPABASE_BOT_MAP[pattern] || pattern;
-      result.today[displayName] = info.count;
+    if (macaoSumRes.ok && macaoTodayRes.ok) {
+      _supabaseMacao = {
+        summary: await macaoSumRes.json(),
+        today: await macaoTodayRes.json(),
+      };
     }
-    return result;
-  } catch (e) { return null; }
+  } catch (e) { console.error("Supabase load error", e); }
 }
 
-// Cache for macao industry data (fetched once, shared by 20 industry cards)
-let _macaoCache = null;
-let _macaoCacheTime = 0;
-async function getMacaoIndustryData() {
-  if (_macaoCache && Date.now() - _macaoCacheTime < 120000) return _macaoCache;
-  try {
-    const sep = SUPABASE_API.includes("?") ? "&" : "?";
-    const [summaryRes, todayRes] = await Promise.all([
-      fetch(SUPABASE_API + sep + "view=summary&days=3650&site=cloudpipe-macao-app"),
-      fetch(SUPABASE_API + sep + "view=summary&days=1&site=cloudpipe-macao-app"),
-    ]);
-    if (!summaryRes.ok || !todayRes.ok) return null;
-    const [summary, today] = await Promise.all([summaryRes.json(), todayRes.json()]);
-    _macaoCache = { summary, today };
-    _macaoCacheTime = Date.now();
-    return _macaoCache;
-  } catch (e) { return null; }
+function mapBots(botsObj) {
+  const result = {};
+  for (const [pattern, info] of Object.entries(botsObj || {})) {
+    const displayName = SUPABASE_BOT_MAP[pattern] || pattern;
+    result[displayName] = info.count;
+  }
+  return result;
+}
+
+function getSupabaseDataForSite(siteId) {
+  if (!_supabaseAll) return null;
+  const supabaseSiteName = SUPABASE_SITE_MAP[siteId];
+  if (!supabaseSiteName) return null;
+
+  // Check if this site has data in the all-sites summary
+  const siteTotal = (_supabaseAll.summary.sites || {})[supabaseSiteName] || 0;
+  const siteTodayTotal = (_supabaseAll.today.sites || {})[supabaseSiteName] || 0;
+  if (siteTotal === 0 && siteTodayTotal === 0) return null;
+
+  // For per-site bot breakdown, we use the global bot data (most accurate approximation)
+  // The total is accurate per-site from the sites breakdown
+  return {
+    today: mapBots(_supabaseAll.today.bots),
+    totals: mapBots(_supabaseAll.summary.bots),
+    recentVisits: [],
+    _supabase: true,
+    _siteTotal: siteTotal,
+    _siteTodayTotal: siteTodayTotal,
+  };
 }
 
 async function fetchSiteData(site) {
-  // Macao industry entries — extract per-industry data from cached summary
+  // Macao industry entries — extract per-industry data from unified cache
   if (site.macaoIndustry) {
-    const cached = await getMacaoIndustryData();
-    if (!cached) return { today: {}, totals: {}, recentVisits: [], error: false };
+    if (!_supabaseMacao) return { today: {}, totals: {}, recentVisits: [], error: false };
     const slug = site.macaoIndustry;
-    const cumCount = (cached.summary.industries || {})[slug] || 0;
-    const todayCount = (cached.today.industries || {})[slug] || 0;
-    // Map bots from main summary (shared across all industries)
-    const result = { today: {}, totals: {}, recentVisits: [], _industry: slug, _industryTotal: cumCount, _industryToday: todayCount };
-    for (const [pattern, info] of Object.entries(cached.summary.bots || {})) {
-      const displayName = SUPABASE_BOT_MAP[pattern] || pattern;
-      result.totals[displayName] = info.count;
-    }
-    for (const [pattern, info] of Object.entries(cached.today.bots || {})) {
-      const displayName = SUPABASE_BOT_MAP[pattern] || pattern;
-      result.today[displayName] = info.count;
-    }
-    return result;
+    const cumCount = (_supabaseMacao.summary.industries || {})[slug] || 0;
+    const todayCount = (_supabaseMacao.today.industries || {})[slug] || 0;
+    return {
+      today: mapBots(_supabaseMacao.today.bots),
+      totals: mapBots(_supabaseMacao.summary.bots),
+      recentVisits: [], _industry: slug, _industryTotal: cumCount, _industryToday: todayCount,
+    };
   }
 
-  // Sites without a Cloudflare Worker — use Supabase only
+  // Sites without a Cloudflare Worker — use pre-loaded Supabase data
   if (!site.worker) {
-    const supabaseUrl = SUPABASE_SITES[site.id];
-    if (supabaseUrl) {
-      const data = await fetchSupabaseStats(supabaseUrl);
-      return data || { today: {}, totals: {}, recentVisits: [], error: false };
-    }
+    const data = getSupabaseDataForSite(site.id);
+    if (data) return data;
+    if (SUPABASE_SITE_MAP[site.id]) return { today: {}, totals: {}, recentVisits: [], error: false };
     return { today: {}, totals: {}, recentVisits: [], error: false, noWorker: true };
   }
 
-  // Fetch from both sources in parallel
+  // Fetch from Worker
   const workerPromise = (async () => {
     try {
       const statsUrl = site.workerSlug
@@ -793,10 +805,8 @@ async function fetchSiteData(site) {
     }
   })();
 
-  const supabaseUrl = SUPABASE_SITES[site.id];
-  const supabasePromise = supabaseUrl ? fetchSupabaseStats(supabaseUrl) : Promise.resolve(null);
-
-  const [workerData, supabaseData] = await Promise.all([workerPromise, supabasePromise]);
+  const supabaseData = getSupabaseDataForSite(site.id);
+  const workerData = await workerPromise;
 
   // Prefer Supabase when it has data; fall back to Worker if Supabase empty or unavailable
   if (supabaseData && Object.keys(supabaseData.totals || {}).length > 0) {
@@ -978,8 +988,8 @@ function renderSiteCards() {
     const d = allData[site.id] || { today: {}, totals: {}, recentVisits: [] };
     // For macao industry entries, use industry-specific counts
     const isMacaoInd = !!site.macaoIndustry;
-    const todayTotal = isMacaoInd ? (d._industryToday || 0) : Object.entries(d.today || {}).reduce((s, [k, v]) => k === "Human Visitors" ? s : s + v, 0);
-    const cumTotal = isMacaoInd ? (d._industryTotal || 0) : Object.entries(d.totals || {}).reduce((s, [k, v]) => k === "Human Visitors" ? s : s + v, 0);
+    const todayTotal = isMacaoInd ? (d._industryToday || 0) : (d._siteTodayTotal != null ? d._siteTodayTotal : Object.entries(d.today || {}).reduce((s, [k, v]) => k === "Human Visitors" ? s : s + v, 0));
+    const cumTotal = isMacaoInd ? (d._industryTotal || 0) : (d._siteTotal != null ? d._siteTotal : Object.entries(d.totals || {}).reduce((s, [k, v]) => k === "Human Visitors" ? s : s + v, 0));
     const activeBots = Object.keys(d.totals || {}).filter(k => d.totals[k] > 0 && k !== "Human Visitors");
     const noWorker = d.noWorker;
 
@@ -1188,22 +1198,27 @@ function renderSummary() {
     const d = allData[site.id] || { today: {}, totals: {} };
     if (!d.noWorker && !d.error) activeSites++;
 
-    // Macao main page: use full site totals (includes all industry + non-industry pages)
+    // Macao main page: use site-specific total from Supabase
     if (site.macaoMain) {
-      Object.entries(d.today || {}).forEach(([b, v]) => {
-        if (b === "Human Visitors") return;
-        todayAll += v;
-        todayByBot[b] = (todayByBot[b] || 0) + v;
-      });
-      Object.entries(d.totals || {}).forEach(([b, v]) => {
-        if (b === "Human Visitors") return;
-        totalAll += v;
-        if (v > 0) allBots.add(b);
-      });
+      const siteToday = d._siteTodayTotal || 0;
+      const siteTotal = d._siteTotal || 0;
+      todayAll += siteToday;
+      totalAll += siteTotal;
+      Object.entries(d.today || {}).forEach(([b, v]) => { if (b !== "Human Visitors") todayByBot[b] = (todayByBot[b] || 0) + v; });
+      Object.entries(d.totals || {}).forEach(([b, v]) => { if (b !== "Human Visitors" && v > 0) allBots.add(b); });
       return;
     }
     // Macao industry entries: skip in summary (macaoMain already covers full site)
     if (site.macaoIndustry) return;
+
+    // For Supabase sites, use per-site breakdown if available
+    if (d._siteTotal != null) {
+      todayAll += d._siteTodayTotal || 0;
+      totalAll += d._siteTotal;
+      Object.entries(d.totals || {}).forEach(([b, v]) => { if (b !== "Human Visitors" && v > 0) allBots.add(b); });
+      Object.entries(d.today || {}).forEach(([b, v]) => { if (b !== "Human Visitors") todayByBot[b] = (todayByBot[b] || 0) + v; });
+      return;
+    }
 
     Object.entries(d.today || {}).forEach(([b, v]) => {
       if (b === "Human Visitors") return;
@@ -1246,6 +1261,10 @@ function renderSummary() {
 // Load all data
 // ============================================
 async function loadAll() {
+  // Load all Supabase data in 4 API calls (instead of ~30)
+  _supabaseLoaded = false;
+  await loadSupabaseData();
+
   await Promise.allSettled(ALL_SITES.map(async site => {
     allData[site.id] = await fetchSiteData(site);
   }));
