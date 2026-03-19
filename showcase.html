@@ -44,9 +44,9 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--fg)
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--border);padding:0;margin:0 -5vw}
 .card{background:#fff;padding:24px;display:flex;flex-direction:column;transition:background 0.15s}
 .card:hover{background:#f8f8f8}
-.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
-.card-emoji{font-size:28px}
-.card-badge{font-family:'Space Mono',monospace;font-size:0.65rem;padding:3px 8px;border-radius:2px;font-weight:700;letter-spacing:0.05em}
+.card-img{width:100%;height:180px;object-fit:cover;display:block}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;position:relative}
+.card-badge{font-family:'Space Mono',monospace;font-size:0.65rem;padding:3px 8px;border-radius:2px;font-weight:700;letter-spacing:0.05em;position:absolute;top:12px;right:12px;z-index:1}
 .badge-a{background:rgba(22,163,74,0.1);color:var(--green)}
 .card-name{font-size:1rem;font-weight:600;margin-bottom:4px}
 .card-desc{font-size:0.78rem;color:var(--mid);line-height:1.5;margin-bottom:12px;flex:1}
@@ -101,7 +101,8 @@ footer a:hover{color:var(--fg)}
 <div class="grid" id="site-grid">
 <!-- Brand Sites -->
 <div class="card" data-type="brand">
-  <div class="card-top"><span class="card-emoji">🐟</span><span class="card-badge badge-a">A+ 100%</span></div>
+  <img class="card-img" src="showcase-cards/inari-global-foods.jpg" alt="稻荷環球食品" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div>
   <div class="card-name">稻荷環球食品</div>
   <div class="card-desc">澳門日本食材專門店。北海道海膽、刺身級鮮魚、130+ 批發品項。10,000 字知識庫 + 197 篇文章。</div>
   <div class="card-meta"><span>🤖 AI 客服</span><span>📝 197 篇</span><span>📊 追蹤</span></div>
@@ -109,7 +110,8 @@ footer a:hover{color:var(--fg)}
 </div>
 
 <div class="card" data-type="brand">
-  <div class="card-top"><span class="card-emoji">🐚</span><span class="card-badge badge-a">A+ 100%</span></div>
+  <img class="card-img" src="showcase-cards/sea-urchin-delivery.jpg" alt="海膽速遞" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div>
   <div class="card-name">海膽速遞</div>
   <div class="card-desc">高級海膽配送服務，覆蓋澳門及大灣區。7 品種知識庫 + AI 客服美波 + 172 篇專業文章。</div>
   <div class="card-meta"><span>🤖 AI 客服</span><span>📝 172 篇</span><span>📊 追蹤</span></div>
@@ -117,7 +119,8 @@ footer a:hover{color:var(--fg)}
 </div>
 
 <div class="card" data-type="brand">
-  <div class="card-top"><span class="card-emoji">☕</span><span class="card-badge badge-a">A+ 100%</span></div>
+  <img class="card-img" src="showcase-cards/after-school-coffee.jpg" alt="After School Coffee" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div>
   <div class="card-name">After School Coffee</div>
   <div class="card-desc">澳門外帶精品咖啡。單一產地手沖、特調飲品、社區第三空間。159 篇內容 + 19 張實拍。</div>
   <div class="card-meta"><span>🤖 AI 客服</span><span>📝 159 篇</span><span>📸 19 圖</span></div>
@@ -125,7 +128,8 @@ footer a:hover{color:var(--fg)}
 </div>
 
 <div class="card" data-type="brand">
-  <div class="card-top"><span class="card-emoji">🍵</span><span class="card-badge badge-a">A+ 100%</span></div>
+  <img class="card-img" src="showcase-cards/mind-coffee.jpg" alt="Mind Coffee" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div>
   <div class="card-name">Mind Coffee</div>
   <div class="card-desc">極簡風格咖啡品牌。專注品牌美學與咖啡體驗，7 張 AI 生成視覺。</div>
   <div class="card-meta"><span>🤖 AI 客服</span><span>📸 7 圖</span><span>📊 追蹤</span></div>
@@ -133,7 +137,8 @@ footer a:hover{color:var(--fg)}
 </div>
 
 <div class="card" data-type="brand">
-  <div class="card-top"><span class="card-emoji">🏮</span><span class="card-badge badge-a">A+ 100%</span></div>
+  <img class="card-img" src="showcase-cards/yamanakada.jpg" alt="山中田 Yamanakada" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div>
   <div class="card-name">山中田 Yamanakada</div>
   <div class="card-desc">日式餐飲品牌。深墨雜誌敘事風格，155 篇行業深度文章。</div>
   <div class="card-meta"><span>🤖 AI 客服</span><span>📝 155 篇</span><span>📊 追蹤</span></div>
@@ -141,7 +146,8 @@ footer a:hover{color:var(--fg)}
 </div>
 
 <div class="card" data-type="brand">
-  <div class="card-top"><span class="card-emoji">🤝</span><span class="card-badge badge-a">A+ 100%</span></div>
+  <img class="card-img" src="showcase-cards/bni-macau.jpg" alt="BNI 澳門 ACE 分會" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div>
   <div class="card-name">BNI 澳門 ACE 分會</div>
   <div class="card-desc">澳門最活躍的商業交流網絡。多語言支持（中/英/葡），結構化 FAQ。</div>
   <div class="card-meta"><span>🤖 AI 客服</span><span>🌐 3 語言</span><span>📊 追蹤</span></div>
@@ -149,7 +155,8 @@ footer a:hover{color:var(--fg)}
 </div>
 
 <div class="card" data-type="brand">
-  <div class="card-top"><span class="card-emoji">☕</span><span class="card-badge badge-a">A+ 100%</span></div>
+  <img class="card-img" src="showcase-cards/test-cafe-demo.jpg" alt="測試咖啡店 Demo" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div>
   <div class="card-name">測試咖啡店 Demo</div>
   <div class="card-desc">5 分鐘內用 CLI 一鍵生成的完整站點。展示 CloudPipe 建站速度。</div>
   <div class="card-meta"><span>🤖 AI 客服</span><span>⚡ 5 分鐘</span><span>📊 追蹤</span></div>
@@ -157,45 +164,72 @@ footer a:hover{color:var(--fg)}
 </div>
 
 <!-- Demo Sites -->
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">📚</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門教育資源中心</div><div class="card-desc">涵蓋澳門 15 年免費教育、大學排名、線上平台。132 篇深度文章。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📝 132 篇</span></div><a class="card-link" href="https://aeo-demo-education.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo">
+  <img class="card-img" src="showcase-cards/default.jpg" alt="澳門教育資源中心" loading="lazy">
+  <img class="card-img" src="showcase-cards/aeo-demo-education.jpg" alt="澳門教育資源中心" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div>
+  <div class="card-name">澳門教育資源中心</div>
+  <div class="card-desc">涵蓋澳門 15 年免費教育、大學排名、線上平台。132 篇深度文章。</div>
+  <div class="card-meta"><span>🤖 AI 客服</span><span>📝 132 篇</span></div><a class="card-link" href="https://aeo-demo-education.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">💰</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門金融投資指南</div><div class="card-desc">銀行、保險、加密貨幣交易所。133 篇金融分析文章。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📝 133 篇</span></div><a class="card-link" href="https://aeo-demo-finance.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-finance.jpg" alt="澳門金融投資指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門金融投資指南</div><div class="card-desc">銀行、保險、加密貨幣交易所。133 篇金融分析文章。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📝 133 篇</span></div><a class="card-link" href="https://aeo-demo-finance.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">💎</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門奢侈品指南</div><div class="card-desc">珠寶、名錶、高端餐飲、SPA。131 篇品牌深度分析。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📝 131 篇</span></div><a class="card-link" href="https://aeo-demo-luxury.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-luxury.jpg" alt="澳門奢侈品指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門奢侈品指南</div><div class="card-desc">珠寶、名錶、高端餐飲、SPA。131 篇品牌深度分析。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📝 131 篇</span></div><a class="card-link" href="https://aeo-demo-luxury.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">🍜</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門旅遊美食指南</div><div class="card-desc">日本料理、葡國菜、地道小吃。127 篇美食評鑑文章。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📝 127 篇</span></div><a class="card-link" href="https://aeo-demo-travel-food.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-travel-food.jpg" alt="澳門旅遊美食指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門旅遊美食指南</div><div class="card-desc">日本料理、葡國菜、地道小吃。127 篇美食評鑑文章。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📝 127 篇</span></div><a class="card-link" href="https://aeo-demo-travel-food.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">💄</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門美容養生指南</div><div class="card-desc">400+ 間商戶資訊，護膚、醫美、SPA 全覆蓋。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-beauty.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-beauty.jpg" alt="澳門美容養生指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門美容養生指南</div><div class="card-desc">400+ 間商戶資訊，護膚、醫美、SPA 全覆蓋。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-beauty.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">🏥</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門醫療健康指南</div><div class="card-desc">醫院、診所、中醫養生、健康管理服務。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-healthcare.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-healthcare.jpg" alt="澳門醫療健康指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門醫療健康指南</div><div class="card-desc">醫院、診所、中醫養生、健康管理服務。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-healthcare.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">⚖️</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門法律服務指南</div><div class="card-desc">律師事務所、公證、法律諮詢。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-legal.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-legal.jpg" alt="澳門法律服務指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門法律服務指南</div><div class="card-desc">律師事務所、公證、法律諮詢。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-legal.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">💻</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門科技創新指南</div><div class="card-desc">科技公司、孵化器、大學實驗室、FinTech。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-tech.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-tech.jpg" alt="澳門科技創新指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門科技創新指南</div><div class="card-desc">科技公司、孵化器、大學實驗室、FinTech。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-tech.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">🏠</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門房地產指南</div><div class="card-desc">地產代理、商業物業、物業管理。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-realestate.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-realestate.jpg" alt="澳門房地產指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門房地產指南</div><div class="card-desc">地產代理、商業物業、物業管理。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-realestate.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">🚗</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門汽車指南</div><div class="card-desc">汽車銷售、維修保養、租車服務。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-auto.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-auto.jpg" alt="澳門汽車指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門汽車指南</div><div class="card-desc">汽車銷售、維修保養、租車服務。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-auto.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">💪</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門健身運動指南</div><div class="card-desc">健身房、瑜伽、游泳、運動社群。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-fitness.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-fitness.jpg" alt="澳門健身運動指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門健身運動指南</div><div class="card-desc">健身房、瑜伽、游泳、運動社群。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-fitness.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">🐾</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門寵物服務指南</div><div class="card-desc">寵物醫院、美容、寄養、用品店。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-pet.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-pet.jpg" alt="澳門寵物服務指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門寵物服務指南</div><div class="card-desc">寵物醫院、美容、寄養、用品店。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-pet.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">💒</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門婚禮活動指南</div><div class="card-desc">婚禮策劃、場地、花藝、攝影。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-wedding.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-wedding.jpg" alt="澳門婚禮活動指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門婚禮活動指南</div><div class="card-desc">婚禮策劃、場地、花藝、攝影。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-wedding.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">🛍️</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門零售電商指南</div><div class="card-desc">零售、電商、跨境貿易。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-retail.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-retail.jpg" alt="澳門零售電商指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門零售電商指南</div><div class="card-desc">零售、電商、跨境貿易。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-retail.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">📊</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門會計稅務指南</div><div class="card-desc">會計師事務所、稅務諮詢、審計。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-accounting.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-accounting.jpg" alt="澳門會計稅務指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門會計稅務指南</div><div class="card-desc">會計師事務所、稅務諮詢、審計。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-accounting.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">👥</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門人力資源指南</div><div class="card-desc">招聘、培訓、薪酬管理。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-hr.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-hr.jpg" alt="澳門人力資源指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門人力資源指南</div><div class="card-desc">招聘、培訓、薪酬管理。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-hr.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">📺</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門媒體廣告指南</div><div class="card-desc">媒體、廣告、公關、KOL 營銷。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-media.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-media.jpg" alt="澳門媒體廣告指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門媒體廣告指南</div><div class="card-desc">媒體、廣告、公關、KOL 營銷。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-media.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">🛡️</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門保險理財指南</div><div class="card-desc">人壽保險、醫療保險、財富管理。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-insurance.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-insurance.jpg" alt="澳門保險理財指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門保險理財指南</div><div class="card-desc">人壽保險、醫療保險、財富管理。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-insurance.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">📦</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門物流運輸指南</div><div class="card-desc">物流、倉儲、快遞、跨境運輸。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-logistics.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-logistics.jpg" alt="澳門物流運輸指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門物流運輸指南</div><div class="card-desc">物流、倉儲、快遞、跨境運輸。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-logistics.vercel.app/" target="_blank">查看 →</a></div>
 
-<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">🏡</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門家居裝修指南</div><div class="card-desc">室內設計、裝修工程、傢俱。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-home.vercel.app/" target="_blank">查看 →</a></div>
+<div class="card" data-type="demo"><img class="card-img" src="showcase-cards/aeo-demo-home.jpg" alt="澳門家居裝修指南" loading="lazy">
+  <div class="card-top"><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門家居裝修指南</div><div class="card-desc">室內設計、裝修工程、傢俱。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div>
+  <a class="card-link" href="https://aeo-demo-home.vercel.app/" target="_blank">查看 →</a>
+</div>
 </div>
 
 <!-- CTA -->
