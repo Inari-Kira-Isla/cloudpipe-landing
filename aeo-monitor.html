@@ -709,7 +709,7 @@ async function fetchSupabaseStats(apiUrl) {
   try {
     const sep = apiUrl.includes("?") ? "&" : "?";
     const [summaryRes, todayRes] = await Promise.all([
-      fetch(apiUrl + sep + "view=summary&days=90"),
+      fetch(apiUrl + sep + "view=summary&days=3650"),
       fetch(apiUrl + sep + "view=summary&days=1"),
     ]);
     if (!summaryRes.ok || !todayRes.ok) return null;
@@ -737,7 +737,7 @@ async function getMacaoIndustryData() {
   try {
     const sep = SUPABASE_API.includes("?") ? "&" : "?";
     const [summaryRes, todayRes] = await Promise.all([
-      fetch(SUPABASE_API + sep + "view=summary&days=90&site=cloudpipe-macao-app"),
+      fetch(SUPABASE_API + sep + "view=summary&days=3650&site=cloudpipe-macao-app"),
       fetch(SUPABASE_API + sep + "view=summary&days=1&site=cloudpipe-macao-app"),
     ]);
     if (!summaryRes.ok || !todayRes.ok) return null;
