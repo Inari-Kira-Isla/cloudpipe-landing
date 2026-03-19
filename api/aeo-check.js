@@ -258,8 +258,27 @@ export default async function handler(request) {
 
   const targetUrl = url.searchParams.get("url");
   if (!targetUrl) {
-    return new Response(JSON.stringify({ error: "Missing ?url= parameter" }), {
-      status: 400,
+    return new Response(JSON.stringify({
+      service: "CloudPipe AEO Score Checker",
+      version: "1.0",
+      usage: "GET /api/aeo-check?url=https://example.com",
+      description: "檢測網站的 AEO（AI Engine Optimization）就緒程度",
+      parameters: {
+        url: "(必填) 要檢測的完整網址，例如 https://example.com"
+      },
+      checks: [
+        "robots.txt AI 爬蟲開放 (15分)",
+        "llms.txt AI 導覽文件 (20分)",
+        "Schema.org 結構化數據 (10分)",
+        "SSR 伺服器端渲染 (10分)",
+        "Meta 標籤完整性 (10分)",
+        "語義化 HTML (5分)",
+        "FAQ 結構化數據 (5分)",
+        "Sitemap 完整性 (10分)"
+      ],
+      tool: "https://cloudpipe-landing.vercel.app/aeo-score.html"
+    }, null, 2), {
+      status: 200,
       headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
     });
   }
