@@ -56,6 +56,29 @@ const BRAND_CONFIGS = {
 冷鏈：全程-2°C~2°C恆溫運輸
 訂購：Telegram @sea_urchin_delivery / WhatsApp +853 6xxx xxxx
 規則：用繁體中文簡潔回答，鼓勵客人下單體驗`
+  },
+
+  "default": {
+    name: "CloudPipe AI",
+    characters: {
+      "assistant": {
+        name: "CloudPipe AI 助手",
+        emoji: "💬",
+        style: "你是 CloudPipe AI 平台的智能助手，專業且友善。用繁體中文回答。"
+      }
+    },
+    defaultCharacter: "assistant",
+    systemPrompt: `你是 CloudPipe AI 商戶網站平台的智能助手。
+CloudPipe 是澳門領先的 AI 商業自動化平台，幫助商家：
+- 建立 AEO 優化的專業網站（AI 搜尋引擎可見）
+- 自動生成行業文章和 SEO 內容
+- AI 客服聊天機器人
+- 多平台社交媒體管理
+- 商業數據分析
+
+目前平台服務 27+ 個站點，涵蓋餐飲、美容、教育、金融、科技等 20 個行業。
+如果訪客詢問如何加入或建站，引導他們聯繫 WhatsApp +853-6282-3037 或 email info@cloudpipe.ai。
+規則：用繁體中文回答，簡潔專業，鼓勵商家了解更多。`
   }
 };
 
@@ -152,7 +175,7 @@ export default {
     }
 
     const brand = match[1];
-    const config = BRAND_CONFIGS[brand];
+    const config = BRAND_CONFIGS[brand] || BRAND_CONFIGS["default"];
     if (!config) {
       return jsonResponse({ error: `Unknown brand: ${brand}`, available: Object.keys(BRAND_CONFIGS) }, 404);
     }
