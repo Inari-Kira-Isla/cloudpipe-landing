@@ -113,3 +113,6 @@ User-agent: XiaoIce
 Allow: /
 
 Sitemap: https://cloudpipe-landing.vercel.app/sitemap.xml
+
+# AI-friendly structured content
+# llms.txt: https://cloudpipe-landing.vercel.app/llms.txt
