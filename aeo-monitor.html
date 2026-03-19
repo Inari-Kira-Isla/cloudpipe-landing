@@ -697,7 +697,7 @@ const SUPABASE_SITE_MAP = {
   "taiwan-encyclopedia": "taiwan-encyclopedia",
   "hongkong-encyclopedia": "hongkong-encyclopedia",
   "cloudpipe-directory": "cloudpipe-directory",
-  "ai-learning": "Openclaw",
+  "ai-learning": "openclaw",
   "cloudpipe": "cloudpipe-landing",
   "yamanakada": "yamanakada",
   "sea-urchin-delivery": "sea-urchin-delivery",
@@ -747,14 +747,28 @@ function mapBots(botsObj) {
   return result;
 }
 
+// Case-insensitive site lookup — handles "Openclaw" vs "openclaw" etc.
+function getSiteCount(sitesObj, name) {
+  if (!sitesObj || !name) return 0;
+  // Exact match first
+  if (sitesObj[name] != null) return sitesObj[name];
+  // Case-insensitive match, sum all variants
+  const lower = name.toLowerCase();
+  let total = 0;
+  for (const [k, v] of Object.entries(sitesObj)) {
+    if (k.toLowerCase() === lower) total += v;
+  }
+  return total;
+}
+
 function getSupabaseDataForSite(siteId) {
   if (!_supabaseAll) return null;
   const supabaseSiteName = SUPABASE_SITE_MAP[siteId];
   if (!supabaseSiteName) return null;
 
-  // Check if this site has data in the all-sites summary
-  const siteTotal = (_supabaseAll.summary.sites || {})[supabaseSiteName] || 0;
-  const siteTodayTotal = (_supabaseAll.today.sites || {})[supabaseSiteName] || 0;
+  // Check if this site has data in the all-sites summary (case-insensitive)
+  const siteTotal = getSiteCount(_supabaseAll.summary.sites, supabaseSiteName);
+  const siteTodayTotal = getSiteCount(_supabaseAll.today.sites, supabaseSiteName);
   if (siteTotal === 0 && siteTodayTotal === 0) return null;
 
   // For per-site bot breakdown, we use the global bot data (most accurate approximation)
