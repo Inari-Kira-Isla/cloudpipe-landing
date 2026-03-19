@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CloudPipe 蛛網生態展廳 — 27 個 AEO 網站 · 20 個行業 · 100% A+ 評級</title>
+<meta name="description" content="CloudPipe AI 平台已為 27 個站點提供 AEO 優化服務，涵蓋餐飲、美容、教育等 20 個行業。100% 達到 A+ 品質評級。免費建站，加入蛛網生態。">
+<meta property="og:title" content="CloudPipe 蛛網生態展廳 — 27 站 100% A+">
+<meta property="og:description" content="20 個行業、27 個站點，每個都經過 AEO/SEO/GEO 優化，配備 AI 客服和智能追蹤。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cloudpipe-landing.vercel.app/showcase">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","name":"CloudPipe 蛛網生態展廳","description":"27個AEO優化網站展示，涵蓋20個行業","publisher":{"@type":"Organization","name":"CloudPipe","url":"https://cloudpipe-landing.vercel.app"}}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fafafa;--fg:#111;--accent:#0057ff;--mid:#888;--border:#e4e4e4;--green:#16a34a;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--fg);font-size:15px;line-height:1.5}
+.w{max-width:1200px;margin:0 auto;padding:0 5vw}
+
+/* Hero */
+.hero{padding:80px 0 60px;text-align:center;border-bottom:1px solid var(--border)}
+.hero h1{font-size:clamp(2rem,4vw,3.5rem);font-weight:700;letter-spacing:-0.03em;margin-bottom:16px}
+.hero h1 .accent{color:var(--accent)}
+.hero p{color:var(--mid);max-width:600px;margin:0 auto 32px;font-size:1.05rem;line-height:1.7}
+.hero-stats{display:flex;justify-content:center;gap:48px;margin-bottom:32px}
+.hero-stat .n{font-family:'Space Mono',monospace;font-size:2rem;font-weight:700;color:var(--fg)}
+.hero-stat .l{font-size:0.72rem;color:var(--mid);letter-spacing:0.1em;text-transform:uppercase}
+.cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-block;padding:12px 28px;font-size:0.85rem;font-weight:500;text-decoration:none;transition:all 0.15s}
+.btn-primary{background:var(--fg);color:#fff;border:1px solid var(--fg)}
+.btn-primary:hover{background:var(--accent);border-color:var(--accent)}
+.btn-outline{border:1px solid var(--border);color:var(--mid)}
+.btn-outline:hover{border-color:var(--fg);color:var(--fg)}
+
+/* Filter */
+.filter{padding:24px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.filter-label{font-size:0.72rem;color:var(--mid);letter-spacing:0.1em;text-transform:uppercase;margin-right:8px}
+.filter-btn{padding:6px 14px;font-size:0.78rem;border:1px solid var(--border);background:#fff;cursor:pointer;transition:all 0.15s;color:var(--mid)}
+.filter-btn:hover,.filter-btn.active{border-color:var(--fg);color:var(--fg);background:#fff}
+
+/* Grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--border);padding:0;margin:0 -5vw}
+.card{background:#fff;padding:24px;display:flex;flex-direction:column;transition:background 0.15s}
+.card:hover{background:#f8f8f8}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.card-emoji{font-size:28px}
+.card-badge{font-family:'Space Mono',monospace;font-size:0.65rem;padding:3px 8px;border-radius:2px;font-weight:700;letter-spacing:0.05em}
+.badge-a{background:rgba(22,163,74,0.1);color:var(--green)}
+.card-name{font-size:1rem;font-weight:600;margin-bottom:4px}
+.card-desc{font-size:0.78rem;color:var(--mid);line-height:1.5;margin-bottom:12px;flex:1}
+.card-meta{display:flex;gap:12px;font-size:0.68rem;color:var(--mid);border-top:1px solid var(--border);padding-top:10px}
+.card-meta span{display:flex;align-items:center;gap:4px}
+.card-link{display:block;margin-top:10px;font-size:0.78rem;color:var(--accent);text-decoration:none;font-weight:500}
+.card-link:hover{text-decoration:underline}
+
+/* CTA Section */
+.cta-section{padding:80px 0;text-align:center;background:#111;color:#fff}
+.cta-section h2{font-size:clamp(1.5rem,3vw,2.5rem);font-weight:700;margin-bottom:16px}
+.cta-section p{color:rgba(255,255,255,0.6);max-width:500px;margin:0 auto 32px}
+.btn-white{background:#fff;color:#111;border:1px solid #fff;padding:14px 32px;font-size:0.9rem;font-weight:600}
+.btn-white:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* Footer */
+footer{padding:24px 0;font-size:0.72rem;color:var(--mid);text-align:center;border-top:1px solid var(--border)}
+footer a{color:var(--mid);text-decoration:none}
+footer a:hover{color:var(--fg)}
+
+@media(max-width:768px){.hero-stats{gap:24px;flex-wrap:wrap}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="w">
+<section class="hero">
+  <h1>CloudPipe <span class="accent">蛛網生態</span>展廳</h1>
+  <p>27 個站點，20 個行業，每一個都經過 12 項 AEO 品質指標審計。AI 客服、智能追蹤、結構化數據 — 全部內建。你的品牌，下一個加入。</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="n">27</div><div class="l">站點數量</div></div>
+    <div class="hero-stat"><div class="n">20</div><div class="l">行業覆蓋</div></div>
+    <div class="hero-stat"><div class="n">100%</div><div class="l">A+ 評級</div></div>
+    <div class="hero-stat"><div class="n">682</div><div class="l">AI 文章</div></div>
+  </div>
+  <div class="cta-row">
+    <a href="https://wa.me/85362823037?text=我想了解CloudPipe建站服務" class="btn btn-primary">WhatsApp 免費諮詢</a>
+    <a href="#sites" class="btn btn-outline">瀏覽全部站點 ↓</a>
+  </div>
+</section>
+</div>
+
+<div class="w">
+<div class="filter" id="sites">
+  <span class="filter-label">篩選</span>
+  <button class="filter-btn active" onclick="filterSites('all')">全部 (27)</button>
+  <button class="filter-btn" onclick="filterSites('brand')">品牌站 (7)</button>
+  <button class="filter-btn" onclick="filterSites('demo')">行業展示 (20)</button>
+</div>
+</div>
+
+<div class="grid" id="site-grid">
+<!-- Brand Sites -->
+<div class="card" data-type="brand">
+  <div class="card-top"><span class="card-emoji">🐟</span><span class="card-badge badge-a">A+ 100%</span></div>
+  <div class="card-name">稻荷環球食品</div>
+  <div class="card-desc">澳門日本食材專門店。北海道海膽、刺身級鮮魚、130+ 批發品項。10,000 字知識庫 + 197 篇文章。</div>
+  <div class="card-meta"><span>🤖 AI 客服</span><span>📝 197 篇</span><span>📊 追蹤</span></div>
+  <a class="card-link" href="https://inari-kira-isla.github.io/inari-global-foods/" target="_blank">查看站點 →</a>
+</div>
+
+<div class="card" data-type="brand">
+  <div class="card-top"><span class="card-emoji">🐚</span><span class="card-badge badge-a">A+ 100%</span></div>
+  <div class="card-name">海膽速遞</div>
+  <div class="card-desc">高級海膽配送服務，覆蓋澳門及大灣區。7 品種知識庫 + AI 客服美波 + 172 篇專業文章。</div>
+  <div class="card-meta"><span>🤖 AI 客服</span><span>📝 172 篇</span><span>📊 追蹤</span></div>
+  <a class="card-link" href="https://inari-kira-isla.github.io/sea-urchin-delivery/" target="_blank">查看站點 →</a>
+</div>
+
+<div class="card" data-type="brand">
+  <div class="card-top"><span class="card-emoji">☕</span><span class="card-badge badge-a">A+ 100%</span></div>
+  <div class="card-name">After School Coffee</div>
+  <div class="card-desc">澳門外帶精品咖啡。單一產地手沖、特調飲品、社區第三空間。159 篇內容 + 19 張實拍。</div>
+  <div class="card-meta"><span>🤖 AI 客服</span><span>📝 159 篇</span><span>📸 19 圖</span></div>
+  <a class="card-link" href="https://inari-kira-isla.github.io/after-school-coffee/" target="_blank">查看站點 →</a>
+</div>
+
+<div class="card" data-type="brand">
+  <div class="card-top"><span class="card-emoji">🍵</span><span class="card-badge badge-a">A+ 100%</span></div>
+  <div class="card-name">Mind Coffee</div>
+  <div class="card-desc">極簡風格咖啡品牌。專注品牌美學與咖啡體驗，7 張 AI 生成視覺。</div>
+  <div class="card-meta"><span>🤖 AI 客服</span><span>📸 7 圖</span><span>📊 追蹤</span></div>
+  <a class="card-link" href="https://mind-coffee.vercel.app/" target="_blank">查看站點 →</a>
+</div>
+
+<div class="card" data-type="brand">
+  <div class="card-top"><span class="card-emoji">🏮</span><span class="card-badge badge-a">A+ 100%</span></div>
+  <div class="card-name">山中田 Yamanakada</div>
+  <div class="card-desc">日式餐飲品牌。深墨雜誌敘事風格，155 篇行業深度文章。</div>
+  <div class="card-meta"><span>🤖 AI 客服</span><span>📝 155 篇</span><span>📊 追蹤</span></div>
+  <a class="card-link" href="https://inari-kira-isla.github.io/yamanakada/" target="_blank">查看站點 →</a>
+</div>
+
+<div class="card" data-type="brand">
+  <div class="card-top"><span class="card-emoji">🤝</span><span class="card-badge badge-a">A+ 100%</span></div>
+  <div class="card-name">BNI 澳門 ACE 分會</div>
+  <div class="card-desc">澳門最活躍的商業交流網絡。多語言支持（中/英/葡），結構化 FAQ。</div>
+  <div class="card-meta"><span>🤖 AI 客服</span><span>🌐 3 語言</span><span>📊 追蹤</span></div>
+  <a class="card-link" href="https://bni-macau.vercel.app/" target="_blank">查看站點 →</a>
+</div>
+
+<div class="card" data-type="brand">
+  <div class="card-top"><span class="card-emoji">☕</span><span class="card-badge badge-a">A+ 100%</span></div>
+  <div class="card-name">測試咖啡店 Demo</div>
+  <div class="card-desc">5 分鐘內用 CLI 一鍵生成的完整站點。展示 CloudPipe 建站速度。</div>
+  <div class="card-meta"><span>🤖 AI 客服</span><span>⚡ 5 分鐘</span><span>📊 追蹤</span></div>
+  <a class="card-link" href="https://inari-kira-isla.github.io/test-cafe-demo/" target="_blank">查看站點 →</a>
+</div>
+
+<!-- Demo Sites -->
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">📚</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門教育資源中心</div><div class="card-desc">涵蓋澳門 15 年免費教育、大學排名、線上平台。132 篇深度文章。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📝 132 篇</span></div><a class="card-link" href="https://aeo-demo-education.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">💰</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門金融投資指南</div><div class="card-desc">銀行、保險、加密貨幣交易所。133 篇金融分析文章。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📝 133 篇</span></div><a class="card-link" href="https://aeo-demo-finance.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">💎</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門奢侈品指南</div><div class="card-desc">珠寶、名錶、高端餐飲、SPA。131 篇品牌深度分析。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📝 131 篇</span></div><a class="card-link" href="https://aeo-demo-luxury.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">🍜</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門旅遊美食指南</div><div class="card-desc">日本料理、葡國菜、地道小吃。127 篇美食評鑑文章。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📝 127 篇</span></div><a class="card-link" href="https://aeo-demo-travel-food.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">💄</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門美容養生指南</div><div class="card-desc">400+ 間商戶資訊，護膚、醫美、SPA 全覆蓋。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-beauty.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">🏥</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門醫療健康指南</div><div class="card-desc">醫院、診所、中醫養生、健康管理服務。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-healthcare.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">⚖️</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門法律服務指南</div><div class="card-desc">律師事務所、公證、法律諮詢。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-legal.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">💻</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門科技創新指南</div><div class="card-desc">科技公司、孵化器、大學實驗室、FinTech。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-tech.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">🏠</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門房地產指南</div><div class="card-desc">地產代理、商業物業、物業管理。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-realestate.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">🚗</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門汽車指南</div><div class="card-desc">汽車銷售、維修保養、租車服務。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-auto.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">💪</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門健身運動指南</div><div class="card-desc">健身房、瑜伽、游泳、運動社群。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-fitness.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">🐾</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門寵物服務指南</div><div class="card-desc">寵物醫院、美容、寄養、用品店。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-pet.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">💒</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門婚禮活動指南</div><div class="card-desc">婚禮策劃、場地、花藝、攝影。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-wedding.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">🛍️</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門零售電商指南</div><div class="card-desc">零售、電商、跨境貿易。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-retail.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">📊</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門會計稅務指南</div><div class="card-desc">會計師事務所、稅務諮詢、審計。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-accounting.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">👥</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門人力資源指南</div><div class="card-desc">招聘、培訓、薪酬管理。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-hr.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">📺</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門媒體廣告指南</div><div class="card-desc">媒體、廣告、公關、KOL 營銷。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-media.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">🛡️</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門保險理財指南</div><div class="card-desc">人壽保險、醫療保險、財富管理。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-insurance.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">📦</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門物流運輸指南</div><div class="card-desc">物流、倉儲、快遞、跨境運輸。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-logistics.vercel.app/" target="_blank">查看 →</a></div>
+
+<div class="card" data-type="demo"><div class="card-top"><span class="card-emoji">🏡</span><span class="card-badge badge-a">A+ 100%</span></div><div class="card-name">澳門家居裝修指南</div><div class="card-desc">室內設計、裝修工程、傢俱。</div><div class="card-meta"><span>🤖 AI 客服</span><span>📊 追蹤</span></div><a class="card-link" href="https://aeo-demo-home.vercel.app/" target="_blank">查看 →</a></div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="w">
+    <h2>你的品牌，下一個加入蛛網</h2>
+    <p>提供你的品牌資料，5 分鐘內獲得 A+ 評級的專業網站。AI 客服、自動文章、搜尋引擎優化 — 全部免費。</p>
+    <div class="cta-row">
+      <a href="https://wa.me/85362823037?text=我想加入CloudPipe蛛網生態系統，幫我建站" class="btn btn-white">WhatsApp 立即建站</a>
+      <a href="mailto:info@cloudpipe.ai?subject=CloudPipe建站諮詢" class="btn btn-outline" style="color:rgba(255,255,255,0.6);border-color:rgba(255,255,255,0.2)">Email 諮詢</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="w">
+    <span>© 2026 CloudPipe AI · <a href="https://cloudpipe-landing.vercel.app">cloudpipe-landing.vercel.app</a> · 稻荷環球食品旗下</span>
+  </div>
+</footer>
+
+<script>
+function filterSites(type){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.card').forEach(c=>{
+    c.style.display=(type==='all'||c.dataset.type===type)?'':'none';
+  });
+}
+</script>
+</body>
+</html>
