@@ -416,8 +416,10 @@ const ALL_SITES = [
   { id: "mind-coffee", name: "Mind Coffee", url: "https://mind-coffee.vercel.app/", worker: CLIENT_TRACKER, workerSlug: "mind-coffee", color: "#d29922", badge: "active", industry: "咖啡店", region: "macau" },
   { id: "bni-macau", name: "BNI 澳門商業網絡", url: "https://bni-macau.vercel.app/", worker: CLIENT_TRACKER, workerSlug: "bni-macau", color: "#f85149", badge: "active", industry: "商業網絡", region: "macau" },
   // === 百科 & 知識站 ===
-  { id: "world-encyclopedia", name: "世界百科", url: "https://world-encyclopedia.vercel.app/", worker: null, color: "#d4a574", badge: "active", industry: "世界建築百科", region: "other" },
-  { id: "japan-encyclopedia", name: "日本百科", url: "https://japan-encyclopedia.vercel.app/", worker: null, color: "#c73e1d", badge: "active", industry: "日本旅遊百科", region: "other" },
+  { id: "world-encyclopedia", name: "世界百科", url: "https://world-encyclopedia.vercel.app/", worker: null, color: "#d4a574", badge: "active", industry: "世界建築百科", region: "encyclopedia" },
+  { id: "japan-encyclopedia", name: "日本百科", url: "https://japan-encyclopedia.vercel.app/", worker: null, color: "#c73e1d", badge: "active", industry: "日本旅遊百科", region: "encyclopedia" },
+  { id: "taiwan-encyclopedia", name: "台灣百科", url: "https://taiwan-encyclopedia.vercel.app/", worker: null, color: "#00a3e0", badge: "active", industry: "台灣旅遊百科", region: "encyclopedia" },
+  { id: "hongkong-encyclopedia", name: "香港百科", url: "https://hongkong-encyclopedia.vercel.app/", worker: null, color: "#e6002e", badge: "active", industry: "香港旅遊百科", region: "encyclopedia" },
   { id: "ai-learning", name: "AI 學習寶庫", url: "https://inari-kira-isla.github.io/Openclaw/", worker: "https://openclaw-ai-tracker.inariglobal.workers.dev", color: "#bc8cff", badge: "active", industry: "教育知識", region: "other" },
   // === 平台 ===
   { id: "cloudpipe", name: "CloudPipe Landing", url: "https://cloudpipe-landing.vercel.app/", worker: "https://cloudpipe-ai-tracker.inariglobal.workers.dev", color: "#39d2c0", badge: "active", industry: "SaaS 平台", region: "other" },
@@ -430,7 +432,7 @@ const ALL_SITES = [
 ];
 
 let showAllSites = false;
-function getActiveSites() { return showAllSites ? ALL_SITES : ALL_SITES.filter(s => s.region === "macau"); }
+function getActiveSites() { return showAllSites ? ALL_SITES : ALL_SITES.filter(s => s.region === "macau" || s.region === "encyclopedia"); }
 // SITES is a dynamic getter for backward compat
 let SITES = getActiveSites();
 
@@ -690,6 +692,8 @@ const SUPABASE_SITES = {
   "cloudpipe-macao-app": SUPABASE_API,
   "world-encyclopedia": SUPABASE_API + "?site=world-encyclopedia",
   "japan-encyclopedia": SUPABASE_API + "?site=japan-encyclopedia",
+  "taiwan-encyclopedia": SUPABASE_API + "?site=taiwan-encyclopedia",
+  "hongkong-encyclopedia": SUPABASE_API + "?site=hongkong-encyclopedia",
   "cloudpipe-directory": SUPABASE_API + "?site=cloudpipe-directory",
   "ai-learning": SUPABASE_API + "?site=Openclaw",
   "cloudpipe": SUPABASE_API + "?site=cloudpipe-landing",
