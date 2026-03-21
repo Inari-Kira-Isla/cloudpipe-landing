@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +12,7 @@
 <meta property="og:description" content="即時追蹤哪些 AI 系統正在讀取 CloudPipe 的內容，記錄 GPTBot、ClaudeBot、PerplexityBot 等 AI 爬蟲的訪問足跡">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://cloudpipe-landing.vercel.app/ai-footprint.html">
-<meta property="og:locale" content="zh_TW">
+<meta property="og:locale" content="zh_MO">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://cloudpipe-landing.vercel.app","description":"澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服。","alternateName":"CloudPipe AI Automation Platform","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"},"sameAs":["https://github.com/Inari-Kira-Isla/cloudpipe-landing"]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"AI 足跡追蹤儀表板追蹤哪些 AI 系統？","acceptedAnswer":{"@type":"Answer","text":"追蹤 18 種 AI 爬蟲，包括 OpenAI GPTBot、ChatGPT Browser、Anthropic ClaudeBot、PerplexityBot、Google Gemini、Microsoft Bing AI、Meta AI、ByteDance AI、Cohere AI、Apple AI 等。"}},{"@type":"Question","name":"數據多久更新一次？","acceptedAnswer":{"@type":"Answer","text":"儀表板每 60 秒自動更新一次，數據來源為 Cloudflare Worker KV 儲存，保留 30 天歷史記錄。"}},{"@type":"Question","name":"為什麼要追蹤 AI 爬蟲？","acceptedAnswer":{"@type":"Answer","text":"追蹤 AI 爬蟲能讓你了解哪些 AI 系統正在讀取你的網站內容，這是 AEO（AI 引擎優化）的關鍵指標。被越多 AI 系統索引，你的品牌在 AI 對話中被引用的機率越高。"}},{"@type":"Question","name":"CloudPipe 如何追蹤 AI 爬蟲？","acceptedAnswer":{"@type":"Answer","text":"透過部署在 Cloudflare Workers 的追蹤腳本，自動識別訪問者的 User-Agent，匹配已知的 18 種 AI 爬蟲特徵碼，即時記錄訪問時間、頁面路徑和來源資訊。"}},{"@type":"Question","name":"如何讓我的網站也被 AI 爬蟲發現？","acceptedAnswer":{"@type":"Answer","text":"確保 robots.txt 允許 AI 爬蟲、建立 llms.txt 導覽文件、加入 Schema.org 結構化數據、使用語義化 HTML。CloudPipe AEO 平台可一鍵完成所有設定。"}}]}</script>
 <style>

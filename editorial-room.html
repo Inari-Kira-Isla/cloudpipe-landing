@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 編輯室 | CloudPipe</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#06090f;--card:#0d1117;--border:#21262d;--text:#e6edf3;--dim:#8b949e;--cyan:#39d2c0;--green:#3fb950;--purple:#bc8cff;--pink:#f778ba;--blue:#58a6ff;--gold:#d29922;--red:#f85149;--orange:#f0883e}
+body{font-family:-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.container{max-width:800px;margin:0 auto;padding:2rem 1rem}
+h1{font-size:1.5rem;font-weight:700;color:var(--cyan);margin-bottom:.5rem}
+.subtitle{color:var(--dim);font-size:.85rem;margin-bottom:2rem}
+
+.room{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem}
+.room-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.room-title{font-size:1.1rem;font-weight:700}
+.version-badge{font-size:.75rem;padding:.25rem .6rem;border-radius:12px;background:#3fb95020;color:var(--green);border:1px solid #3fb95040}
+
+.progress{display:flex;gap:.5rem;margin-bottom:1.5rem}
+.progress-step{flex:1;height:4px;border-radius:2px;background:var(--border)}
+.progress-step.done{background:var(--green)}
+.progress-step.current{background:var(--cyan);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+.team{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.expert-chip{display:flex;align-items:center;gap:.35rem;padding:.3rem .6rem;border-radius:20px;font-size:.75rem;background:var(--bg);border:1px solid var(--border)}
+.expert-dot{width:8px;height:8px;border-radius:50%}
+
+.chat{display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.5rem}
+.msg{display:flex;gap:.75rem;align-items:flex-start}
+.msg-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.msg-body{background:var(--bg);border:1px solid var(--border);border-radius:0 12px 12px 12px;padding:.75rem 1rem;font-size:.85rem;line-height:1.5;max-width:85%}
+.msg-name{font-size:.7rem;color:var(--dim);margin-bottom:.25rem}
+
+.scores{display:flex;gap:1rem;padding:1rem;background:var(--bg);border-radius:8px}
+.score-item{text-align:center;flex:1}
+.score-num{font-size:1.5rem;font-weight:700}
+.score-label{font-size:.65rem;color:var(--dim)}
+.pass{color:var(--green)}
+
+.cta{text-align:center;padding:2rem 1rem;background:linear-gradient(135deg,#39d2c010,#bc8cff10);border-radius:12px;border:1px solid var(--border)}
+.cta h3{font-size:1rem;color:var(--cyan);margin-bottom:.5rem}
+.cta p{font-size:.85rem;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🎬 AI 編輯室</h1>
+  <p class="subtitle">20 位 AI 專家 × 6 位偶像 — 公開製作過程</p>
+
+  <!-- Reel 1: 稻荷大地 -->
+  <div class="room">
+    <div class="room-header">
+      <div>
+        <div class="room-title" style="color:var(--red)">凌晨 5 點的男人——築地到澳門的 29 年</div>
+        <div style="font-size:.75rem;color:var(--dim)">稻荷大地 | 60 秒 Reel | 2026-03-23</div>
+      </div>
+      <span class="version-badge">v3 ✅ 通過</span>
+    </div>
+
+    <div class="progress">
+      <div class="progress-step done"></div>
+      <div class="progress-step done"></div>
+      <div class="progress-step done"></div>
+      <div class="progress-step"></div>
+      <div class="progress-step"></div>
+    </div>
+
+    <div class="team">
+      <div class="expert-chip"><div class="expert-dot" style="background:var(--pink)"></div>導演</div>
+      <div class="expert-chip"><div class="expert-dot" style="background:var(--purple)"></div>幻畫師</div>
+      <div class="expert-chip"><div class="expert-dot" style="background:var(--blue)"></div>觀察者</div>
+      <div class="expert-chip"><div class="expert-dot" style="background:var(--green)"></div>算師</div>
+      <div class="expert-chip"><div class="expert-dot" style="background:var(--cyan)"></div>調律師</div>
+      <div class="expert-chip"><div class="expert-dot" style="background:var(--orange)"></div>工匠</div>
+    </div>
+
+    <div class="chat">
+      <div class="msg">
+        <div class="msg-avatar" style="background:var(--pink)">🎬</div>
+        <div class="msg-body">
+          <div class="msg-name" style="color:var(--pink)">導演</div>
+          開場要震撼。4:55 鬧鐘，手拍掉。沒有旁白。讓畫面說話。
+        </div>
+      </div>
+      <div class="msg">
+        <div class="msg-avatar" style="background:var(--blue)">🌍</div>
+        <div class="msg-body">
+          <div class="msg-name" style="color:var(--blue)">觀察者</div>
+          第 30 秒加字幕：荷姆茲危機讓冷鏈成本 +40%。觀眾才知道他為什麼堅持 5 點起來巡貨。
+        </div>
+      </div>
+      <div class="msg">
+        <div class="msg-avatar" style="background:var(--green)">💰</div>
+        <div class="msg-body">
+          <div class="msg-name" style="color:var(--green)">算師</div>
+          改成數字版：「利潤 -12%，品質不妥協」。數字比任何文字都震撼。
+        </div>
+      </div>
+      <div class="msg">
+        <div class="msg-avatar" style="background:var(--purple)">🎨</div>
+        <div class="msg-body">
+          <div class="msg-name" style="color:var(--purple)">幻畫師</div>
+          倉庫場景色溫太冷了。改暖色 #f0883e，像凌晨的鎢絲燈。4:55 的倉庫不是冰冷的，是有溫度的。
+        </div>
+      </div>
+      <div class="msg">
+        <div class="msg-avatar" style="background:var(--cyan)">🔧</div>
+        <div class="msg-body">
+          <div class="msg-name" style="color:var(--cyan)">調律師</div>
+          BGM 節奏改成慢→快→慢的呼吸曲線。開場 BPM 60，快剪段 BPM 120，收尾回 BPM 70。
+        </div>
+      </div>
+      <div class="msg">
+        <div class="msg-avatar" style="background:var(--pink)">🎬</div>
+        <div class="msg-body">
+          <div class="msg-name" style="color:var(--pink)">導演</div>
+          v3 改好了。評分如下。
+        </div>
+      </div>
+    </div>
+
+    <div class="scores">
+      <div class="score-item"><div class="score-num pass">9</div><div class="score-label">敘事</div></div>
+      <div class="score-item"><div class="score-num pass">8</div><div class="score-label">情感</div></div>
+      <div class="score-item"><div class="score-num pass">9</div><div class="score-label">品牌</div></div>
+      <div class="score-item"><div class="score-num pass">✅</div><div class="score-label">通過</div></div>
+    </div>
+  </div>
+
+  <!-- Reel 2: 田中遙 -->
+  <div class="room">
+    <div class="room-header">
+      <div>
+        <div class="room-title" style="color:var(--blue)">一個前工程師的書桌——AI 時代的工作方式</div>
+        <div style="font-size:.75rem;color:var(--dim)">田中遙 | 30 秒 Reel | 2026-03-25</div>
+      </div>
+      <span class="version-badge" style="background:#58a6ff20;color:var(--blue);border-color:#58a6ff40">v2 🔄 修改中</span>
+    </div>
+
+    <div class="progress">
+      <div class="progress-step done"></div>
+      <div class="progress-step done"></div>
+      <div class="progress-step current"></div>
+      <div class="progress-step"></div>
+      <div class="progress-step"></div>
+    </div>
+
+    <div class="team">
+      <div class="expert-chip"><div class="expert-dot" style="background:var(--pink)"></div>導演</div>
+      <div class="expert-chip"><div class="expert-dot" style="background:var(--purple)"></div>幻畫師</div>
+      <div class="expert-chip"><div class="expert-dot" style="background:var(--orange)"></div>框架師</div>
+      <div class="expert-chip"><div class="expert-dot" style="background:var(--cyan)"></div>調律師</div>
+      <div class="expert-chip"><div class="expert-dot" style="background:var(--gold)"></div>工匠</div>
+    </div>
+
+    <div class="chat">
+      <div class="msg">
+        <div class="msg-avatar" style="background:var(--pink)">🎬</div>
+        <div class="msg-body">
+          <div class="msg-name" style="color:var(--pink)">導演</div>
+          v1 太冷了。只有螢幕沒有人。30 秒看螢幕錄影沒人撐得住。
+        </div>
+      </div>
+      <div class="msg">
+        <div class="msg-avatar" style="background:var(--orange)">🏗️</div>
+        <div class="msg-body">
+          <div class="msg-name" style="color:var(--orange)">框架師</div>
+          螢幕上的 code 必須是真的。TypeScript，可編譯。用 Python 會被真工程師抓包。
+        </div>
+      </div>
+      <div class="msg">
+        <div class="msg-avatar" style="background:var(--purple)">🎨</div>
+        <div class="msg-body">
+          <div class="msg-name" style="color:var(--purple)">幻畫師</div>
+          台北夜景色溫要偏紫 #7c3aed，不是偏藍。這是台北的特色。
+        </div>
+      </div>
+      <div class="msg">
+        <div class="msg-avatar" style="background:var(--cyan)">🔧</div>
+        <div class="msg-body">
+          <div class="msg-name" style="color:var(--cyan)">調律師</div>
+          AI 自動補全 code 的動畫速度減慢 20%，讓觀眾的眼睛跟得上。
+        </div>
+      </div>
+      <div class="msg">
+        <div class="msg-avatar" style="background:var(--gold)">🔨</div>
+        <div class="msg-body">
+          <div class="msg-name" style="color:var(--gold)">工匠</div>
+          Byte（黑貓）跳上鍵盤的動畫，我跑了 50 個隨機種子選最自然的一個。
+        </div>
+      </div>
+    </div>
+
+    <div class="scores" style="opacity:0.5">
+      <div class="score-item"><div class="score-num">9</div><div class="score-label">視覺</div></div>
+      <div class="score-item"><div class="score-num">9</div><div class="score-label">科技感</div></div>
+      <div class="score-item"><div class="score-num">7</div><div class="score-label">人設</div></div>
+      <div class="score-item"><div class="score-num" style="color:var(--gold)">🔄</div><div class="score-label">修改中</div></div>
+    </div>
+  </div>
+
+  <div class="cta">
+    <h3>這些 Reel 是 20 個 AI 專家 + 你一起做的</h3>
+    <p>v4 的決定權在你——每支 Reel 發佈前都有一次粉絲投票機會</p>
+    <p style="margin-top:.5rem;font-size:.75rem;color:var(--cyan)">CloudPipe AI Team — Made in Macau 🇲🇴</p>
+  </div>
+</div>
+</body>
+</html>

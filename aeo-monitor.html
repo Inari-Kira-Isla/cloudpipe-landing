@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +12,7 @@
 <meta property="og:description" content="即時監控所有託管網站的 AI 爬蟲活動 — 中國 AI vs 國際 AI vs 人類搜尋">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://cloudpipe-landing.vercel.app/aeo-monitor.html">
-<meta property="og:locale" content="zh_TW">
+<meta property="og:locale" content="zh_MO">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://cloudpipe-landing.vercel.app","description":"澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服。","alternateName":"CloudPipe AI Automation Platform","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"},"sameAs":["https://github.com/Inari-Kira-Isla/cloudpipe-landing"]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"CloudPipe AI 爬蟲監控中心","description":"即時監控所有託管網站的 AI 爬蟲活動","url":"https://cloudpipe-landing.vercel.app/aeo-monitor.html","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"MOP"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"AI 爬蟲監控中心追蹤哪些站點？","acceptedAnswer":{"@type":"Answer","text":"目前追蹤 CloudPipe 生態系統下的所有站點，包括 AI 學習寶庫、CloudPipe Landing、山中田、海膽速遞、稻荷環球食品、After School Coffee、Mind Coffee、BNI 澳門商業網絡等 13 個站點。"}},{"@type":"Question","name":"監控數據多久更新一次？","acceptedAnswer":{"@type":"Answer","text":"每 60 秒自動從各站點的 Cloudflare Worker 拉取最新數據，即時顯示今日訪問、累積訪問、AI 種類統計及活動記錄。"}},{"@type":"Question","name":"什麼是中國 AI vs 國際 AI 比對？","acceptedAnswer":{"@type":"Answer","text":"監控中心可區分來自中國（百度、騰訊混元、智譜 ChatGLM、科大訊飛等）和國際（OpenAI、Anthropic、Google、Perplexity 等）的 AI 爬蟲，以圓餅圖和條形圖呈現比例。"}},{"@type":"Question","name":"如何追蹤 AI 與人類訪客的比例？","acceptedAnswer":{"@type":"Answer","text":"透過 Cloudflare Worker 的 User-Agent 偵測，自動區分 AI 爬蟲和人類瀏覽器訪問，提供即時的 AI vs 人類流量比對數據。"}},{"@type":"Question","name":"如何為新站點加入 AI 追蹤？","acceptedAnswer":{"@type":"Answer","text":"新站點透過多租戶 Cloudflare Worker (client-ai-tracker) 統一追蹤，只需在 Worker 配置中加入站點 slug 和 URL 即可自動開始收集數據。"}}]}</script>
