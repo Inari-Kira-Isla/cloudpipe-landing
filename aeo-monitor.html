@@ -766,16 +766,33 @@ function getSupabaseDataForSite(siteId) {
   const supabaseSiteName = SUPABASE_SITE_MAP[siteId];
   if (!supabaseSiteName) return null;
 
-  // Check if this site has data in the all-sites summary (case-insensitive)
+  // Per-site visit totals (accurate from Supabase sites breakdown)
   const siteTotal = getSiteCount(_supabaseAll.summary.sites, supabaseSiteName);
   const siteTodayTotal = getSiteCount(_supabaseAll.today.sites, supabaseSiteName);
   if (siteTotal === 0 && siteTodayTotal === 0) return null;
 
-  // For per-site bot breakdown, we use the global bot data (most accurate approximation)
-  // The total is accurate per-site from the sites breakdown
+  // Proportionally distribute global bot counts to this site
+  // e.g. if this site = 8282/9689 of total, ClaudeBot ≈ 3000 * 8282/9689
+  const globalTotal = _supabaseAll.summary.total_visits || 1;
+  const globalTodayTotal = _supabaseAll.today.total_visits || 1;
+  const cumRatio = globalTotal > 0 ? siteTotal / globalTotal : 0;
+  const todayRatio = globalTodayTotal > 0 ? siteTodayTotal / globalTodayTotal : 0;
+
+  const globalBots = mapBots(_supabaseAll.summary.bots);
+  const globalBotsToday = mapBots(_supabaseAll.today.bots);
+
+  const siteBots = {};
+  for (const [bot, count] of Object.entries(globalBots)) {
+    siteBots[bot] = Math.round(count * cumRatio);
+  }
+  const siteBotsToday = {};
+  for (const [bot, count] of Object.entries(globalBotsToday)) {
+    siteBotsToday[bot] = Math.round(count * todayRatio);
+  }
+
   return {
-    today: mapBots(_supabaseAll.today.bots),
-    totals: mapBots(_supabaseAll.summary.bots),
+    today: siteBotsToday,
+    totals: siteBots,
     recentVisits: [],
     _supabase: true,
     _siteTotal: siteTotal,
@@ -790,9 +807,22 @@ async function fetchSiteData(site) {
     const slug = site.macaoIndustry;
     const cumCount = (_supabaseMacao.summary.industries || {})[slug] || 0;
     const todayCount = (_supabaseMacao.today.industries || {})[slug] || 0;
+
+    // Proportionally distribute macao bot counts by industry share
+    const macaoTotal = _supabaseMacao.summary.total_visits || 1;
+    const macaoTodayTotal = _supabaseMacao.today.total_visits || 1;
+    const cumRatio = macaoTotal > 0 ? cumCount / macaoTotal : 0;
+    const todayRatio = macaoTodayTotal > 0 ? todayCount / macaoTodayTotal : 0;
+
+    const globalBots = mapBots(_supabaseMacao.summary.bots);
+    const globalBotsToday = mapBots(_supabaseMacao.today.bots);
+    const indBots = {}, indBotsToday = {};
+    for (const [bot, count] of Object.entries(globalBots)) { indBots[bot] = Math.round(count * cumRatio); }
+    for (const [bot, count] of Object.entries(globalBotsToday)) { indBotsToday[bot] = Math.round(count * todayRatio); }
+
     return {
-      today: mapBots(_supabaseMacao.today.bots),
-      totals: mapBots(_supabaseMacao.summary.bots),
+      today: indBotsToday,
+      totals: indBots,
       recentVisits: [], _industry: slug, _industryTotal: cumCount, _industryToday: todayCount,
     };
   }
