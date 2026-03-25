@@ -1246,12 +1246,20 @@ function renderSummary() {
     });
   });
 
-  Object.entries(todayByBot).forEach(([b, v]) => { if (v > topCount) { topBot = b; topCount = v; } });
-  if (topCount === 0 && allBots.size > 0) {
-    SITES.forEach(site => {
-      const d = allData[site.id] || { totals: {} };
-      Object.entries(d.totals || {}).forEach(([b, v]) => { if (b !== "Human Visitors" && v > topCount) { topBot = b; topCount = v; } });
-    });
+  // Find top bot — use Supabase global data directly (avoid double-counting per-site global totals)
+  if (_supabaseAll && _supabaseAll.summary.bots) {
+    const globalBots = mapBots(_supabaseAll.summary.bots);
+    Object.entries(globalBots).forEach(([b, v]) => { if (b !== "Human Visitors" && v > topCount) { topBot = b; topCount = v; } });
+  } else {
+    // Fallback for non-Supabase: use todayByBot, then per-site Worker totals
+    Object.entries(todayByBot).forEach(([b, v]) => { if (v > topCount) { topBot = b; topCount = v; } });
+    if (topCount === 0 && allBots.size > 0) {
+      SITES.forEach(site => {
+        const d = allData[site.id] || { totals: {} };
+        if (d._supabase) return; // skip Supabase sites (already handled above)
+        Object.entries(d.totals || {}).forEach(([b, v]) => { if (b !== "Human Visitors" && v > topCount) { topBot = b; topCount = v; } });
+      });
+    }
   }
 
   document.getElementById("g-today").textContent = todayAll;
