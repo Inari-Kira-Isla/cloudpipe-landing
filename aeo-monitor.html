@@ -1049,7 +1049,7 @@ const CN_BOT_NAMES = [
 
 function renderHeatmap() {
   // Show sites with worker OR Supabase data (exclude macao industry sub-entries to avoid duplication)
-  const trackedSites = ALL_SITES.filter(s => !s.macaoIndustry && (s.worker || SUPABASE_SITES[s.id]));
+  const trackedSites = ALL_SITES.filter(s => !s.macaoIndustry && (s.worker || SUPABASE_SITE_MAP[s.id]));
 
   const grid = document.getElementById("heatmap-grid");
   grid.style.setProperty("--cols", trackedSites.length);
