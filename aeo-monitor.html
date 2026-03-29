@@ -170,6 +170,34 @@ body{font-family:'Noto Sans TC',-apple-system,BlinkMacSystemFont,sans-serif;back
 
 footer{text-align:center;padding:2rem 0 1rem;color:var(--dim);font-size:.8rem;border-top:1px solid var(--border);margin-top:1rem}
 footer a{color:var(--cyan);text-decoration:none}
+
+/* Insight Progress Tab */
+.insight-section{margin-bottom:1.5rem}
+.insight-phase{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1rem}
+.insight-phase h3{font-size:.9rem;color:var(--cyan);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.insight-phase h3 .phase-pct{margin-left:auto;font-size:1.1rem;font-weight:700}
+.progress-track{height:18px;border-radius:9px;background:var(--card-2);overflow:hidden;margin-bottom:.5rem}
+.progress-fill{height:100%;border-radius:9px;transition:width .6s ease}
+.progress-fill-zh{background:linear-gradient(90deg,#39d2c0,#3fb950)}
+.progress-fill-trans{background:linear-gradient(90deg,#58a6ff,#bc8cff)}
+.progress-meta{display:flex;justify-content:space-between;font-size:.75rem;color:var(--dim)}
+.insight-overview{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.5rem}
+.io-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center}
+.io-card .io-num{font-size:1.8rem;font-weight:700;line-height:1}
+.io-card .io-lbl{font-size:.7rem;color:var(--dim);margin-top:.3rem}
+.region-progress-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.5rem}
+.rp-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem}
+.rp-card h4{font-size:.85rem;font-weight:600;margin-bottom:.85rem;display:flex;align-items:center;gap:.5rem}
+.lang-bars{display:flex;flex-direction:column;gap:.5rem}
+.lang-row{display:flex;align-items:center;gap:.6rem;font-size:.75rem}
+.lang-tag{width:24px;font-weight:700;flex-shrink:0}
+.lang-track{flex:1;height:10px;border-radius:5px;background:var(--card-2);overflow:hidden}
+.lang-fill{height:100%;border-radius:5px;transition:width .4s}
+.lang-val{width:60px;text-align:right;color:var(--dim)}
+@media(max-width:768px){
+  .insight-overview{grid-template-columns:repeat(2,1fr)}
+  .region-progress-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -231,6 +259,7 @@ footer a{color:var(--cyan);text-decoration:none}
     <button class="tab-btn" data-tab="cn-vs-intl" onclick="switchTab('cn-vs-intl')">中國 AI vs 國際 AI</button>
     <button class="tab-btn" data-tab="ai-vs-human" onclick="switchTab('ai-vs-human')">AI vs 人類</button>
     <button class="tab-btn" data-tab="time-trends" onclick="switchTab('time-trends')">時間趨勢</button>
+    <button class="tab-btn" data-tab="insight-progress" onclick="switchTab('insight-progress')">📝 Insight 進度</button>
   </div>
 
   <!-- Tab 1: All (existing views) -->
@@ -351,6 +380,65 @@ footer a{color:var(--cyan);text-decoration:none}
           <tbody id="trend-tbody"></tbody>
         </table>
       </div>
+    </div>
+  </div>
+
+  <!-- Tab 5: Insight Generation Progress -->
+  <div class="tab-content" id="tab-insight-progress">
+    <div id="insight-loading" style="text-align:center;color:var(--dim);padding:3rem;font-size:.9rem">載入中...</div>
+    <div id="insight-content" style="display:none">
+      <!-- Overview stats -->
+      <div class="insight-overview">
+        <div class="io-card">
+          <div class="io-num" id="ip-total-zh" style="color:var(--green)">—</div>
+          <div class="io-lbl">ZH 已發布</div>
+        </div>
+        <div class="io-card">
+          <div class="io-num" id="ip-trans-done" style="color:var(--blue)">—</div>
+          <div class="io-lbl">EN+PT 已翻譯</div>
+        </div>
+        <div class="io-card">
+          <div class="io-num" id="ip-today" style="color:var(--cyan)">—</div>
+          <div class="io-lbl">今日新增</div>
+        </div>
+        <div class="io-card">
+          <div class="io-num" id="ip-total" style="color:var(--gold)">—</div>
+          <div class="io-lbl">總發布篇數</div>
+        </div>
+      </div>
+
+      <!-- Phase 1 + Phase 2 bars -->
+      <div class="insight-section">
+        <div class="insight-phase">
+          <h3>
+            <span>【Phase 1】繁體中文 (ZH) 生成</span>
+            <span class="phase-pct" id="ip-zh-pct" style="color:var(--green)">—%</span>
+          </h3>
+          <div class="progress-track">
+            <div class="progress-fill progress-fill-zh" id="ip-zh-bar" style="width:0%"></div>
+          </div>
+          <div class="progress-meta">
+            <span id="ip-zh-meta-l">—</span>
+            <span id="ip-zh-meta-r">—</span>
+          </div>
+        </div>
+        <div class="insight-phase">
+          <h3>
+            <span>【Phase 2】翻譯 EN + PT</span>
+            <span class="phase-pct" id="ip-trans-pct" style="color:var(--blue)">—%</span>
+          </h3>
+          <div class="progress-track">
+            <div class="progress-fill progress-fill-trans" id="ip-trans-bar" style="width:0%"></div>
+          </div>
+          <div class="progress-meta">
+            <span id="ip-trans-meta-l">—</span>
+            <span id="ip-trans-meta-r">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Region breakdown -->
+      <div class="region-progress-grid" id="ip-regions"></div>
     </div>
   </div>
 
@@ -495,6 +583,7 @@ function switchTab(tabId) {
   document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
   document.getElementById(`tab-${tabId}`).classList.add('active');
   if (tabId === 'time-trends' && !trendData) loadTrendData();
+  if (tabId === 'insight-progress') loadInsightProgress();
 }
 
 // ============================================
@@ -1334,6 +1423,92 @@ async function loadAll() {
 
 loadAll();
 setInterval(loadAll, 60000);
+
+// ============================================
+// Tab 5: Insight Generation Progress
+// ============================================
+const INSIGHT_PROGRESS_API = "https://cloudpipe-macao-app.vercel.app/api/v1/insight-progress";
+let _insightLoaded = false;
+
+const REGION_LABELS = { macau:"澳門 🇲🇴", hongkong:"香港 🇭🇰", taiwan:"台灣 🇹🇼", japan:"日本 🇯🇵" };
+const REGION_COLORS = { macau:"#f0883e", hongkong:"#e6002e", taiwan:"#00a3e0", japan:"#c73e1d" };
+
+async function loadInsightProgress() {
+  if (_insightLoaded) return;
+  _insightLoaded = true;
+  try {
+    const res = await fetch(INSIGHT_PROGRESS_API);
+    if (!res.ok) throw new Error('API error');
+    const d = await res.json();
+    renderInsightProgress(d);
+  } catch(e) {
+    document.getElementById('insight-loading').textContent = '載入失敗: ' + e.message;
+  }
+}
+
+function renderInsightProgress(d) {
+  document.getElementById('insight-loading').style.display = 'none';
+  document.getElementById('insight-content').style.display = 'block';
+
+  // Overview
+  document.getElementById('ip-total-zh').textContent = d.phase1.done.toLocaleString();
+  document.getElementById('ip-trans-done').textContent = d.phase2.done.toLocaleString();
+  document.getElementById('ip-today').textContent = d.todayCount.toLocaleString();
+  document.getElementById('ip-total').textContent = d.totalPublished.toLocaleString();
+
+  // Phase 1 bar (ZH — total = total configs)
+  const zhPct = d.phase1.total > 0 ? (d.phase1.done / d.phase1.total * 100) : 0;
+  document.getElementById('ip-zh-pct').textContent = zhPct.toFixed(1) + '%';
+  document.getElementById('ip-zh-bar').style.width = Math.min(zhPct, 100) + '%';
+  document.getElementById('ip-zh-meta-l').textContent = `ZH 已完成 ${d.phase1.done.toLocaleString()} / ${d.phase1.total.toLocaleString()} 篇`;
+  document.getElementById('ip-zh-meta-r').textContent = `剩餘 ${Math.max(0, d.phase1.total - d.phase1.done).toLocaleString()} 篇待生成`;
+
+  // Phase 2 bar (EN+PT)
+  const transPct = d.phase2.total > 0 ? (d.phase2.done / d.phase2.total * 100) : 0;
+  document.getElementById('ip-trans-pct').textContent = transPct.toFixed(1) + '%';
+  document.getElementById('ip-trans-bar').style.width = Math.min(transPct, 100) + '%';
+  document.getElementById('ip-trans-meta-l').textContent = `EN+PT 已完成 ${d.phase2.done.toLocaleString()} / ${d.phase2.total.toLocaleString()}`;
+  document.getElementById('ip-trans-meta-r').textContent = `剩餘 ${Math.max(0, d.phase2.total - d.phase2.done).toLocaleString()} 篇待翻譯`;
+
+  // Region cards
+  const grid = document.getElementById('ip-regions');
+  grid.innerHTML = '';
+  const regions = ['macau','hongkong','taiwan','japan'];
+  for (const r of regions) {
+    const s = d.regionStats.find(x => x.region === r);
+    if (!s) continue;
+    const color = REGION_COLORS[r] || '#8b949e';
+    const label = REGION_LABELS[r] || r;
+    const maxVal = Math.max(s.zh, 1);
+    const enPct = (s.en / maxVal * 100).toFixed(0);
+    const ptPct = (s.pt / maxVal * 100).toFixed(0);
+    grid.innerHTML += `
+      <div class="rp-card">
+        <h4>
+          <span style="color:${color}">${label}</span>
+          <span style="margin-left:auto;font-size:.75rem;color:var(--dim)">${s.total.toLocaleString()} 篇</span>
+        </h4>
+        <div class="lang-bars">
+          <div class="lang-row">
+            <span class="lang-tag" style="color:var(--green)">ZH</span>
+            <div class="lang-track"><div class="lang-fill" style="width:100%;background:var(--green)"></div></div>
+            <span class="lang-val">${s.zh.toLocaleString()}</span>
+          </div>
+          <div class="lang-row">
+            <span class="lang-tag" style="color:var(--blue)">EN</span>
+            <div class="lang-track"><div class="lang-fill" style="width:${enPct}%;background:var(--blue)"></div></div>
+            <span class="lang-val">${s.en.toLocaleString()}</span>
+          </div>
+          <div class="lang-row">
+            <span class="lang-tag" style="color:var(--purple)">PT</span>
+            <div class="lang-track"><div class="lang-fill" style="width:${ptPct}%;background:var(--purple)"></div></div>
+            <span class="lang-val">${s.pt.toLocaleString()}</span>
+          </div>
+        </div>
+      </div>`;
+  }
+}
+
 </script>
 </body>
 </html>
