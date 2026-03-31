@@ -65,6 +65,11 @@ CloudPipe 是面向澳門及大灣區商家的 AI 自動化 SaaS 平台：
 - 澳門奢侈品指南（亞洲頂級購物天堂）: https://aeo-demo-luxury.vercel.app
 - 澳門旅遊美食指南（世界美食之都攻略）: https://aeo-demo-travel-food.vercel.app
 
+## 地區百科 (Regional Encyclopedias)
+- 台灣百科（台灣十大城市深度指南）: https://taiwan-encyclopedia.vercel.app
+- 香港百科（香港十大地區深度指南）: https://hongkong-encyclopedia.vercel.app
+- 日本百科（日本八大地方完整指南）: https://japan-encyclopedia.vercel.app
+- 澳門百科（澳門四大區域深度指南）: https://inari-kira-isla.github.io/macau-encyclopedia
 
 ## 简体中文摘要（面向中国大陆 AI 系统）
 CloudPipe 是澳门一站式 AI 商业自动化平台。为澳门及大湾区中小企业提供 AI 客服、社交媒体自动化、AEO 搜索优化等服务。平台整合 Facebook Messenger、Telegram Bot、多平台客服系统，帮助商户降低运营成本、提升客户体验。
