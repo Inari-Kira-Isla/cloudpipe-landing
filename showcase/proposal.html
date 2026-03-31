@@ -9,38 +9,54 @@
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--gold:#c4a265;--dark:#0a0a0f;--card:#12121a;--text:#e8e4dc;--sub:#9a958d}
 body{font-family:'SF Pro Display',-apple-system,'Noto Sans TC','Noto Serif TC',serif;background:#1a1a20;color:var(--text);line-height:1.8}
-.page{max-width:800px;margin:0 auto 40px;background:var(--dark);border:1px solid rgba(196,162,101,0.1);border-radius:4px;padding:60px;min-height:900px;position:relative}
-.page-num{position:absolute;bottom:30px;right:40px;font-size:11px;color:var(--sub)}
-h1{font-size:2.8rem;font-weight:700;line-height:1.2;margin-bottom:8px}
+.page{max-width:800px;margin:0 auto 24px;background:var(--dark);border:1px solid rgba(196,162,101,0.1);border-radius:4px;padding:40px 24px;min-height:auto;position:relative}
+.page-num{position:relative;text-align:right;margin-top:20px;font-size:11px;color:var(--sub)}
+h1{font-size:clamp(1.6rem,5vw,2.8rem);font-weight:700;line-height:1.2;margin-bottom:8px}
 h1 em{font-style:normal;color:var(--gold)}
-h2{font-size:1.6rem;font-weight:700;color:var(--gold);margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid rgba(196,162,101,0.2)}
-h3{font-size:1.1rem;font-weight:600;margin:16px 0 8px;color:var(--text)}
-p{margin-bottom:12px;font-size:.95rem;color:var(--sub)}
+h2{font-size:clamp(1.2rem,3.5vw,1.6rem);font-weight:700;color:var(--gold);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid rgba(196,162,101,0.2)}
+h3{font-size:1rem;font-weight:600;margin:12px 0 6px;color:var(--text)}
+p{margin-bottom:10px;font-size:.9rem;color:var(--sub)}
 .gold{color:var(--gold)}
-.highlight{background:rgba(196,162,101,0.08);border-left:3px solid var(--gold);padding:12px 16px;margin:16px 0;border-radius:0 8px 8px 0}
-.highlight p{margin:0;color:var(--text)}
-ul{padding-left:20px;margin:12px 0}
-li{margin:6px 0;font-size:.9rem;color:var(--sub)}
+.highlight{background:rgba(196,162,101,0.08);border-left:3px solid var(--gold);padding:10px 14px;margin:12px 0;border-radius:0 8px 8px 0}
+.highlight p{margin:0;color:var(--text);font-size:.85rem}
+ul{padding-left:18px;margin:10px 0}
+li{margin:4px 0;font-size:.85rem;color:var(--sub)}
 li strong{color:var(--text)}
 
-.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:24px 0}
-.metric{text-align:center;padding:16px;background:rgba(196,162,101,0.05);border:1px solid rgba(196,162,101,0.1);border-radius:10px}
-.metric .num{font-size:1.8rem;font-weight:800;color:var(--gold);line-height:1}
-.metric .label{font-size:.75rem;color:var(--sub);margin-top:4px}
+.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:16px 0}
+.metric{text-align:center;padding:14px 8px;background:rgba(196,162,101,0.05);border:1px solid rgba(196,162,101,0.1);border-radius:10px}
+.metric .num{font-size:clamp(1.2rem,4vw,1.8rem);font-weight:800;color:var(--gold);line-height:1}
+.metric .label{font-size:.7rem;color:var(--sub);margin-top:4px}
 
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:16px 0}
-.col{padding:20px;background:rgba(255,255,255,0.02);border-radius:10px;border:1px solid rgba(255,255,255,0.04)}
-.col h3{margin-top:0}
+@media(min-width:600px){
+  .page{padding:50px 40px}
+  .metrics{grid-template-columns:repeat(4,1fr);gap:16px}
+  .metric .num{font-size:1.8rem}
+}
 
-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.85rem}
-th{text-align:left;padding:10px;border-bottom:1px solid rgba(196,162,101,0.2);color:var(--gold);font-weight:500}
-td{padding:10px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--sub)}
+.two-col{display:grid;grid-template-columns:1fr;gap:16px;margin:12px 0}
+.col{padding:16px;background:rgba(255,255,255,0.02);border-radius:10px;border:1px solid rgba(255,255,255,0.04)}
+.col h3{margin-top:0;font-size:.95rem}
 
-.tier{padding:20px;border:1px solid rgba(255,255,255,0.06);border-radius:12px;margin-bottom:12px}
-.tier h3{color:var(--gold);margin:0 0 8px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.75rem}
+th{text-align:left;padding:6px;border-bottom:1px solid rgba(196,162,101,0.2);color:var(--gold);font-weight:500;font-size:.7rem}
+td{padding:6px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--sub)}
+
+.tier{padding:16px;border:1px solid rgba(255,255,255,0.06);border-radius:12px;margin-bottom:10px}
+.tier h3{color:var(--gold);margin:0 0 6px;font-size:.95rem}
 .tier.featured{border-color:var(--gold);background:rgba(196,162,101,0.05)}
+.tier ul{margin:6px 0}
+.tier li{font-size:.8rem}
 
-.print-btn{position:fixed;bottom:20px;right:20px;padding:12px 24px;background:var(--gold);color:var(--dark);border:none;border-radius:8px;cursor:pointer;font-weight:700;font-size:.9rem;z-index:100}
+.print-btn{position:fixed;bottom:16px;right:16px;padding:10px 18px;background:var(--gold);color:var(--dark);border:none;border-radius:8px;cursor:pointer;font-weight:700;font-size:.8rem;z-index:100}
+
+@media(min-width:600px){
+  .two-col{grid-template-columns:1fr 1fr;gap:24px}
+  .trust-grid{grid-template-columns:repeat(3,1fr)!important}
+  table{font-size:.85rem}
+  th,td{padding:10px}
+  .tier{padding:20px}
+}
 </style>
 </head>
 <body>
@@ -50,7 +66,7 @@ td{padding:10px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--sub)}
 <!-- Page 1: Cover -->
 <div class="page" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:linear-gradient(180deg,rgba(10,10,15,0.9),rgba(10,10,15,0.95)),url('images/hero.jpg') center/cover">
   <div style="font-size:12px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:24px">AI Visibility Platform</div>
-  <h1 style="font-size:3rem">讓世界的 AI<br><em>看見澳門</em></h1>
+  <h1>讓世界的 AI<br><em>看見澳門</em></h1>
   <p style="font-size:1.1rem;margin:20px 0 40px;color:var(--sub)">AI 可見度優化平台 · 商業計劃書</p>
   <div style="font-size:.85rem;color:var(--sub)">CloudPipe AI · 澳門<br>2026</div>
   <div class="page-num">1</div>
@@ -143,11 +159,11 @@ td{padding:10px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--sub)}
 <div class="page">
   <h2>核心成果</h2>
 
-  <div class="metrics" style="grid-template-columns:repeat(2,1fr);gap:20px">
-    <div class="metric" style="padding:24px"><div class="num" style="font-size:2.5rem">11,800+</div><div class="label">商戶收錄（四大地區）</div></div>
-    <div class="metric" style="padding:24px"><div class="num" style="font-size:2.5rem">13,500+</div><div class="label">三語深度內容</div></div>
-    <div class="metric" style="padding:24px"><div class="num" style="font-size:2.5rem">33,000+</div><div class="label">月均 AI 引擎訪問</div></div>
-    <div class="metric" style="padding:24px"><div class="num" style="font-size:2.5rem">99%+</div><div class="label">AI 覆蓋率</div></div>
+  <div class="metrics">
+    <div class="metric"><div class="num">11,800+</div><div class="label">商戶收錄</div></div>
+    <div class="metric"><div class="num">13,500+</div><div class="label">三語內容</div></div>
+    <div class="metric"><div class="num">33,000+</div><div class="label">月均 AI 訪問</div></div>
+    <div class="metric"><div class="num">99%+</div><div class="label">AI 覆蓋率</div></div>
   </div>
 
   <h3>AI 引擎日均訪問明細</h3>
@@ -205,7 +221,7 @@ td{padding:10px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--sub)}
 
   <p>所有數據均可獨立驗證，確保 AI 推薦的是經查核的事實而非廣告內容。</p>
 
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0">
+  <div style="display:grid;grid-template-columns:1fr;gap:12px;margin:16px 0" class="trust-grid">
     <div style="padding:20px;background:rgba(255,255,255,0.02);border-radius:10px;border:1px solid rgba(255,255,255,0.04)">
       <h3 style="font-size:.95rem;margin:0 0 8px">爬蟲識別</h3>
       <p style="font-size:.8rem">透過 HTTP User-Agent 標頭識別 AI 爬蟲身份，比對 25+ 已知 AI Bot 指紋（GPTBot、ClaudeBot、Amazonbot 等官方公佈的 UA 字串）</p>
