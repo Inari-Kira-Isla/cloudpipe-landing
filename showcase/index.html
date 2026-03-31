@@ -269,22 +269,18 @@ footer a{color:var(--gold)}
     <!-- Data Source Credibility -->
     <div style="background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px">
       <h3 style="font-size:.95rem;margin-bottom:12px">數據來源與驗證方式</h3>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:.8rem">
-        <div style="padding:12px;background:rgba(255,255,255,0.02);border-radius:8px">
-          <div style="font-weight:600;margin-bottom:4px">爬蟲識別</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:.8rem">
+        <div style="padding:16px;background:rgba(255,255,255,0.02);border-radius:8px">
+          <div style="font-weight:600;margin-bottom:6px">爬蟲識別</div>
           <div style="color:var(--sub)">透過 HTTP User-Agent 標頭識別 AI 爬蟲身份，比對 25+ 已知 AI Bot 指紋（GPTBot、ClaudeBot、Amazonbot 等官方公佈的 UA 字串）</div>
         </div>
-        <div style="padding:12px;background:rgba(255,255,255,0.02);border-radius:8px">
-          <div style="font-weight:600;margin-bottom:4px">數據儲存</div>
+        <div style="padding:16px;background:rgba(255,255,255,0.02);border-radius:8px">
+          <div style="font-weight:600;margin-bottom:6px">數據儲存</div>
           <div style="color:var(--sub)">所有爬蟲訪問記錄即時寫入 Supabase PostgreSQL 資料庫，含時間戳、Bot 名稱、訪問路徑、IP 匿名雜湊。數據可獨立審計。</div>
         </div>
-        <div style="padding:12px;background:rgba(255,255,255,0.02);border-radius:8px">
-          <div style="font-weight:600;margin-bottom:4px">內容來源</div>
+        <div style="padding:16px;background:rgba(255,255,255,0.02);border-radius:8px">
+          <div style="font-weight:600;margin-bottom:6px">內容來源</div>
           <div style="color:var(--sub)">商戶資料參考澳門旅遊局、統計暨普查局、UNESCO 世界遺產名錄、米芝蓮指南、Google Maps 公開評價等官方數據。</div>
-        </div>
-        <div style="padding:12px;background:rgba(255,255,255,0.02);border-radius:8px">
-          <div style="font-weight:600;margin-bottom:4px">品質審計</div>
-          <div style="color:var(--sub)">每日自動執行 SEO/AEO/GEO 三合一審計，檢查 Schema.org、Sitemap、robots.txt、多語言標記等 10+ 項指標，確保持續合規。</div>
         </div>
       </div>
     </div>
