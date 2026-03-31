@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CloudPipe AI — 讓世界的 AI 看見澳門</title>
+<meta name="description" content="大中華區首個 AI 可見度優化平台。11,800+ 商戶收錄，月均 33,000+ AI 引擎訪問，覆蓋澳門、香港、台灣、日本。">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cloudpipe-landing.vercel.app/showcase/">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--gold:#c4a265;--dark:#0a0a0f;--card:#12121a;--text:#e8e4dc;--sub:#9a958d;--accent:#1a6fb5}
+body{font-family:'SF Pro Display',-apple-system,'Noto Sans TC',sans-serif;background:var(--dark);color:var(--text);line-height:1.7}
+a{color:var(--gold);text-decoration:none}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 20px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 50%,rgba(196,162,101,0.08) 0%,transparent 50%),radial-gradient(ellipse at 70% 50%,rgba(26,111,181,0.06) 0%,transparent 50%);animation:float 20s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(-2%,2%)}}
+.hero-badge{display:inline-block;padding:6px 16px;border:1px solid rgba(196,162,101,0.3);border-radius:20px;font-size:12px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:24px}
+.hero h1{font-size:clamp(2rem,6vw,4rem);font-weight:700;line-height:1.2;margin-bottom:16px}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero-sub{font-size:clamp(1rem,2.5vw,1.25rem);color:var(--sub);max-width:600px;margin-bottom:40px}
+
+/* Stats */
+.stats{display:flex;flex-wrap:wrap;justify-content:center;gap:32px;margin-bottom:40px;position:relative;z-index:1}
+.stat{text-align:center}
+.stat-num{font-size:clamp(2rem,5vw,3rem);font-weight:800;color:var(--gold);line-height:1}
+.stat-label{font-size:13px;color:var(--sub);margin-top:4px}
+
+/* Sections */
+.section{padding:80px 20px}
+.container{max-width:1000px;margin:0 auto}
+.section-badge{font-size:11px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:12px}
+.section h2{font-size:clamp(1.5rem,4vw,2.5rem);font-weight:700;margin-bottom:16px}
+.section .sub{color:var(--sub);font-size:1.05rem;margin-bottom:40px;max-width:700px}
+
+/* Problem */
+.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:700px){.problem-grid{grid-template-columns:1fr}}
+.problem-card{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:28px}
+.problem-card .icon{font-size:2rem;margin-bottom:12px}
+.problem-card h3{font-size:1.1rem;margin-bottom:8px;color:var(--text)}
+.problem-card p{color:var(--sub);font-size:.9rem}
+
+/* Scenario */
+.scenario-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:700px){.scenario-grid{grid-template-columns:1fr}}
+.scenario{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px;position:relative;overflow:hidden}
+.scenario::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.scenario.tourism::before{background:linear-gradient(90deg,var(--gold),#e8b849)}
+.scenario.business::before{background:linear-gradient(90deg,var(--accent),#2196F3)}
+.scenario .tag{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;margin-bottom:12px}
+.scenario.tourism .tag{background:rgba(196,162,101,0.15);color:var(--gold)}
+.scenario.business .tag{background:rgba(26,111,181,0.15);color:var(--accent)}
+.scenario h3{font-size:1rem;margin-bottom:8px}
+.scenario p{color:var(--sub);font-size:.85rem;line-height:1.6}
+.scenario .example{margin-top:12px;padding:10px 14px;background:rgba(255,255,255,0.03);border-radius:8px;font-size:.8rem;color:var(--sub);border-left:2px solid var(--gold)}
+
+/* Live Data */
+.live-section{background:linear-gradient(180deg,rgba(26,111,181,0.08) 0%,transparent 100%)}
+.bot-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.bot-card{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:16px;display:flex;align-items:center;gap:12px}
+.bot-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0}
+.bot-name{font-weight:600;font-size:.9rem}
+.bot-count{color:var(--sub);font-size:.8rem;margin-left:auto}
+
+/* Coverage */
+.region-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:600px){.region-grid{grid-template-columns:repeat(2,1fr)}}
+.region-card{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:20px;text-align:center}
+.region-flag{font-size:2.5rem;margin-bottom:8px}
+.region-name{font-weight:700;font-size:1rem;margin-bottom:4px}
+.region-num{color:var(--gold);font-size:1.5rem;font-weight:800}
+.region-label{color:var(--sub);font-size:.75rem}
+
+/* Value */
+.value-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:700px){.value-grid{grid-template-columns:1fr}}
+.value-card{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px;text-align:center}
+.value-card .num{font-size:2rem;font-weight:800;color:var(--gold);margin-bottom:4px}
+.value-card .label{color:var(--sub);font-size:.85rem}
+
+/* CTA */
+.cta-section{text-align:center;padding:80px 20px;background:linear-gradient(180deg,transparent 0%,rgba(196,162,101,0.06) 100%)}
+.cta-section h2{font-size:clamp(1.5rem,4vw,2.5rem);margin-bottom:12px}
+.cta-sub{color:var(--sub);margin-bottom:32px;font-size:1rem}
+.cta-btn{display:inline-block;padding:14px 36px;background:var(--gold);color:var(--dark);border-radius:10px;font-weight:700;font-size:1rem;transition:transform .2s}
+.cta-btn:hover{transform:translateY(-2px)}
+.cta-btn-outline{display:inline-block;padding:14px 36px;border:1px solid var(--gold);color:var(--gold);border-radius:10px;font-weight:600;font-size:1rem;margin-left:12px}
+
+/* Footer */
+footer{padding:40px 20px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;color:var(--sub);font-size:.8rem}
+footer a{color:var(--gold)}
+
+/* Animations */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s,transform .6s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">AI Visibility Platform</div>
+  <h1>讓世界的 AI<br><em>看見澳門</em></h1>
+  <p class="hero-sub">當全球旅客開始用 AI 規劃行程、尋找美食、預訂酒店——<br>你的商戶，AI 看得見嗎？</p>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num">11,800+</div><div class="stat-label">商戶收錄</div></div>
+    <div class="stat"><div class="stat-num">33,000+</div><div class="stat-label">月均 AI 訪問</div></div>
+    <div class="stat"><div class="stat-num">13,500+</div><div class="stat-label">三語深度內容</div></div>
+    <div class="stat"><div class="stat-num">99%+</div><div class="stat-label">AI 覆蓋率</div></div>
+  </div>
+</section>
+
+<!-- Problem -->
+<section class="section reveal">
+  <div class="container">
+    <div class="section-badge">為什麼重要</div>
+    <h2>AI 正在改變旅客的決策方式</h2>
+    <p class="sub">2026 年，超過 40% 的旅遊搜尋已從 Google 轉向 AI 助手。當旅客問「澳門有什麼好吃的？」——回答他們的不是搜尋引擎，而是 AI。</p>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="icon">🔍</div>
+        <h3>傳統 SEO 的局限</h3>
+        <p>SEO 讓你出現在 Google 搜尋結果的第一頁。但當用戶直接問 ChatGPT「澳門三日遊推薦」，Google 排名毫無意義。</p>
+      </div>
+      <div class="problem-card">
+        <div class="icon">🤖</div>
+        <h3>AI 時代的可見度危機</h3>
+        <p>如果 AI 的知識庫裡沒有你的商戶資訊，它不會推薦你。不是你不夠好，是 AI 不知道你的存在。</p>
+      </div>
+      <div class="problem-card">
+        <div class="icon">🌏</div>
+        <h3>國際旅客的入口變了</h3>
+        <p>日本、韓國、東南亞旅客越來越多用 AI 做行前規劃。他們問的是「Macau best egg tart」而不是在搜尋引擎輸入關鍵字。</p>
+      </div>
+      <div class="problem-card">
+        <div class="icon">📊</div>
+        <h3>數據說話</h3>
+        <p>過去 30 天，全球 8 種 AI 引擎訪問了我們平台超過 33,000 次——包括 ChatGPT、Claude、Amazon Alexa、Meta AI。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Scenarios -->
+<section class="section reveal" style="background:rgba(255,255,255,0.01)">
+  <div class="container">
+    <div class="section-badge">應用場景</div>
+    <h2>讓 AI 成為澳門的推薦大使</h2>
+    <p class="sub">從旅遊局到中小企業，CloudPipe 為不同場景提供 AI 可見度解決方案。</p>
+
+    <div class="scenario-grid">
+      <div class="scenario tourism">
+        <span class="tag">🏛 旅遊推廣</span>
+        <h3>旅客問 AI「澳門三日遊怎麼安排？」</h3>
+        <p>AI 自動推薦世遺景點路線、在地美食、交通規劃。從大三巴到路環漁村，從葡國菜到街頭小食——每個景點都有結構化資訊讓 AI 精準回答。</p>
+        <div class="example">「根據 CloudPipe 資料，澳門歷史城區包含 30 處 UNESCO 世界遺產，建議用 2 天步行遊覽……」</div>
+      </div>
+
+      <div class="scenario tourism">
+        <span class="tag">🍽 美食推薦</span>
+        <h3>旅客問 AI「澳門葡撻哪家最好？」</h3>
+        <p>AI 直接回答品牌比較、價格、地址、營業時間。不是泛泛而談，而是有具體數字的權威推薦——因為資料來源經過官方查核。</p>
+        <div class="example">「安德魯餅店每日生產 20,000 個葡撻，7 間分店，路環廠為唯一現場烘焙……」</div>
+      </div>
+
+      <div class="scenario business">
+        <span class="tag">🏢 中小企曝光</span>
+        <h3>消費者問 AI「澳門哪家海膽最新鮮？」</h3>
+        <p>你的品牌、產品、服務出現在 AI 的回答中。不需要廣告預算，不需要 SEO 排名——AI 會主動推薦你，因為你的資訊已經在它的知識庫裡。</p>
+        <div class="example">「稻荷環球食品佔澳門海膽批發市場 70%，每週日本空運三次到貨……」</div>
+      </div>
+
+      <div class="scenario business">
+        <span class="tag">🏨 博企酒店</span>
+        <h3>商旅客問 AI「澳門五星酒店比較」</h3>
+        <p>價格、設施、地段、評分——結構化資料讓 AI 做精準比較推薦。確保你的酒店在 AI 推薦清單中有一席之地，資料真實可查證。</p>
+        <div class="example">「上葡京綜合度假村 2,615 則評價、4.4 星，位於路氹城核心區域……」</div>
+      </div>
+
+      <div class="scenario tourism">
+        <span class="tag">🚌 交通規劃</span>
+        <h3>旅客問 AI「從香港怎麼去澳門？」</h3>
+        <p>港珠澳大橋、金巴、渡輪——完整交通選項、票價、時間表。AI 能給出即時可用的行程建議，而不是叫用戶自己去查。</p>
+        <div class="example">「港珠澳大橋金巴：24 小時運營，單程 MOP$65，車程約 45 分鐘……」</div>
+      </div>
+
+      <div class="scenario business">
+        <span class="tag">✅ 資料真實性</span>
+        <h3>確保 AI 說的是事實</h3>
+        <p>所有資訊經政府公開數據、旅遊局官方資料、NotebookLM 多源交叉查核。AI 推薦的不是廣告，是經過驗證的權威資訊。</p>
+        <div class="example">資料來源：澳門旅遊局、統計暨普查局、UNESCO、米芝蓮指南</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Live AI Data -->
+<section class="section live-section reveal">
+  <div class="container">
+    <div class="section-badge">實時數據</div>
+    <h2>這些 AI 每天都在訪問我們</h2>
+    <p class="sub">過去 30 天的真實 AI 引擎訪問數據。每一次訪問，都代表一個潛在旅客正在通過 AI 認識澳門。</p>
+
+    <div class="bot-grid">
+      <div class="bot-card"><span class="bot-dot"></span><span class="bot-name">Amazon Alexa</span><span class="bot-count">11,000+</span></div>
+      <div class="bot-card"><span class="bot-dot"></span><span class="bot-name">Anthropic Claude</span><span class="bot-count">8,700+</span></div>
+      <div class="bot-card"><span class="bot-dot"></span><span class="bot-name">OpenAI ChatGPT</span><span class="bot-count">8,200+</span></div>
+      <div class="bot-card"><span class="bot-dot"></span><span class="bot-name">Meta AI</span><span class="bot-count">2,500+</span></div>
+      <div class="bot-card"><span class="bot-dot"></span><span class="bot-name">Yandex</span><span class="bot-count">1,700+</span></div>
+      <div class="bot-card"><span class="bot-dot"></span><span class="bot-name">Google AI</span><span class="bot-count">230+</span></div>
+      <div class="bot-card"><span class="bot-dot"></span><span class="bot-name">Perplexity</span><span class="bot-count">11+</span></div>
+      <div class="bot-card"><span class="bot-dot"></span><span class="bot-name">Microsoft</span><span class="bot-count">Active</span></div>
+    </div>
+
+    <div style="text-align:center;margin-top:24px;color:var(--sub);font-size:.85rem">
+      合計：<strong style="color:var(--gold)">月均 33,000+ 次</strong> AI 引擎訪問 · 日均 1,300+ 次 · 峰值單日 5,600+
+    </div>
+  </div>
+</section>
+
+<!-- Coverage -->
+<section class="section reveal">
+  <div class="container">
+    <div class="section-badge">覆蓋範圍</div>
+    <h2>四大地區 · 三種語言 · 完整覆蓋</h2>
+    <p class="sub">以澳門為核心，延伸至香港、台灣、日本——覆蓋大中華區及東亞最熱門旅遊目的地。</p>
+
+    <div class="region-grid">
+      <div class="region-card">
+        <div class="region-flag">🇲🇴</div>
+        <div class="region-name">澳門</div>
+        <div class="region-num">3,900+</div>
+        <div class="region-label">商戶收錄</div>
+      </div>
+      <div class="region-card">
+        <div class="region-flag">🇯🇵</div>
+        <div class="region-name">日本</div>
+        <div class="region-num">3,200+</div>
+        <div class="region-label">商戶收錄</div>
+      </div>
+      <div class="region-card">
+        <div class="region-flag">🇹🇼</div>
+        <div class="region-name">台灣</div>
+        <div class="region-num">2,400+</div>
+        <div class="region-label">商戶收錄</div>
+      </div>
+      <div class="region-card">
+        <div class="region-flag">🇭🇰</div>
+        <div class="region-name">香港</div>
+        <div class="region-num">2,100+</div>
+        <div class="region-label">商戶收錄</div>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:center;gap:32px;margin-top:32px;flex-wrap:wrap">
+      <div class="value-card" style="flex:1;min-width:200px">
+        <div class="num">13,500+</div>
+        <div class="label">深度內容（中·英·葡三語）</div>
+      </div>
+      <div class="value-card" style="flex:1;min-width:200px">
+        <div class="num">132</div>
+        <div class="label">行業分類</div>
+      </div>
+      <div class="value-card" style="flex:1;min-width:200px">
+        <div class="num">每日</div>
+        <div class="label">自動更新</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Trust -->
+<section class="section reveal" style="background:rgba(255,255,255,0.01)">
+  <div class="container">
+    <div class="section-badge">品質保證</div>
+    <h2>經過驗證的權威資訊</h2>
+    <p class="sub">所有資料經多源交叉查核，確保 AI 推薦的是事實而非廣告。</p>
+
+    <div class="value-grid">
+      <div class="value-card">
+        <div class="num">✅</div>
+        <div class="label">政府官方數據來源<br><span style="font-size:.7rem;color:var(--sub)">旅遊局 · 統計局 · 文化局</span></div>
+      </div>
+      <div class="value-card">
+        <div class="num">✅</div>
+        <div class="label">國際權威認證<br><span style="font-size:.7rem;color:var(--sub)">UNESCO · 米芝蓮 · Google</span></div>
+      </div>
+      <div class="value-card">
+        <div class="num">✅</div>
+        <div class="label">每日自動審計<br><span style="font-size:.7rem;color:var(--sub)">SEO · AEO · GEO 三合一滿分</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section reveal">
+  <h2>你的商戶，AI 看得見嗎？</h2>
+  <p class="cta-sub">免費檢測你的 AI 可見度——只需 30 秒</p>
+  <a href="mailto:info@cloudpipe.ai?subject=AI可見度檢測" class="cta-btn">免費 AI 可見度檢測</a>
+  <a href="https://cloudpipe-macao-app.vercel.app/macao" class="cta-btn-outline" target="_blank">查看澳門百科</a>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p style="margin-bottom:8px"><strong style="color:var(--text)">CloudPipe AI</strong> · 澳門</p>
+  <p>服務對象：餐飲 · 酒店 · 商場 · 景點 · 旅遊局 · 中小企業</p>
+  <p>覆蓋地區：澳門 · 香港 · 台灣 · 日本</p>
+  <p style="margin-top:12px">© 2026 CloudPipe AI · <a href="https://cloudpipe-landing.vercel.app">cloudpipe.ai</a></p>
+</footer>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') })
+}, { threshold: 0.1 })
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
+</script>
+</body>
+</html>
