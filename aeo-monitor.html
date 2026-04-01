@@ -611,7 +611,7 @@ async function loadTrendData() {
   document.getElementById('trend-title').textContent =
     `每日 AI 爬蟲訪問趨勢 — 按${group === 'owner' ? '所有者' : '站點'} (${trendDays} 天)`;
   try {
-    const res = await fetch(SUPABASE_API + `?view=daily&days=${trendDays}`);
+    const res = await fetch(SUPABASE_API + `&view=daily&days=${trendDays}`);
     if (!res.ok) throw new Error('API error');
     trendData = await res.json();
     trendDisabled.clear();
@@ -777,7 +777,7 @@ const SUPABASE_BOT_MAP = {
 };
 
 // Sites with Supabase crawler-stats API (Next.js middleware tracking, much higher accuracy)
-const SUPABASE_API = "https://cloudpipe-macao-app.vercel.app/api/v1/crawler-stats";
+const SUPABASE_API = "https://cloudpipe-macao-app.vercel.app/api/v1/crawler-stats?token=cloudpipe2026";
 
 // Supabase site ID mapping (monitor id → Supabase site column value)
 const SUPABASE_SITE_MAP = {
@@ -808,10 +808,10 @@ async function loadSupabaseData() {
   try {
     // Only 4 API calls total (was ~30 before)
     const [allSumRes, allTodayRes, macaoSumRes, macaoTodayRes] = await Promise.all([
-      fetch(SUPABASE_API + "?view=summary&days=3650"),
-      fetch(SUPABASE_API + "?view=summary&days=1"),
-      fetch(SUPABASE_API + "?view=summary&days=3650&site=cloudpipe-macao-app"),
-      fetch(SUPABASE_API + "?view=summary&days=1&site=cloudpipe-macao-app"),
+      fetch(SUPABASE_API + "&view=summary&days=3650"),
+      fetch(SUPABASE_API + "&view=summary&days=1"),
+      fetch(SUPABASE_API + "&view=summary&days=3650&site=cloudpipe-macao-app"),
+      fetch(SUPABASE_API + "&view=summary&days=1&site=cloudpipe-macao-app"),
     ]);
     if (allSumRes.ok && allTodayRes.ok) {
       _supabaseAll = {
