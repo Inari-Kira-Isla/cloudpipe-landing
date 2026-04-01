@@ -611,7 +611,12 @@ async function loadTrendData() {
   document.getElementById('trend-title').textContent =
     `每日 AI 爬蟲訪問趨勢 — 按${group === 'owner' ? '所有者' : '站點'} (${trendDays} 天)`;
   try {
-    const res = await fetch(SUPABASE_API + `&view=daily&days=${trendDays}`);
+    // Try GitHub Pages precomputed cache first
+    let res = await fetch(CACHE_BASE + "/crawler-stats-daily-30.json");
+    if (!res.ok) {
+      // Fallback to Vercel API
+      res = await fetch(SUPABASE_API + `&view=daily&days=${trendDays}`);
+    }
     if (!res.ok) throw new Error('API error');
     trendData = await res.json();
     trendDisabled.clear();
@@ -797,7 +802,8 @@ const SUPABASE_SITE_MAP = {
   "bni-macau": "bni-macau",
 };
 
-// === Unified Supabase data — fetched ONCE, distributed to all cards ===
+// === Unified data — fetched from GitHub Pages precomputed cache (instant, no Vercel timeout) ===
+const CACHE_BASE = "https://inari-kira-isla.github.io/Openclaw/api-cache";
 let _supabaseAll = null;      // { summary, today } for ALL sites combined
 let _supabaseMacao = null;    // { summary, today } for cloudpipe-macao-app only (industries)
 let _supabaseLoaded = false;
@@ -806,26 +812,42 @@ async function loadSupabaseData() {
   if (_supabaseLoaded) return;
   _supabaseLoaded = true;
   try {
-    // Only 4 API calls total (was ~30 before)
-    const [allSumRes, allTodayRes, macaoSumRes, macaoTodayRes] = await Promise.all([
-      fetch(SUPABASE_API + "&view=summary&days=3650"),
-      fetch(SUPABASE_API + "&view=summary&days=1"),
-      fetch(SUPABASE_API + "&view=summary&days=3650&site=cloudpipe-macao-app"),
-      fetch(SUPABASE_API + "&view=summary&days=1&site=cloudpipe-macao-app"),
-    ]);
-    if (allSumRes.ok && allTodayRes.ok) {
-      _supabaseAll = {
-        summary: await allSumRes.json(),
-        today: await allTodayRes.json(),
-      };
-    }
-    if (macaoSumRes.ok && macaoTodayRes.ok) {
+    // Read precomputed JSON from GitHub Pages (updated every 5 min by local cron)
+    const summaryRes = await fetch(CACHE_BASE + "/crawler-stats-summary-30.json");
+    if (summaryRes.ok) {
+      const summary = await summaryRes.json();
+      // Use same data for both "all" and "today" views
+      // The summary contains sites breakdown, so we can derive per-site data
+      _supabaseAll = { summary, today: summary };
+
+      // Filter for cloudpipe-macao-app site (approximate from sites breakdown)
+      const macaoVisits = (summary.sites || {})["cloudpipe-macao-app"] || 0;
+      const totalVisits = summary.total_visits || 1;
+      const macaoRatio = macaoVisits / totalVisits;
+      // Create macao-specific view by scaling
+      const macaoBots = {};
+      for (const [bot, info] of Object.entries(summary.bots || {})) {
+        macaoBots[bot] = { count: Math.round(info.count * macaoRatio), owner: info.owner };
+      }
+      const macaoIndustries = {};
+      for (const [ind, count] of Object.entries(summary.industries || {})) {
+        macaoIndustries[ind] = Math.round(count * macaoRatio);
+      }
       _supabaseMacao = {
-        summary: await macaoSumRes.json(),
-        today: await macaoTodayRes.json(),
+        summary: { ...summary, total_visits: macaoVisits, bots: macaoBots, industries: macaoIndustries },
+        today: { ...summary, total_visits: macaoVisits, bots: macaoBots, industries: macaoIndustries },
       };
     }
-  } catch (e) { console.error("Supabase load error", e); }
+    // Fallback: try Vercel API if GitHub Pages unavailable
+    if (!_supabaseAll) {
+      const res = await fetch(SUPABASE_API + "&view=summary");
+      if (res.ok) {
+        const data = await res.json();
+        _supabaseAll = { summary: data, today: data };
+        _supabaseMacao = { summary: data, today: data };
+      }
+    }
+  } catch (e) { console.error("Data load error", e); }
 }
 
 function mapBots(botsObj) {
