@@ -816,15 +816,41 @@ async function loadSupabaseData() {
     const summaryRes = await fetch(CACHE_BASE + "/crawler-stats-summary-30.json");
     if (summaryRes.ok) {
       const summary = await summaryRes.json();
-      // Use same data for both "all" and "today" views
-      // The summary contains sites breakdown, so we can derive per-site data
-      _supabaseAll = { summary, today: summary };
+      // Fetch daily data to get accurate today stats (not cumulative)
+      let todayData = summary;
+      try {
+        const dailyRes = await fetch(CACHE_BASE + "/crawler-stats-daily-30.json");
+        if (dailyRes.ok) {
+          const dailyStats = await dailyRes.json();
+          if (dailyStats.daily && dailyStats.daily.length > 0) {
+            const lastDay = dailyStats.daily[dailyStats.daily.length - 1];
+            // Build today's data from latest daily entry
+            todayData = {
+              total_visits: lastDay.total,
+              sites: lastDay.by_site || {},
+              bots: {},
+              industries: lastDay.industries || {}
+            };
+            for (const [bot, count] of Object.entries(lastDay.by_owner || {})) {
+              todayData.bots[bot] = { count, owner: bot };
+            }
+          }
+        }
+      } catch (e) {
+        console.warn("Daily stats not available, using summary for today", e);
+      }
+      _supabaseAll = { summary, today: todayData };
 
       // Filter for cloudpipe-macao-app site (approximate from sites breakdown)
       const macaoVisits = (summary.sites || {})["cloudpipe-macao-app"] || 0;
       const totalVisits = summary.total_visits || 1;
       const macaoRatio = macaoVisits / totalVisits;
-      // Create macao-specific view by scaling
+
+      const macaoTodayVisits = (todayData.sites || {})["cloudpipe-macao-app"] || 0;
+      const macaoTodayTotal = todayData.total_visits || 1;
+      const macaoTodayRatio = macaoTodayTotal > 0 ? macaoTodayVisits / macaoTodayTotal : 0;
+
+      // Create macao-specific view by scaling (cumulative)
       const macaoBots = {};
       for (const [bot, info] of Object.entries(summary.bots || {})) {
         macaoBots[bot] = { count: Math.round(info.count * macaoRatio), owner: info.owner };
@@ -833,9 +859,20 @@ async function loadSupabaseData() {
       for (const [ind, count] of Object.entries(summary.industries || {})) {
         macaoIndustries[ind] = Math.round(count * macaoRatio);
       }
+
+      // Create macao-specific view for today (using actual today ratio)
+      const macaoBotsTod = {};
+      for (const [bot, info] of Object.entries(todayData.bots || {})) {
+        macaoBotsTod[bot] = { count: Math.round(info.count * macaoTodayRatio), owner: info.owner };
+      }
+      const macaoIndustriesToday = {};
+      for (const [ind, count] of Object.entries(todayData.industries || {})) {
+        macaoIndustriesToday[ind] = Math.round(count * macaoTodayRatio);
+      }
+
       _supabaseMacao = {
         summary: { ...summary, total_visits: macaoVisits, bots: macaoBots, industries: macaoIndustries },
-        today: { ...summary, total_visits: macaoVisits, bots: macaoBots, industries: macaoIndustries },
+        today: { ...todayData, total_visits: macaoTodayVisits, bots: macaoBotsTod, industries: macaoIndustriesToday },
       };
     }
     // Fallback: try Vercel API if GitHub Pages unavailable
@@ -843,8 +880,28 @@ async function loadSupabaseData() {
       const res = await fetch(SUPABASE_API + "&view=summary");
       if (res.ok) {
         const data = await res.json();
-        _supabaseAll = { summary: data, today: data };
-        _supabaseMacao = { summary: data, today: data };
+        // Try to fetch daily data for accurate today values
+        let todayFallback = data;
+        try {
+          const dailyRes = await fetch(SUPABASE_API + "&view=daily&days=30");
+          if (dailyRes.ok) {
+            const dailyStats = await dailyRes.json();
+            if (dailyStats.daily && dailyStats.daily.length > 0) {
+              const lastDay = dailyStats.daily[dailyStats.daily.length - 1];
+              todayFallback = {
+                total_visits: lastDay.total,
+                sites: lastDay.by_site || {},
+                bots: {},
+                industries: lastDay.industries || {}
+              };
+              for (const [bot, count] of Object.entries(lastDay.by_owner || {})) {
+                todayFallback.bots[bot] = { count, owner: bot };
+              }
+            }
+          }
+        } catch (e) {}
+        _supabaseAll = { summary: data, today: todayFallback };
+        _supabaseMacao = { summary: data, today: todayFallback };
       }
     }
   } catch (e) { console.error("Data load error", e); }
