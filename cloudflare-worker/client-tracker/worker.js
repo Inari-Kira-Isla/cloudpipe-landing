@@ -30,6 +30,33 @@ const CLIENT_SITES = {
   "openclaw":             "https://inari-kira-isla.github.io/Openclaw",
 };
 
+// Site to industry mapping (from aeo-monitor.html)
+const SITE_INDUSTRY_MAP = {
+  "yamanakada": "AI 資訊平台",
+  "sea-urchin-delivery": "海膽冷鏈配送",
+  "inari-global-foods": "日本食材進口",
+  "after-school-coffee": "精品咖啡館",
+  "mind-coffee": "咖啡店",
+  "world-encyclopedia": "世界建築百科",
+  "japan-encyclopedia": "日本旅遊百科",
+  "ai-learning": "教育知識",
+  "cloudpipe": "SaaS 平台",
+  "cloudpipe-directory": "AEO 企業目錄",
+  "aeo-demo-education": "教育機構",
+  "aeo-demo-finance": "金融服務",
+  "aeo-demo-luxury": "奢侈品牌",
+  "aeo-demo-travel-food": "旅遊美食",
+  "cloudpipe-landing": "SaaS 平台",
+  "openclaw": "教育知識",
+  "cloudpipe-macao-app": "澳門商戶百科",
+  "bni-macau": "商業網絡",
+  "test-cafe-demo": "測試站點",
+};
+
+function getIndustryForSite(siteSlug) {
+  return SITE_INDUSTRY_MAP[siteSlug] || null;
+}
+
 const AI_BOTS = {
   "GPTBot": "OpenAI GPT",
   "ChatGPT-User": "ChatGPT Browser",
@@ -137,11 +164,11 @@ async function writeToSupabase(env, siteSlug, botInfo, request) {
       ua_raw: (request.headers.get("user-agent") || "").substring(0, 500),
       site: siteSlug,
       page_type: fromSite ? "spider-web" : (path === "/" ? "home" : "page"),
-      industry: fromSite || null,
+      industry: getIndustryForSite(siteSlug),
       category: null,
     };
 
-    await fetch(`${env.SUPABASE_URL}/rest/v1/crawler_visits`, {
+    const response = await fetch(`${env.SUPABASE_URL}/rest/v1/crawler_visits`, {
       method: "POST",
       headers: {
         "apikey": env.SUPABASE_KEY,
@@ -151,7 +178,14 @@ async function writeToSupabase(env, siteSlug, botInfo, request) {
       },
       body: JSON.stringify(row),
     });
-  } catch (e) { /* silently ignore */ }
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`[Supabase] ${siteSlug} write failed: ${response.status} ${errorText}`);
+    }
+  } catch (e) {
+    console.error(`[Supabase] ${siteSlug} exception: ${e.message}`);
+  }
 }
 
 async function logAIVisit(env, siteSlug, botInfo, request) {
@@ -373,6 +407,51 @@ async function handleRequest(request, env, ctx) {
       }
 
       return new Response(JSON.stringify({ migrated: results }, null, 2), { headers: corsHeaders() });
+    }
+
+    // === Diagnostic: Test Supabase connection ===
+    if (path === "/test-supabase") {
+      const result = { supabase_url: env.SUPABASE_URL, key_exists: !!env.SUPABASE_KEY };
+      if (!env.SUPABASE_URL || !env.SUPABASE_KEY) {
+        return new Response(JSON.stringify({ ...result, error: "Missing Supabase config" }, null, 2), {
+          status: 500, headers: corsHeaders(),
+        });
+      }
+      try {
+        const testRow = {
+          bot_name: "Test",
+          bot_owner: "Test",
+          path: "/test",
+          referer: null,
+          ip_hash: "test-hash",
+          session_id: "test-session",
+          ua_raw: "test-agent",
+          site: "test-site",
+          page_type: "test",
+          industry: null,
+          category: null,
+        };
+        const response = await fetch(`${env.SUPABASE_URL}/rest/v1/crawler_visits`, {
+          method: "POST",
+          headers: {
+            "apikey": env.SUPABASE_KEY,
+            "Authorization": `Bearer ${env.SUPABASE_KEY}`,
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal",
+          },
+          body: JSON.stringify(testRow),
+        });
+        result.response_status = response.status;
+        result.response_ok = response.ok;
+        if (!response.ok) {
+          result.error = await response.text();
+        } else {
+          result.status = "✓ Supabase write successful";
+        }
+      } catch (e) {
+        result.error = e.message;
+      }
+      return new Response(JSON.stringify(result, null, 2), { headers: corsHeaders() });
     }
 
     // === List all tracked sites ===
