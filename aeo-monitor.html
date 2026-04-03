@@ -1006,9 +1006,24 @@ function computeRegionData() {
       perSite[site.id] = { cnToday: sCnT, cnTotal: sCnC, intlToday: sIntlT, intlTotal: sIntlC, name: site.name, color: site.color };
       return;
     }
-    // Macao industry entries: skip in region data (macaoMain covers full site)
+    // Macao industry entries: calculate CN vs Intl breakdown
     if (site.macaoIndustry) {
-      perSite[site.id] = { cnToday: 0, cnTotal: 0, intlToday: d._industryToday || 0, intlTotal: d._industryTotal || 0, name: site.name, color: site.color };
+      let indCnT = 0, indCnC = 0, indIntlT = 0, indIntlC = 0;
+      Object.entries(d.today || {}).forEach(([bot, v]) => {
+        if (bot === "Human Visitors") return;
+        if (CN_BOTS.has(bot)) { indCnT += v; }
+        else { indIntlT += v; }
+      });
+      Object.entries(d.totals || {}).forEach(([bot, v]) => {
+        if (bot === "Human Visitors") return;
+        if (CN_BOTS.has(bot)) { indCnC += v; }
+        else { indIntlC += v; }
+      });
+      perSite[site.id] = { cnToday: indCnT, cnTotal: indCnC, intlToday: indIntlT, intlTotal: indIntlC, name: site.name, color: site.color };
+      cnToday += indCnT;
+      cnTotal += indCnC;
+      intlToday += indIntlT;
+      intlTotal += indIntlC;
       return;
     }
 
@@ -1051,9 +1066,22 @@ function computeHumanData() {
       perSite[site.id] = { aiToday: sAiT, aiTotal: sAiC, humanToday: sHT, humanTotal: sHC, name: site.name, color: site.color };
       return;
     }
-    // Macao industry entries: skip (macaoMain covers full site)
+    // Macao industry entries: calculate AI vs Human breakdown
     if (site.macaoIndustry) {
-      perSite[site.id] = { aiToday: d._industryToday || 0, aiTotal: d._industryTotal || 0, humanToday: 0, humanTotal: 0, name: site.name, color: site.color };
+      let indAiT = 0, indAiC = 0, indHT = 0, indHC = 0;
+      Object.entries(d.today || {}).forEach(([bot, v]) => {
+        if (bot === "Human Visitors") { indHT += v; }
+        else { indAiT += v; }
+      });
+      Object.entries(d.totals || {}).forEach(([bot, v]) => {
+        if (bot === "Human Visitors") { indHC += v; }
+        else { indAiC += v; }
+      });
+      perSite[site.id] = { aiToday: indAiT, aiTotal: indAiC, humanToday: indHT, humanTotal: indHC, name: site.name, color: site.color };
+      aiToday += indAiT;
+      aiTotal += indAiC;
+      humanToday += indHT;
+      humanTotal += indHC;
       return;
     }
 
