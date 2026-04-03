@@ -1,5 +1,4 @@
 {
-  "buildCommand": "echo 'Static site'",
   "outputDirectory": ".",
   "rewrites": [
     { "source": "/.well-known/security.txt", "destination": "/security.txt" }
