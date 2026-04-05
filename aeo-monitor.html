@@ -817,38 +817,25 @@ async function loadSupabaseData() {
     if (summaryRes.ok) {
       const summary = await summaryRes.json();
       // Fetch daily data to get accurate today stats (not cumulative)
-      let todayData = summary;
-      try {
-        const dailyRes = await fetch(CACHE_BASE + "/crawler-stats-daily-30.json");
-        if (dailyRes.ok) {
-          const dailyStats = await dailyRes.json();
-          if (dailyStats.daily && dailyStats.daily.length > 0) {
-            const lastDay = dailyStats.daily[dailyStats.daily.length - 1];
-            // Build today's data from latest daily entry
-            todayData = {
-              total_visits: lastDay.total,
-              sites: lastDay.by_site || {},
-              bots: {},
-              industries: lastDay.industries || {}
-            };
-            for (const [bot, count] of Object.entries(lastDay.by_owner || {})) {
-              todayData.bots[bot] = { count, owner: bot };
-            }
-          }
-        }
-      } catch (e) {
-        console.warn("Daily stats not available, using summary for today", e);
-      }
+      // Use summary.today_visits directly (from exact count query, no limit)
+      const todayData = {
+        total_visits: summary.today_visits || 0,
+        sites: summary.sites || {},
+        bots: summary.bots || {},
+        industries: summary.industries || {},
+      };
       _supabaseAll = { summary, today: todayData };
 
-      // Filter for cloudpipe-macao-app site (approximate from sites breakdown)
+      // Filter for cloudpipe-macao-app site
+      // Use site_sample_total as denominator (sample size), not total_visits,
+      // so ratio reflects the true proportion from the most-recent-5000-row sample.
       const macaoVisits = (summary.sites || {})["cloudpipe-macao-app"] || 0;
-      const totalVisits = summary.total_visits || 1;
-      const macaoRatio = macaoVisits / totalVisits;
+      const sampleTotal = summary.site_sample_total || Object.values(summary.sites || {}).reduce((a, b) => a + b, 0) || 1;
+      const macaoRatio = macaoVisits / sampleTotal;
 
-      const macaoTodayVisits = (todayData.sites || {})["cloudpipe-macao-app"] || 0;
-      const macaoTodayTotal = todayData.total_visits || 1;
-      const macaoTodayRatio = macaoTodayTotal > 0 ? macaoTodayVisits / macaoTodayTotal : 0;
+      // Estimate today macao visits using 30d ratio (no per-day site breakdown available)
+      const macaoTodayVisits = Math.round(macaoRatio * (todayData.total_visits || 0));
+      const macaoTodayRatio = macaoRatio;  // same ratio assumption
 
       // Create macao-specific view by scaling (cumulative)
       const macaoBots = {};
