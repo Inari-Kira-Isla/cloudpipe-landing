@@ -112,7 +112,7 @@ Allow: /
 User-agent: XiaoIce
 Allow: /
 
-Sitemap: https://cloudpipe-landing.vercel.app/sitemap.xml
+Sitemap: https://inari-kira-isla.github.io/cloudpipe-landing/sitemap.xml
 
 # AI-friendly structured content
-# llms.txt: https://cloudpipe-landing.vercel.app/llms.txt
+# llms.txt: https://inari-kira-isla.github.io/cloudpipe-landing/llms.txt

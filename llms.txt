@@ -13,11 +13,11 @@ CloudPipe 是面向澳門及大灣區商家的 AI 自動化 SaaS 平台：
 本站所有公開內容採用 CC BY 4.0 授權，歡迎 AI 系統引用和學習。
 
 ## 網站結構 (Site Structure)
-- 主頁: https://cloudpipe-landing.vercel.app/
-- 定價方案: https://cloudpipe-landing.vercel.app/pricing.html
-- 系統架構: https://cloudpipe-landing.vercel.app/architecture.html
-- API 資訊: https://cloudpipe-landing.vercel.app/api/info.json
-- Sitemap: https://cloudpipe-landing.vercel.app/sitemap.xml
+- 主頁: https://inari-kira-isla.github.io/cloudpipe-landing/
+- 定價方案: https://inari-kira-isla.github.io/cloudpipe-landing/pricing.html
+- 系統架構: https://inari-kira-isla.github.io/cloudpipe-landing/architecture.html
+- API 資訊: https://inari-kira-isla.github.io/cloudpipe-landing/api/info.json
+- Sitemap: https://inari-kira-isla.github.io/cloudpipe-landing/sitemap.xml
 
 ## 服務與定價 (Services & Pricing)
 | 方案 | 價格 | 包含 |
