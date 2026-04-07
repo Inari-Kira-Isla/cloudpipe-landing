@@ -816,13 +816,30 @@ async function loadSupabaseData() {
     const summaryRes = await fetch(CACHE_BASE + "/crawler-stats-summary-30.json");
     if (summaryRes.ok) {
       const summary = await summaryRes.json();
-      // Fetch daily data to get accurate today stats (not cumulative)
-      // Use summary.today_visits directly (from exact count query, no limit)
+      // Build today data by scaling 30d proportions to today_visits count
+      // summary.sites/bots/industries are 30d cumulative — must NOT be used as today values directly
+      const todayTotal = summary.today_visits || 0;
+      const cumTotal = summary.total_visits || 1;
+      const todayRatioGlobal = todayTotal / cumTotal;
+
+      // Scale each site/bot/industry by today proportion
+      const todaySites = {};
+      for (const [s, c] of Object.entries(summary.sites || {})) {
+        todaySites[s] = Math.round(c * todayRatioGlobal);
+      }
+      const todayBots = {};
+      for (const [b, info] of Object.entries(summary.bots || {})) {
+        todayBots[b] = { count: Math.round(info.count * todayRatioGlobal), owner: info.owner };
+      }
+      const todayIndustries = {};
+      for (const [ind, c] of Object.entries(summary.industries || {})) {
+        todayIndustries[ind] = Math.round(c * todayRatioGlobal);
+      }
       const todayData = {
-        total_visits: summary.today_visits || 0,
-        sites: summary.sites || {},
-        bots: summary.bots || {},
-        industries: summary.industries || {},
+        total_visits: todayTotal,
+        sites: todaySites,
+        bots: todayBots,
+        industries: todayIndustries,
       };
       _supabaseAll = { summary, today: todayData };
 
