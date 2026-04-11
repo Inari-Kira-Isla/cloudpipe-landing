@@ -185,6 +185,35 @@ export default {
         return resp;
       }
 
+      // === Handle pixel.gif requests (tracking) ===
+      if (url.pathname.includes("/pixel.gif")) {
+        const userAgent = request.headers.get("user-agent") || "";
+        const botInfo = detectAIBot(userAgent);
+
+        if (botInfo && env.AI_FOOTPRINT) {
+          ctx.waitUntil(logAIVisit(env, botInfo, request));
+          ctx.waitUntil(writeToSupabase(env, botInfo, request));
+        }
+
+        // Return 1x1 transparent GIF with proper headers
+        const gifData = new Uint8Array([
+          0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00, 0x01, 0x00, 0x80, 0x00,
+          0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0x21, 0xF9, 0x04, 0x01, 0x0A,
+          0x00, 0x01, 0x00, 0x2C, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00,
+          0x00, 0x02, 0x02, 0x4C, 0x01, 0x00, 0x3B
+        ]);
+
+        return new Response(gifData, {
+          status: 200,
+          headers: {
+            "Content-Type": "image/gif",
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Access-Control-Allow-Origin": "*",
+            "Content-Length": gifData.length.toString(),
+          },
+        });
+      }
+
       // === Proxy to Vercel ===
       const targetUrl = VERCEL_URL + url.pathname + url.search;
       const userAgent = request.headers.get("user-agent") || "";

@@ -1,0 +1,9 @@
+# cloudpipe-landing — AI 爬蟲發現源
+#
+# 本站點遵守 AI 爬蟲友善規範
+# License: CC BY 4.0
+# Generated: 2026-04-05T06:05:01.973647
+
+https://inari-kira-isla.github.io/cloudpipe-landing/
+https://inari-kira-isla.github.io/cloudpipe-landing/architecture.html
+https://inari-kira-isla.github.io/cloudpipe-landing/pricing.html
