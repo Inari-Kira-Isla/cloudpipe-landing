@@ -90,6 +90,17 @@ body{font-family:'Noto Sans TC',-apple-system,BlinkMacSystemFont,sans-serif;back
 .region-cn{background:#f8514915;color:var(--red);border:1px solid #f8514930}
 .region-intl{background:#58a6ff15;color:var(--blue);border:1px solid #58a6ff30}
 
+/* Site Region Filter */
+.site-filter-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center}
+.site-filter-bar .label{font-size:.72rem;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-right:.25rem}
+.region-btn{padding:.35rem .85rem;background:var(--card-2);border:1px solid var(--border);border-radius:20px;font-size:.75rem;color:var(--dim);cursor:pointer;font-family:inherit;transition:all .15s}
+.region-btn:hover{color:var(--text);border-color:var(--blue)}
+.region-btn.active{color:var(--bg);font-weight:600}
+.region-btn[data-r="all"].active{background:var(--dim);border-color:var(--dim)}
+.region-btn[data-r="macau"].active{background:var(--green);border-color:var(--green)}
+.region-btn[data-r="encyclopedia"].active{background:var(--cyan);border-color:var(--cyan)}
+.region-btn[data-r="other"].active{background:var(--purple);border-color:var(--purple)}
+.site-section-label{font-size:.7rem;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;padding:.25rem 0;margin:.5rem 0 .25rem;border-bottom:1px solid var(--border);grid-column:1/-1}
 /* Site Cards */
 .sites{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:1rem;margin-bottom:1.5rem}
 .site-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s}
@@ -264,6 +275,13 @@ footer a{color:var(--cyan);text-decoration:none}
 
   <!-- Tab 1: All (existing views) -->
   <div class="tab-content active" id="tab-all">
+    <div class="site-filter-bar">
+      <span class="label">篩選：</span>
+      <button class="region-btn active" data-r="all" onclick="setRegionFilter('all')">全部</button>
+      <button class="region-btn" data-r="macau" onclick="setRegionFilter('macau')">🏮 澳門商戶</button>
+      <button class="region-btn" data-r="encyclopedia" onclick="setRegionFilter('encyclopedia')">📚 百科站</button>
+      <button class="region-btn" data-r="other" onclick="setRegionFilter('other')">🌐 其他</button>
+    </div>
     <div class="sites" id="site-cards"></div>
     <div class="heatmap">
       <h2>AI 系統 × 站點 矩陣 — 28 種 AI + 人類（全部站點）</h2>
@@ -522,9 +540,16 @@ const ALL_SITES = [
 ];
 
 let showAllSites = true;
+let currentRegionFilter = "all";
 function getActiveSites() { return showAllSites ? ALL_SITES : ALL_SITES.filter(s => s.region === "macau" || s.region === "encyclopedia"); }
 // SITES is a dynamic getter for backward compat
 let SITES = getActiveSites();
+
+function setRegionFilter(r) {
+  currentRegionFilter = r;
+  document.querySelectorAll('.region-btn').forEach(b => b.classList.toggle('active', b.dataset.r === r));
+  renderSiteCards();
+}
 
 const BOT_COLORS = {
   "OpenAI GPT":"#58a6ff","ChatGPT Browser":"#58a6ff","OpenAI Search":"#58a6ff",
@@ -1231,7 +1256,18 @@ function badgeHTML(type) {
 
 function renderSiteCards() {
   const container = document.getElementById("site-cards");
-  container.innerHTML = SITES.map(site => {
+  const filtered = currentRegionFilter === "all" ? SITES : SITES.filter(s => s.region === currentRegionFilter);
+
+  // Group sites by region for section labels (only when showing all)
+  const REGION_LABEL = { macau: "🏮 澳門商戶百科", encyclopedia: "📚 百科站", other: "🌐 其他站點" };
+  let lastRegion = null;
+
+  container.innerHTML = filtered.map(site => {
+    let sectionHtml = "";
+    if (currentRegionFilter === "all" && site.region !== lastRegion) {
+      lastRegion = site.region;
+      sectionHtml = `<div class="site-section-label">${REGION_LABEL[site.region] || site.region}</div>`;
+    }
     const d = allData[site.id] || { today: {}, totals: {}, recentVisits: [] };
     // For macao industry entries, use industry-specific counts
     const isMacaoInd = !!site.macaoIndustry;
@@ -1240,7 +1276,7 @@ function renderSiteCards() {
     const activeBots = Object.keys(d.totals || {}).filter(k => d.totals[k] > 0 && k !== "Human Visitors");
     const noWorker = d.noWorker;
 
-    return `<div class="site-card">
+    return sectionHtml + `<div class="site-card">
       <div class="site-header">
         <div>
           <div class="site-name" style="color:${site.color}">${site.name}</div>
