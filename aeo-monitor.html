@@ -271,6 +271,7 @@ footer a{color:var(--cyan);text-decoration:none}
     <button class="tab-btn" data-tab="ai-vs-human" onclick="switchTab('ai-vs-human')">AI vs 人類</button>
     <button class="tab-btn" data-tab="time-trends" onclick="switchTab('time-trends')">時間趨勢</button>
     <button class="tab-btn" data-tab="insight-progress" onclick="switchTab('insight-progress')">📝 Insight 進度</button>
+    <button class="tab-btn" data-tab="insight-pref" onclick="switchTab('insight-pref')">🤖 AI 偏好分類</button>
   </div>
 
   <!-- Tab 1: All (existing views) -->
@@ -460,6 +461,50 @@ footer a{color:var(--cyan);text-decoration:none}
     </div>
   </div>
 
+  <!-- Tab 6: AI Preference by Insight Category -->
+  <div class="tab-content" id="tab-insight-pref">
+    <div id="ipref-loading" style="text-align:center;color:var(--dim);padding:3rem;font-size:.9rem">載入中...</div>
+    <div id="ipref-content" style="display:none">
+
+      <!-- Summary row -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.5rem">
+        <div class="s-card"><div class="label">Insight 總爬取</div><div class="value" id="ipref-total" style="color:var(--cyan)">—</div><div class="sub">近 30 天</div></div>
+        <div class="s-card"><div class="label">最熱地區</div><div class="value mono" id="ipref-top-region" style="font-size:1.1rem;color:var(--green)">—</div><div class="sub" id="ipref-top-region-sub"></div></div>
+        <div class="s-card"><div class="label">最熱行業</div><div class="value mono" id="ipref-top-ind" style="font-size:1.1rem;color:var(--gold)">—</div><div class="sub" id="ipref-top-ind-sub"></div></div>
+        <div class="s-card"><div class="label">最熱地區×行業</div><div class="value mono" id="ipref-top-cross" style="font-size:.9rem;color:var(--purple)">—</div><div class="sub" id="ipref-top-cross-sub"></div></div>
+      </div>
+
+      <!-- Two column: by region + by industry -->
+      <div class="comparison-row" style="margin-bottom:1.5rem">
+        <div class="bar-chart">
+          <h3>📍 按地區 — AI 偏好</h3>
+          <div id="ipref-region-bars"></div>
+        </div>
+        <div class="bar-chart">
+          <h3>🏷️ 按行業分類 — AI 偏好</h3>
+          <div id="ipref-ind-bars"></div>
+        </div>
+      </div>
+
+      <!-- Cross heatmap: region × industry -->
+      <div class="bar-chart" style="margin-bottom:1.5rem">
+        <h3>🔥 地區 × 行業 熱力排行 (Top 15)</h3>
+        <div id="ipref-cross-bars"></div>
+      </div>
+
+      <!-- Top insights table -->
+      <div class="detail-table">
+        <h3>📄 Top AI 爬取 Insights</h3>
+        <table>
+          <thead><tr>
+            <th>Slug</th><th>地區</th><th>行業</th><th>爬取次數</th><th>Bot 種類</th>
+          </tr></thead>
+          <tbody id="ipref-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <footer>
     <address style="font-style:normal;font-size:12px;color:var(--dim)">
       <strong>CloudPipe</strong> &middot; AI Automation Platform &middot;
@@ -610,6 +655,7 @@ function switchTab(tabId) {
   document.getElementById(`tab-${tabId}`).classList.add('active');
   if (tabId === 'time-trends' && !trendData) loadTrendData();
   if (tabId === 'insight-progress') loadInsightProgress();
+  if (tabId === 'insight-pref') loadInsightPref();
 }
 
 // ============================================
@@ -1572,6 +1618,127 @@ async function loadAll() {
 
 loadAll();
 setInterval(loadAll, 60000);
+
+// ============================================
+// Tab 6: AI Preference by Insight Category
+// ============================================
+const INSIGHT_PREF_API = "https://cloudpipe-macao-app.vercel.app/api/v1/crawler-stats?view=insight-categories&days=30&token=XGLple%2BBt5Tljpzj3SCIsNnMVGixByg3wBwvvYxpsv8%3D";
+let _iprefLoaded = false;
+
+const IND_LABELS = {
+  dining:'餐飲',shopping:'購物',attractions:'景點',hotels:'酒店',nightlife:'夜生活',
+  wellness:'健康',gaming:'博彩',transport:'交通',entertainment:'娛樂',culture:'文化',
+  education:'教育',services:'服務',general:'綜合'
+};
+const IND_COLORS = {
+  dining:'#f85149',shopping:'#f778ba',attractions:'#58a6ff',hotels:'#d29922',
+  nightlife:'#bc8cff',wellness:'#3fb950',gaming:'#f0883e',transport:'#39d2c0',
+  entertainment:'#ed8936',culture:'#9f7aea',education:'#48bb78',services:'#8b949e',general:'#8b949e'
+};
+const REGION_COLORS_PREF = {'澳門':'#f0883e','日本':'#c73e1d','台灣':'#00a3e0','香港':'#e6002e','unknown':'#8b949e'};
+
+async function loadInsightPref() {
+  if (_iprefLoaded) return;
+  _iprefLoaded = true;
+  try {
+    const res = await fetch(INSIGHT_PREF_API, { cache: 'no-store' });
+    if (!res.ok) throw new Error('API error ' + res.status);
+    const d = await res.json();
+    renderInsightPref(d);
+  } catch(e) {
+    document.getElementById('ipref-loading').textContent = '載入失敗: ' + e.message;
+  }
+}
+
+function renderBar(container, label, count, maxCount, color, subText) {
+  const pct = maxCount > 0 ? (count / maxCount * 100) : 0;
+  const row = document.createElement('div');
+  row.className = 'bar-row';
+  row.innerHTML = `
+    <div class="bar-label" title="${label}">${label}</div>
+    <div class="bar-track">
+      <div class="bar-segment" style="width:${pct.toFixed(1)}%;background:${color}"></div>
+    </div>
+    <div class="bar-values">${count.toLocaleString()}${subText ? ' · ' + subText : ''}</div>
+  `;
+  container.appendChild(row);
+}
+
+function renderInsightPref(d) {
+  document.getElementById('ipref-loading').style.display = 'none';
+  document.getElementById('ipref-content').style.display = 'block';
+
+  const total = d.total_insight_visits || 0;
+  document.getElementById('ipref-total').textContent = total.toLocaleString();
+
+  // Top region
+  const regions = Object.entries(d.by_region || {}).sort((a,b) => b[1].count - a[1].count);
+  if (regions.length > 0) {
+    const [r, ri] = regions[0];
+    document.getElementById('ipref-top-region').textContent = r;
+    document.getElementById('ipref-top-region-sub').textContent = `${ri.count} 次 · ${ri.unique_bots} 種 bot`;
+  }
+
+  // Top industry
+  const inds = Object.entries(d.by_industry || {}).sort((a,b) => b[1].count - a[1].count);
+  if (inds.length > 0) {
+    const [ind, ii] = inds[0];
+    document.getElementById('ipref-top-ind').textContent = IND_LABELS[ind] || ind;
+    document.getElementById('ipref-top-ind-sub').textContent = `${ii.count} 次 · ${ii.unique_bots} 種 bot`;
+  }
+
+  // Top cross
+  const crosses = Object.entries(d.by_cross || {}).sort((a,b) => b[1].count - a[1].count);
+  if (crosses.length > 0) {
+    const [k, ki] = crosses[0];
+    document.getElementById('ipref-top-cross').textContent = k;
+    document.getElementById('ipref-top-cross-sub').textContent = `${ki.count} 次`;
+  }
+
+  // Region bars
+  const regionMax = regions[0]?.[1].count || 1;
+  const regionCont = document.getElementById('ipref-region-bars');
+  regionCont.innerHTML = '';
+  for (const [r, ri] of regions) {
+    renderBar(regionCont, r, ri.count, regionMax, REGION_COLORS_PREF[r] || '#8b949e', `${ri.unique_bots} bots`);
+  }
+
+  // Industry bars
+  const indMax = inds[0]?.[1].count || 1;
+  const indCont = document.getElementById('ipref-ind-bars');
+  indCont.innerHTML = '';
+  for (const [ind, ii] of inds) {
+    const label = IND_LABELS[ind] || ind;
+    renderBar(indCont, label, ii.count, indMax, IND_COLORS[ind] || '#8b949e', `${ii.unique_bots} bots`);
+  }
+
+  // Cross bars (top 15)
+  const crossMax = crosses[0]?.[1].count || 1;
+  const crossCont = document.getElementById('ipref-cross-bars');
+  crossCont.innerHTML = '';
+  for (const [k, ki] of crosses.slice(0, 15)) {
+    const [region, industry] = k.split('×');
+    const color = REGION_COLORS_PREF[region] || '#8b949e';
+    renderBar(crossCont, k, ki.count, crossMax, color, `${ki.unique_bots} bots`);
+  }
+
+  // Top insights table
+  const tbody = document.getElementById('ipref-table');
+  tbody.innerHTML = (d.top_insights || []).slice(0, 30).map(ins => {
+    const indLabel = IND_LABELS[ins.industry] || ins.industry;
+    const indColor = IND_COLORS[ins.industry] || '#8b949e';
+    const pct = total > 0 ? (ins.visits / total * 100).toFixed(1) : '0';
+    return `<tr>
+      <td class="mono" style="font-size:.72rem;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${ins.slug}">
+        <a href="https://cloudpipe-macao-app.vercel.app/macao/insights/${ins.slug}" target="_blank" style="color:var(--blue)">${ins.slug.replace(/%[0-9A-F]{2}/gi,'…')}</a>
+      </td>
+      <td>${ins.region || '—'}</td>
+      <td><span class="region-badge" style="background:${indColor}20;color:${indColor};border:1px solid ${indColor}40">${indLabel}</span></td>
+      <td class="mono">${ins.visits} <span style="color:var(--dim);font-size:.7rem">(${pct}%)</span></td>
+      <td class="mono">${ins.unique_bots}</td>
+    </tr>`;
+  }).join('');
+}
 
 // ============================================
 // Tab 5: Insight Generation Progress
