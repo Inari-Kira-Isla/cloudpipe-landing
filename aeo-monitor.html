@@ -638,10 +638,10 @@ async function loadTrendData() {
     `每日 AI 爬蟲訪問趨勢 — 按${group === 'owner' ? '所有者' : '站點'} (${trendDays} 天)`;
   try {
     // Try GitHub Pages precomputed cache first
-    let res = await fetch(CACHE_BASE + "/crawler-stats-daily-30.json");
+    let res = await fetch(CACHE_BASE + "/crawler-stats-daily-30.json", { cache: 'no-store' });
     if (!res.ok) {
       // Fallback to Vercel API
-      res = await fetch(SUPABASE_API + `&view=daily&days=${trendDays}`);
+      res = await fetch(SUPABASE_API + `&view=daily&days=${trendDays}`, { cache: 'no-store' });
     }
     if (!res.ok) throw new Error('API error');
     trendData = await res.json();
@@ -840,7 +840,7 @@ async function loadSupabaseData() {
   _supabaseLoaded = true;
   try {
     // Read precomputed JSON from GitHub Pages (updated every 5 min by local cron)
-    const summaryRes = await fetch(CACHE_BASE + "/crawler-stats-summary-30.json");
+    const summaryRes = await fetch(CACHE_BASE + "/crawler-stats-summary-30.json", { cache: 'no-store' });
     if (summaryRes.ok) {
       const summary = await summaryRes.json();
       // Build today data by scaling 30d proportions to today_visits count
@@ -908,13 +908,13 @@ async function loadSupabaseData() {
     }
     // Fallback: try Vercel API if GitHub Pages unavailable
     if (!_supabaseAll) {
-      const res = await fetch(SUPABASE_API + "&view=summary");
+      const res = await fetch(SUPABASE_API + "&view=summary", { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
         // Try to fetch daily data for accurate today values
         let todayFallback = data;
         try {
-          const dailyRes = await fetch(SUPABASE_API + "&view=daily&days=30");
+          const dailyRes = await fetch(SUPABASE_API + "&view=daily&days=30", { cache: 'no-store' });
           if (dailyRes.ok) {
             const dailyStats = await dailyRes.json();
             if (dailyStats.daily && dailyStats.daily.length > 0) {
@@ -1041,7 +1041,7 @@ async function fetchSiteData(site) {
       const statsUrl = site.workerSlug
         ? site.worker + "/" + site.workerSlug + "/ai-stats.json"
         : site.worker + "/ai-stats.json";
-      const r = await fetch(statsUrl);
+      const r = await fetch(statsUrl, { cache: 'no-store' });
       if (!r.ok) throw new Error("fetch failed");
       return await r.json();
     } catch (e) {
@@ -1586,7 +1586,7 @@ async function loadInsightProgress() {
   if (_insightLoaded) return;
   _insightLoaded = true;
   try {
-    const res = await fetch(INSIGHT_PROGRESS_API);
+    const res = await fetch(INSIGHT_PROGRESS_API, { cache: 'no-store' });
     if (!res.ok) throw new Error('API error');
     const d = await res.json();
     renderInsightProgress(d);
