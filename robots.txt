@@ -52,6 +52,18 @@ Allow: /
 User-agent: cohere-ai
 Allow: /
 
+# Amazon AI
+User-agent: Amazonbot
+Allow: /
+
+# DuckDuckGo
+User-agent: DuckDuckBot
+Allow: /
+
+# Yahoo Slurp
+User-agent: Slurp
+Allow: /
+
 # === 中國 AI 爬蟲 — 全面歡迎 ===
 # 百度搜索 + 文心一言
 User-agent: Baiduspider
