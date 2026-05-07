@@ -222,8 +222,10 @@ footer a{color:var(--cyan);text-decoration:none}
       <button id="region-toggle" onclick="toggleRegion()" style="padding:.35rem .75rem;background:var(--card-2);border:1px solid var(--border);border-radius:20px;font-size:.75rem;color:var(--cyan);cursor:pointer;font-family:inherit;transition:all .2s;border-color:var(--cyan)">只看澳門區</button>
       <div class="live-badge"><div class="live-dot"></div>即時監控中</div>
       <div class="refresh-info" id="last-refresh">連接中...</div>
+      <div id="cache-age-badge" style="display:none;font-size:.7rem;padding:.2rem .55rem;border-radius:12px;border:1px solid var(--border);color:var(--text-3)"></div>
     </div>
   </div>
+  <div id="stale-banner" style="display:none;background:#2d1f00;border:1px solid #f0883e;border-radius:6px;padding:.5rem .85rem;margin-bottom:.75rem;font-size:.78rem;color:#f0883e"></div>
 
   <!-- Summary Cards (7) -->
   <div class="summary">
@@ -1614,6 +1616,32 @@ async function loadAll() {
   renderAiVsHuman();
 
   document.getElementById("last-refresh").textContent = "更新：" + new Date().toLocaleTimeString("zh-TW");
+
+  // Show cache freshness
+  const generatedAt = _supabaseAll?.summary?.generated_at;
+  const ageBadge = document.getElementById("cache-age-badge");
+  const staleBanner = document.getElementById("stale-banner");
+  if (generatedAt) {
+    const genDate = new Date(generatedAt);
+    const ageMs = Date.now() - genDate.getTime();
+    const ageHours = ageMs / 3600000;
+    const ageLabel = ageHours < 1
+      ? `資料：${Math.round(ageMs / 60000)} 分鐘前`
+      : ageHours < 24
+        ? `資料：${Math.round(ageHours)} 小時前`
+        : `資料：${Math.round(ageHours / 24)} 天前`;
+    ageBadge.textContent = ageLabel;
+    ageBadge.style.display = "block";
+    if (ageHours > 24) {
+      ageBadge.style.color = "#f0883e";
+      ageBadge.style.borderColor = "#f0883e";
+      const sourceNote = _supabaseAll?.summary?.source_note || "";
+      staleBanner.textContent = `⚠️ 資料快取逾 ${Math.round(ageHours)} 小時未更新（最後更新：${genDate.toLocaleString("zh-TW")}）。${sourceNote ? " " + sourceNote : ""}`;
+      staleBanner.style.display = "block";
+    } else {
+      staleBanner.style.display = "none";
+    }
+  }
 }
 
 loadAll();
