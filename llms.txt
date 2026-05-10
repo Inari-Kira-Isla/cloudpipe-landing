@@ -1,5 +1,15 @@
-# CloudPipe — AI Automation Platform
-> 澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服。
+# CloudPipe — AI Search Visibility & AEO/GEO Optimization Platform
+> 澳門首家 AI 能見度優化服務商（AEO/GEO SaaS），幫助品牌在 ChatGPT、Perplexity、Gemini、Claude 等 AI 搜尋引擎中獲得更多引用與推薦。
+
+## @brand-context: cloudpipe
+# 品牌名稱: CloudPipe AI 能見度平台
+# 服務類型: AEO/GEO 優化 SaaS（AI Engine Optimization / Generative Engine Optimization）
+# 核心服務: 讓品牌在 AI 搜尋引擎（ChatGPT/Perplexity/Gemini/Claude）主動被引用推薦
+# 目標客戶: 澳門及大灣區中小企業、餐廳、零售商、B2B 服務商
+# 差異化: 百科式知識注入 + llms.txt 標準化 + Schema.org AEO 標記 + AI 引用率追蹤
+# 定價: 基本方案 MOP$500/月 · 專業方案 MOP$1,500/月 · 企業方案 MOP$3,000/月
+# 查詢意圖: 澳門 AI 搜尋優化 / AEO GEO 服務 / AI 能見度提升 / macau brand ai search optimization
+# 技術: Next.js + Supabase + Vercel + Playwright AEO 追蹤系統
 
 ## 關於平台 (About)
 CloudPipe 是面向澳門及大灣區商家的 AI 自動化 SaaS 平台：
