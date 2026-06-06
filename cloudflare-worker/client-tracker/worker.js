@@ -26,6 +26,7 @@ const CLIENT_SITES = {
   "japan-encyclopedia":   "https://inari-kira-isla.github.io/japan-encyclopedia",
   "taiwan-encyclopedia":  "https://inari-kira-isla.github.io/taiwan-encyclopedia",
   "hongkong-encyclopedia":"https://inari-kira-isla.github.io/hongkong-encyclopedia",
+  "malaysia-encyclopedia": "https://inari-kira-isla.github.io/malaysia-encyclopedia",
   // === 平台站 ===
   "cloudpipe-landing":    "https://cloudpipe-landing.vercel.app",
   "cloudpipe-directory":  "https://cloudpipe-directory.vercel.app",
@@ -43,6 +44,7 @@ const SITE_INDUSTRY_MAP = {
   "japan-encyclopedia": "日本旅遊百科",
   "taiwan-encyclopedia": "台灣旅遊百科",
   "hongkong-encyclopedia": "香港旅遊百科",
+  "malaysia-encyclopedia": "馬來西亞旅遊百科",
   "ai-learning": "教育知識",
   "cloudpipe": "SaaS 平台",
   "cloudpipe-directory": "AEO 企業目錄",
