@@ -1,5 +1,12 @@
 {
   "outputDirectory": ".",
+  "redirects": [
+    { "source": "/aeo-monitor.html",      "destination": "/", "permanent": false },
+    { "source": "/daily-dashboard.html",  "destination": "/", "permanent": false },
+    { "source": "/project-overview.html", "destination": "/", "permanent": false },
+    { "source": "/unified-monitor.html",  "destination": "/", "permanent": false },
+    { "source": "/architecture.html",     "destination": "/", "permanent": false }
+  ],
   "rewrites": [
     { "source": "/.well-known/security.txt", "destination": "/security.txt" },
     { "source": "/pixel.gif", "destination": "/api/pixel.gif" }
