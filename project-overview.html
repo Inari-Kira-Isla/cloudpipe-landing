@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
 <title>CloudPipe 全景儀表板 — 項目全貌</title>
 <style>
 :root {
@@ -125,7 +126,7 @@ a:hover { text-decoration: underline; }
 <div class="header">
   <h1>CloudPipe 全景儀表板</h1>
   <p>14 個活躍項目 · 41 GitHub Repos · 完整工作生態系統一覽</p>
-  <div class="snapshot">靜態快照 — 2026-03-11 · Joe Cheok</div>
+  <div class="snapshot">靜態快照 — 2026-03-11</div>
 </div>
 
 <div class="tabs" id="tabs">
@@ -308,7 +309,7 @@ a:hover { text-decoration: underline; }
       </div>
       <div class="proj-card">
         <div class="name"><div class="status" style="background:var(--green)"></div>CS 客服系統</div>
-        <div class="desc">Webhook (port 18793) + 3 Agents + GitHub 同步 (每 15 分)。6 品牌 FB token。</div>
+        <div class="desc">Webhook (內部 Webhook) + 3 Agents + GitHub 同步 (每 15 分)。多品牌社群整合。</div>
         <div class="tags"><span class="tag">Flask</span><span class="tag">SQLite</span><span class="tag">GitHub Sync</span></div>
       </div>
       <div class="proj-card">
@@ -506,7 +507,7 @@ function drawTopology() {
 
   const nodes = [
     // Center
-    { x: W/2, y: H/2, r: 28, color: '#f85149', label: 'OpenClaw\nGateway', sub: 'port 18789' },
+    { x: W/2, y: H/2, r: 28, color: '#f85149', label: 'OpenClaw\nGateway', sub: '內部 Gateway' },
     // Ring 1: Products
     { x: W/2, y: H/2-140, r: 22, color: '#58a6ff', label: 'Macao App', sub: 'Vercel' },
     { x: W/2+130, y: H/2-80, r: 18, color: '#58a6ff', label: 'Landing', sub: 'Vercel' },
