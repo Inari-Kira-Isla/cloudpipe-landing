@@ -229,7 +229,7 @@ footer a{color:var(--cyan);text-decoration:none}
 
   <!-- Summary Cards (7) -->
   <div class="summary">
-    <div class="s-card">
+    <div class="s-card" title="今日全部 40 站合計（含 SEO + LLM 全部爬蟲），以各站 30 天爬取佔比把今日總量分配到各站估算。基準 = 澳門百科管線今日總量（HKT 0:00 起）。">
       <div class="label">今日 AI 訪問</div>
       <div class="value" id="g-today" style="color:var(--cyan)">—</div>
       <div class="sub" id="g-today-sub">載入中</div>
@@ -1580,7 +1580,7 @@ function renderSummary() {
   }
 
   document.getElementById("g-today").textContent = todayAll;
-  document.getElementById("g-today-sub").textContent = `來自 ${Object.keys(todayByBot).length} 種 AI`;
+  document.getElementById("g-today-sub").textContent = `全站 ${activeSites} 站 · ${Object.keys(todayByBot).length} 種爬蟲（含 SEO）`;
   document.getElementById("g-total").textContent = totalAll;
   document.getElementById("g-types").textContent = allBots.size;
   document.getElementById("g-sites").textContent = activeSites + " / " + SITES.length;
