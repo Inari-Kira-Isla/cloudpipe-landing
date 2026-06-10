@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 爬蟲監控中心 | CloudPipe AEO Platform</title>
+<meta name="description" content="即時監控所有託管網站的 AI 爬蟲活動 — 中國 AI、國際 AI、人類搜尋三方比對追蹤">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<link rel="canonical" href="https://cloudpipe-landing.vercel.app/aeo-monitor.html">
+<link rel="llms-txt" href="https://cloudpipe-landing.vercel.app/llms.txt">
+<meta property="og:title" content="AI 爬蟲監控中心 | CloudPipe">
+<meta property="og:description" content="即時監控所有託管網站的 AI 爬蟲活動 — 中國 AI vs 國際 AI vs 人類搜尋">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cloudpipe-landing.vercel.app/aeo-monitor.html">
+<meta property="og:locale" content="zh_MO">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://cloudpipe-landing.vercel.app","description":"澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服。","alternateName":"CloudPipe AI Automation Platform","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"},"sameAs":["https://github.com/Inari-Kira-Isla/cloudpipe-landing"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"CloudPipe AI 爬蟲監控中心","description":"即時監控所有託管網站的 AI 爬蟲活動","url":"https://cloudpipe-landing.vercel.app/aeo-monitor.html","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"MOP"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"AI 爬蟲監控中心追蹤哪些站點？","acceptedAnswer":{"@type":"Answer","text":"目前追蹤 CloudPipe 生態系統下的所有站點，包括 AI 學習寶庫、CloudPipe Landing、山中田、海膽速遞、稻荷環球食品、After School Coffee、Mind Coffee、BNI 澳門商業網絡等 13 個站點。"}},{"@type":"Question","name":"監控數據多久更新一次？","acceptedAnswer":{"@type":"Answer","text":"每 60 秒自動從各站點的 Cloudflare Worker 拉取最新數據，即時顯示今日訪問、累積訪問、AI 種類統計及活動記錄。"}},{"@type":"Question","name":"什麼是中國 AI vs 國際 AI 比對？","acceptedAnswer":{"@type":"Answer","text":"監控中心可區分來自中國（百度、騰訊混元、智譜 ChatGLM、科大訊飛等）和國際（OpenAI、Anthropic、Google、Perplexity 等）的 AI 爬蟲，以圓餅圖和條形圖呈現比例。"}},{"@type":"Question","name":"如何追蹤 AI 與人類訪客的比例？","acceptedAnswer":{"@type":"Answer","text":"透過 Cloudflare Worker 的 User-Agent 偵測，自動區分 AI 爬蟲和人類瀏覽器訪問，提供即時的 AI vs 人類流量比對數據。"}},{"@type":"Question","name":"如何為新站點加入 AI 追蹤？","acceptedAnswer":{"@type":"Answer","text":"新站點透過多租戶 Cloudflare Worker (client-ai-tracker) 統一追蹤，只需在 Worker 配置中加入站點 slug 和 URL 即可自動開始收集數據。"}}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#06090f;--card:#0d1117;--card-2:#161b22;--border:#21262d;--text:#e6edf3;--dim:#8b949e;--blue:#58a6ff;--green:#3fb950;--purple:#bc8cff;--gold:#d29922;--red:#f85149;--cyan:#39d2c0;--orange:#f0883e;--pink:#f778ba}
+body{font-family:'Noto Sans TC',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.mono{font-family:'JetBrains Mono',monospace}
+.container{max-width:1200px;margin:0 auto;padding:1.5rem}
+
+/* Header */
+.header{display:flex;align-items:center;justify-content:space-between;padding:1rem 0;margin-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.header-left{display:flex;align-items:center;gap:1rem}
+.logo{font-size:1.1rem;font-weight:700;color:var(--cyan)}
+.logo span{color:var(--dim);font-weight:400;font-size:.85rem;margin-left:.5rem}
+.header-right{display:flex;align-items:center;gap:1rem}
+.live-badge{display:flex;align-items:center;gap:.5rem;padding:.35rem .75rem;background:#3fb95015;border:1px solid #3fb95030;border-radius:20px;font-size:.75rem;color:var(--green)}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.refresh-info{color:var(--dim);font-size:.75rem}
+
+/* Summary Cards */
+.summary{display:grid;grid-template-columns:repeat(7,1fr);gap:.75rem;margin-bottom:1.5rem}
+.s-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem}
+.s-card .label{font-size:.65rem;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+.s-card .value{font-size:1.6rem;font-weight:700;line-height:1}
+.s-card .sub{font-size:.7rem;color:var(--dim);margin-top:.3rem}
+
+/* Tab Bar */
+.tab-bar{display:flex;gap:0;margin-bottom:1.5rem;border-bottom:2px solid var(--border)}
+.tab-btn{padding:.75rem 1.5rem;background:none;border:none;color:var(--dim);font-size:.9rem;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;font-family:inherit;transition:color .2s}
+.tab-btn.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+.tab-btn:hover{color:var(--text)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* Comparison layouts */
+.comparison-row{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
+.comp-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem}
+.comp-card h3{font-size:1rem;margin-bottom:1rem}
+.comp-big-num{font-size:2.5rem;font-weight:700;line-height:1}
+.comp-sub{font-size:.85rem;color:var(--dim);margin-top:.5rem}
+.comp-bot-list{margin-top:1rem;display:flex;flex-wrap:wrap;gap:.4rem}
+
+/* CSS Pie Chart */
+.pie-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem;text-align:center}
+.pie-wrap h3{font-size:.9rem;color:var(--cyan);margin-bottom:1.5rem}
+.pie-chart{width:180px;height:180px;border-radius:50%;margin:0 auto 1.25rem;position:relative}
+.pie-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:90px;height:90px;border-radius:50%;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pie-center .pct{font-size:1.2rem;font-weight:700}
+.pie-center .plbl{font-size:.6rem;color:var(--dim)}
+.pie-legend{display:flex;justify-content:center;gap:2rem;font-size:.85rem}
+.pie-legend .dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:.4rem;vertical-align:middle}
+
+/* Stacked Bar Chart */
+.bar-chart{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem}
+.bar-chart h3{font-size:.9rem;color:var(--cyan);margin-bottom:1.25rem}
+.bar-row{display:flex;align-items:center;margin-bottom:.6rem}
+.bar-label{width:140px;font-size:.78rem;color:var(--dim);flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{flex:1;height:22px;border-radius:4px;overflow:hidden;display:flex;background:var(--card-2)}
+.bar-segment{height:100%;transition:width .3s;min-width:0}
+.bar-values{width:100px;text-align:right;font-size:.72rem;color:var(--dim);margin-left:.5rem;flex-shrink:0}
+
+/* Detail Table */
+.detail-table{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem}
+.detail-table h3{font-size:.9rem;color:var(--cyan);margin-bottom:1rem}
+.detail-table table{width:100%;border-collapse:collapse;font-size:.82rem}
+.detail-table th{text-align:left;padding:.5rem .75rem;color:var(--dim);font-weight:500;border-bottom:1px solid var(--border);font-size:.72rem;text-transform:uppercase}
+.detail-table td{padding:.5rem .75rem;border-bottom:1px solid var(--border)}
+.detail-table tr:last-child td{border-bottom:none}
+.region-badge{font-size:.65rem;padding:.15rem .4rem;border-radius:4px;font-weight:600}
+.region-cn{background:#f8514915;color:var(--red);border:1px solid #f8514930}
+.region-intl{background:#58a6ff15;color:var(--blue);border:1px solid #58a6ff30}
+
+/* Site Region Filter */
+.site-filter-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center}
+.site-filter-bar .label{font-size:.72rem;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-right:.25rem}
+.region-btn{padding:.35rem .85rem;background:var(--card-2);border:1px solid var(--border);border-radius:20px;font-size:.75rem;color:var(--dim);cursor:pointer;font-family:inherit;transition:all .15s}
+.region-btn:hover{color:var(--text);border-color:var(--blue)}
+.region-btn.active{color:var(--bg);font-weight:600}
+.region-btn[data-r="all"].active{background:var(--dim);border-color:var(--dim)}
+.region-btn[data-r="macau"].active{background:var(--green);border-color:var(--green)}
+.region-btn[data-r="encyclopedia"].active{background:var(--cyan);border-color:var(--cyan)}
+.region-btn[data-r="other"].active{background:var(--purple);border-color:var(--purple)}
+.site-section-label{font-size:.7rem;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;padding:.25rem 0;margin:.5rem 0 .25rem;border-bottom:1px solid var(--border);grid-column:1/-1}
+/* Site Cards */
+.sites{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:1rem;margin-bottom:1.5rem}
+.site-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s}
+.site-card:hover{border-color:var(--blue)}
+.site-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid var(--border)}
+.site-name{font-weight:700;font-size:.95rem}
+.site-badge{font-size:.65rem;padding:.2rem .5rem;border-radius:12px;font-weight:600}
+.badge-active{background:#3fb95015;color:var(--green);border:1px solid #3fb95030}
+.badge-pending{background:#d2992215;color:var(--gold);border:1px solid #d2992230}
+.badge-new{background:#58a6ff15;color:var(--blue);border:1px solid #58a6ff30}
+.site-body{padding:1.25rem}
+.site-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1rem}
+.site-stat .num{font-size:1.4rem;font-weight:700}
+.site-stat .lbl{font-size:.7rem;color:var(--dim)}
+.site-bots{display:flex;flex-wrap:wrap;gap:.4rem}
+.bot-chip{font-size:.65rem;padding:.15rem .4rem;border-radius:4px;background:var(--card-2);border:1px solid var(--border);color:var(--dim)}
+.bot-chip.active{color:var(--blue);border-color:var(--blue);background:#58a6ff10}
+
+/* Activity Feed */
+.feed{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-bottom:1.5rem}
+.feed h2{font-size:.9rem;color:var(--cyan);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.feed-list{max-height:400px;overflow-y:auto}
+.feed-item{display:grid;grid-template-columns:110px 140px 1fr 100px;gap:.75rem;padding:.6rem 0;border-bottom:1px solid var(--border);font-size:.82rem;align-items:center}
+.feed-item:last-child{border-bottom:none}
+.feed-time{color:var(--dim);font-family:'JetBrains Mono',monospace;font-size:.75rem}
+.feed-bot{font-weight:600}
+.feed-page{color:var(--dim);font-family:'JetBrains Mono',monospace;font-size:.75rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.feed-site{font-size:.7rem;padding:.15rem .4rem;border-radius:4px;text-align:center}
+
+/* Bot Heatmap */
+.heatmap{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-bottom:1.5rem;overflow-x:auto}
+.heatmap h2{font-size:.9rem;color:var(--cyan);margin-bottom:1rem}
+.hm-grid{display:grid;grid-template-columns:160px repeat(var(--cols,6),1fr);gap:2px;font-size:.72rem}
+.hm-header{padding:.4rem;text-align:center;color:var(--dim);font-weight:500}
+.hm-bot{padding:.4rem;color:var(--text);font-weight:500;display:flex;align-items:center}
+.hm-cell{padding:.4rem;text-align:center;border-radius:4px;min-height:32px;display:flex;align-items:center;justify-content:center}
+.hm-0{background:var(--card-2);color:var(--dim)}
+.hm-1{background:#3fb95020;color:var(--green)}
+.hm-2{background:#3fb95040;color:var(--green)}
+.hm-3{background:#3fb95060;color:#fff}
+.hm-4{background:#3fb95080;color:#fff}
+
+/* Time Trends Tab */
+.trend-controls{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.trend-controls label{font-size:.8rem;color:var(--dim)}
+.trend-select{background:var(--card-2);border:1px solid var(--border);border-radius:6px;padding:.4rem .75rem;color:var(--text);font-size:.82rem;font-family:inherit;cursor:pointer}
+.trend-select:focus{outline:none;border-color:var(--cyan)}
+.day-btn{padding:.35rem .75rem;background:var(--card-2);border:1px solid var(--border);border-radius:20px;font-size:.75rem;color:var(--dim);cursor:pointer;font-family:inherit;transition:all .2s}
+.day-btn.active{color:var(--cyan);border-color:var(--cyan);background:#39d2c015}
+.trend-chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem;position:relative}
+.trend-chart-wrap h3{font-size:.9rem;color:var(--cyan);margin-bottom:1.25rem}
+.trend-canvas{width:100%;height:350px;cursor:crosshair}
+.trend-tooltip{position:absolute;background:var(--card-2);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;font-size:.78rem;color:var(--text);pointer-events:none;z-index:10;display:none;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.trend-legend{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1rem;justify-content:center}
+.trend-legend-item{display:flex;align-items:center;gap:.35rem;font-size:.78rem;color:var(--dim);cursor:pointer;transition:opacity .2s}
+.trend-legend-item.disabled{opacity:.3}
+.trend-legend-dot{width:10px;height:10px;border-radius:50%}
+.trend-table{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem}
+.trend-table h3{font-size:.9rem;color:var(--cyan);margin-bottom:1rem}
+.trend-table table{width:100%;border-collapse:collapse;font-size:.8rem}
+.trend-table th{text-align:left;padding:.4rem .6rem;color:var(--dim);font-weight:500;border-bottom:1px solid var(--border);font-size:.7rem;text-transform:uppercase}
+.trend-table td{padding:.4rem .6rem;border-bottom:1px solid var(--border)}
+
+/* Responsive */
+@media(max-width:768px){
+  .summary{grid-template-columns:repeat(2,1fr)}
+  .summary .s-card:nth-child(7){grid-column:span 2}
+  .sites{grid-template-columns:1fr}
+  .feed-item{grid-template-columns:80px 100px 1fr}
+  .feed-item>:last-child{display:none}
+.hm-grid{font-size:.55rem;overflow-x:auto}
+  .comparison-row{grid-template-columns:1fr}
+  .tab-btn{padding:.6rem .8rem;font-size:.8rem}
+  .trend-canvas{height:250px}
+  .trend-controls{gap:.5rem}
+  .bar-label{width:100px;font-size:.7rem}
+}
+
+footer{text-align:center;padding:2rem 0 1rem;color:var(--dim);font-size:.8rem;border-top:1px solid var(--border);margin-top:1rem}
+footer a{color:var(--cyan);text-decoration:none}
+
+/* Insight Progress Tab */
+.insight-section{margin-bottom:1.5rem}
+.insight-phase{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1rem}
+.insight-phase h3{font-size:.9rem;color:var(--cyan);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.insight-phase h3 .phase-pct{margin-left:auto;font-size:1.1rem;font-weight:700}
+.progress-track{height:18px;border-radius:9px;background:var(--card-2);overflow:hidden;margin-bottom:.5rem}
+.progress-fill{height:100%;border-radius:9px;transition:width .6s ease}
+.progress-fill-zh{background:linear-gradient(90deg,#39d2c0,#3fb950)}
+.progress-fill-trans{background:linear-gradient(90deg,#58a6ff,#bc8cff)}
+.progress-meta{display:flex;justify-content:space-between;font-size:.75rem;color:var(--dim)}
+.insight-overview{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.5rem}
+.io-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center}
+.io-card .io-num{font-size:1.8rem;font-weight:700;line-height:1}
+.io-card .io-lbl{font-size:.7rem;color:var(--dim);margin-top:.3rem}
+.region-progress-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.5rem}
+.rp-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem}
+.rp-card h4{font-size:.85rem;font-weight:600;margin-bottom:.85rem;display:flex;align-items:center;gap:.5rem}
+.lang-bars{display:flex;flex-direction:column;gap:.5rem}
+.lang-row{display:flex;align-items:center;gap:.6rem;font-size:.75rem}
+.lang-tag{width:24px;font-weight:700;flex-shrink:0}
+.lang-track{flex:1;height:10px;border-radius:5px;background:var(--card-2);overflow:hidden}
+.lang-fill{height:100%;border-radius:5px;transition:width .4s}
+.lang-val{width:60px;text-align:right;color:var(--dim)}
+@media(max-width:768px){
+  .insight-overview{grid-template-columns:repeat(2,1fr)}
+  .region-progress-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <h1 class="logo">CloudPipe <span>AI 爬蟲監控中心 — <span id="region-label">全部站點</span></span></h1>
+    </div>
+    <div class="header-right">
+      <button id="region-toggle" onclick="toggleRegion()" style="padding:.35rem .75rem;background:var(--card-2);border:1px solid var(--border);border-radius:20px;font-size:.75rem;color:var(--cyan);cursor:pointer;font-family:inherit;transition:all .2s;border-color:var(--cyan)">只看澳門區</button>
+      <div class="live-badge"><div class="live-dot"></div>即時監控中</div>
+      <div class="refresh-info" id="last-refresh">連接中...</div>
+      <div id="cache-age-badge" style="display:none;font-size:.7rem;padding:.2rem .55rem;border-radius:12px;border:1px solid var(--border);color:var(--text-3)"></div>
+    </div>
+  </div>
+  <div id="stale-banner" style="display:none;background:#2d1f00;border:1px solid #f0883e;border-radius:6px;padding:.5rem .85rem;margin-bottom:.75rem;font-size:.78rem;color:#f0883e"></div>
+
+  <!-- Summary Cards (7) -->
+  <div class="summary">
+    <div class="s-card">
+      <div class="label">今日 AI 訪問</div>
+      <div class="value" id="g-today" style="color:var(--cyan)">—</div>
+      <div class="sub" id="g-today-sub">載入中</div>
+    </div>
+    <div class="s-card">
+      <div class="label">累積 AI 訪問</div>
+      <div class="value" id="g-total" style="color:var(--green)">—</div>
+      <div class="sub">所有站點合計</div>
+    </div>
+    <div class="s-card">
+      <div class="label">AI 種類</div>
+      <div class="value" id="g-types" style="color:var(--purple)">—</div>
+      <div class="sub">/ 28 種支援</div>
+    </div>
+    <div class="s-card">
+      <div class="label">託管站點</div>
+      <div class="value" id="g-sites" style="color:var(--blue)">—</div>
+      <div class="sub">已啟用追蹤</div>
+    </div>
+    <div class="s-card">
+      <div class="label">最活躍 AI</div>
+      <div class="value" id="g-top" style="color:var(--gold);font-size:1rem;padding-top:.4rem">—</div>
+      <div class="sub" id="g-top-sub">全站最多訪問</div>
+    </div>
+    <div class="s-card">
+      <div class="label">中國 AI 訪問</div>
+      <div class="value" id="g-cn" style="color:var(--red)">—</div>
+      <div class="sub" id="g-cn-sub">今日合計</div>
+    </div>
+    <div class="s-card">
+      <div class="label">人類訪客</div>
+      <div class="value" id="g-human" style="color:var(--orange)">—</div>
+      <div class="sub" id="g-human-sub">今日合計</div>
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="all" onclick="switchTab('all')">全部</button>
+    <button class="tab-btn" data-tab="cn-vs-intl" onclick="switchTab('cn-vs-intl')">中國 AI vs 國際 AI</button>
+    <button class="tab-btn" data-tab="ai-vs-human" onclick="switchTab('ai-vs-human')">AI vs 人類</button>
+    <button class="tab-btn" data-tab="time-trends" onclick="switchTab('time-trends')">時間趨勢</button>
+    <button class="tab-btn" data-tab="insight-progress" onclick="switchTab('insight-progress')">📝 Insight 進度</button>
+    <button class="tab-btn" data-tab="insight-pref" onclick="switchTab('insight-pref')">🤖 AI 偏好分類</button>
+  </div>
+
+  <!-- Tab 1: All (existing views) -->
+  <div class="tab-content active" id="tab-all">
+    <div class="site-filter-bar">
+      <span class="label">篩選：</span>
+      <button class="region-btn active" data-r="all" onclick="setRegionFilter('all')">全部</button>
+      <button class="region-btn" data-r="macau" onclick="setRegionFilter('macau')">🏮 澳門商戶</button>
+      <button class="region-btn" data-r="encyclopedia" onclick="setRegionFilter('encyclopedia')">📚 百科站</button>
+      <button class="region-btn" data-r="other" onclick="setRegionFilter('other')">🌐 其他</button>
+    </div>
+    <div class="sites" id="site-cards"></div>
+    <div class="heatmap">
+      <h2>AI 系統 × 站點 矩陣 — 28 種 AI + 人類（全部站點）</h2>
+      <div class="hm-grid" id="heatmap-grid" style="--cols:2">
+        <div class="hm-header"></div>
+        <div class="hm-header">載入中...</div>
+      </div>
+    </div>
+    <div class="feed">
+      <h2>全站即時活動記錄</h2>
+      <div class="feed-list" id="feed-list">
+        <div style="text-align:center;color:var(--dim);padding:2rem">載入中...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 2: CN vs International AI -->
+  <div class="tab-content" id="tab-cn-vs-intl">
+    <div class="comparison-row">
+      <div class="comp-card">
+        <h3 style="color:var(--red)">中國 AI</h3>
+        <div class="comp-big-num" id="cn-today-num" style="color:var(--red)">0</div>
+        <div class="comp-sub" id="cn-today-sub">今日訪問</div>
+        <div style="margin-top:.5rem;font-size:.85rem;color:var(--dim)" id="cn-total-text">累積: 0</div>
+        <div class="comp-bot-list" id="cn-bot-list"></div>
+      </div>
+      <div class="comp-card">
+        <h3 style="color:var(--blue)">國際 AI</h3>
+        <div class="comp-big-num" id="intl-today-num" style="color:var(--blue)">0</div>
+        <div class="comp-sub" id="intl-today-sub">今日訪問</div>
+        <div style="margin-top:.5rem;font-size:.85rem;color:var(--dim)" id="intl-total-text">累積: 0</div>
+        <div class="comp-bot-list" id="intl-bot-list"></div>
+      </div>
+    </div>
+    <div class="pie-wrap">
+      <h3>中國 AI vs 國際 AI — 累積比例</h3>
+      <div id="cn-intl-pie"></div>
+    </div>
+    <div class="bar-chart">
+      <h3>各站點 — 中國 AI vs 國際 AI</h3>
+      <div id="cn-intl-bars"></div>
+    </div>
+    <div class="detail-table">
+      <h3>所有 AI 爬蟲明細</h3>
+      <div style="overflow-x:auto">
+        <table id="cn-intl-table">
+          <thead><tr><th>Bot</th><th>所屬</th><th>地區</th><th>今日</th><th>累積</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 3: AI vs Human -->
+  <div class="tab-content" id="tab-ai-vs-human">
+    <div class="comparison-row">
+      <div class="comp-card">
+        <h3 style="color:var(--purple)">AI 爬蟲</h3>
+        <div class="comp-big-num" id="ai-total-num" style="color:var(--purple)">0</div>
+        <div class="comp-sub" id="ai-total-sub">今日 AI 訪問</div>
+        <div style="margin-top:.5rem;font-size:.85rem;color:var(--dim)" id="ai-cum-text">累積: 0</div>
+      </div>
+      <div class="comp-card">
+        <h3 style="color:var(--green)">人類訪客</h3>
+        <div class="comp-big-num" id="human-total-num" style="color:var(--green)">0</div>
+        <div class="comp-sub" id="human-total-sub">今日人類訪問</div>
+        <div style="margin-top:.5rem;font-size:.85rem;color:var(--dim)" id="human-cum-text">累積: 0</div>
+      </div>
+    </div>
+    <div class="pie-wrap">
+      <h3>AI 爬蟲 vs 人類訪客 — 累積比例</h3>
+      <div id="ai-human-pie"></div>
+    </div>
+    <div class="bar-chart">
+      <h3>各站點 — AI vs 人類流量</h3>
+      <div id="ai-human-bars"></div>
+    </div>
+    <div class="detail-table">
+      <h3>各站點 AI/人類 比率</h3>
+      <div style="overflow-x:auto">
+        <table id="ai-human-table">
+          <thead><tr><th>站點</th><th>AI 今日</th><th>人類今日</th><th>AI 佔比</th><th>AI 累積</th><th>人類累積</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 4: Time Trends -->
+  <div class="tab-content" id="tab-time-trends">
+    <div class="trend-controls">
+      <label>時間範圍:</label>
+      <button class="day-btn" data-days="7" onclick="setTrendDays(7)">7 天</button>
+      <button class="day-btn" data-days="14" onclick="setTrendDays(14)">14 天</button>
+      <button class="day-btn active" data-days="30" onclick="setTrendDays(30)">30 天</button>
+      <button class="day-btn" data-days="90" onclick="setTrendDays(90)">90 天</button>
+      <label style="margin-left:auto">分組:</label>
+      <select class="trend-select" id="trend-group" onchange="loadTrendData()">
+        <option value="owner">Bot 所有者</option>
+        <option value="site">站點</option>
+      </select>
+    </div>
+    <div class="trend-chart-wrap">
+      <h3 id="trend-title">每日 AI 爬蟲訪問趨勢 — 按所有者 (30 天)</h3>
+      <canvas class="trend-canvas" id="trend-canvas"></canvas>
+      <div class="trend-tooltip" id="trend-tip"></div>
+      <div class="trend-legend" id="trend-legend"></div>
+    </div>
+    <div class="trend-table">
+      <h3>每日數據明細</h3>
+      <div style="overflow-x:auto">
+        <table>
+          <thead id="trend-thead"><tr><th>日期</th><th>合計</th></tr></thead>
+          <tbody id="trend-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 5: Insight Generation Progress -->
+  <div class="tab-content" id="tab-insight-progress">
+    <div id="insight-loading" style="text-align:center;color:var(--dim);padding:3rem;font-size:.9rem">載入中...</div>
+    <div id="insight-content" style="display:none">
+      <!-- Overview stats -->
+      <div class="insight-overview">
+        <div class="io-card">
+          <div class="io-num" id="ip-total-zh" style="color:var(--green)">—</div>
+          <div class="io-lbl">ZH 已發布</div>
+        </div>
+        <div class="io-card">
+          <div class="io-num" id="ip-trans-done" style="color:var(--blue)">—</div>
+          <div class="io-lbl">EN+PT 已翻譯</div>
+        </div>
+        <div class="io-card">
+          <div class="io-num" id="ip-today" style="color:var(--cyan)">—</div>
+          <div class="io-lbl">今日新增</div>
+        </div>
+        <div class="io-card">
+          <div class="io-num" id="ip-total" style="color:var(--gold)">—</div>
+          <div class="io-lbl">總發布篇數</div>
+        </div>
+      </div>
+
+      <!-- Phase 1 + Phase 2 bars -->
+      <div class="insight-section">
+        <div class="insight-phase">
+          <h3>
+            <span>【Phase 1】繁體中文 (ZH) 生成</span>
+            <span class="phase-pct" id="ip-zh-pct" style="color:var(--green)">—%</span>
+          </h3>
+          <div class="progress-track">
+            <div class="progress-fill progress-fill-zh" id="ip-zh-bar" style="width:0%"></div>
+          </div>
+          <div class="progress-meta">
+            <span id="ip-zh-meta-l">—</span>
+            <span id="ip-zh-meta-r">—</span>
+          </div>
+        </div>
+        <div class="insight-phase">
+          <h3>
+            <span>【Phase 2】翻譯 EN + PT</span>
+            <span class="phase-pct" id="ip-trans-pct" style="color:var(--blue)">—%</span>
+          </h3>
+          <div class="progress-track">
+            <div class="progress-fill progress-fill-trans" id="ip-trans-bar" style="width:0%"></div>
+          </div>
+          <div class="progress-meta">
+            <span id="ip-trans-meta-l">—</span>
+            <span id="ip-trans-meta-r">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Region breakdown -->
+      <div class="region-progress-grid" id="ip-regions"></div>
+    </div>
+  </div>
+
+  <!-- Tab 6: AI Preference by Insight Category -->
+  <div class="tab-content" id="tab-insight-pref">
+    <div id="ipref-loading" style="text-align:center;color:var(--dim);padding:3rem;font-size:.9rem">載入中...</div>
+    <div id="ipref-content" style="display:none">
+
+      <!-- Summary row -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.5rem">
+        <div class="s-card"><div class="label">Insight 總爬取</div><div class="value" id="ipref-total" style="color:var(--cyan)">—</div><div class="sub">近 30 天</div></div>
+        <div class="s-card"><div class="label">最熱地區</div><div class="value mono" id="ipref-top-region" style="font-size:1.1rem;color:var(--green)">—</div><div class="sub" id="ipref-top-region-sub"></div></div>
+        <div class="s-card"><div class="label">最熱行業</div><div class="value mono" id="ipref-top-ind" style="font-size:1.1rem;color:var(--gold)">—</div><div class="sub" id="ipref-top-ind-sub"></div></div>
+        <div class="s-card"><div class="label">最熱地區×行業</div><div class="value mono" id="ipref-top-cross" style="font-size:.9rem;color:var(--purple)">—</div><div class="sub" id="ipref-top-cross-sub"></div></div>
+      </div>
+
+      <!-- Two column: by region + by industry -->
+      <div class="comparison-row" style="margin-bottom:1.5rem">
+        <div class="bar-chart">
+          <h3>📍 按地區 — AI 偏好</h3>
+          <div id="ipref-region-bars"></div>
+        </div>
+        <div class="bar-chart">
+          <h3>🏷️ 按行業分類 — AI 偏好</h3>
+          <div id="ipref-ind-bars"></div>
+        </div>
+      </div>
+
+      <!-- Cross heatmap: region × industry -->
+      <div class="bar-chart" style="margin-bottom:1.5rem">
+        <h3>🔥 地區 × 行業 熱力排行 (Top 15)</h3>
+        <div id="ipref-cross-bars"></div>
+      </div>
+
+      <!-- Top insights table -->
+      <div class="detail-table">
+        <h3>📄 Top AI 爬取 Insights</h3>
+        <table>
+          <thead><tr>
+            <th>Slug</th><th>地區</th><th>行業</th><th>爬取次數</th><th>Bot 種類</th>
+          </tr></thead>
+          <tbody id="ipref-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <address style="font-style:normal;font-size:12px;color:var(--dim)">
+      <strong>CloudPipe</strong> &middot; AI Automation Platform &middot;
+      GitHub: <a href="https://github.com/Inari-Kira-Isla/cloudpipe-landing">Inari-Kira-Isla/cloudpipe-landing</a>
+    </address>
+    <div style="margin-top:.5rem">
+      <a href="/">CloudPipe 首頁</a> &middot;
+      <a href="/aeo-score.html">AEO 評分工具</a> &middot;
+      <a href="/ai-footprint.html">CloudPipe 足跡</a>
+    </div>
+    <div style="margin-top:.5rem">&copy; 2026 CloudPipe &middot; CC BY 4.0</div>
+  </footer>
+</div>
+
+<script>
+// ============================================
+// Multi-Site AI Crawler Monitor v2.0
+// With CN vs International + AI vs Human tabs
+// ============================================
+
+const CLIENT_TRACKER = "https://client-ai-tracker.inariglobal.workers.dev";
+
+// 澳門百科 20 行業 — 從 Supabase crawler-stats 取得各行業爬蟲數據
+const MACAO_INDUSTRIES = [
+  { slug: "insights", name: "行業洞察 Insights", color: "#c4983a" },
+  { slug: "dining", name: "餐飲美食", color: "#f85149" },
+  { slug: "attractions", name: "景區觀光", color: "#58a6ff" },
+  { slug: "hotels", name: "酒店住宿", color: "#d29922" },
+  { slug: "shopping", name: "購物零售", color: "#f778ba" },
+  { slug: "food-supply", name: "食品供應", color: "#f0883e" },
+  { slug: "wellness", name: "健康養生", color: "#3fb950" },
+  { slug: "professional-services", name: "專業服務", color: "#39d2c0" },
+  { slug: "community", name: "社區服務", color: "#bc8cff" },
+  { slug: "luxury", name: "奢侈品牌", color: "#ecc94b" },
+  { slug: "nightlife", name: "夜生活", color: "#f778ba" },
+  { slug: "transport", name: "交通運輸", color: "#79c0ff" },
+  { slug: "government", name: "政府機構", color: "#8b949e" },
+  { slug: "finance", name: "金融服務", color: "#48bb78" },
+  { slug: "events", name: "活動會展", color: "#ed8936" },
+  { slug: "media", name: "媒體傳播", color: "#9f7aea" },
+  { slug: "education", name: "教育培訓", color: "#58a6ff" },
+  { slug: "real-estate", name: "房地產", color: "#d29922" },
+  { slug: "tech", name: "科技創新", color: "#39d2c0" },
+  { slug: "gaming", name: "博彩娛樂", color: "#f85149" },
+  { slug: "heritage", name: "文化遺產", color: "#bc8cff" },
+];
+
+const ALL_SITES = [
+  // === 澳門百科主頁 ===
+  { id: "cloudpipe-macao-app", name: "澳門商戶百科（主頁）", url: "https://cloudpipe-macao-app.vercel.app/", worker: null, color: "#f0883e", badge: "active", industry: "澳門商戶百科", region: "macau", macaoMain: true },
+  // === 澳門百科 20 行業 ===
+  ...MACAO_INDUSTRIES.map(ind => ({
+    id: "macao-" + ind.slug, name: ind.name, url: "https://cloudpipe-macao-app.vercel.app/macao/" + ind.slug,
+    worker: null, color: ind.color, badge: "active", industry: "澳門商戶百科", region: "macau", macaoIndustry: ind.slug
+  })),
+  // === 品牌站 ===
+  { id: "yamanakada", name: "山中田 Yamanakada", url: "https://inari-kira-isla.github.io/yamanakada/", worker: CLIENT_TRACKER, workerSlug: "yamanakada", color: "#3fb950", badge: "active", industry: "AI 資訊平台", region: "macau" },
+  { id: "sea-urchin-delivery", name: "海膽速遞", url: "https://inari-kira-isla.github.io/sea-urchin-delivery/", worker: CLIENT_TRACKER, workerSlug: "sea-urchin-delivery", color: "#f0883e", badge: "active", industry: "海膽冷鏈配送", region: "macau" },
+  { id: "inari-global-foods", name: "稻荷環球食品", url: "https://inari-kira-isla.github.io/inari-global-foods/", worker: CLIENT_TRACKER, workerSlug: "inari-global-foods", color: "#58a6ff", badge: "active", industry: "日本食材進口", region: "macau" },
+  { id: "after-school-coffee", name: "After School Coffee", url: "https://inari-kira-isla.github.io/after-school-coffee/", worker: CLIENT_TRACKER, workerSlug: "after-school-coffee", color: "#f778ba", badge: "active", industry: "精品咖啡館", region: "macau" },
+  { id: "mind-coffee", name: "Mind Coffee", url: "https://mind-coffee.vercel.app/", worker: CLIENT_TRACKER, workerSlug: "mind-coffee", color: "#d29922", badge: "active", industry: "咖啡店", region: "macau" },
+  { id: "bni-macau", name: "BNI 澳門商業網絡", url: "https://bni-macau.vercel.app/", worker: CLIENT_TRACKER, workerSlug: "bni-macau", color: "#f85149", badge: "active", industry: "商業網絡", region: "macau" },
+  // === 百科 & 知識站 ===
+  { id: "world-encyclopedia", name: "世界百科", url: "https://world-encyclopedia.vercel.app/", worker: null, color: "#d4a574", badge: "active", industry: "世界建築百科", region: "encyclopedia" },
+  { id: "japan-encyclopedia", name: "日本百科", url: "https://japan-encyclopedia.vercel.app/", worker: null, color: "#c73e1d", badge: "active", industry: "日本旅遊百科", region: "encyclopedia" },
+  { id: "taiwan-encyclopedia", name: "台灣百科", url: "https://taiwan-encyclopedia.vercel.app/", worker: null, color: "#00a3e0", badge: "active", industry: "台灣旅遊百科", region: "encyclopedia" },
+  { id: "hongkong-encyclopedia", name: "香港百科", url: "https://hongkong-encyclopedia.vercel.app/", worker: null, color: "#e6002e", badge: "active", industry: "香港旅遊百科", region: "encyclopedia" },
+  { id: "macau-encyclopedia", name: "澳門百科", url: "https://inari-kira-isla.github.io/macau-encyclopedia/", worker: null, color: "#8338ec", badge: "active", industry: "澳門旅遊百科", region: "encyclopedia" },
+  { id: "ai-learning", name: "AI 學習寶庫", url: "https://inari-kira-isla.github.io/Openclaw/", worker: "https://client-ai-tracker.inariglobal.workers.dev", color: "#bc8cff", badge: "active", industry: "教育知識", region: "other" },
+  // === 平台 ===
+  { id: "cloudpipe", name: "CloudPipe Landing", url: "https://cloudpipe-landing.vercel.app/", worker: "https://cloudpipe-ai-tracker.inariglobal.workers.dev", color: "#39d2c0", badge: "active", industry: "SaaS 平台", region: "other" },
+  { id: "cloudpipe-directory", name: "企業目錄", url: "https://cloudpipe-directory.vercel.app/", worker: null, color: "#48bb78", badge: "active", industry: "AEO 企業目錄", region: "other" },
+  // === AEO Demo ===
+  { id: "aeo-demo-education", name: "AEO Demo — 教育", url: "https://inari-kira-isla.github.io/aeo-demo-education/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-education", color: "#9f7aea", badge: "new", industry: "教育機構", region: "other" },
+  { id: "aeo-demo-finance", name: "AEO Demo — 金融", url: "https://inari-kira-isla.github.io/aeo-demo-finance/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-finance", color: "#48bb78", badge: "new", industry: "金融服務", region: "other" },
+  { id: "aeo-demo-luxury", name: "AEO Demo — 奢侈品", url: "https://inari-kira-isla.github.io/aeo-demo-luxury/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-luxury", color: "#ecc94b", badge: "new", industry: "奢侈品牌", region: "other" },
+  { id: "aeo-demo-travel-food", name: "AEO Demo — 旅遊美食", url: "https://inari-kira-isla.github.io/aeo-demo-travel-food/", worker: CLIENT_TRACKER, workerSlug: "aeo-demo-travel-food", color: "#ed8936", badge: "new", industry: "旅遊美食", region: "other" }
+];
+
+let showAllSites = true;
+let currentRegionFilter = "all";
+function getActiveSites() { return showAllSites ? ALL_SITES : ALL_SITES.filter(s => s.region === "macau" || s.region === "encyclopedia"); }
+// SITES is a dynamic getter for backward compat
+let SITES = getActiveSites();
+
+function setRegionFilter(r) {
+  currentRegionFilter = r;
+  document.querySelectorAll('.region-btn').forEach(b => b.classList.toggle('active', b.dataset.r === r));
+  renderSiteCards();
+}
+
+const BOT_COLORS = {
+  "OpenAI GPT":"#58a6ff","ChatGPT Browser":"#58a6ff","OpenAI Search":"#58a6ff",
+  "Anthropic Claude":"#bc8cff","Claude Crawler":"#bc8cff","Claude Web":"#bc8cff",
+  "Perplexity AI":"#39d2c0","Google Gemini Training":"#3fb950","Google Search":"#3fb950",
+  "Microsoft Bing AI":"#79c0ff","Meta AI":"#58a6ff","Meta AI Bot":"#58a6ff",
+  "ByteDance AI":"#f85149","Common Crawl":"#8b949e","You.com AI":"#8b949e",
+  "Cohere AI":"#8b949e","Apple AI":"#8b949e","Internet Archive":"#8b949e",
+  // Chinese AI
+  "Baidu/Ernie AI":"#de4343","Sogou AI":"#ff6b35","ChatGLM/Zhipu AI":"#7c3aed",
+  "360 AI":"#22c55e","Tencent Hunyuan":"#0ea5e9","SenseChat AI":"#f97316",
+  "Spark/iFlytek AI":"#ec4899","Kimi/Moonshot AI":"#14b8a6","Doubao AI":"#8b5cf6",
+  "XiaoIce AI":"#06b6d4"
+};
+
+// Chinese AI bot names (display names)
+const CN_BOTS = new Set([
+  "ByteDance AI", "Baidu/Ernie AI", "Sogou AI", "ChatGLM/Zhipu AI",
+  "360 AI", "Tencent Hunyuan", "SenseChat AI", "Spark/iFlytek AI",
+  "Kimi/Moonshot AI", "Doubao AI", "XiaoIce AI"
+]);
+
+const BOT_OWNER_MAP = {
+  "OpenAI GPT":"OpenAI","ChatGPT Browser":"OpenAI","OpenAI Search":"OpenAI",
+  "Anthropic Claude":"Anthropic","Claude Crawler":"Anthropic","Claude Web":"Anthropic",
+  "Perplexity AI":"Perplexity","Google Gemini Training":"Google","Google Search":"Google",
+  "Microsoft Bing AI":"Microsoft","Meta AI":"Meta","Meta AI Bot":"Meta",
+  "ByteDance AI":"ByteDance","Common Crawl":"Common Crawl","You.com AI":"You.com",
+  "Cohere AI":"Cohere","Apple AI":"Apple","Internet Archive":"Internet Archive",
+  "Baidu/Ernie AI":"Baidu","Sogou AI":"Sogou","ChatGLM/Zhipu AI":"Zhipu AI",
+  "360 AI":"Qihoo 360","Tencent Hunyuan":"Tencent","SenseChat AI":"SenseTime",
+  "Spark/iFlytek AI":"iFlytek","Kimi/Moonshot AI":"Moonshot AI","Doubao AI":"ByteDance","XiaoIce AI":"XiaoIce"
+};
+
+let allData = {};
+
+// ============================================
+// Region toggle (Macau focus vs All)
+// ============================================
+function toggleRegion() {
+  showAllSites = !showAllSites;
+  SITES = getActiveSites();
+  document.getElementById("region-label").textContent = showAllSites ? "全部站點" : "澳門區";
+  const btn = document.getElementById("region-toggle");
+  btn.textContent = showAllSites ? "只看澳門區" : "顯示全部站點";
+  btn.style.color = showAllSites ? "var(--cyan)" : "var(--dim)";
+  btn.style.borderColor = showAllSites ? "var(--cyan)" : "var(--border)";
+  renderSummary(); renderSiteCards(); renderHeatmap(); renderFeed(); renderCnVsIntl(); renderAiVsHuman();
+}
+
+// ============================================
+// Tab switching
+// ============================================
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+  document.getElementById(`tab-${tabId}`).classList.add('active');
+  if (tabId === 'time-trends' && !trendData) loadTrendData();
+  if (tabId === 'insight-progress') loadInsightProgress();
+  if (tabId === 'insight-pref') loadInsightPref();
+}
+
+// ============================================
+// Tab 4: Time Trends — Canvas stacked area chart
+// ============================================
+let trendDays = 30, trendData = null;
+const trendDisabled = new Set();
+
+const OWNER_COLORS = {
+  "OpenAI":"#58a6ff","Anthropic":"#bc8cff","Google":"#3fb950","Perplexity":"#39d2c0",
+  "Microsoft":"#79c0ff","Meta":"#0668E1","ByteDance":"#f85149","Apple":"#8b949e",
+  "Baidu":"#de4343","Unknown":"#8b949e"
+};
+const SITE_COLORS_MAP = {};
+ALL_SITES.forEach(s => { SITE_COLORS_MAP[s.id] = s.color; });
+
+function setTrendDays(d) {
+  trendDays = d;
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.toggle('active', parseInt(b.dataset.days) === d));
+  loadTrendData();
+}
+
+async function loadTrendData() {
+  const group = document.getElementById('trend-group').value;
+  document.getElementById('trend-title').textContent =
+    `每日 AI 爬蟲訪問趨勢 — 按${group === 'owner' ? '所有者' : '站點'} (${trendDays} 天)`;
+  try {
+    // Try GitHub Pages precomputed cache first
+    let res = await fetch(CACHE_BASE + "/crawler-stats-daily-30.json", { cache: 'no-store' });
+    if (!res.ok) {
+      // Fallback to Vercel API
+      res = await fetch(SUPABASE_API + `&view=daily&days=${trendDays}`, { cache: 'no-store' });
+    }
+    if (!res.ok) throw new Error('API error');
+    trendData = await res.json();
+    trendDisabled.clear();
+    renderTrendChart();
+    renderTrendLegend();
+    renderTrendTable();
+  } catch (e) {
+    console.error('Trend load error', e);
+  }
+}
+
+function niceStep(max) {
+  const rough = max / 5;
+  const mag = Math.pow(10, Math.floor(Math.log10(rough)));
+  const norm = rough / mag;
+  return norm <= 1 ? mag : norm <= 2 ? 2*mag : norm <= 5 ? 5*mag : 10*mag;
+}
+
+function renderTrendChart() {
+  if (!trendData || !trendData.daily.length) return;
+  const canvas = document.getElementById('trend-canvas');
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  canvas.width = w * dpr; canvas.height = h * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const group = document.getElementById('trend-group').value;
+  const daily = trendData.daily;
+  const allKeys = group === 'owner' ? trendData.owners : trendData.sites;
+  const keys = allKeys.filter(k => !trendDisabled.has(k));
+  const colors = group === 'owner' ? OWNER_COLORS : SITE_COLORS_MAP;
+
+  const ml = 55, mr = 20, mt = 10, mb = 55;
+  const cw = w - ml - mr, ch = h - mt - mb;
+  const n = daily.length;
+  if (n < 1) return;
+
+  // Build stacked data
+  const stacked = daily.map(d => {
+    const src = group === 'owner' ? d.by_owner : d.by_site;
+    let cum = 0;
+    const vals = {};
+    keys.forEach(k => { const v = src[k] || 0; vals[k] = { b: cum, t: cum + v }; cum += v; });
+    return { date: d.date, vals, total: cum };
+  });
+  const maxY = Math.max(1, ...stacked.map(s => s.total));
+  const yStep = niceStep(maxY);
+
+  ctx.clearRect(0, 0, w, h);
+
+  // Y gridlines
+  ctx.strokeStyle = '#21262d'; ctx.lineWidth = 1;
+  ctx.font = '11px JetBrains Mono,monospace'; ctx.fillStyle = '#8b949e'; ctx.textAlign = 'right';
+  for (let y = 0; y <= maxY; y += yStep) {
+    const py = mt + ch - (y / maxY) * ch;
+    ctx.beginPath(); ctx.moveTo(ml, py); ctx.lineTo(ml + cw, py); ctx.stroke();
+    ctx.fillText(y.toString(), ml - 8, py + 4);
+  }
+
+  // Stacked areas
+  const xStep = n > 1 ? cw / (n - 1) : cw;
+  const px = i => ml + i * xStep;
+  const py = (v) => mt + ch - (v / maxY) * ch;
+
+  [...keys].reverse().forEach(k => {
+    const c = colors[k] || '#8b949e';
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) { const x = px(i), y2 = py(stacked[i].vals[k]?.t || 0); i === 0 ? ctx.moveTo(x, y2) : ctx.lineTo(x, y2); }
+    for (let i = n - 1; i >= 0; i--) { ctx.lineTo(px(i), py(stacked[i].vals[k]?.b || 0)); }
+    ctx.closePath();
+    ctx.fillStyle = c + '60'; ctx.fill();
+    // Top line
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) { const x = px(i), y2 = py(stacked[i].vals[k]?.t || 0); i === 0 ? ctx.moveTo(x, y2) : ctx.lineTo(x, y2); }
+    ctx.strokeStyle = c; ctx.lineWidth = 1.5; ctx.stroke();
+  });
+
+  // X labels
+  ctx.fillStyle = '#8b949e'; ctx.font = '10px JetBrains Mono,monospace'; ctx.textAlign = 'center';
+  const every = n > 60 ? 7 : n > 20 ? 3 : 1;
+  daily.forEach((d, i) => {
+    if (i % every !== 0 && i !== n - 1) return;
+    ctx.save(); ctx.translate(px(i), mt + ch + 12); ctx.rotate(Math.PI / 6);
+    ctx.fillText(d.date.slice(5), 0, 0); ctx.restore();
+  });
+
+  // Axis lines
+  ctx.strokeStyle = '#30363d'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(ml, mt); ctx.lineTo(ml, mt + ch); ctx.lineTo(ml + cw, mt + ch); ctx.stroke();
+
+  // Hover
+  const tip = document.getElementById('trend-tip');
+  canvas.onmousemove = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const idx = Math.min(n - 1, Math.max(0, Math.round((mx - ml) / xStep)));
+    const d = daily[idx];
+    const src = group === 'owner' ? d.by_owner : d.by_site;
+    let html = `<div style="font-weight:700;margin-bottom:.35rem;color:var(--cyan)">${d.date}</div>`;
+    html += `<div style="margin-bottom:.25rem">合計: <b>${d.total}</b></div>`;
+    Object.entries(src).sort((a, b) => b[1] - a[1]).forEach(([k, v]) => {
+      const c = colors[k] || '#8b949e';
+      html += `<div><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${c};margin-right:.35rem;vertical-align:middle"></span>${k}: ${v}</div>`;
+    });
+    tip.innerHTML = html; tip.style.display = 'block';
+    tip.style.left = Math.min(mx + 15, w - 220) + 'px'; tip.style.top = '40px';
+  };
+  canvas.onmouseleave = () => { tip.style.display = 'none'; };
+}
+
+function renderTrendLegend() {
+  if (!trendData) return;
+  const group = document.getElementById('trend-group').value;
+  const keys = group === 'owner' ? trendData.owners : trendData.sites;
+  const colors = group === 'owner' ? OWNER_COLORS : SITE_COLORS_MAP;
+  document.getElementById('trend-legend').innerHTML = keys.map(k => {
+    const c = colors[k] || '#8b949e';
+    const dis = trendDisabled.has(k) ? ' disabled' : '';
+    return `<div class="trend-legend-item${dis}" onclick="toggleTrendSeries('${k}')"><div class="trend-legend-dot" style="background:${c}"></div>${k}</div>`;
+  }).join('');
+}
+
+function toggleTrendSeries(key) {
+  trendDisabled.has(key) ? trendDisabled.delete(key) : trendDisabled.add(key);
+  renderTrendChart(); renderTrendLegend();
+}
+
+function renderTrendTable() {
+  if (!trendData) return;
+  const group = document.getElementById('trend-group').value;
+  const keys = group === 'owner' ? trendData.owners : trendData.sites;
+  const colors = group === 'owner' ? OWNER_COLORS : SITE_COLORS_MAP;
+  document.getElementById('trend-thead').innerHTML = `<tr><th>日期</th><th>合計</th>${keys.map(k => `<th style="color:${colors[k]||'var(--dim)'}">${k}</th>`).join('')}</tr>`;
+  document.getElementById('trend-tbody').innerHTML = [...trendData.daily].reverse().map(d => {
+    const src = group === 'owner' ? d.by_owner : d.by_site;
+    return `<tr><td class="mono">${d.date}</td><td style="font-weight:700">${d.total}</td>${keys.map(k => `<td>${src[k]||0}</td>`).join('')}</tr>`;
+  }).join('');
+}
+
+window.addEventListener('resize', () => {
+  if (document.getElementById('tab-time-trends')?.classList.contains('active') && trendData) renderTrendChart();
+});
+
+// ============================================
+// Data fetching (Worker KV + Supabase hybrid)
+// ============================================
+
+// Bot pattern → display name mapping (Supabase uses patterns, monitor uses display names)
+const SUPABASE_BOT_MAP = {
+  "GPTBot": "OpenAI GPT", "ChatGPT-User": "ChatGPT Browser", "OAI-SearchBot": "OpenAI Search",
+  "ClaudeBot": "Claude Crawler", "anthropic-ai": "Anthropic Claude", "Claude-Web": "Claude Web",
+  "PerplexityBot": "Perplexity AI", "Google-Extended": "Google Gemini Training",
+  "Googlebot": "Google Search", "Bingbot": "Microsoft Bing AI",
+  "meta-externalagent": "Meta AI", "FacebookBot": "Meta AI Bot",
+  "Bytespider": "ByteDance AI", "Applebot": "Apple AI", "Applebot-Extended": "Apple AI",
+  "CCBot": "Common Crawl", "YouBot": "You.com AI", "cohere-ai": "Cohere AI",
+  "ia_archiver": "Internet Archive",
+  "Baiduspider": "Baidu/Ernie AI", "Sogou": "Sogou AI", "ChatGLM": "ChatGLM/Zhipu AI",
+  "360Spider": "360 AI", "HunyuanBot": "Tencent Hunyuan", "SenseChat": "SenseChat AI",
+  "SparkBot": "Spark/iFlytek AI", "Kimi": "Kimi/Moonshot AI", "Doubao": "Doubao AI",
+  "XiaoIce": "XiaoIce AI",
+};
+
+// Sites with Supabase crawler-stats API (Next.js middleware tracking, much higher accuracy)
+const SUPABASE_API = "https://cloudpipe-macao-app.vercel.app/api/v1/crawler-stats";
+
+// Supabase site ID mapping (monitor id → Supabase site column value)
+const SUPABASE_SITE_MAP = {
+  "cloudpipe-macao-app": "cloudpipe-macao-app",
+  "world-encyclopedia": "world-encyclopedia",
+  "japan-encyclopedia": "japan-encyclopedia",
+  "taiwan-encyclopedia": "taiwan-encyclopedia",
+  "hongkong-encyclopedia": "hongkong-encyclopedia",
+  "macau-encyclopedia": "macau-encyclopedia",
+  "cloudpipe-directory": "cloudpipe-directory",
+  "ai-learning": "openclaw",
+  "cloudpipe": "cloudpipe-landing",
+  "yamanakada": "yamanakada",
+  "sea-urchin-delivery": "sea-urchin-delivery",
+  "inari-global-foods": "inari-global-foods",
+  "after-school-coffee": "after-school-coffee",
+  "mind-coffee": "mind-coffee",
+  "bni-macau": "bni-macau",
+};
+
+// === Unified data — fetched from GitHub Pages precomputed cache (instant, no Vercel timeout) ===
+const CACHE_BASE = "https://inari-kira-isla.github.io/Openclaw/api-cache";
+let _supabaseAll = null;      // { summary, today } for ALL sites combined
+let _supabaseMacao = null;    // { summary, today } for cloudpipe-macao-app only (industries)
+let _supabaseLoaded = false;
+
+async function loadSupabaseData() {
+  if (_supabaseLoaded) return;
+  _supabaseLoaded = true;
+  try {
+    // Read precomputed JSON from GitHub Pages (updated every 5 min by local cron)
+    const summaryRes = await fetch(CACHE_BASE + "/crawler-stats-summary-30.json", { cache: 'no-store' });
+    if (summaryRes.ok) {
+      const summary = await summaryRes.json();
+      // Build today data by scaling 30d proportions to today_visits count
+      // summary.sites/bots/industries are 30d cumulative — must NOT be used as today values directly
+      const todayTotal = summary.today_visits || 0;
+      const cumTotal = summary.total_visits || 1;
+      const todayRatioGlobal = todayTotal / cumTotal;
+
+      // Scale each site/bot/industry by today proportion
+      const todaySites = {};
+      for (const [s, c] of Object.entries(summary.sites || {})) {
+        todaySites[s] = Math.round(c * todayRatioGlobal);
+      }
+      const todayBots = {};
+      for (const [b, info] of Object.entries(summary.bots || {})) {
+        todayBots[b] = { count: Math.round(info.count * todayRatioGlobal), owner: info.owner };
+      }
+      const todayIndustries = {};
+      for (const [ind, c] of Object.entries(summary.industries || {})) {
+        todayIndustries[ind] = Math.round(c * todayRatioGlobal);
+      }
+      const todayData = {
+        total_visits: todayTotal,
+        sites: todaySites,
+        bots: todayBots,
+        industries: todayIndustries,
+      };
+      _supabaseAll = { summary, today: todayData };
+
+      // Filter for cloudpipe-macao-app site
+      // Use site_sample_total as denominator (sample size), not total_visits,
+      // so ratio reflects the true proportion from the most-recent-5000-row sample.
+      const macaoVisits = (summary.sites || {})["cloudpipe-macao-app"] || 0;
+      const sampleTotal = summary.site_sample_total || Object.values(summary.sites || {}).reduce((a, b) => a + b, 0) || 1;
+      const macaoRatio = macaoVisits / sampleTotal;
+
+      // Estimate today macao visits using 30d ratio (no per-day site breakdown available)
+      const macaoTodayVisits = Math.round(macaoRatio * (todayData.total_visits || 0));
+      const macaoTodayRatio = macaoRatio;  // same ratio assumption
+
+      // Create macao-specific view by scaling (cumulative)
+      const macaoBots = {};
+      for (const [bot, info] of Object.entries(summary.bots || {})) {
+        macaoBots[bot] = { count: Math.round(info.count * macaoRatio), owner: info.owner };
+      }
+      const macaoIndustries = {};
+      for (const [ind, count] of Object.entries(summary.industries || {})) {
+        macaoIndustries[ind] = Math.round(count * macaoRatio);
+      }
+
+      // Create macao-specific view for today (using actual today ratio)
+      const macaoBotsTod = {};
+      for (const [bot, info] of Object.entries(todayData.bots || {})) {
+        macaoBotsTod[bot] = { count: Math.round(info.count * macaoTodayRatio), owner: info.owner };
+      }
+      const macaoIndustriesToday = {};
+      for (const [ind, count] of Object.entries(todayData.industries || {})) {
+        macaoIndustriesToday[ind] = Math.round(count * macaoTodayRatio);
+      }
+
+      _supabaseMacao = {
+        summary: { ...summary, total_visits: macaoVisits, bots: macaoBots, industries: macaoIndustries },
+        today: { ...todayData, total_visits: macaoTodayVisits, bots: macaoBotsTod, industries: macaoIndustriesToday },
+      };
+    }
+    // Fallback: try Vercel API if GitHub Pages unavailable
+    if (!_supabaseAll) {
+      const res = await fetch(SUPABASE_API + "&view=summary", { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        // Try to fetch daily data for accurate today values
+        let todayFallback = data;
+        try {
+          const dailyRes = await fetch(SUPABASE_API + "&view=daily&days=30", { cache: 'no-store' });
+          if (dailyRes.ok) {
+            const dailyStats = await dailyRes.json();
+            if (dailyStats.daily && dailyStats.daily.length > 0) {
+              const lastDay = dailyStats.daily[dailyStats.daily.length - 1];
+              todayFallback = {
+                total_visits: lastDay.total,
+                sites: lastDay.by_site || {},
+                bots: {},
+                industries: lastDay.industries || {}
+              };
+              for (const [bot, count] of Object.entries(lastDay.by_owner || {})) {
+                todayFallback.bots[bot] = { count, owner: bot };
+              }
+            }
+          }
+        } catch (e) {}
+        _supabaseAll = { summary: data, today: todayFallback };
+        _supabaseMacao = { summary: data, today: todayFallback };
+      }
+    }
+  } catch (e) { console.error("Data load error", e); }
+}
+
+function mapBots(botsObj) {
+  const result = {};
+  for (const [pattern, info] of Object.entries(botsObj || {})) {
+    const displayName = SUPABASE_BOT_MAP[pattern] || pattern;
+    result[displayName] = info.count;
+  }
+  return result;
+}
+
+// Case-insensitive site lookup — handles "Openclaw" vs "openclaw" etc.
+function getSiteCount(sitesObj, name) {
+  if (!sitesObj || !name) return 0;
+  // Exact match first
+  if (sitesObj[name] != null) return sitesObj[name];
+  // Case-insensitive match, sum all variants
+  const lower = name.toLowerCase();
+  let total = 0;
+  for (const [k, v] of Object.entries(sitesObj)) {
+    if (k.toLowerCase() === lower) total += v;
+  }
+  return total;
+}
+
+function getSupabaseDataForSite(siteId) {
+  if (!_supabaseAll) return null;
+  const supabaseSiteName = SUPABASE_SITE_MAP[siteId];
+  if (!supabaseSiteName) return null;
+
+  // Per-site visit totals (accurate from Supabase sites breakdown)
+  const siteTotal = getSiteCount(_supabaseAll.summary.sites, supabaseSiteName);
+  const siteTodayTotal = getSiteCount(_supabaseAll.today.sites, supabaseSiteName);
+  if (siteTotal === 0 && siteTodayTotal === 0) return null;
+
+  // Proportionally distribute global bot counts to this site
+  // e.g. if this site = 8282/9689 of total, ClaudeBot ≈ 3000 * 8282/9689
+  const globalTotal = _supabaseAll.summary.total_visits || 1;
+  const globalTodayTotal = _supabaseAll.today.total_visits || 1;
+  const cumRatio = globalTotal > 0 ? siteTotal / globalTotal : 0;
+  const todayRatio = globalTodayTotal > 0 ? siteTodayTotal / globalTodayTotal : 0;
+
+  const globalBots = mapBots(_supabaseAll.summary.bots);
+  const globalBotsToday = mapBots(_supabaseAll.today.bots);
+
+  const siteBots = {};
+  for (const [bot, count] of Object.entries(globalBots)) {
+    siteBots[bot] = Math.round(count * cumRatio);
+  }
+  const siteBotsToday = {};
+  for (const [bot, count] of Object.entries(globalBotsToday)) {
+    siteBotsToday[bot] = Math.round(count * todayRatio);
+  }
+
+  return {
+    today: siteBotsToday,
+    totals: siteBots,
+    recentVisits: [],
+    _supabase: true,
+    _siteTotal: siteTotal,
+    _siteTodayTotal: siteTodayTotal,
+  };
+}
+
+async function fetchSiteData(site) {
+  // Macao industry entries — extract per-industry data from unified cache
+  if (site.macaoIndustry) {
+    if (!_supabaseMacao) return { today: {}, totals: {}, recentVisits: [], error: false };
+    const slug = site.macaoIndustry;
+    const cumCount = (_supabaseMacao.summary.industries || {})[slug] || 0;
+    const todayCount = (_supabaseMacao.today.industries || {})[slug] || 0;
+
+    // Proportionally distribute macao bot counts by industry share
+    const macaoTotal = _supabaseMacao.summary.total_visits || 1;
+    const macaoTodayTotal = _supabaseMacao.today.total_visits || 1;
+    const cumRatio = macaoTotal > 0 ? cumCount / macaoTotal : 0;
+    const todayRatio = macaoTodayTotal > 0 ? todayCount / macaoTodayTotal : 0;
+
+    const globalBots = mapBots(_supabaseMacao.summary.bots);
+    const globalBotsToday = mapBots(_supabaseMacao.today.bots);
+    const indBots = {}, indBotsToday = {};
+    for (const [bot, count] of Object.entries(globalBots)) { indBots[bot] = Math.round(count * cumRatio); }
+    for (const [bot, count] of Object.entries(globalBotsToday)) { indBotsToday[bot] = Math.round(count * todayRatio); }
+
+    return {
+      today: indBotsToday,
+      totals: indBots,
+      recentVisits: [], _industry: slug, _industryTotal: cumCount, _industryToday: todayCount,
+    };
+  }
+
+  // Sites without a Cloudflare Worker — use pre-loaded Supabase data
+  if (!site.worker) {
+    const data = getSupabaseDataForSite(site.id);
+    if (data) return data;
+    if (SUPABASE_SITE_MAP[site.id]) return { today: {}, totals: {}, recentVisits: [], error: false };
+    return { today: {}, totals: {}, recentVisits: [], error: false, noWorker: true };
+  }
+
+  // Fetch from Worker
+  const workerPromise = (async () => {
+    try {
+      const statsUrl = site.workerSlug
+        ? site.worker + "/" + site.workerSlug + "/ai-stats.json"
+        : site.worker + "/ai-stats.json";
+      const r = await fetch(statsUrl, { cache: 'no-store' });
+      if (!r.ok) throw new Error("fetch failed");
+      return await r.json();
+    } catch (e) {
+      return { today: {}, totals: {}, recentVisits: [], error: true };
+    }
+  })();
+
+  const supabaseData = getSupabaseDataForSite(site.id);
+  const workerData = await workerPromise;
+
+  // Prefer Supabase when it has data; fall back to Worker if Supabase empty or unavailable
+  if (supabaseData && Object.keys(supabaseData.totals || {}).length > 0) {
+    supabaseData.recentVisits = workerData.recentVisits || [];
+    return supabaseData;
+  }
+  // Worker data available — use it (Supabase was empty or unavailable)
+  if (!workerData.error) {
+    workerData.recentVisits = workerData.recentVisits || [];
+    return workerData;
+  }
+  // Both empty — return Supabase shell
+  return supabaseData || workerData;
+}
+
+// ============================================
+// Region & Human data computation
+// ============================================
+function computeRegionData() {
+  let cnToday = 0, cnTotal = 0, intlToday = 0, intlTotal = 0;
+  const cnBotTotals = {}, intlBotTotals = {}, cnBotToday = {}, intlBotToday = {};
+  const perSite = {};
+
+  let macaoCompHandled = false;
+  SITES.forEach(site => {
+    const d = allData[site.id] || { today: {}, totals: {} };
+    let sCnT = 0, sCnC = 0, sIntlT = 0, sIntlC = 0;
+
+    // Macao main page: use full site totals for region breakdown
+    if (site.macaoMain) {
+      Object.entries(d.today || {}).forEach(([bot, v]) => {
+        if (bot === "Human Visitors") return;
+        if (CN_BOTS.has(bot)) { sCnT += v; cnToday += v; cnBotToday[bot] = (cnBotToday[bot]||0) + v; }
+        else { sIntlT += v; intlToday += v; intlBotToday[bot] = (intlBotToday[bot]||0) + v; }
+      });
+      Object.entries(d.totals || {}).forEach(([bot, v]) => {
+        if (bot === "Human Visitors") return;
+        if (CN_BOTS.has(bot)) { sCnC += v; cnTotal += v; cnBotTotals[bot] = (cnBotTotals[bot]||0) + v; }
+        else { sIntlC += v; intlTotal += v; intlBotTotals[bot] = (intlBotTotals[bot]||0) + v; }
+      });
+      perSite[site.id] = { cnToday: sCnT, cnTotal: sCnC, intlToday: sIntlT, intlTotal: sIntlC, name: site.name, color: site.color };
+      return;
+    }
+    // Macao industry entries: calculate CN vs Intl breakdown
+    if (site.macaoIndustry) {
+      let indCnT = 0, indCnC = 0, indIntlT = 0, indIntlC = 0;
+      Object.entries(d.today || {}).forEach(([bot, v]) => {
+        if (bot === "Human Visitors") return;
+        if (CN_BOTS.has(bot)) { indCnT += v; }
+        else { indIntlT += v; }
+      });
+      Object.entries(d.totals || {}).forEach(([bot, v]) => {
+        if (bot === "Human Visitors") return;
+        if (CN_BOTS.has(bot)) { indCnC += v; }
+        else { indIntlC += v; }
+      });
+      perSite[site.id] = { cnToday: indCnT, cnTotal: indCnC, intlToday: indIntlT, intlTotal: indIntlC, name: site.name, color: site.color };
+      cnToday += indCnT;
+      cnTotal += indCnC;
+      intlToday += indIntlT;
+      intlTotal += indIntlC;
+      return;
+    }
+
+    Object.entries(d.today || {}).forEach(([bot, v]) => {
+      if (bot === "Human Visitors") return;
+      if (CN_BOTS.has(bot)) { sCnT += v; cnToday += v; cnBotToday[bot] = (cnBotToday[bot]||0) + v; }
+      else { sIntlT += v; intlToday += v; intlBotToday[bot] = (intlBotToday[bot]||0) + v; }
+    });
+    Object.entries(d.totals || {}).forEach(([bot, v]) => {
+      if (bot === "Human Visitors") return;
+      if (CN_BOTS.has(bot)) { sCnC += v; cnTotal += v; cnBotTotals[bot] = (cnBotTotals[bot]||0) + v; }
+      else { sIntlC += v; intlTotal += v; intlBotTotals[bot] = (intlBotTotals[bot]||0) + v; }
+    });
+
+    perSite[site.id] = { cnToday: sCnT, cnTotal: sCnC, intlToday: sIntlT, intlTotal: sIntlC, name: site.name, color: site.color };
+  });
+
+  return { cnToday, cnTotal, intlToday, intlTotal, cnBotTotals, intlBotTotals, cnBotToday, intlBotToday, perSite };
+}
+
+function computeHumanData() {
+  let aiToday = 0, aiTotal = 0, humanToday = 0, humanTotal = 0;
+  const perSite = {};
+
+  let macaoHumanHandled = false;
+  SITES.forEach(site => {
+    const d = allData[site.id] || { today: {}, totals: {} };
+    let sAiT = 0, sAiC = 0, sHT = 0, sHC = 0;
+
+    // Macao main page: use full site totals for human vs AI
+    if (site.macaoMain) {
+      Object.entries(d.today || {}).forEach(([bot, v]) => {
+        if (bot === "Human Visitors") { sHT += v; humanToday += v; }
+        else { sAiT += v; aiToday += v; }
+      });
+      Object.entries(d.totals || {}).forEach(([bot, v]) => {
+        if (bot === "Human Visitors") { sHC += v; humanTotal += v; }
+        else { sAiC += v; aiTotal += v; }
+      });
+      perSite[site.id] = { aiToday: sAiT, aiTotal: sAiC, humanToday: sHT, humanTotal: sHC, name: site.name, color: site.color };
+      return;
+    }
+    // Macao industry entries: calculate AI vs Human breakdown
+    if (site.macaoIndustry) {
+      let indAiT = 0, indAiC = 0, indHT = 0, indHC = 0;
+      Object.entries(d.today || {}).forEach(([bot, v]) => {
+        if (bot === "Human Visitors") { indHT += v; }
+        else { indAiT += v; }
+      });
+      Object.entries(d.totals || {}).forEach(([bot, v]) => {
+        if (bot === "Human Visitors") { indHC += v; }
+        else { indAiC += v; }
+      });
+      perSite[site.id] = { aiToday: indAiT, aiTotal: indAiC, humanToday: indHT, humanTotal: indHC, name: site.name, color: site.color };
+      aiToday += indAiT;
+      aiTotal += indAiC;
+      humanToday += indHT;
+      humanTotal += indHC;
+      return;
+    }
+
+    Object.entries(d.today || {}).forEach(([bot, v]) => {
+      if (bot === "Human Visitors") { sHT += v; humanToday += v; }
+      else { sAiT += v; aiToday += v; }
+    });
+    Object.entries(d.totals || {}).forEach(([bot, v]) => {
+      if (bot === "Human Visitors") { sHC += v; humanTotal += v; }
+      else { sAiC += v; aiTotal += v; }
+    });
+
+    perSite[site.id] = { aiToday: sAiT, aiTotal: sAiC, humanToday: sHT, humanTotal: sHC, name: site.name, color: site.color };
+  });
+
+  return { aiToday, aiTotal, humanToday, humanTotal, perSite };
+}
+
+// ============================================
+// Pie chart renderer (CSS conic-gradient)
+// ============================================
+function renderPie(containerId, val1, val2, color1, color2, label1, label2) {
+  const total = val1 + val2;
+  const pct1 = total > 0 ? (val1 / total * 100) : 0;
+  const pct2 = total > 0 ? (val2 / total * 100) : 0;
+  const container = document.getElementById(containerId);
+
+  if (total === 0) {
+    container.innerHTML = '<div style="color:var(--dim);padding:2rem">尚無數據</div>';
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="pie-chart" style="background:conic-gradient(${color1} 0% ${pct1}%, ${color2} ${pct1}% 100%)">
+      <div class="pie-center">
+        <div class="pct" style="color:${color1}">${pct1.toFixed(1)}%</div>
+        <div class="plbl">${label1}</div>
+      </div>
+    </div>
+    <div class="pie-legend">
+      <span><span class="dot" style="background:${color1}"></span>${label1}: ${val1.toLocaleString()} (${pct1.toFixed(1)}%)</span>
+      <span><span class="dot" style="background:${color2}"></span>${label2}: ${val2.toLocaleString()} (${pct2.toFixed(1)}%)</span>
+    </div>
+  `;
+}
+
+// ============================================
+// Stacked bar chart renderer
+// ============================================
+function renderBars(containerId, data, color1, color2, label1, label2) {
+  const container = document.getElementById(containerId);
+  const entries = SITES.map(s => {
+    const d = data[s.id];
+    if (!d) return null;
+    return { name: s.name, v1: d.v1 || 0, v2: d.v2 || 0, color: s.color };
+  }).filter(Boolean);
+
+  if (entries.length === 0) {
+    container.innerHTML = '<div style="color:var(--dim);padding:1rem">尚無數據</div>';
+    return;
+  }
+
+  container.innerHTML = entries.map(e => {
+    const total = e.v1 + e.v2;
+    const pct1 = total > 0 ? (e.v1 / total * 100) : 0;
+    const pct2 = total > 0 ? (e.v2 / total * 100) : 0;
+    return `<div class="bar-row">
+      <div class="bar-label">${e.name}</div>
+      <div class="bar-track">
+        ${total > 0 ? `<div class="bar-segment" style="width:${pct1}%;background:${color1}"></div><div class="bar-segment" style="width:${pct2}%;background:${color2}"></div>` : ''}
+      </div>
+      <div class="bar-values">${e.v1} / ${e.v2}</div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================
+// Tab 1: Original renders
+// ============================================
+function badgeHTML(type) {
+  const map = { active: '<span class="site-badge badge-active">追蹤中</span>', pending: '<span class="site-badge badge-pending">待部署</span>', new: '<span class="site-badge badge-new">新站點</span>' };
+  return map[type] || map.pending;
+}
+
+function renderSiteCards() {
+  const container = document.getElementById("site-cards");
+  const filtered = currentRegionFilter === "all" ? SITES : SITES.filter(s => s.region === currentRegionFilter);
+
+  // Group sites by region for section labels (only when showing all)
+  const REGION_LABEL = { macau: "🏮 澳門商戶百科", encyclopedia: "📚 百科站", other: "🌐 其他站點" };
+  let lastRegion = null;
+
+  container.innerHTML = filtered.map(site => {
+    let sectionHtml = "";
+    if (currentRegionFilter === "all" && site.region !== lastRegion) {
+      lastRegion = site.region;
+      sectionHtml = `<div class="site-section-label">${REGION_LABEL[site.region] || site.region}</div>`;
+    }
+    const d = allData[site.id] || { today: {}, totals: {}, recentVisits: [] };
+    // For macao industry entries, use industry-specific counts
+    const isMacaoInd = !!site.macaoIndustry;
+    const todayTotal = isMacaoInd ? (d._industryToday || 0) : (d._siteTodayTotal != null ? d._siteTodayTotal : Object.entries(d.today || {}).reduce((s, [k, v]) => k === "Human Visitors" ? s : s + v, 0));
+    const cumTotal = isMacaoInd ? (d._industryTotal || 0) : (d._siteTotal != null ? d._siteTotal : Object.entries(d.totals || {}).reduce((s, [k, v]) => k === "Human Visitors" ? s : s + v, 0));
+    const activeBots = Object.keys(d.totals || {}).filter(k => d.totals[k] > 0 && k !== "Human Visitors");
+    const noWorker = d.noWorker;
+
+    return sectionHtml + `<div class="site-card">
+      <div class="site-header">
+        <div>
+          <div class="site-name" style="color:${site.color}">${site.name}</div>
+          <div style="font-size:.7rem;color:var(--dim);margin-top:.2rem">${site.industry} &middot; ${site.url.replace('https://','').replace(/\/$/,'')}</div>
+        </div>
+        ${badgeHTML(noWorker ? 'new' : (d.error ? 'pending' : site.badge))}
+      </div>
+      <div class="site-body">
+        <div class="site-stats">
+          <div class="site-stat"><div class="num" style="color:${site.color}">${noWorker ? '—' : todayTotal}</div><div class="lbl">今日 AI</div></div>
+          <div class="site-stat"><div class="num">${noWorker ? '—' : cumTotal}</div><div class="lbl">累積 AI</div></div>
+          <div class="site-stat"><div class="num">${noWorker ? '—' : isMacaoInd ? activeBots.length : activeBots.length}</div><div class="lbl">${isMacaoInd ? '共用 Bot' : 'AI 種類'}</div></div>
+        </div>
+        <div class="site-bots">
+          ${noWorker ? '<span style="font-size:.72rem;color:var(--dim)">待部署追蹤</span>' :
+            isMacaoInd ? `<span style="font-size:.72rem;color:var(--dim)">澳門商戶百科 · ${cumTotal} 次 AI 爬蟲訪問</span>` :
+            (activeBots.length > 0
+              ? activeBots.map(b => `<span class="bot-chip active" style="${CN_BOTS.has(b)?'color:var(--red);border-color:var(--red)':''}">${b}</span>`).join('')
+              : '<span style="font-size:.72rem;color:var(--dim)">尚無 AI 訪問記錄</span>')}
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+// All 28 monitored bot names (always show in heatmap even with 0 data)
+const INTL_BOT_NAMES = [
+  "OpenAI GPT","ChatGPT Browser","OpenAI Search",
+  "Anthropic Claude","Claude Crawler","Claude Web",
+  "Perplexity AI","Google Gemini Training","Google Search",
+  "Microsoft Bing AI","Meta AI","Meta AI Bot",
+  "Common Crawl","You.com AI","Cohere AI","Apple AI","Internet Archive"
+];
+const CN_BOT_NAMES = [
+  "ByteDance AI","Baidu/Ernie AI","Sogou AI","ChatGLM/Zhipu AI",
+  "360 AI","Tencent Hunyuan","SenseChat AI",
+  "Spark/iFlytek AI","Kimi/Moonshot AI","Doubao AI","XiaoIce AI"
+];
+
+function renderHeatmap() {
+  // Show sites with worker OR Supabase data (exclude macao industry sub-entries to avoid duplication)
+  const trackedSites = ALL_SITES.filter(s => !s.macaoIndustry && (s.worker || SUPABASE_SITE_MAP[s.id]));
+
+  const grid = document.getElementById("heatmap-grid");
+  grid.style.setProperty("--cols", trackedSites.length);
+
+  let html = '<div class="hm-header"></div>';
+  trackedSites.forEach(s => { html += `<div class="hm-header" style="color:${s.color};font-size:.68rem;writing-mode:vertical-lr;text-orientation:mixed;height:90px;display:flex;align-items:flex-end;justify-content:center">${s.name}</div>`; });
+
+  function renderBotRow(bot, isCN) {
+    html += `<div class="hm-bot" style="${isCN ? 'color:var(--red)' : ''}">${bot}</div>`;
+    trackedSites.forEach(s => {
+      const d = allData[s.id] || { totals: {} };
+      const val = d.totals?.[bot] || 0;
+      let cls = "hm-0";
+      if (val >= 20) cls = "hm-4"; else if (val >= 10) cls = "hm-3"; else if (val >= 3) cls = "hm-2"; else if (val >= 1) cls = "hm-1";
+      html += `<div class="hm-cell ${cls}">${val}</div>`;
+    });
+  }
+
+  // Section: 國際 AI
+  html += `<div class="hm-bot" style="grid-column:1/-1;background:var(--card-2);color:var(--blue);font-weight:700;font-size:.78rem;padding:.5rem .75rem;border-radius:4px;margin:.4rem 0 .2rem">🌐 國際 AI（${INTL_BOT_NAMES.length} 種）</div>`;
+  INTL_BOT_NAMES.forEach(bot => renderBotRow(bot, false));
+
+  // Section: 中國 AI
+  html += `<div class="hm-bot" style="grid-column:1/-1;background:#f8514915;color:var(--red);font-weight:700;font-size:.78rem;padding:.5rem .75rem;border-radius:4px;margin:.6rem 0 .2rem">🇨🇳 中國 AI（${CN_BOT_NAMES.length} 種）</div>`;
+  CN_BOT_NAMES.forEach(bot => renderBotRow(bot, true));
+
+  // Section: 人類
+  html += `<div class="hm-bot" style="grid-column:1/-1;background:#f0883e15;color:var(--orange);font-weight:700;font-size:.78rem;padding:.5rem .75rem;border-radius:4px;margin:.6rem 0 .2rem">👤 人類訪客</div>`;
+  renderBotRow("Human Visitors", false);
+
+  grid.innerHTML = html;
+}
+
+function renderFeed() {
+  const allVisits = [];
+  SITES.forEach(site => {
+    const d = allData[site.id] || { recentVisits: [] };
+    (d.recentVisits || []).forEach(v => { allVisits.push({ ...v, site }); });
+  });
+  allVisits.sort((a, b) => b.ts - a.ts);
+  const recent = allVisits.slice(0, 30);
+  const container = document.getElementById("feed-list");
+  if (recent.length === 0) { container.innerHTML = '<div style="text-align:center;color:var(--dim);padding:2rem">尚無即時活動記錄</div>'; return; }
+  container.innerHTML = recent.map(v => {
+    const t = new Date(v.ts).toLocaleTimeString("zh-TW");
+    const d = new Date(v.ts).toLocaleDateString("zh-TW");
+    const path = (v.path || "/").length > 35 ? v.path.substring(0, 35) + "..." : v.path;
+    const botColor = BOT_COLORS[v.bot] || "var(--dim)";
+    const isCN = CN_BOTS.has(v.bot);
+    return `<div class="feed-item">
+      <div class="feed-time">${d} ${t}</div>
+      <div class="feed-bot" style="color:${botColor}">${v.bot}${isCN ? ' <span style="font-size:.6rem;color:var(--red)">CN</span>' : ''}</div>
+      <div class="feed-page">${path}</div>
+      <div class="feed-site" style="background:${v.site.color}15;color:${v.site.color};border:1px solid ${v.site.color}30;border-radius:4px">${v.site.name}</div>
+    </div>`;
+  }).join("");
+}
+
+// ============================================
+// Tab 2: CN vs International
+// ============================================
+function renderCnVsIntl() {
+  const rd = computeRegionData();
+
+  document.getElementById("cn-today-num").textContent = rd.cnToday.toLocaleString();
+  document.getElementById("cn-today-sub").textContent = `今日 ${Object.keys(rd.cnBotToday).length} 種中國 AI`;
+  document.getElementById("cn-total-text").textContent = `累積: ${rd.cnTotal.toLocaleString()}`;
+  document.getElementById("intl-today-num").textContent = rd.intlToday.toLocaleString();
+  document.getElementById("intl-today-sub").textContent = `今日 ${Object.keys(rd.intlBotToday).length} 種國際 AI`;
+  document.getElementById("intl-total-text").textContent = `累積: ${rd.intlTotal.toLocaleString()}`;
+
+  // Bot lists
+  document.getElementById("cn-bot-list").innerHTML = Object.entries(rd.cnBotTotals)
+    .sort((a, b) => b[1] - a[1])
+    .map(([b, v]) => `<span class="bot-chip active" style="color:var(--red);border-color:var(--red)">${b} (${v})</span>`).join('') || '<span style="font-size:.72rem;color:var(--dim)">尚無中國 AI 訪問</span>';
+  document.getElementById("intl-bot-list").innerHTML = Object.entries(rd.intlBotTotals)
+    .sort((a, b) => b[1] - a[1])
+    .map(([b, v]) => `<span class="bot-chip active">${b} (${v})</span>`).join('') || '<span style="font-size:.72rem;color:var(--dim)">尚無國際 AI 訪問</span>';
+
+  // Pie chart
+  renderPie("cn-intl-pie", rd.cnTotal, rd.intlTotal, "var(--red)", "var(--blue)", "中國 AI", "國際 AI");
+
+  // Bar chart
+  const barData = {};
+  SITES.forEach(s => {
+    const ps = rd.perSite[s.id];
+    if (ps) barData[s.id] = { v1: ps.cnTotal, v2: ps.intlTotal };
+  });
+  renderBars("cn-intl-bars", barData, "var(--red)", "var(--blue)", "中國 AI", "國際 AI");
+
+  // Detail table
+  const allBotEntries = [];
+  Object.entries(rd.cnBotTotals).forEach(([b, t]) => allBotEntries.push({ bot: b, owner: BOT_OWNER_MAP[b]||"?", region: "CN", today: rd.cnBotToday[b]||0, total: t }));
+  Object.entries(rd.intlBotTotals).forEach(([b, t]) => allBotEntries.push({ bot: b, owner: BOT_OWNER_MAP[b]||"?", region: "International", today: rd.intlBotToday[b]||0, total: t }));
+  allBotEntries.sort((a, b) => b.total - a.total);
+
+  document.querySelector("#cn-intl-table tbody").innerHTML = allBotEntries.map(e =>
+    `<tr>
+      <td style="color:${BOT_COLORS[e.bot]||'var(--dim)'}">${e.bot}</td>
+      <td>${e.owner}</td>
+      <td><span class="region-badge ${e.region === 'CN' ? 'region-cn' : 'region-intl'}">${e.region === 'CN' ? '中國' : '國際'}</span></td>
+      <td>${e.today}</td>
+      <td>${e.total.toLocaleString()}</td>
+    </tr>`
+  ).join('');
+}
+
+// ============================================
+// Tab 3: AI vs Human
+// ============================================
+function renderAiVsHuman() {
+  const hd = computeHumanData();
+
+  document.getElementById("ai-total-num").textContent = hd.aiToday.toLocaleString();
+  document.getElementById("ai-total-sub").textContent = `今日 AI 訪問`;
+  document.getElementById("ai-cum-text").textContent = `累積: ${hd.aiTotal.toLocaleString()}`;
+  document.getElementById("human-total-num").textContent = hd.humanToday.toLocaleString();
+  document.getElementById("human-total-sub").textContent = `今日人類訪問`;
+  document.getElementById("human-cum-text").textContent = `累積: ${hd.humanTotal.toLocaleString()}`;
+
+  // Pie chart
+  renderPie("ai-human-pie", hd.aiTotal, hd.humanTotal, "var(--purple)", "var(--green)", "AI 爬蟲", "人類訪客");
+
+  // Bar chart
+  const barData = {};
+  SITES.forEach(s => {
+    const ps = hd.perSite[s.id];
+    if (ps) barData[s.id] = { v1: ps.aiTotal, v2: ps.humanTotal };
+  });
+  renderBars("ai-human-bars", barData, "var(--purple)", "var(--green)", "AI 爬蟲", "人類訪客");
+
+  // Ratio table
+  document.querySelector("#ai-human-table tbody").innerHTML = SITES.map(s => {
+    const ps = hd.perSite[s.id];
+    if (!ps) return '';
+    const todayTotal = ps.aiToday + ps.humanToday;
+    const aiPct = todayTotal > 0 ? (ps.aiToday / todayTotal * 100).toFixed(1) + '%' : '—';
+    return `<tr>
+      <td style="color:${s.color}">${s.name}</td>
+      <td>${ps.aiToday}</td>
+      <td>${ps.humanToday}</td>
+      <td>${aiPct}</td>
+      <td>${ps.aiTotal.toLocaleString()}</td>
+      <td>${ps.humanTotal.toLocaleString()}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ============================================
+// Summary cards
+// ============================================
+function renderSummary() {
+  let todayAll = 0, totalAll = 0;
+  const allBots = new Set();
+  let topBot = "—", topCount = 0;
+  const todayByBot = {};
+  let activeSites = 0;
+
+  SITES.forEach(site => {
+    const d = allData[site.id] || { today: {}, totals: {} };
+    if (!d.noWorker && !d.error) activeSites++;
+
+    // Macao main page: use site-specific total from Supabase
+    if (site.macaoMain) {
+      const siteToday = d._siteTodayTotal || 0;
+      const siteTotal = d._siteTotal || 0;
+      todayAll += siteToday;
+      totalAll += siteTotal;
+      Object.entries(d.today || {}).forEach(([b, v]) => { if (b !== "Human Visitors") todayByBot[b] = (todayByBot[b] || 0) + v; });
+      Object.entries(d.totals || {}).forEach(([b, v]) => { if (b !== "Human Visitors" && v > 0) allBots.add(b); });
+      return;
+    }
+    // Macao industry entries: skip in summary (macaoMain already covers full site)
+    if (site.macaoIndustry) return;
+
+    // For Supabase sites, use per-site breakdown if available
+    if (d._siteTotal != null) {
+      todayAll += d._siteTodayTotal || 0;
+      totalAll += d._siteTotal;
+      Object.entries(d.totals || {}).forEach(([b, v]) => { if (b !== "Human Visitors" && v > 0) allBots.add(b); });
+      Object.entries(d.today || {}).forEach(([b, v]) => { if (b !== "Human Visitors") todayByBot[b] = (todayByBot[b] || 0) + v; });
+      return;
+    }
+
+    Object.entries(d.today || {}).forEach(([b, v]) => {
+      if (b === "Human Visitors") return;
+      todayAll += v;
+      todayByBot[b] = (todayByBot[b] || 0) + v;
+    });
+    Object.entries(d.totals || {}).forEach(([b, v]) => {
+      if (b === "Human Visitors") return;
+      totalAll += v;
+      if (v > 0) allBots.add(b);
+    });
+  });
+
+  // Find top bot — use Supabase global data directly (avoid double-counting per-site global totals)
+  if (_supabaseAll && _supabaseAll.summary.bots) {
+    const globalBots = mapBots(_supabaseAll.summary.bots);
+    Object.entries(globalBots).forEach(([b, v]) => { if (b !== "Human Visitors" && v > topCount) { topBot = b; topCount = v; } });
+  } else {
+    // Fallback for non-Supabase: use todayByBot, then per-site Worker totals
+    Object.entries(todayByBot).forEach(([b, v]) => { if (v > topCount) { topBot = b; topCount = v; } });
+    if (topCount === 0 && allBots.size > 0) {
+      SITES.forEach(site => {
+        const d = allData[site.id] || { totals: {} };
+        if (d._supabase) return; // skip Supabase sites (already handled above)
+        Object.entries(d.totals || {}).forEach(([b, v]) => { if (b !== "Human Visitors" && v > topCount) { topBot = b; topCount = v; } });
+      });
+    }
+  }
+
+  document.getElementById("g-today").textContent = todayAll;
+  document.getElementById("g-today-sub").textContent = `來自 ${Object.keys(todayByBot).length} 種 AI`;
+  document.getElementById("g-total").textContent = totalAll;
+  document.getElementById("g-types").textContent = allBots.size;
+  document.getElementById("g-sites").textContent = activeSites + " / " + SITES.length;
+  document.getElementById("g-top").textContent = topBot;
+  document.getElementById("g-top-sub").textContent = topCount > 0 ? `累積 ${topCount} 次` : "等待數據";
+
+  // CN AI + Human cards
+  const rd = computeRegionData();
+  const hd = computeHumanData();
+  document.getElementById("g-cn").textContent = rd.cnToday;
+  document.getElementById("g-cn-sub").textContent = `累積 ${rd.cnTotal.toLocaleString()}`;
+  document.getElementById("g-human").textContent = hd.humanToday;
+  document.getElementById("g-human-sub").textContent = `累積 ${hd.humanTotal.toLocaleString()}`;
+}
+
+// ============================================
+// Load all data
+// ============================================
+async function loadAll() {
+  // Load all Supabase data in 4 API calls (instead of ~30)
+  _supabaseLoaded = false;
+  await loadSupabaseData();
+
+  await Promise.allSettled(ALL_SITES.map(async site => {
+    allData[site.id] = await fetchSiteData(site);
+  }));
+
+  renderSummary();
+  renderSiteCards();
+  renderHeatmap();
+  renderFeed();
+  renderCnVsIntl();
+  renderAiVsHuman();
+
+  document.getElementById("last-refresh").textContent = "更新：" + new Date().toLocaleTimeString("zh-TW");
+
+  // Show cache freshness
+  const generatedAt = _supabaseAll?.summary?.generated_at;
+  const ageBadge = document.getElementById("cache-age-badge");
+  const staleBanner = document.getElementById("stale-banner");
+  if (generatedAt) {
+    const genDate = new Date(generatedAt);
+    const ageMs = Date.now() - genDate.getTime();
+    const ageHours = ageMs / 3600000;
+    const ageLabel = ageHours < 1
+      ? `資料：${Math.round(ageMs / 60000)} 分鐘前`
+      : ageHours < 24
+        ? `資料：${Math.round(ageHours)} 小時前`
+        : `資料：${Math.round(ageHours / 24)} 天前`;
+    ageBadge.textContent = ageLabel;
+    ageBadge.style.display = "block";
+    if (ageHours > 24) {
+      ageBadge.style.color = "#f0883e";
+      ageBadge.style.borderColor = "#f0883e";
+      const sourceNote = _supabaseAll?.summary?.source_note || "";
+      staleBanner.textContent = `⚠️ 資料快取逾 ${Math.round(ageHours)} 小時未更新（最後更新：${genDate.toLocaleString("zh-TW")}）。${sourceNote ? " " + sourceNote : ""}`;
+      staleBanner.style.display = "block";
+    } else {
+      staleBanner.style.display = "none";
+    }
+  }
+}
+
+loadAll();
+setInterval(loadAll, 60000);
+
+// ============================================
+// Tab 6: AI Preference by Insight Category
+// ============================================
+const INSIGHT_PREF_API = "https://cloudpipe-macao-app.vercel.app/api/v1/crawler-stats?view=insight-categories&days=30";
+let _iprefLoaded = false;
+
+const IND_LABELS = {
+  dining:'餐飲',shopping:'購物',attractions:'景點',hotels:'酒店',nightlife:'夜生活',
+  wellness:'健康',gaming:'博彩',transport:'交通',entertainment:'娛樂',culture:'文化',
+  education:'教育',services:'服務',general:'綜合'
+};
+const IND_COLORS = {
+  dining:'#f85149',shopping:'#f778ba',attractions:'#58a6ff',hotels:'#d29922',
+  nightlife:'#bc8cff',wellness:'#3fb950',gaming:'#f0883e',transport:'#39d2c0',
+  entertainment:'#ed8936',culture:'#9f7aea',education:'#48bb78',services:'#8b949e',general:'#8b949e'
+};
+const REGION_COLORS_PREF = {'澳門':'#f0883e','日本':'#c73e1d','台灣':'#00a3e0','香港':'#e6002e','unknown':'#8b949e'};
+
+async function loadInsightPref() {
+  if (_iprefLoaded) return;
+  _iprefLoaded = true;
+  try {
+    const res = await fetch(INSIGHT_PREF_API, { cache: 'no-store' });
+    if (!res.ok) throw new Error('API error ' + res.status);
+    const d = await res.json();
+    renderInsightPref(d);
+  } catch(e) {
+    document.getElementById('ipref-loading').textContent = '載入失敗: ' + e.message;
+  }
+}
+
+function renderBar(container, label, count, maxCount, color, subText) {
+  const pct = maxCount > 0 ? (count / maxCount * 100) : 0;
+  const row = document.createElement('div');
+  row.className = 'bar-row';
+  row.innerHTML = `
+    <div class="bar-label" title="${label}">${label}</div>
+    <div class="bar-track">
+      <div class="bar-segment" style="width:${pct.toFixed(1)}%;background:${color}"></div>
+    </div>
+    <div class="bar-values">${count.toLocaleString()}${subText ? ' · ' + subText : ''}</div>
+  `;
+  container.appendChild(row);
+}
+
+function renderInsightPref(d) {
+  document.getElementById('ipref-loading').style.display = 'none';
+  document.getElementById('ipref-content').style.display = 'block';
+
+  const total = d.total_insight_visits || 0;
+  document.getElementById('ipref-total').textContent = total.toLocaleString();
+
+  // Top region
+  const regions = Object.entries(d.by_region || {}).sort((a,b) => b[1].count - a[1].count);
+  if (regions.length > 0) {
+    const [r, ri] = regions[0];
+    document.getElementById('ipref-top-region').textContent = r;
+    document.getElementById('ipref-top-region-sub').textContent = `${ri.count} 次 · ${ri.unique_bots} 種 bot`;
+  }
+
+  // Top industry
+  const inds = Object.entries(d.by_industry || {}).sort((a,b) => b[1].count - a[1].count);
+  if (inds.length > 0) {
+    const [ind, ii] = inds[0];
+    document.getElementById('ipref-top-ind').textContent = IND_LABELS[ind] || ind;
+    document.getElementById('ipref-top-ind-sub').textContent = `${ii.count} 次 · ${ii.unique_bots} 種 bot`;
+  }
+
+  // Top cross
+  const crosses = Object.entries(d.by_cross || {}).sort((a,b) => b[1].count - a[1].count);
+  if (crosses.length > 0) {
+    const [k, ki] = crosses[0];
+    document.getElementById('ipref-top-cross').textContent = k;
+    document.getElementById('ipref-top-cross-sub').textContent = `${ki.count} 次`;
+  }
+
+  // Region bars
+  const regionMax = regions[0]?.[1].count || 1;
+  const regionCont = document.getElementById('ipref-region-bars');
+  regionCont.innerHTML = '';
+  for (const [r, ri] of regions) {
+    renderBar(regionCont, r, ri.count, regionMax, REGION_COLORS_PREF[r] || '#8b949e', `${ri.unique_bots} bots`);
+  }
+
+  // Industry bars
+  const indMax = inds[0]?.[1].count || 1;
+  const indCont = document.getElementById('ipref-ind-bars');
+  indCont.innerHTML = '';
+  for (const [ind, ii] of inds) {
+    const label = IND_LABELS[ind] || ind;
+    renderBar(indCont, label, ii.count, indMax, IND_COLORS[ind] || '#8b949e', `${ii.unique_bots} bots`);
+  }
+
+  // Cross bars (top 15)
+  const crossMax = crosses[0]?.[1].count || 1;
+  const crossCont = document.getElementById('ipref-cross-bars');
+  crossCont.innerHTML = '';
+  for (const [k, ki] of crosses.slice(0, 15)) {
+    const [region, industry] = k.split('×');
+    const color = REGION_COLORS_PREF[region] || '#8b949e';
+    renderBar(crossCont, k, ki.count, crossMax, color, `${ki.unique_bots} bots`);
+  }
+
+  // Top insights table
+  const tbody = document.getElementById('ipref-table');
+  tbody.innerHTML = (d.top_insights || []).slice(0, 30).map(ins => {
+    const indLabel = IND_LABELS[ins.industry] || ins.industry;
+    const indColor = IND_COLORS[ins.industry] || '#8b949e';
+    const pct = total > 0 ? (ins.visits / total * 100).toFixed(1) : '0';
+    return `<tr>
+      <td class="mono" style="font-size:.72rem;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${ins.slug}">
+        <a href="https://cloudpipe-macao-app.vercel.app/macao/insights/${ins.slug}" target="_blank" style="color:var(--blue)">${ins.slug.replace(/%[0-9A-F]{2}/gi,'…')}</a>
+      </td>
+      <td>${ins.region || '—'}</td>
+      <td><span class="region-badge" style="background:${indColor}20;color:${indColor};border:1px solid ${indColor}40">${indLabel}</span></td>
+      <td class="mono">${ins.visits} <span style="color:var(--dim);font-size:.7rem">(${pct}%)</span></td>
+      <td class="mono">${ins.unique_bots}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ============================================
+// Tab 5: Insight Generation Progress
+// ============================================
+const INSIGHT_PROGRESS_API = "https://cloudpipe-macao-app.vercel.app/api/v1/insight-progress";
+let _insightLoaded = false;
+
+const REGION_LABELS = { macau:"澳門 🇲🇴", hongkong:"香港 🇭🇰", taiwan:"台灣 🇹🇼", japan:"日本 🇯🇵" };
+const REGION_COLORS = { macau:"#f0883e", hongkong:"#e6002e", taiwan:"#00a3e0", japan:"#c73e1d" };
+
+async function loadInsightProgress() {
+  if (_insightLoaded) return;
+  _insightLoaded = true;
+  try {
+    const res = await fetch(INSIGHT_PROGRESS_API, { cache: 'no-store' });
+    if (!res.ok) throw new Error('API error');
+    const d = await res.json();
+    renderInsightProgress(d);
+  } catch(e) {
+    document.getElementById('insight-loading').textContent = '載入失敗: ' + e.message;
+  }
+}
+
+function renderInsightProgress(d) {
+  document.getElementById('insight-loading').style.display = 'none';
+  document.getElementById('insight-content').style.display = 'block';
+
+  // Overview
+  document.getElementById('ip-total-zh').textContent = d.phase1.done.toLocaleString();
+  document.getElementById('ip-trans-done').textContent = d.phase2.done.toLocaleString();
+  document.getElementById('ip-today').textContent = d.todayCount.toLocaleString();
+  document.getElementById('ip-total').textContent = d.totalPublished.toLocaleString();
+
+  // Phase 1 bar (ZH — total = ZH target, cap to avoid negative remaining)
+  const zh1Total = Math.max(d.phase1.total, d.phase1.done);
+  const zhPct = zh1Total > 0 ? (d.phase1.done / zh1Total * 100) : 0;
+  document.getElementById('ip-zh-pct').textContent = Math.min(zhPct, 100).toFixed(1) + '%';
+  document.getElementById('ip-zh-bar').style.width = Math.min(zhPct, 100) + '%';
+  document.getElementById('ip-zh-meta-l').textContent = `ZH 已完成 ${d.phase1.done.toLocaleString()} / ${zh1Total.toLocaleString()} 篇`;
+  document.getElementById('ip-zh-meta-r').textContent = `剩餘 ${Math.max(0, zh1Total - d.phase1.done).toLocaleString()} 篇待生成`;
+
+  // Phase 2 bar (EN+PT)
+  const transPct = d.phase2.total > 0 ? (d.phase2.done / d.phase2.total * 100) : 0;
+  document.getElementById('ip-trans-pct').textContent = transPct.toFixed(1) + '%';
+  document.getElementById('ip-trans-bar').style.width = Math.min(transPct, 100) + '%';
+  document.getElementById('ip-trans-meta-l').textContent = `EN+PT 已完成 ${d.phase2.done.toLocaleString()} / ${d.phase2.total.toLocaleString()}`;
+  document.getElementById('ip-trans-meta-r').textContent = `剩餘 ${Math.max(0, d.phase2.total - d.phase2.done).toLocaleString()} 篇待翻譯`;
+
+  // Region cards
+  const grid = document.getElementById('ip-regions');
+  grid.innerHTML = '';
+  const regions = ['macau','hongkong','taiwan','japan'];
+  for (const r of regions) {
+    const s = d.regionStats.find(x => x.region === r);
+    if (!s) continue;
+    const color = REGION_COLORS[r] || '#8b949e';
+    const label = REGION_LABELS[r] || r;
+    const maxVal = Math.max(s.zh, 1);
+    const enPct = (s.en / maxVal * 100).toFixed(0);
+    const ptPct = (s.pt / maxVal * 100).toFixed(0);
+    grid.innerHTML += `
+      <div class="rp-card">
+        <h4>
+          <span style="color:${color}">${label}</span>
+          <span style="margin-left:auto;font-size:.75rem;color:var(--dim)">${s.total.toLocaleString()} 篇</span>
+        </h4>
+        <div class="lang-bars">
+          <div class="lang-row">
+            <span class="lang-tag" style="color:var(--green)">ZH</span>
+            <div class="lang-track"><div class="lang-fill" style="width:100%;background:var(--green)"></div></div>
+            <span class="lang-val">${s.zh.toLocaleString()}</span>
+          </div>
+          <div class="lang-row">
+            <span class="lang-tag" style="color:var(--blue)">EN</span>
+            <div class="lang-track"><div class="lang-fill" style="width:${enPct}%;background:var(--blue)"></div></div>
+            <span class="lang-val">${s.en.toLocaleString()}</span>
+          </div>
+          <div class="lang-row">
+            <span class="lang-tag" style="color:var(--purple)">PT</span>
+            <div class="lang-track"><div class="lang-fill" style="width:${ptPct}%;background:var(--purple)"></div></div>
+            <span class="lang-val">${s.pt.toLocaleString()}</span>
+          </div>
+        </div>
+      </div>`;
+  }
+}
+
+</script>
+</body>
+</html>
