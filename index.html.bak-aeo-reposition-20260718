@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" prefix="og: https://ogp.me/ns#">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CloudPipe — AI 自動化平台 | 澳門智能客服 · 多平台整合 · MCP Server</title>
+  <meta name="description" content="CloudPipe 是澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服，AI 智能回覆，24/7 自動運行，從 MOP$500/月起。">
+  <meta name="keywords" content="CloudPipe, AI自動化, 澳門客服, Facebook自動化, Telegram Bot, MCP Server, 智能客服, SaaS, 澳門AI">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+  <meta name="google-site-verification" content="9EYAWnIRJ55Ccf3QicIn8s7d4GhYGU1rb9C8etIc200">
+    <meta name="msvalidate.01" content="BING_VERIFICATION_CODE_HERE">
+  <link rel="canonical" href="https://cloudpipe-landing.vercel.app/">
+  <link rel="llms-txt" href="https://cloudpipe-landing.vercel.app/llms.txt">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="CloudPipe — AI 自動化平台">
+  <meta property="og:description" content="整合 Facebook Messenger、Telegram Bot 及多平台，AI 驅動客服自動化。澳門商家首選 SaaS 方案。">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://cloudpipe-landing.vercel.app/og-cover.svg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://cloudpipe-landing.vercel.app/">
+  <meta property="og:locale" content="zh_MO">
+  <meta property="og:site_name" content="CloudPipe">
+
+  <!-- Schema.org SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CloudPipe",
+    "alternateName": "CloudPipe AI Automation Platform",
+    "description": "一站式 AI 自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台，為澳門及大灣區商家提供智能客服與行銷自動化。",
+    "url": "https://cloudpipe-landing.vercel.app",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "macOS, Linux",
+    "offers": [
+      { "@type": "Offer", "name": "基本方案", "price": "500", "priceCurrency": "MOP", "description": "單一平台整合，Claude Haiku 客服引擎，免費網站托管，每月 5,000 則訊息" },
+      { "@type": "Offer", "name": "專業方案", "price": "1500", "priceCurrency": "MOP", "description": "多平台整合，Claude Sonnet 進階分析，自動接單，每月 30,000 則訊息" },
+      { "@type": "Offer", "name": "企業方案", "price": "3000", "priceCurrency": "MOP", "description": "全平台整合，AI 銷售員，CRM，多語言，無限訊息" }
+    ],
+    "featureList": [
+      "Facebook Messenger 多品牌自動化客服",
+      "Telegram Bot 系統管理介面",
+      "MCP Server 工具箱（Model Context Protocol）",
+      "OpenAI 相容 API Proxy 多模型調度",
+      "Core 路由引擎（中央調度）",
+      "n8n Cloud 工作流整合",
+      "Cloudflare Workers 邊緣運算"
+    ],
+    "author": {
+      "@type": "Organization",
+      "name": "CloudPipe",
+      "address": { "@type": "PostalAddress", "addressLocality": "Macau", "addressRegion": "Macau SAR" }
+    }
+  }
+  </script>
+
+  <!-- Schema.org WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "CloudPipe",
+    "alternateName": "CloudPipe AI Automation Platform",
+    "url": "https://cloudpipe-landing.vercel.app",
+    "description": "澳門一站式 AI 商業自動化平台",
+    "inLanguage": ["zh-TW", "en"],
+    "publisher": {
+      "@type": "Organization",
+      "name": "CloudPipe",
+      "url": "https://cloudpipe-landing.vercel.app"
+    }
+  }
+  </script>
+
+  <!-- Schema.org BreadcrumbList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{"@type": "ListItem", "position": 1, "name": "CloudPipe", "item": "https://cloudpipe-landing.vercel.app"}]
+  }
+  </script>
+
+  <!-- Schema.org SiteNavigationElement -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SiteNavigationElement",
+    "name": "CloudPipe 主導航",
+    "hasPart": [
+      {"@type": "WebPage", "name": "服務", "url": "https://cloudpipe-landing.vercel.app/#services"},
+      {"@type": "WebPage", "name": "運作方式", "url": "https://cloudpipe-landing.vercel.app/#how-it-works"},
+      {"@type": "WebPage", "name": "定價", "url": "https://cloudpipe-landing.vercel.app/pricing.html"},
+      {"@type": "WebPage", "name": "技術架構", "url": "https://cloudpipe-landing.vercel.app/architecture.html"},
+      {"@type": "WebPage", "name": "AEO 監控", "url": "https://cloudpipe-landing.vercel.app/aeo-monitor.html"},
+      {"@type": "WebPage", "name": "FAQ", "url": "https://cloudpipe-landing.vercel.app/#faq"}
+    ]
+  }
+  </script>
+
+  <!-- Schema.org FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "CloudPipe 是什麼？", "acceptedAnswer": { "@type": "Answer", "text": "CloudPipe 是一站式 AI 自動化平台，整合 MCP Server、API Proxy、Telegram Bot 及 Facebook 粉專自動化，幫助商家用 AI 自動處理客服、接單及行銷任務，24/7 無間斷運行。" } },
+      { "@type": "Question", "name": "CloudPipe 支援哪些平台？", "acceptedAnswer": { "@type": "Answer", "text": "目前支援 Facebook Messenger（多品牌粉專）及 Telegram Bot。Instagram DM 和 WhatsApp Business 即將推出。" } },
+      { "@type": "Question", "name": "CloudPipe 使用什麼 AI 模型？", "acceptedAnswer": { "@type": "Answer", "text": "透過 API Proxy 智能調度多模型：Claude Haiku（日常客服）、Claude Sonnet（進階分析）、Gemini Flash（工具雜務），按任務自動選擇最具成本效益的模型。" } },
+      { "@type": "Question", "name": "CloudPipe 如何保障資料安全？", "acceptedAnswer": { "@type": "Answer", "text": "所有服務透過 Tailscale 加密網路連接，資料儲存在本地 SQLite，不依賴第三方雲端儲存。SaaS 架構以 tenant_id 嚴格隔離各商家資料。" } },
+      { "@type": "Question", "name": "CloudPipe 的定價是多少？", "acceptedAnswer": { "@type": "Answer", "text": "基本方案 MOP$500/月（含免費網站托管服務）、專業方案 MOP$1,500/月、企業方案 MOP$3,000/月。詳細功能比較請參閱定價頁面。" } }
+    ]
+  }
+  </script>
+
+  <!-- Schema.org Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "CloudPipe",
+    "url": "https://cloudpipe-landing.vercel.app",
+    "description": "澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服。",
+    "alternateName": "CloudPipe AI Automation Platform",
+    "address": { "@type": "PostalAddress", "addressLocality": "Macau", "addressRegion": "Macau SAR" },
+    "sameAs": ["https://github.com/Inari-Kira-Isla/cloudpipe-landing"],
+    "relatedLink": [
+      "https://cloudpipe-macao-app.vercel.app/",
+      "https://inari-kira-isla.github.io/inari-global-foods",
+      "https://inari-kira-isla.github.io/sea-urchin-delivery",
+      "https://inari-kira-isla.github.io/after-school-coffee",
+      "https://inari-kira-isla.github.io/yamanakada",
+      "https://inari-kira-isla.github.io/Openclaw/",
+      "https://cloudpipe-directory.vercel.app",
+      "https://mind-coffee.vercel.app",
+      "https://world-encyclopedia.vercel.app"
+    ],
+    "member": [
+      {"@type": "Organization", "name": "稻荷環球食品", "alternateName": "Inari Global Foods", "url": "https://inari-kira-isla.github.io/inari-global-foods"},
+      {"@type": "Organization", "name": "海膽速遞", "alternateName": "Sea Urchin Express Delivery", "url": "https://inari-kira-isla.github.io/sea-urchin-delivery"},
+      {"@type": "CafeOrCoffeeShop", "name": "After School Coffee", "url": "https://inari-kira-isla.github.io/after-school-coffee"},
+      {"@type": "Organization", "name": "山中田", "alternateName": "Yamanakada AI", "url": "https://inari-kira-isla.github.io/yamanakada"},
+      {"@type": "Organization", "name": "CloudPipe 全球企業目錄", "url": "https://cloudpipe-directory.vercel.app"},
+      {"@type": "EducationalOrganization", "name": "AI 學習寶庫", "url": "https://inari-kira-isla.github.io/Openclaw/"},
+      {"@type": "CafeOrCoffeeShop", "name": "Mind Coffee", "alternateName": "賣·咖啡", "url": "https://mind-coffee.vercel.app"},
+      {"@type": "WebSite", "name": "世界百科", "alternateName": "World Encyclopedia", "url": "https://world-encyclopedia.vercel.app"}
+    ]
+  }
+  </script>
+
+  <link rel="alternate" type="application/json" href="/api/info.json" title="CloudPipe API Endpoint">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ══════════════════════════════════════════════
+       TOKENS
+    ══════════════════════════════════════════════ */
+    :root {
+      --bg:          #080810;
+      --bg-alt:      #0d0d1a;
+      --bg-card:     #111120;
+      --bg-card-h:   #16162a;
+      --cyan:        #00e5ff;
+      --cyan-dim:    rgba(0,229,255,0.10);
+      --cyan-border: rgba(0,229,255,0.20);
+      --magenta:     #ff2d7b;
+      --magenta-dim: rgba(255,45,123,0.08);
+      --amber:       #ffab00;
+      --text:        #e6e6f0;
+      --text-2:      #7272a0;
+      --text-3:      #404060;
+      --border:      rgba(255,255,255,0.07);
+      --r:           16px;
+      --r-sm:        10px;
+    }
+
+    /* ══════════════════════════════════════════════
+       RESET / BASE
+    ══════════════════════════════════════════════ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ══════════════════════════════════════════════
+       BACKGROUND FX
+    ══════════════════════════════════════════════ */
+    .bg-ambient {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 900px 700px at 10% 15%, rgba(0,229,255,0.05), transparent 60%),
+        radial-gradient(ellipse 700px 900px at 90% 85%, rgba(255,45,123,0.04), transparent 60%);
+    }
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 72px 72px;
+    }
+
+    /* ══════════════════════════════════════════════
+       LAYOUT
+    ══════════════════════════════════════════════ */
+    .container {
+      max-width: 1140px; margin: 0 auto; padding: 0 24px;
+      position: relative; z-index: 1;
+    }
+    section { padding: 96px 0; }
+    .section-alt { background: var(--bg-alt); }
+
+    /* ══════════════════════════════════════════════
+       TYPOGRAPHY HELPERS
+    ══════════════════════════════════════════════ */
+    .eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--magenta); margin-bottom: 14px;
+    }
+    .section-title {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700; letter-spacing: -1.5px; margin-bottom: 56px;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, var(--cyan), var(--magenta));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* ══════════════════════════════════════════════
+       BUTTONS
+    ══════════════════════════════════════════════ */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Sora', sans-serif; font-weight: 600; font-size: 14px;
+      padding: 13px 28px; border-radius: 100px;
+      transition: all 0.2s; cursor: pointer; border: none;
+    }
+    .btn-primary {
+      background: var(--cyan); color: #080810;
+    }
+    .btn-primary:hover { background: #fff; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,229,255,0.25); }
+    .btn-outline {
+      background: transparent; color: var(--text-2);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+    /* ══════════════════════════════════════════════
+       NAVBAR
+    ══════════════════════════════════════════════ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      padding: 22px 0; transition: padding 0.3s, background 0.3s, border 0.3s;
+    }
+    .nav.scrolled {
+      background: rgba(8,8,16,0.88); backdrop-filter: blur(20px);
+      padding: 14px 0; border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex; align-items: center; gap: 32px;
+    }
+    .nav-logo {
+      font-family: 'Sora', sans-serif; font-weight: 800; font-size: 20px;
+      letter-spacing: -0.5px; flex-shrink: 0;
+    }
+    .nav-logo .c { color: var(--cyan); }
+    .nav-links {
+      display: flex; gap: 28px; margin: 0 auto;
+    }
+    .nav-links a {
+      font-size: 14px; color: var(--text-2); transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.5px; padding: 10px 22px; border-radius: 100px;
+      background: var(--cyan); color: #080810;
+      transition: all 0.2s; flex-shrink: 0; white-space: nowrap;
+    }
+    .nav-cta:hover { background: #fff; transform: translateY(-1px); }
+    /* Mobile hamburger */
+    .nav-burger {
+      display: none; background: none; border: none;
+      color: var(--text-2); cursor: pointer; font-size: 22px;
+      margin-left: auto; padding: 4px;
+    }
+    @media (max-width: 760px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-burger { display: block; }
+      .nav.open .nav-links {
+        display: flex; flex-direction: column; gap: 0;
+        position: absolute; top: 100%; left: 0; right: 0;
+        background: var(--bg-alt); border-bottom: 1px solid var(--border);
+        padding: 8px 0;
+      }
+      .nav.open .nav-links a {
+        padding: 14px 24px; border-bottom: 1px solid var(--border);
+      }
+    }
+
+    /* ══════════════════════════════════════════════
+       HERO
+    ══════════════════════════════════════════════ */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center;
+      padding: 140px 0 96px; position: relative;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 1px;
+      color: var(--cyan); background: var(--cyan-dim); border: 1px solid var(--cyan-border);
+      padding: 6px 16px; border-radius: 100px; margin-bottom: 36px;
+    }
+    .hero-badge .dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--cyan);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+    .hero h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(3.2rem, 6.5vw, 6rem); font-weight: 800;
+      line-height: 1.06; letter-spacing: -3px; margin-bottom: 28px;
+      animation: fade-up 0.7s 0.1s both;
+    }
+    .hero-sub {
+      font-size: 18px; color: var(--text-2); max-width: 560px;
+      line-height: 1.75; margin-bottom: 44px;
+      animation: fade-up 0.7s 0.25s both;
+    }
+    .hero-actions {
+      display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 64px;
+      animation: fade-up 0.7s 0.4s both;
+    }
+    .hero-stats {
+      display: flex; gap: 48px; flex-wrap: wrap;
+      padding-top: 40px; border-top: 1px solid var(--border);
+      animation: fade-up 0.7s 0.55s both;
+    }
+    .stat-num {
+      font-family: 'Sora', sans-serif; font-size: 30px; font-weight: 800;
+      color: var(--text); line-height: 1;
+    }
+    .stat-label { font-size: 12px; color: var(--text-2); margin-top: 4px; }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ══════════════════════════════════════════════
+       PLATFORM STRIP
+    ══════════════════════════════════════════════ */
+    .platform-strip {
+      padding: 32px 0; border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative; z-index: 1;
+    }
+    .strip-label {
+      font-family: 'Space Mono', monospace; font-size: 10px;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--text-3); text-align: center; margin-bottom: 20px;
+    }
+    .platform-list {
+      display: flex; flex-wrap: wrap;
+      justify-content: center; align-items: center; gap: 20px 40px;
+    }
+    .platform-item {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 14px; color: var(--text-2);
+    }
+    .platform-icon {
+      width: 32px; height: 32px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center; font-size: 17px;
+    }
+    .platform-item.soon { opacity: 0.4; }
+    .soon-badge {
+      font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.5px;
+      color: var(--amber); border: 1px solid rgba(255,171,0,0.3);
+      padding: 2px 7px; border-radius: 4px;
+    }
+
+    /* ══════════════════════════════════════════════
+       HOW IT WORKS
+    ══════════════════════════════════════════════ */
+    .steps-grid {
+      display: grid; grid-template-columns: 1fr 48px 1fr 48px 1fr;
+      align-items: start; gap: 0;
+    }
+    .step-card { padding: 32px 20px; text-align: center; }
+    .step-num {
+      font-family: 'Sora', sans-serif; font-size: 56px; font-weight: 800;
+      color: rgba(0,229,255,0.15); line-height: 1; margin-bottom: 20px;
+    }
+    .step-card h3 {
+      font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .step-card p { font-size: 14px; color: var(--text-2); line-height: 1.7; }
+    .step-arrow {
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-3); font-size: 20px; padding-top: 44px;
+    }
+    @media (max-width: 700px) {
+      .steps-grid { grid-template-columns: 1fr; }
+      .step-arrow { display: none; }
+    }
+
+    /* ══════════════════════════════════════════════
+       SERVICE CARDS
+    ══════════════════════════════════════════════ */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 14px;
+    }
+    .service-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 28px 28px 32px;
+      position: relative; overflow: hidden; transition: border-color 0.3s, transform 0.2s;
+    }
+    .service-card:hover { border-color: var(--cyan-border); transform: translateY(-3px); }
+    .service-card::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .service-card:hover::after { opacity: 1; }
+    .service-icon {
+      width: 46px; height: 46px; background: var(--cyan-dim);
+      border: 1px solid var(--cyan-border); border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 18px;
+    }
+    .service-port {
+      font-family: 'Space Mono', monospace; font-size: 11px; color: var(--cyan);
+      margin-bottom: 8px;
+    }
+    .service-card h3 {
+      font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .service-card p { font-size: 13px; color: var(--text-2); line-height: 1.7; }
+
+    /* ══════════════════════════════════════════════
+       PRICING CARDS
+    ══════════════════════════════════════════════ */
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px; align-items: start;
+    }
+    .pricing-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 36px 32px;
+      position: relative; transition: all 0.3s;
+    }
+    .pricing-card.popular {
+      border-color: var(--cyan-border);
+      box-shadow: 0 0 48px rgba(0,229,255,0.09), inset 0 0 48px rgba(0,229,255,0.02);
+      margin-top: -8px;
+    }
+    .popular-badge {
+      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+      font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 1px;
+      background: var(--cyan); color: #080810; font-weight: 700;
+      padding: 5px 18px; border-radius: 100px; white-space: nowrap;
+    }
+    .plan-name {
+      font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 1px;
+      color: var(--text-2); text-transform: uppercase; margin-bottom: 20px;
+    }
+    .plan-price {
+      font-family: 'Sora', sans-serif; font-size: 52px; font-weight: 800;
+      color: var(--text); line-height: 1; margin-bottom: 4px;
+    }
+    .plan-price sup { font-size: 22px; font-weight: 500; color: var(--text-2); vertical-align: super; }
+    .plan-period { font-size: 13px; color: var(--text-3); margin-bottom: 20px; }
+    .plan-desc {
+      font-size: 13px; color: var(--text-2); line-height: 1.65;
+      padding-bottom: 20px; margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .plan-features {
+      list-style: none; margin-bottom: 32px;
+    }
+    .plan-features li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 13px; color: var(--text-2); padding: 7px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .plan-features li::before {
+      content: '✓'; color: var(--cyan); font-weight: 700;
+      font-size: 11px; margin-top: 2px; flex-shrink: 0;
+    }
+    .plan-cta {
+      display: block; text-align: center;
+      padding: 13px 20px; border-radius: var(--r-sm);
+      font-family: 'Sora', sans-serif; font-weight: 600; font-size: 14px;
+      transition: all 0.2s;
+    }
+    .pricing-card.popular .plan-cta {
+      background: var(--cyan); color: #080810;
+    }
+    .pricing-card.popular .plan-cta:hover { background: #fff; }
+    .pricing-card:not(.popular) .plan-cta {
+      background: rgba(255,255,255,0.05); color: var(--text-2);
+      border: 1px solid var(--border);
+    }
+    .pricing-card:not(.popular) .plan-cta:hover {
+      background: rgba(255,255,255,0.1); color: var(--text);
+    }
+    .pricing-note {
+      text-align: center; margin-top: 32px;
+      font-size: 14px; color: var(--text-2);
+    }
+    .pricing-note a { color: var(--cyan); border-bottom: 1px solid rgba(0,229,255,0.3); }
+    .pricing-note a:hover { border-color: var(--cyan); }
+
+    /* ══════════════════════════════════════════════
+       TECH STACK
+    ══════════════════════════════════════════════ */
+    .stack-groups { display: flex; flex-direction: column; gap: 32px; }
+    .stack-group-label {
+      font-family: 'Space Mono', monospace; font-size: 10px;
+      letter-spacing: 3px; text-transform: uppercase; color: var(--text-3);
+      margin-bottom: 12px;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      font-family: 'Space Mono', monospace; font-size: 12px;
+      padding: 8px 18px; border-radius: var(--r-sm);
+      border: 1px solid var(--border); background: var(--bg-card);
+      color: var(--text-2); transition: all 0.2s; cursor: default;
+    }
+    .chip:hover { border-color: var(--cyan-border); color: var(--cyan); }
+
+    /* ══════════════════════════════════════════════
+       FAQ
+    ══════════════════════════════════════════════ */
+    .faq-wrap { max-width: 720px; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-q {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 0; cursor: pointer;
+      font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 600;
+      color: var(--text); transition: color 0.2s; user-select: none;
+    }
+    .faq-q:hover { color: var(--cyan); }
+    .faq-icon {
+      font-size: 20px; color: var(--text-3); flex-shrink: 0;
+      transition: transform 0.3s, color 0.2s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--cyan); }
+    .faq-a {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s;
+      font-size: 14px; color: var(--text-2); line-height: 1.8;
+    }
+    .faq-item.open .faq-a { max-height: 260px; padding-bottom: 20px; }
+
+    /* ══════════════════════════════════════════════
+       CTA BOX
+    ══════════════════════════════════════════════ */
+    .cta-section { padding: 96px 0; }
+    .cta-box {
+      background: linear-gradient(135deg, rgba(0,229,255,0.07), rgba(255,45,123,0.04));
+      border: 1px solid var(--cyan-border); border-radius: 24px;
+      padding: 88px 48px; text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-box::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 600px 400px at 50% 0%, rgba(0,229,255,0.06), transparent);
+      pointer-events: none;
+    }
+    .cta-box h2 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
+      letter-spacing: -1.5px; margin-bottom: 18px;
+    }
+    .cta-box p { font-size: 16px; color: var(--text-2); margin-bottom: 40px; max-width: 440px; margin-left: auto; margin-right: auto; }
+    .cta-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; position: relative; }
+
+    /* ══════════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════════ */
+    footer {
+      padding: 48px 0; border-top: 1px solid var(--border);
+      position: relative; z-index: 1;
+    }
+    .footer-inner {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 24px;
+    }
+    .footer-brand {
+      font-family: 'Sora', sans-serif; font-weight: 800; font-size: 17px;
+    }
+    .footer-brand .c { color: var(--cyan); }
+    .footer-sub { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+    .footer-links {
+      display: flex; flex-wrap: wrap; gap: 6px 24px;
+    }
+    .footer-links a { font-size: 13px; color: var(--text-2); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { font-size: 11px; color: var(--text-3); }
+
+    /* ══════════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .hero { padding: 100px 0 64px; }
+      section { padding: 64px 0; }
+      .hero-stats { gap: 28px; }
+      .cta-box { padding: 56px 24px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 28px; }
+    }
+
+    /* ══════════════════════════════════════════════
+       SCROLL REVEAL
+    ══════════════════════════════════════════════ */
+    .reveal {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+    .reveal-d4 { transition-delay: 0.4s; }
+  </style>
+<link rel="alternate" hreflang="zh-Hant" href="https://cloudpipe-landing.vercel.app">
+<link rel="alternate" hreflang="zh-CN" href="https://cloudpipe-landing.vercel.app">
+<link rel="alternate" hreflang="x-default" href="https://cloudpipe-landing.vercel.app">
+<meta http-equiv="content-language" content="zh-TW, zh-CN, en">
+<meta name="description" lang="zh-CN" content="澳门一站式 AI 商业自动化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服，为澳门中小企业提供智能化解决方案。">
+<link rel="alternate" type="application/rss+xml" title="CloudPipe RSS" href="feed.xml">
+<!-- CAPN-NETWORK v2 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://cloudpipe-landing.vercel.app/#org",
+      "name": "CloudPipe",
+      "url": "https://cloudpipe-landing.vercel.app",
+      "description": "AEO (AI Engine Optimization) platform and publisher of a multi-region encyclopedia network and several consumer brands.",
+      "sameAs": [],
+      "knowsAbout": [
+        "Macau",
+        "Hong Kong",
+        "Japan",
+        "Taiwan",
+        "Malaysia",
+        "AEO",
+        "AI Engine Optimization",
+        "Knowledge Graph",
+        "Seafood Supply Chain",
+        "Specialty Coffee"
+      ]
+    }
+  ]
+}
+</script>
+<!-- /CAPN-NETWORK -->
+</head>
+<body>
+  <div class="bg-ambient"></div>
+  <div class="bg-grid"></div>
+
+  <!-- ════════════ NAVBAR ════════════ -->
+  <nav class="nav" id="nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="index.html" class="nav-logo">Cloud<span class="c">Pipe</span></a>
+        <div class="nav-links" id="navLinks">
+          <a href="#services">服務</a>
+          <a href="#how-it-works">運作方式</a>
+          <a href="pricing.html">定價</a>
+          <a href="#stack">技術</a>
+          <a href="architecture.html">架構</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <a href="#contact" class="nav-cta">立即諮詢 →</a>
+        <button class="nav-burger" id="navBurger" aria-label="選單">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ════════════ HERO ════════════ -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-badge">
+        <span class="dot"></span>AI Automation Platform · Macau SAR
+      </div>
+      <h1>讓 AI 幫你<br><span class="gradient-text">管理商業溝通</span></h1>
+      <p class="hero-sub">
+        整合 Facebook Messenger、Telegram Bot 及多個社交平台——一個平台管理所有品牌訊息，AI 智能回覆，24/7 自動運行。
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary">立即諮詢 →</a>
+        <a href="pricing.html" class="btn btn-outline">查看方案</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">4+</div>
+          <div class="stat-label">整合平台</div>
+        </div>
+        <div>
+          <div class="stat-num">3</div>
+          <div class="stat-label">AI 模型調度</div>
+        </div>
+        <div>
+          <div class="stat-num">24/7</div>
+          <div class="stat-label">自動運行</div>
+        </div>
+        <div>
+          <div class="stat-num">$500</div>
+          <div class="stat-label">起 MOP/月</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ════════════ AI CRAWLER REPORT STRIP ════════════ -->
+  <div style="background:linear-gradient(90deg,#0f4c81 0%,#1a3a6e 100%);padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.08);">
+    <div class="container" style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;text-align:center;">
+      <span style="font-size:13px;color:rgba(255,255,255,0.7);">📊 最新數據</span>
+      <span style="font-size:14px;color:#fff;font-weight:600;">過去 30 天，ChatGPT / Claude / Perplexity 等 AI 爬蟲訪問澳門商戶百科 <strong style="color:#fbbf24;">60,000+</strong> 次</span>
+      <a href="https://cloudpipe-macao-app.vercel.app/macao/report"
+         target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:6px;color:#fff;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;transition:background 0.2s;"
+         onmouseover="this.style.background='rgba(255,255,255,0.2)'"
+         onmouseout="this.style.background='rgba(255,255,255,0.12)'"
+      >
+        查看 AI 爬蟲季度報告 →
+      </a>
+    </div>
+  </div>
+
+  <!-- ════════════ PLATFORM STRIP ════════════ -->
+  <div class="platform-strip">
+    <div class="container">
+      <div class="strip-label">目前支援 · 即將推出</div>
+      <div class="platform-list">
+        <div class="platform-item">
+          <div class="platform-icon" style="background:rgba(24,119,242,0.15)">📘</div>
+          <span>Facebook Messenger</span>
+        </div>
+        <div class="platform-item">
+          <div class="platform-icon" style="background:rgba(0,136,204,0.15)">✈️</div>
+          <span>Telegram Bot</span>
+        </div>
+        <div class="platform-item soon">
+          <div class="platform-icon" style="background:rgba(193,53,132,0.15)">📷</div>
+          <span>Instagram DM</span>
+          <span class="soon-badge">Phase 1</span>
+        </div>
+        <div class="platform-item soon">
+          <div class="platform-icon" style="background:rgba(37,211,102,0.15)">💬</div>
+          <span>WhatsApp Business</span>
+          <span class="soon-badge">Phase 3</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ HOW IT WORKS ════════════ -->
+  <section id="how-it-works">
+    <div class="container">
+      <p class="eyebrow reveal">// How It Works</p>
+      <h2 class="section-title reveal">三步驟啟動 AI 客服</h2>
+      <div class="steps-grid">
+        <div class="step-card reveal reveal-d1">
+          <div class="step-num">01</div>
+          <h3>整合平台</h3>
+          <p>連接你的社交平台，設定品牌 FAQ 知識庫與客服語氣，5 分鐘完成初始配置。</p>
+        </div>
+        <div class="step-arrow reveal">→</div>
+        <div class="step-card reveal reveal-d2">
+          <div class="step-num">02</div>
+          <h3>AI 智能路由</h3>
+          <p>每條訊息自動分類。高信心度問題 FAQ 直接回覆，複雜問題交 AI Agent 深度處理。</p>
+        </div>
+        <div class="step-arrow reveal">→</div>
+        <div class="step-card reveal reveal-d3">
+          <div class="step-num">03</div>
+          <h3>回覆 + 升級</h3>
+          <p>AI 以品牌語氣即時回覆；無法處理時自動推送 Telegram 通知，人工無縫接手。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ SERVICES ════════════ -->
+  <section id="services" class="section-alt">
+    <div class="container">
+      <p class="eyebrow reveal">// Services</p>
+      <h2 class="section-title reveal">五大核心服務</h2>
+      <div class="services-grid">
+        <div class="service-card reveal reveal-d1">
+          <div class="service-icon">⚡</div>
+          <div class="service-port">Port :3000</div>
+          <h3>Core 路由引擎</h3>
+          <p>所有請求的中央調度站，負責路由分發、認證鑑權及流量管理，確保每個請求到達正確服務。</p>
+        </div>
+        <div class="service-card reveal reveal-d2">
+          <div class="service-icon">🔧</div>
+          <div class="service-port">Port :3001</div>
+          <h3>MCP Server 工具箱</h3>
+          <p>Model Context Protocol 伺服器，為 AI 模型提供結構化工具介面，實現外部系統的無縫整合。</p>
+        </div>
+        <div class="service-card reveal reveal-d3">
+          <div class="service-icon">🔀</div>
+          <div class="service-port">Port :3002</div>
+          <h3>API Proxy 模型調度</h3>
+          <p>OpenAI 相容 API 代理層，智能調度 Claude、Gemini 等多模型，按任務類型自動選擇最佳模型。</p>
+        </div>
+        <div class="service-card reveal reveal-d1">
+          <div class="service-icon">📡</div>
+          <div class="service-port">Port :3003</div>
+          <h3>Telegram Bot 管理介面</h3>
+          <p>透過 Telegram 進行系統管理、監控告警與快速操作，隨時隨地掌控平台狀態。</p>
+        </div>
+        <div class="service-card reveal reveal-d2">
+          <div class="service-icon">💬</div>
+          <div class="service-port">Port :3004</div>
+          <h3>FB 多品牌自動化客服</h3>
+          <p>同時管理多個 Facebook 粉專 Messenger，AI 驅動的智能回覆、自動分流與客戶記憶。</p>
+        </div>
+        <div class="service-card reveal reveal-d3">
+          <div class="service-icon">🌐</div>
+          <div class="service-port">EDGE</div>
+          <h3>外部整合服務</h3>
+          <p>Vercel 前端部署、Cloudflare Workers 邊緣運算、n8n Cloud 工作流自動化，三層架構協同運作。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ MACAO ENCYCLOPEDIA CTA ════════════ -->
+  <section style="padding:48px 0;text-align:center;background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 100%);">
+    <div class="container">
+      <p class="eyebrow reveal" style="color:#60a5fa;">// Powered by CloudPipe</p>
+      <h2 class="section-title reveal" style="font-size:1.8rem;">澳門商戶 AI 百科</h2>
+      <p style="color:#94a3b8;max-width:600px;margin:0 auto 24px;font-size:1.05rem;">940+ 商戶 · 20 行業 · 三語內容（中/英/葡） · AI 自動生成 · 開放 API</p>
+      <a href="https://cloudpipe-macao-app.vercel.app/macao" style="display:inline-block;padding:14px 32px;background:#3b82f6;color:#fff;border-radius:8px;font-weight:600;text-decoration:none;font-size:1.05rem;transition:background .2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">瀏覽澳門商戶百科 →</a>
+    </div>
+  </section>
+
+  <!-- ════════════ PRICING ════════════ -->
+  <section id="pricing">
+    <div class="container">
+      <p class="eyebrow reveal">// Pricing</p>
+      <h2 class="section-title reveal">簡單透明的定價</h2>
+      <div class="pricing-grid">
+        <div class="pricing-card reveal reveal-d1">
+          <div class="plan-name">基本方案</div>
+          <div class="plan-price"><sup>$</sup>500</div>
+          <div class="plan-period">MOP / 月</div>
+          <p class="plan-desc">適合小型商家，快速啟動 AI 客服自動化</p>
+          <ul class="plan-features">
+            <li>單一平台整合（FB 或 TG）</li>
+            <li>Claude Haiku 客服引擎</li>
+            <li>基礎自動回覆 + FAQ 匹配</li>
+            <li>免費網站托管服務</li>
+            <li>每月 5,000 則訊息</li>
+          </ul>
+          <a href="#contact" class="plan-cta">立即開始</a>
+        </div>
+        <div class="pricing-card popular reveal reveal-d2">
+          <div class="popular-badge">推薦方案</div>
+          <div class="plan-name">專業方案</div>
+          <div class="plan-price"><sup>$</sup>1,500</div>
+          <div class="plan-period">MOP / 月</div>
+          <p class="plan-desc">多平台整合、進階 AI 分析與自動化工作流</p>
+          <ul class="plan-features">
+            <li>多平台整合（FB + TG + IG）</li>
+            <li>Claude Sonnet 進階分析</li>
+            <li>自動接單 + 庫存管理</li>
+            <li>數據分析面板</li>
+            <li>每月 30,000 則訊息</li>
+          </ul>
+          <a href="#contact" class="plan-cta">立即開始</a>
+        </div>
+        <div class="pricing-card reveal reveal-d3">
+          <div class="plan-name">企業方案</div>
+          <div class="plan-price"><sup>$</sup>3,000</div>
+          <div class="plan-period">MOP / 月</div>
+          <p class="plan-desc">完整 SaaS 功能，CRM 整合與專屬技術支援</p>
+          <ul class="plan-features">
+            <li>全平台整合（含 WhatsApp）</li>
+            <li>AI 銷售員 + CRM 系統</li>
+            <li>多語言支援</li>
+            <li>專屬客戶經理</li>
+            <li>無限訊息量</li>
+          </ul>
+          <a href="#contact" class="plan-cta">聯繫我們</a>
+        </div>
+      </div>
+      <p class="pricing-note reveal">
+        需要詳細功能對比？<a href="pricing.html">查看完整定價說明 →</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ════════════ TECH STACK ════════════ -->
+  <section id="stack" class="section-alt">
+    <div class="container">
+      <p class="eyebrow reveal">// Tech Stack</p>
+      <h2 class="section-title reveal">技術基礎設施</h2>
+      <div class="stack-groups">
+        <div class="reveal">
+          <div class="stack-group-label">後端框架 &amp; 基礎設施</div>
+          <div class="chips">
+            <span class="chip">Node.js</span>
+            <span class="chip">Fastify</span>
+            <span class="chip">Python</span>
+            <span class="chip">PM2</span>
+            <span class="chip">Caddy</span>
+            <span class="chip">SQLite</span>
+            <span class="chip">Tailscale</span>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="stack-group-label">硬體 &amp; 雲端服務</div>
+          <div class="chips">
+            <span class="chip">Mac mini M4 — 主力 24/7</span>
+            <span class="chip">iMac × 2 — 開發測試</span>
+            <span class="chip">Vercel — 前端部署</span>
+            <span class="chip">Cloudflare Workers — 邊緣運算</span>
+            <span class="chip">n8n Cloud — 工作流整合</span>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="stack-group-label">AI 模型調度</div>
+          <div class="chips">
+            <span class="chip">Claude Haiku — 客服回覆</span>
+            <span class="chip">Claude Sonnet — 進階分析</span>
+            <span class="chip">Gemini Flash — 工具雜務</span>
+            <span class="chip">MiniMax M2.5 — 中文處理</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ FAQ ════════════ -->
+  <section id="faq">
+    <div class="container">
+      <p class="eyebrow reveal">// FAQ</p>
+      <h2 class="section-title reveal">常見問題</h2>
+      <div class="faq-wrap">
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>CloudPipe 是什麼？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">CloudPipe 是一站式 AI 自動化平台，整合 MCP Server、API Proxy、Telegram Bot 及 Facebook 粉專自動化，幫助商家用 AI 自動處理客服、接單、行銷等日常營運任務，24/7 無間斷運行。</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>支援哪些社交平台？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">目前支援 Facebook Messenger（多品牌粉專）及 Telegram Bot。Phase 1 將擴充 Instagram Direct Message，Phase 3 加入 WhatsApp Business 及多語言支援。</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>使用什麼 AI 模型？費用如何？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">透過 API Proxy 智能調度多模型：Claude Haiku 處理日常客服（約 MOP$5-15/月 API 費用）、Claude Sonnet 處理進階任務（約 MOP$5-30/月）、Gemini Flash 處理雜務（約 MOP$1-5/月）。AI 費用包含在方案月費內，按實際使用量計算。</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>資料安全如何保障？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">所有服務透過 Tailscale 加密網路連接，對話資料儲存在本地 SQLite 資料庫，不依賴第三方雲端儲存。SaaS 架構以 tenant_id 嚴格隔離各商家資料，符合 GDPR 最佳實踐。</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>如何開始？需要技術知識嗎？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">不需要！聯繫我們後，我們的技術團隊負責全程部署與整合。你只需提供品牌 Facebook 頁面管理員權限，我們處理其餘一切，通常 3-5 個工作天完成上線。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════ KNOWLEDGE DEPTH: AEO 完全指南 ════════════ -->
+  <section class="knowledge-depth" style="max-width:900px;margin:2rem auto;padding:0 1.5rem;line-height:1.9;font-size:1.05rem;color:#e6e6f0;position:relative;z-index:1;">
+
+    <h2 style="font-size:2rem;font-weight:800;margin-bottom:1.5rem;letter-spacing:-1px;font-family:'Sora',sans-serif;">什麼是 AEO（答案引擎優化）完全指南</h2>
+
+    <p>答案引擎優化（Answer Engine Optimization，簡稱 AEO）是一種全新的數位行銷策略，專門針對以人工智慧驅動的搜尋引擎和對話式助手進行內容優化。隨著 ChatGPT、Claude、Perplexity、Google Gemini 等 AI 工具成為越來越多人獲取資訊的首選管道，傳統的搜尋引擎優化（SEO）已經不足以確保企業在數位世界中的能見度。</p>
+
+    <p>傳統 SEO 的核心目標是讓網站在 Google 搜尋結果中排名靠前，使用者點擊連結後進入網站。然而，AI 答案引擎的運作方式截然不同：它們直接從多個來源擷取資訊，合成一個完整的答案呈現給使用者，使用者甚至不需要離開對話介面就能獲得所需資訊。這意味著，如果你的企業內容無法被 AI 引擎正確理解和引用，你就會在這場新的資訊革命中被邊緣化。</p>
+
+    <p>AEO 的核心理念是：讓你的內容成為 AI 的最佳答案來源。這不僅僅是關鍵字排名的問題，而是要確保你的內容結構清晰、語義明確、資訊權威，使 AI 模型在回答相關問題時自然而然地引用你的資訊。CloudPipe 作為澳門首家專注 AEO 的科技公司，已經幫助超過三百五十家商戶實現了 AI 可見度的顯著提升。</p>
+
+    <h3 style="font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;border-left:4px solid #00e5ff;padding-left:1rem;">AI 搜尋引擎的運作原理與發展趨勢</h3>
+
+    <p>要理解 AEO，首先需要了解 AI 搜尋引擎是如何運作的。現代 AI 搜尋引擎的核心是大型語言模型（Large Language Model，簡稱 LLM），例如 GPT-4、Claude、Gemini 等。這些模型經過海量文本資料訓練，具備理解自然語言、推理和生成文本的能力。</p>
+
+    <p>當使用者向 AI 助手提問時，系統會執行以下步驟：第一步，理解使用者的意圖和查詢語境；第二步，透過檢索增強生成技術（Retrieval-Augmented Generation，簡稱 RAG）搜尋相關的網頁和知識庫；第三步，從檢索到的資料中篩選最相關、最可信的資訊；第四步，將這些資訊合成為一個連貫、準確的答案呈現給使用者。</p>
+
+    <p>在這個過程中，AI 爬蟲（例如 GPTBot、ClaudeBot、PerplexityBot）扮演著關鍵角色。它們定期造訪網站，擷取和索引內容。與傳統搜尋引擎爬蟲不同，AI 爬蟲更注重內容的語義結構和上下文關係，而非單純的關鍵字密度。這就是為什麼結構化數據和語義標記對 AEO 如此重要。</p>
+
+    <p>從發展趨勢來看，AI 搜尋正在經歷幾個重要變化：首先，多模態搜尋正在興起，AI 不僅能理解文字，還能理解圖片、影片和音訊內容；其次，個人化推薦越來越精準，AI 會根據使用者的歷史偏好和當前語境調整答案；第三，即時資訊整合能力不斷增強，AI 可以結合最新的網路資料提供時效性更強的答案；最後，多語言能力的提升讓 AI 能夠跨語言檢索和整合資訊，這對於澳門這樣的多語言市場尤為重要。</p>
+
+    <h3 style="font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;border-left:4px solid #00e5ff;padding-left:1rem;">企業如何被 AI 引用：從 SEO 到 AEO 的轉型</h3>
+
+    <p>對於企業而言，從 SEO 到 AEO 的轉型不是一蹴而就的過程，而是需要系統性的策略調整。以下是 CloudPipe 總結的五大轉型要點：</p>
+
+    <p><strong>第一，從關鍵字堆砌到語義豐富。</strong>傳統 SEO 強調在頁面中重複使用目標關鍵字以提高排名，但 AI 引擎更注重內容的語義深度和完整性。你的內容需要圍繞主題提供全面、深入的資訊，而不是簡單地重複關鍵字。例如，一篇關於「澳門美食」的文章，不應該只是列出餐廳名單，而應該涵蓋菜系特色、歷史背景、推薦菜品、用餐建議等多個維度的資訊。</p>
+
+    <p><strong>第二，從單一頁面優化到全站知識圖譜。</strong>AI 引擎在回答問題時，會綜合考慮整個網站的資訊架構。一個組織良好的知識圖譜能讓 AI 更容易理解你的專業領域和權威性。CloudPipe 幫助商戶建立的澳門百科系統就是一個典型案例，透過行業分類、商戶檔案、深度文章等多層次的內容架構，形成了一個完整的澳門商業知識圖譜。</p>
+
+    <p><strong>第三，從追求流量到追求引用。</strong>在 AI 搜尋時代，衡量成功的指標不再是網站流量和點擊率，而是你的內容被 AI 引用的頻率和準確度。CloudPipe 的追蹤系統能夠監測各大 AI 爬蟲的造訪頻率和爬取深度，幫助企業了解自己在 AI 世界中的能見度。</p>
+
+    <p><strong>第四，從靜態內容到動態更新。</strong>AI 引擎偏好新鮮、準確的資訊。定期更新內容、確保資訊時效性，是維持 AI 引用率的關鍵。CloudPipe 的自動化內容系統每天生成和更新數十篇行業文章，確保商戶資訊始終保持最新狀態。</p>
+
+    <p><strong>第五，從封閉式設計到 AI 友善架構。</strong>許多傳統網站使用大量 JavaScript 渲染、彈窗廣告、Cookie 牆等元素，這些都會阻礙 AI 爬蟲的正常擷取。AEO 友善的網站設計應該確保核心內容以純 HTML 形式呈現，結構化數據完整標記，並且對 AI 爬蟲保持開放態度。</p>
+
+    <h3 style="font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;border-left:4px solid #00e5ff;padding-left:1rem;">結構化數據與 Schema.org 的重要性</h3>
+
+    <p>結構化數據是 AEO 的基石。Schema.org 是一套由 Google、Microsoft、Yahoo 和 Yandex 共同維護的標準化語彙，它允許網站所有者以機器可讀的格式描述網頁內容。當 AI 爬蟲造訪你的網站時，結構化數據能幫助它們快速、準確地理解你的內容。</p>
+
+    <p>CloudPipe 為每個商戶頁面實施的結構化數據包括：Organization（組織資訊，包含名稱、地址、聯繫方式、營業時間）、LocalBusiness（本地商家資訊，包含地理坐標、服務區域、價格範圍）、Product 或 Service（產品或服務描述，包含價格、規格、可用性）、FAQPage（常見問題，以問答格式呈現關鍵資訊）、BreadcrumbList（麵包屑導航，幫助 AI 理解頁面在網站中的位置）、Article（文章結構，包含作者、發佈日期、修改日期）。</p>
+
+    <p>正確實施結構化數據的效果是顯著的。根據 CloudPipe 的數據分析，具備完整 Schema.org 標記的頁面被 AI 爬蟲索引的速度平均快兩到三倍，被 AI 引用的準確度提高約百分之四十。這意味著，當使用者向 ChatGPT 或 Claude 詢問「澳門有什麼好吃的餐廳」時，具備結構化數據的商戶更有可能被準確推薦。</p>
+
+    <h3 style="font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;border-left:4px solid #00e5ff;padding-left:1rem;">llms.txt 協議與 AI 友善網站設計</h3>
+
+    <p>llms.txt 是一個新興的網路標準，專門用於向大型語言模型提供網站的結構化摘要。類似於 robots.txt 告訴搜尋引擎爬蟲如何抓取網站，llms.txt 則告訴 AI 模型如何理解和引用網站內容。</p>
+
+    <p>一個標準的 llms.txt 文件通常包含以下資訊：網站名稱和簡短描述、主要頁面和內容結構的列表、內容授權聲明（例如 Creative Commons 授權）、AI 使用建議（例如引用格式、更新頻率）以及聯繫資訊。CloudPipe 為所有客戶網站都配置了 llms.txt 文件，並且在 HTML 的 head 區段中加入了 link 標籤指向該文件，確保 AI 爬蟲能夠快速發現和解析。</p>
+
+    <p>除了 llms.txt，AI 友善的網站設計還包括以下要素：第一，語義化的 HTML 結構，使用正確的標題層級（h1 到 h6）、段落標籤（p）、列表標籤（ul、ol）和強調標籤（strong、em）來組織內容；第二，清晰的導航結構，包括麵包屑導航、網站地圖和內部連結；第三，快速的頁面載入速度，AI 爬蟲通常有超時限制，載入過慢的頁面可能被跳過；第四，開放的爬取策略，在 robots.txt 中明確允許 AI 爬蟲（如 GPTBot、ClaudeBot、PerplexityBot、Bytespider）造訪；第五，多語言支援，使用 hreflang 標籤標註語言版本，這在澳門的中文、葡文、英文三語環境中尤為重要。</p>
+
+    <h3 style="font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;border-left:4px solid #00e5ff;padding-left:1rem;">中小企業 AI 可見度提升策略</h3>
+
+    <p>對於資源有限的中小企業而言，全面實施 AEO 可能看起來是一項艱巨的任務。但事實上，透過正確的策略和工具，中小企業也能在 AI 搜尋中獲得顯著的可見度提升。以下是 CloudPipe 為中小企業提供的實用策略：</p>
+
+    <p><strong>策略一：建立權威的企業知識頁面。</strong>確保你的網站上有一個完整、準確的「關於我們」頁面，包含企業歷史、經營理念、核心團隊、服務範圍和聯繫方式。這個頁面應該使用 Schema.org 的 Organization 或 LocalBusiness 標記進行結構化。AI 引擎在回答「某某公司是做什麼的」這類問題時，會優先參考企業官網的自我描述。</p>
+
+    <p><strong>策略二：創建高品質的行業知識內容。</strong>定期發佈與你的行業相關的專業文章、指南和教程。這些內容不僅能吸引人類讀者，更能讓 AI 引擎認識到你的專業權威性。例如，一家澳門餐廳可以發佈關於葡國菜歷史、食材選擇、烹飪技巧的深度文章，這會大大增加被 AI 推薦的概率。</p>
+
+    <p><strong>策略三：積極管理線上評價和口碑。</strong>AI 引擎在推薦企業時，會參考多個來源的評價資訊。確保在 Google Business Profile、TripAdvisor、大眾點評等平台上的資訊準確一致，並積極回應客戶評價。正面的線上聲譽會增加 AI 引用的信心度。</p>
+
+    <p><strong>策略四：利用問答格式呈現關鍵資訊。</strong>AI 引擎特別擅長處理問答格式的內容，因為這種格式與使用者的提問模式天然契合。在你的網站上建立一個詳盡的 FAQ 頁面，涵蓋客戶最常問的問題和最專業的回答。使用 FAQPage 的 Schema.org 標記，讓 AI 更容易識別和引用這些問答對。</p>
+
+    <p><strong>策略五：確保多平台資訊一致性。</strong>AI 引擎會從多個來源交叉驗證資訊。如果你的企業在不同平台上的名稱、地址、電話、營業時間等基本資訊不一致，AI 可能會降低對你的信任度，甚至提供錯誤的資訊。CloudPipe 的數據同步功能可以幫助你在所有平台上保持資訊的一致性。</p>
+
+    <h3 style="font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;border-left:4px solid #00e5ff;padding-left:1rem;">AEO 成功案例分析</h3>
+
+    <p>CloudPipe 的 AEO 方案已經在澳門市場取得了令人矚目的成果。以下是幾個具代表性的案例分析：</p>
+
+    <p><strong>案例一：澳門商戶百科平台。</strong>CloudPipe 建立的澳門商戶 AI 百科平台，目前收錄了超過九百四十家澳門商戶，涵蓋二十個行業分類。透過系統性的 AEO 優化——包括 Schema.org 結構化數據、llms.txt 文件、AI 友善的內容架構和自動化內容更新——該平台在上線三個月內就被多個主流 AI 引擎（包括 ChatGPT、Claude、Perplexity）穩定收錄和引用。平台的 AI 爬蟲追蹤系統顯示，每天有來自超過二十八種不同 AI 爬蟲的造訪，包括國際的 GPTBot、ClaudeBot、PerplexityBot，以及中國大陸的百度蜘蛛、騰訊混元、智譜清言等。</p>
+
+    <p><strong>案例二：全球企業目錄。</strong>CloudPipe 的全球企業目錄收錄了超過一百八十五萬筆企業資料，覆蓋台灣、日本、香港、澳門和中國大陸。透過大規模的結構化數據實施（包括 Organization、Dataset、ItemList 等 Schema.org 類型），以及針對 AI 爬蟲優化的頁面架構，該目錄已成為 AI 引擎回答「某某地區有什麼企業」類問題時的重要資料來源。</p>
+
+    <p><strong>案例三：自有品牌商戶。</strong>CloudPipe 旗下的四個自有品牌——稻荷環球食品、海膽速遞、After School Coffee 和山中田——是 AEO 實踐的第一批受益者。每個品牌都擁有獨立的 AEO 優化網站，配備完整的結構化數據、llms.txt 文件和 AI 爬蟲追蹤系統。數據顯示，這些品牌在 AI 搜尋中的被引用率在優化後的第一個月內就提升了超過三倍。</p>
+
+    <h3 style="font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;border-left:4px solid #00e5ff;padding-left:1rem;">AI 爬蟲識別與流量分析</h3>
+
+    <p>了解哪些 AI 爬蟲在造訪你的網站、它們的造訪頻率和爬取模式，是制定有效 AEO 策略的前提。CloudPipe 開發了一套全面的 AI 爬蟲追蹤和分析系統，能夠識別並追蹤二十八種以上的 AI 爬蟲。</p>
+
+    <p>國際主流 AI 爬蟲包括：GPTBot（OpenAI 用於訓練和檢索的爬蟲）、ClaudeBot（Anthropic 用於 Claude 的爬蟲）、PerplexityBot（Perplexity AI 的搜尋爬蟲）、Google-Extended（Google Gemini 的爬蟲）、Bytespider（字節跳動的爬蟲，服務於 TikTok 和豆包）、FacebookBot（Meta 用於 AI 功能的爬蟲）、Amazonbot（Amazon 的 AI 爬蟲）、AppleBot-Extended（Apple Intelligence 的爬蟲）、YouBot（You.com 搜尋的爬蟲）、Cohere-AI（Cohere 的爬蟲）等十七種以上。</p>
+
+    <p>中國大陸的 AI 爬蟲則包括：百度蜘蛛（Baiduspider，服務於文心一言）、騰訊混元爬蟲（服務於混元大模型）、智譜清言爬蟲（ChatGLM）、三六零 AI 爬蟲、Kimi 爬蟲（月之暗面）、豆包爬蟲（字節跳動國內版）等十一種以上。</p>
+
+    <p>CloudPipe 的統一監控中心可以即時顯示所有 AI 爬蟲的活動數據，包括造訪時間、造訪頻率、爬取的具體頁面路徑、停留時間等。這些數據不僅幫助企業了解自己在不同 AI 平台上的可見度，還能指導內容優化的方向。例如，如果發現某個 AI 爬蟲頻繁造訪特定頁面但很少造訪其他頁面，可能意味著那些被忽略的頁面存在結構或內容問題需要改善。</p>
+
+    <h3 style="font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;border-left:4px solid #00e5ff;padding-left:1rem;">AEO 常見問題</h3>
+
+    <details style="margin-bottom:1rem;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:1rem 1.5rem;background:rgba(17,17,32,0.6);">
+      <summary style="cursor:pointer;font-weight:600;font-size:1.1rem;color:#e6e6f0;">AEO 和 SEO 有什麼區別？</summary>
+      <p style="margin-top:0.8rem;color:#7272a0;">SEO（搜尋引擎優化）的目標是讓網站在 Google 等傳統搜尋引擎中排名靠前，核心指標是關鍵字排名和有機流量。AEO（答案引擎優化）的目標則是讓企業內容被 AI 引擎（如 ChatGPT、Claude、Perplexity）正確理解和引用，核心指標是 AI 引用率和答案準確度。兩者並不互斥，而是互補的關係——良好的 SEO 基礎可以加速 AEO 的成效，而 AEO 的結構化數據也有助於提升 SEO 表現。</p>
+    </details>
+
+    <details style="margin-bottom:1rem;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:1rem 1.5rem;background:rgba(17,17,32,0.6);">
+      <summary style="cursor:pointer;font-weight:600;font-size:1.1rem;color:#e6e6f0;">AEO 優化需要多長時間才能看到效果？</summary>
+      <p style="margin-top:0.8rem;color:#7272a0;">根據 CloudPipe 的經驗，基礎的 AEO 設置（結構化數據、llms.txt、robots.txt 配置）可以在一到兩週內被 AI 爬蟲索引。但要在 AI 搜尋結果中獲得穩定的引用，通常需要一到三個月的持續內容優化。效果的快慢取決於多個因素，包括網站的既有權威性、內容的品質和深度、更新的頻率，以及所在行業的競爭程度。CloudPipe 的自動化系統可以大幅加速這個過程。</p>
+    </details>
+
+    <details style="margin-bottom:1rem;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:1rem 1.5rem;background:rgba(17,17,32,0.6);">
+      <summary style="cursor:pointer;font-weight:600;font-size:1.1rem;color:#e6e6f0;">小型企業也需要做 AEO 嗎？</summary>
+      <p style="margin-top:0.8rem;color:#7272a0;">絕對需要。事實上，AEO 對小型企業的價值可能比大型企業更大。在傳統 SEO 中，小企業很難與擁有龐大預算的大企業在關鍵字排名上競爭。但在 AI 搜尋中，AI 引擎更注重答案的相關性和準確性，而非網站的規模。一家在特定領域提供深度、專業內容的小商家，完全有可能在 AI 推薦中擊敗那些內容泛泛的大型網站。CloudPipe 的基本方案每月僅需五百澳門幣起，就包含完整的 AEO 優化服務。</p>
+    </details>
+
+    <details style="margin-bottom:1rem;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:1rem 1.5rem;background:rgba(17,17,32,0.6);">
+      <summary style="cursor:pointer;font-weight:600;font-size:1.1rem;color:#e6e6f0;">如何衡量 AEO 的成效？</summary>
+      <p style="margin-top:0.8rem;color:#7272a0;">CloudPipe 提供多維度的 AEO 成效衡量指標：第一，AI 爬蟲造訪數據，包括各爬蟲的造訪頻率、爬取深度和覆蓋頁面數；第二，AI 引用測試，定期向主流 AI 引擎提問與你的企業相關的問題，記錄被引用的頻率和準確度；第三，結構化數據完整度評分，檢查 Schema.org 標記的覆蓋率和正確性；第四，內容品質評分，基於語義深度、資訊完整性和時效性進行綜合評估。所有這些數據都可以在 CloudPipe 的統一監控中心即時查看。</p>
+    </details>
+
+    <details style="margin-bottom:1rem;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:1rem 1.5rem;background:rgba(17,17,32,0.6);">
+      <summary style="cursor:pointer;font-weight:600;font-size:1.1rem;color:#e6e6f0;">AI 會不會抄襲我的內容而不給引用？</summary>
+      <p style="margin-top:0.8rem;color:#7272a0;">這是一個合理的擔憂。目前主流的 AI 引擎（特別是 Perplexity、Bing Copilot 和 Google Gemini 的搜尋模式）都會在回答中附帶來源連結。CloudPipe 通過 llms.txt 文件明確聲明 CC BY 4.0 授權條款，要求 AI 引擎在使用內容時進行適當歸因。此外，結構化數據中的作者和出版者資訊也有助於 AI 正確標註來源。雖然無法百分之百保證所有 AI 工具都會提供引用，但正確的 AEO 實施可以最大化被適當引用的概率。</p>
+    </details>
+
+    <details style="margin-bottom:1rem;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:1rem 1.5rem;background:rgba(17,17,32,0.6);">
+      <summary style="cursor:pointer;font-weight:600;font-size:1.1rem;color:#e6e6f0;">CloudPipe 的 AEO 服務包含哪些具體內容？</summary>
+      <p style="margin-top:0.8rem;color:#7272a0;">CloudPipe 的 AEO 服務是一個完整的解決方案，包含以下核心組件：網站 AEO 審計與優化建議、Schema.org 結構化數據全面實施、llms.txt 和 robots.txt 配置、AI 友善的內容架構設計、自動化內容生成與更新系統、AI 爬蟲追蹤與分析儀表板、多平台資訊一致性管理、以及定期的 AEO 成效報告。此外，專業方案和企業方案還包含更深度的服務，如競爭對手分析、自訂知識圖譜建構、以及專屬的 AEO 顧問服務。</p>
+    </details>
+
+    <details style="margin-bottom:1rem;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:1rem 1.5rem;background:rgba(17,17,32,0.6);">
+      <summary style="cursor:pointer;font-weight:600;font-size:1.1rem;color:#e6e6f0;">為什麼選擇 CloudPipe 而不是其他 AEO 服務商？</summary>
+      <p style="margin-top:0.8rem;color:#7272a0;">CloudPipe 是澳門市場上唯一一家同時具備 AI 技術研發能力和 AEO 實踐經驗的科技公司。我們的優勢包括：第一，自建的 AI 基礎設施，包括多模型調度系統、MCP 協議伺服器和自動化工作流引擎；第二，已驗證的成功紀錄，九百四十多家商戶、一百八十五萬筆企業數據的實際運營經驗；第三，二十八種 AI 爬蟲的識別和追蹤能力，涵蓋國際和中國大陸的主流 AI 平台；第四，本地化的服務，熟悉澳門的多語言環境和商業生態；第五，透明的定價和可衡量的成效指標。</p>
+    </details>
+
+    <details style="margin-bottom:1rem;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:1rem 1.5rem;background:rgba(17,17,32,0.6);">
+      <summary style="cursor:pointer;font-weight:600;font-size:1.1rem;color:#e6e6f0;">AEO 對電商企業有什麼特別的價值？</summary>
+      <p style="margin-top:0.8rem;color:#7272a0;">AEO 對電商企業具有極高的戰略價值。當消費者越來越多地使用 AI 助手來搜尋和比較產品時，被 AI 優先推薦的商品會獲得顯著的銷售優勢。具體來說，AEO 可以幫助電商企業實現以下目標：讓產品資訊在 AI 購物推薦中佔據優勢位置、確保價格和庫存資訊在 AI 回答中的準確性、透過 Product Schema 標記讓 AI 更容易理解產品規格和優勢、在 AI 驅動的比較評測中獲得正面引用、以及建立品牌在 AI 知識圖譜中的權威地位。CloudPipe 針對電商客戶提供專門的產品結構化數據方案。</p>
+    </details>
+
+    <h3 style="font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;border-left:4px solid #00e5ff;padding-left:1rem;">關於 CloudPipe AI</h3>
+
+    <p>CloudPipe 是一家總部位於澳門的人工智慧科技公司，專注於為中小企業提供一站式的 AI 自動化和 AEO 解決方案。公司的使命是讓每一家企業，無論規模大小，都能在 AI 時代保持競爭力和可見度。</p>
+
+    <p>CloudPipe 的核心產品包括：AI 智能客服系統（整合 Facebook Messenger、Telegram Bot 等多平台，提供二十四小時不間斷的 AI 驅動客服服務）、AEO 優化平台（涵蓋結構化數據實施、內容自動化、AI 爬蟲追蹤和成效分析的完整工具鏈）、澳門商戶 AI 百科（收錄九百四十多家商戶的綜合性商業資訊平台，支持中文、英文和葡文三語）、全球企業目錄（涵蓋一百八十五萬筆企業數據的大規模商業資訊庫）。</p>
+
+    <p>CloudPipe 的技術架構採用微服務設計，核心引擎由 Node.js 和 Fastify 框架驅動，AI 模型調度透過自研的 API Proxy 系統實現，支持 Claude、Gemini、MiniMax 等多個模型的智能切換。數據儲存使用 SQLite 和 Supabase，確保兼顧性能和可靠性。全部服務透過 Tailscale 加密網路連接，保障數據傳輸安全。</p>
+
+    <p>展望未來，CloudPipe 將繼續深耕 AEO 領域，拓展更多 AI 平台的支援，開發更智能的自動化工具，並將成功經驗從澳門市場推廣到整個大灣區乃至全球華人市場。我們相信，在 AI 重塑資訊獲取方式的時代浪潮中，AEO 將成為每一家企業的數位基礎設施，而 CloudPipe 致力於成為這個領域最值得信賴的合作夥伴。</p>
+
+    <h3 style="font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;border-left:4px solid #ff2d7b;padding-left:1rem;">AEO 技術深度解析：檢索增強生成與知識圖譜</h3>
+
+    <p>檢索增強生成（Retrieval-Augmented Generation，簡稱 RAG）是當前 AI 搜尋引擎的核心技術架構。傳統的大型語言模型僅依賴訓練時學到的知識來回答問題，這會導致資訊過時和幻覺問題（即 AI 生成看似合理但實際不正確的答案）。RAG 技術透過在生成答案之前先從外部知識庫檢索相關文件，大幅提升了答案的準確性和時效性。</p>
+
+    <p>在 RAG 架構中，你的網站內容經過以下處理流程：首先，AI 爬蟲造訪你的網站並擷取頁面內容；接著，內容被切分為語義片段並轉換為向量嵌入（vector embeddings），存入向量資料庫；當使用者提問時，系統將問題同樣轉換為向量，透過餘弦相似度或其他度量方法找到最相關的內容片段；最後，這些片段作為上下文提供給語言模型，模型據此生成精確的答案。</p>
+
+    <p>理解這個流程對 AEO 策略至關重要。你的內容需要在「語義片段」層面具備完整性和自洽性——每一個段落都應該包含足夠的上下文資訊，即使被單獨擷取也能傳達完整的意思。這就是為什麼 CloudPipe 建議在每個內容段落中都包含主題關鍵詞和實體名稱，而不是依賴於前文的代詞指代。</p>
+
+    <p>知識圖譜（Knowledge Graph）是另一個與 AEO 密切相關的技術概念。知識圖譜是一種以圖形結構組織資訊的方式，其中節點代表實體（如企業、產品、地點、人物），邊代表實體之間的關係（如「位於」、「提供」、「屬於」）。Google 的知識面板（Knowledge Panel）就是知識圖譜的一個典型應用。當你的企業資訊被納入 AI 的知識圖譜時，AI 就能更準確地回答與你相關的各種問題。CloudPipe 的 Schema.org 實施策略正是為了幫助企業的關鍵資訊被 AI 的知識圖譜正確收錄。</p>
+
+    <h3 style="font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;border-left:4px solid #ff2d7b;padding-left:1rem;">澳門市場的 AEO 機遇與挑戰</h3>
+
+    <p>澳門作為一個獨特的市場，在 AEO 領域面臨著特殊的機遇和挑戰。從機遇面來看：第一，澳門是全球知名的旅遊目的地，每年吸引數千萬遊客，這些遊客越來越多地使用 AI 助手來規劃行程、搜尋餐廳和購物建議，為澳門商家提供了巨大的 AI 曝光潛力；第二，澳門的多語言環境（中文、葡文、英文）使得 AEO 策略可以覆蓋更廣泛的受眾群體——AI 引擎的多語言能力讓澳門商家有機會觸及全球華人社區、葡語系國家和英語世界的潛在客戶；第三，澳門的中小企業密度高、競爭激烈，早期採用 AEO 的企業可以獲得顯著的先發優勢。</p>
+
+    <p>從挑戰面來看：第一，許多澳門中小企業的數位化程度較低，部分甚至沒有官方網站，這是實施 AEO 的基礎性障礙；第二，澳門市場同時面向國際和中國大陸兩個不同的 AI 生態系統——國際市場以 OpenAI、Anthropic、Google 為主，中國大陸則以百度、騰訊、字節跳動為主——需要針對不同生態系統制定差異化策略；第三，本地 AEO 專業人才稀缺，大多數行銷公司仍停留在傳統 SEO 和社交媒體行銷的思維模式中。</p>
+
+    <p>CloudPipe 正是為了填補這些市場空白而生。我們不僅為沒有網站的商家提供免費的網站托管服務（包含在基本方案中），還同時針對國際和中國大陸的 AI 平台進行雙軌優化。我們的 robots.txt 同時歡迎 GPTBot、ClaudeBot 等國際爬蟲和百度蜘蛛、騰訊混元等中國爬蟲，確保商家在兩個生態系統中都獲得最大的可見度。</p>
+
+    <h3 style="font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;border-left:4px solid #ff2d7b;padding-left:1rem;">AEO 實施路線圖：從零到精通的完整步驟</h3>
+
+    <p>對於希望自行開展 AEO 工作的企業，CloudPipe 建議按照以下階段性路線圖逐步推進：</p>
+
+    <p><strong>第一階段：基礎建設（第一至第二週）。</strong>這個階段的目標是確保你的網站對 AI 爬蟲開放且可讀。具體任務包括：建立或更新官方網站，確保核心內容以純 HTML 呈現；配置 robots.txt 文件，明確允許所有主流 AI 爬蟲造訪；建立 sitemap.xml 文件，幫助爬蟲高效地發現所有頁面；為每個頁面設定正確的 meta 標籤，包括描述、canonical URL 和 Open Graph 標記。</p>
+
+    <p><strong>第二階段：結構化數據實施（第三至第四週）。</strong>在基礎建設完成後，開始為網站添加 Schema.org 結構化數據。優先實施的類型包括：Organization 或 LocalBusiness（企業基本資訊）、FAQPage（常見問題頁面）、Product 或 Service（產品或服務資訊）、BreadcrumbList（導航路徑）。建議使用 JSON-LD 格式嵌入在頁面的 head 區段中，這是 Google 和大多數 AI 爬蟲推薦的格式。</p>
+
+    <p><strong>第三階段：內容深度建設（第一至第三個月）。</strong>這是 AEO 效果差異化的關鍵階段。企業需要圍繞自身的核心業務領域，系統性地建立深度知識內容。每週至少發佈兩到三篇高品質的長篇文章（一千五百字以上），內容應該涵蓋行業趨勢、專業知識、客戶案例、產品深度評測等主題。每篇文章都需要配備完整的 Article Schema 標記和內部連結。</p>
+
+    <p><strong>第四階段：監測與優化（持續進行）。</strong>AEO 不是一次性的工作，而是需要持續監測和迭代的過程。建立 AI 爬蟲追蹤系統（CloudPipe 提供的追蹤腳本可以免費整合）；定期向主流 AI 引擎測試與你的企業相關的問題，檢查答案的準確度和引用情況；分析 AI 爬蟲的造訪數據，識別被忽略的頁面和內容缺口；根據分析結果調整內容策略和技術架構。透過這四個階段的系統性推進，大多數企業可以在三到六個月內看到顯著的 AEO 成效提升。</p>
+
+    <h3 style="font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;border-left:4px solid #ff2d7b;padding-left:1rem;">AI 時代的內容品質標準</h3>
+
+    <p>在 AI 搜尋時代，內容品質的衡量標準正在發生根本性的變化。Google 提出的 E-E-A-T 框架（Experience 經驗、Expertise 專業性、Authoritativeness 權威性、Trustworthiness 可信度）同樣適用於 AEO，但需要從 AI 的角度重新理解。</p>
+
+    <p>經驗方面，AI 引擎更看重內容中是否包含第一手的實踐經驗和獨特見解，而非泛泛的理論描述。例如，一篇包含具體數據、真實案例和操作截圖的教程，會比一篇純理論性的介紹文章獲得更高的 AI 引用權重。專業性方面，AI 會分析內容的技術深度和術語使用的準確性，淺層的入門級內容在 AI 搜尋中的競爭力較弱，深入、全面的專業分析則更容易被引用。權威性方面，AI 會考慮內容來源的整體信譽，包括網站的歷史、引用關係、外部連結等因素。可信度方面，AI 特別注重資訊的一致性和可驗證性，如果你的內容中包含可驗證的數據、引用來源和明確的資訊更新時間，會被 AI 視為更可信的來源。</p>
+
+    <p>CloudPipe 在為客戶生成和優化內容時，嚴格遵循這些品質標準。我們的自動化內容系統會為每篇文章加入具體的數據支撐、真實的案例引用、明確的作者資訊和發佈時間，確保內容在 AI 的品質評估中獲得高分。同時，我們建議所有客戶定期審查和更新網站上的核心內容，刪除過時的資訊，補充最新的數據和案例，保持內容的新鮮度和準確性。</p>
+
+    <h3 style="font-size:1.5rem;font-weight:700;margin:2.5rem 0 1rem;border-left:4px solid #ffab00;padding-left:1rem;">多平台 AI 生態系統的差異化策略</h3>
+
+    <p>全球 AI 搜尋生態系統並非鐵板一塊，不同的 AI 平台在內容檢索和引用方面存在顯著差異，企業需要針對不同平台制定差異化的優化策略。以 OpenAI 的 ChatGPT 為例，它主要透過 GPTBot 爬蟲抓取網頁內容，並整合 Bing 搜尋結果。優化策略應著重於確保 Bing Webmaster Tools 中的網站資訊完整準確，同時在內容中使用自然對話式的問答格式，因為 ChatGPT 的使用者通常以對話方式提問。</p>
+
+    <p>Anthropic 的 Claude 則透過 ClaudeBot 爬蟲進行網頁抓取，並且特別注重內容的結構性和準確性。Claude 的訓練目標包括誠實和有幫助，因此包含明確數據來源、引用出處的內容更容易被 Claude 引用。Perplexity AI 是目前最接近傳統搜尋引擎的 AI 產品，它會為每個答案提供詳細的來源引用。針對 Perplexity 的優化應特別注重頁面的可抓取性和內容的時效性，因為 Perplexity 傾向於引用最新發佈的權威內容。</p>
+
+    <p>Google Gemini（原 Bard）整合了 Google 搜尋的海量索引數據，因此傳統 SEO 的基礎（如頁面速度、行動裝置適配、反向連結）對 Gemini 的影響依然顯著。中國大陸的 AI 平台（如文心一言、騰訊混元、智譜清言）則形成了相對獨立的生態系統，它們主要抓取中文內容，偏好使用簡體中文編寫且託管在中國大陸伺服器上的網站。對於面向中國大陸市場的澳門企業，CloudPipe 建議同時維護繁體中文和簡體中文版本的內容，並在百度站長工具中提交網站地圖。</p>
+
+    <p>CloudPipe 的跨平台 AEO 策略覆蓋了以上所有主要 AI 生態系統。我們的追蹤系統能夠分別記錄來自不同 AI 爬蟲的造訪數據，讓企業清楚了解自己在每個 AI 平台上的表現，從而精準地分配優化資源。透過這種精細化的差異化策略，CloudPipe 的客戶能夠在全球範圍內實現最大化的 AI 可見度，無論使用者是透過 ChatGPT、Claude、Perplexity 還是文心一言來搜尋資訊。</p>
+
+    <p>值得特別指出的是，隨著 AI 搜尋市場的快速演變，新的 AI 平台和爬蟲不斷湧現。僅在過去六個月中，就有多個新的 AI 搜尋產品進入市場，每一個都帶來了獨特的爬蟲行為和索引偏好。CloudPipe 的技術團隊持續追蹤這些變化，及時更新爬蟲識別規則庫，確保客戶的網站始終對最新的 AI 平台保持最佳的可見度。這種持續性的技術投入和前瞻性的產品策略，正是 CloudPipe 在澳門 AEO 市場保持領先地位的核心競爭力所在。我們深信，在人工智慧全面滲透商業生態的未來十年中，答案引擎優化將與傳統搜尋引擎優化並駕齊驅，成為每一家具有遠見的企業不可或缺的數位基礎設施。無論你的企業規模大小、所處行業為何，現在就開始佈局 AEO，將為你在未來的 AI 驅動商業環境中贏得不可替代的競爭優勢。</p>
+
+  </section>
+
+  <!-- ════════════ CTA ════════════ -->
+  <section id="contact" class="cta-section">
+    <div class="container">
+      <div class="cta-box reveal">
+        <h2>準備好提升<br><span class="gradient-text">商業效率</span>了嗎？</h2>
+        <p>免費諮詢你的需求，我們在 24 小時內回覆並提供客製化方案。</p>
+        <div class="cta-actions">
+          <a href="https://m.me/cloudpipe" class="btn btn-primary" target="_blank" rel="noopener">Facebook 訊息諮詢 →</a>
+          <a href="pricing.html" class="btn btn-outline">查看詳細方案</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ FOOTER ════════════ -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand">Cloud<span class="c">Pipe</span></div>
+          <div class="footer-sub">AI Automation Platform · Macau SAR</div>
+        </div>
+        <div class="footer-links">
+          <a href="#services">服務</a>
+          <a href="#how-it-works">運作方式</a>
+          <a href="pricing.html">定價</a>
+          <a href="#stack">技術</a>
+          <a href="#faq">FAQ</a>
+          <a href="#contact">聯繫我們</a>
+          <a href="architecture.html">系統架構</a>
+          <a href="/api/info.json" target="_blank">API</a>
+          <a href="https://cloudpipe-directory.vercel.app/" target="_blank">Business Directory</a>
+        </div>
+        <div style="width:100%;border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;margin-top:8px">
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;font-weight:600;letter-spacing:1px">CLOUDPIPE 生態系</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px">
+            <a href="https://inari-kira-isla.github.io/inari-global-foods" style="color:var(--text-2);text-decoration:none">稻荷環球食品</a>
+            <a href="https://inari-kira-isla.github.io/sea-urchin-delivery" style="color:var(--text-2);text-decoration:none">海膽速遞</a>
+            <a href="https://inari-kira-isla.github.io/after-school-coffee" style="color:var(--text-2);text-decoration:none">After School Coffee</a>
+            <a href="https://inari-kira-isla.github.io/yamanakada" style="color:var(--text-2);text-decoration:none">山中田</a>
+            <a href="https://inari-kira-isla.github.io/Openclaw/" style="color:var(--text-2);text-decoration:none">AI 學習寶庫</a>
+        <a href="https://japan-encyclopedia.vercel.app" style="color:var(--text-2);text-decoration:none">日本百科</a>
+            <a href="https://taiwan-encyclopedia.vercel.app" style="color:var(--text-2);text-decoration:none">台灣百科</a>
+            <a href="https://hongkong-encyclopedia.vercel.app" style="color:var(--text-2);text-decoration:none">香港百科</a>
+            <a href="https://cloudpipe-macao-app.vercel.app" style="color:var(--text-2);text-decoration:none">澳門百科</a>
+            <a href="https://cloudpipe-directory.vercel.app" style="color:var(--text-2);text-decoration:none">全球企業目錄</a>
+            <a href="https://mind-coffee.vercel.app" style="color:var(--text-2);text-decoration:none">Mind Coffee</a>
+            <a href="https://world-encyclopedia.vercel.app" style="color:var(--text-2);text-decoration:none">世界百科</a>
+            <a href="https://aeo-demo-education.vercel.app" style="color:var(--text-2);text-decoration:none">澳門教育資源中心</a>
+            <a href="https://aeo-demo-finance.vercel.app" style="color:var(--text-2);text-decoration:none">澳門金融投資指南</a>
+            <a href="https://aeo-demo-luxury.vercel.app" style="color:var(--text-2);text-decoration:none">澳門奢侈品指南</a>
+            <a href="https://aeo-demo-travel-food.vercel.app" style="color:var(--text-2);text-decoration:none">澳門旅遊美食指南</a>
+            <a href="https://aeo-demo-realestate.vercel.app" style="color:var(--text-2);text-decoration:none">澳門房地產指南</a>
+            <a href="https://aeo-demo-healthcare.vercel.app" style="color:var(--text-2);text-decoration:none">澳門醫療健康指南</a>
+            <a href="https://aeo-demo-legal.vercel.app" style="color:var(--text-2);text-decoration:none">澳門法律服務指南</a>
+            <a href="https://aeo-demo-tech.vercel.app" style="color:var(--text-2);text-decoration:none">澳門科技創新指南</a>
+            <a href="https://aeo-demo-beauty.vercel.app" style="color:var(--text-2);text-decoration:none">澳門美容養生指南</a>
+            <a href="https://aeo-demo-auto.vercel.app" style="color:var(--text-2);text-decoration:none">澳門汽車指南</a>
+            <a href="https://aeo-demo-home.vercel.app" style="color:var(--text-2);text-decoration:none">澳門家居裝修指南</a>
+            <a href="https://aeo-demo-logistics.vercel.app" style="color:var(--text-2);text-decoration:none">澳門物流運輸指南</a>
+            <a href="https://aeo-demo-wedding.vercel.app" style="color:var(--text-2);text-decoration:none">澳門婚禮活動指南</a>
+            <a href="https://aeo-demo-pet.vercel.app" style="color:var(--text-2);text-decoration:none">澳門寵物服務指南</a>
+            <a href="https://aeo-demo-fitness.vercel.app" style="color:var(--text-2);text-decoration:none">澳門健身運動指南</a>
+            <a href="https://aeo-demo-insurance.vercel.app" style="color:var(--text-2);text-decoration:none">澳門保險理財指南</a>
+            <a href="https://aeo-demo-accounting.vercel.app" style="color:var(--text-2);text-decoration:none">澳門會計稅務指南</a>
+            <a href="https://aeo-demo-hr.vercel.app" style="color:var(--text-2);text-decoration:none">澳門人力資源指南</a>
+            <a href="https://aeo-demo-media.vercel.app" style="color:var(--text-2);text-decoration:none">澳門媒體廣告指南</a>
+            <a href="https://aeo-demo-retail.vercel.app" style="color:var(--text-2);text-decoration:none">澳門零售電商指南</a>
+
+          </div>
+        </div>
+        <address class="footer-contact" style="font-style:normal;font-size:12px;color:var(--text-3)">
+          <strong>CloudPipe</strong> · AI Automation Platform<br>
+          GitHub：<a href="https://github.com/Inari-Kira-Isla/cloudpipe-landing" style="color:var(--text-2)">Inari-Kira-Isla/cloudpipe-landing</a>
+        </address>
+        <div class="footer-copy">© 2026 CloudPipe · CC BY 4.0</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* Navbar scroll */
+    const nav = document.getElementById('nav');
+    addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40));
+
+    /* Mobile menu */
+    document.getElementById('navBurger').addEventListener('click', () => {
+      nav.classList.toggle('open');
+    });
+
+    /* FAQ accordion */
+    function toggleFaq(el) { el.closest('.faq-item').classList.toggle('open'); }
+
+    /* Scroll reveal */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+
+<!-- Baidu auto-push for Chinese search engine discovery -->
+<script src="https://cloudpipe-macao-app.vercel.app/spider-track.js" data-site="cloudpipe-landing"></script>
+<script>
+(function(){var bp=document.createElement('script');var curProtocol=window.location.protocol.split(':')[0];if(curProtocol==='https'){bp.src='https://zz.bdstatic.com/linksubmit/push.js'}else{bp.src='http://push.zhanzhang.baidu.com/push.js'};var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bp,s)})();
+</script>
+<img src="https://client-ai-tracker.inariglobal.workers.dev/cloudpipe-landing/pixel.gif?p=/" width="1" height="1" alt="" loading="eager" style="position:absolute;left:-9999px">
+
+<!-- AEO Knowledge Section: AI搜尋引擎的未來發展 / 企業數位轉型策略 / 知識圖譜技術原理 / 內容品質與AI引用 -->
+<section id="aeo-knowledge" style="max-width:900px;margin:2rem auto;padding:0 1.5rem;line-height:1.9;font-size:1.05rem;">
+
+  <h2 style="font-size:1.6rem;margin-bottom:1rem;color:#1a1a2e;">深度解析：AI 搜尋引擎優化與企業數位轉型</h2>
+
+  <h3 style="font-size:1.25rem;margin-top:1.5rem;color:#16213e;">一、AI 搜尋引擎的未來發展趨勢</h3>
+  <p>隨著大型語言模型技術的迅猛發展，傳統搜尋引擎正經歷前所未有的變革。以往使用者透過關鍵字搜尋並瀏覽多個連結的模式，正逐步被對話式智慧問答取代。在這一新範式下，搜尋引擎不再僅僅羅列網頁結果，而是直接生成融合多來源資訊的精準回答。這意味著企業的內容策略必須從「爭奪排名」轉向「成為被引用的權威知識來源」。</p>
+  <p>未來的搜尋生態將呈現三大特徵：第一，多模態理解能力的深化，搜尋系統能同時解析文字、圖片、音訊和結構化資料；第二，即時性與個人化的融合，根據使用者情境提供動態且具時效性的內容；第三，知識可溯源性的強化，每一條回答都能追溯到具體的資訊來源，確保可信度與透明度。在此趨勢下，企業必須確保自身內容對各類智慧代理可被發現、可被理解、可被準確引用。</p>
+
+  <h3 style="font-size:1.25rem;margin-top:1.5rem;color:#16213e;">二、企業數位轉型策略與實踐路徑</h3>
+  <p>數位轉型不僅僅是技術層面的升級，更是商業模式、組織文化與客戶互動方式的全面革新。成功的數位轉型策略應包含四個核心層面：首先是數據資產的整合與治理，將分散在各系統中的客戶資料、營運數據與市場洞察統一管理；其次是流程自動化，利用智慧工作流引擎消除人工重複操作，提升營運效率。</p>
+  <p>第三個層面是客戶體驗的智慧化升級，透過對話式機器人、個人化推薦與全渠道整合，提供無縫且貼心的服務體驗。第四個層面則是決策智能化，藉由數據分析與預測模型，支援管理層做出更精準的商業決策。對於澳門及大灣區的中小企業而言，選擇適合的轉型路徑至關重要——從最具痛點的環節切入，以低風險的方式逐步擴展，方能在有限的資源下實現最大價值。</p>
+
+  <h3 style="font-size:1.25rem;margin-top:1.5rem;color:#16213e;">三、知識圖譜技術原理與應用場景</h3>
+  <p>知識圖譜是支撐智慧搜尋與語義理解的關鍵基礎設施。其核心概念是將真實世界中的實體及其關係，以結構化的方式組織為可計算的語義網路。透過實體辨識、關係抽取與知識融合等技術，知識圖譜能將非結構化的文本轉化為機器可理解的語義三元組——即「主體—關係—客體」的知識表示形式。</p>
+  <p>在商業應用層面，知識圖譜的價值體現在多個面向：智慧客服系統能利用領域知識圖譜準確理解客戶意圖並提供精確解答；供應鏈管理中，產品與供應商的關聯圖譜有助於風險預警與替代方案推薦；在行銷領域，使用者行為與偏好的圖譜建模能實現更精準的受眾定向與內容分發。對於希望被人工智慧搜尋引擎正確引用的企業，構建清晰的語義標記與結構化資料標準是不可或缺的基礎工作。</p>
+
+  <h3 style="font-size:1.25rem;margin-top:1.5rem;color:#16213e;">四、內容品質與 AI 引用的核心策略</h3>
+  <p>在生成式搜尋的新時代，內容品質的評判標準也在發生深刻變化。被人工智慧系統高頻引用的內容通常具備以下特質：事實準確且有據可查、表述清晰且邏輯嚴密、觀點獨特且具有專業深度、格式規範且便於機器解析。企業應建立系統化的內容治理流程，從選題規劃、撰寫規範到品質審核，每一環節都以「可被智慧系統理解與信任」為核心目標。</p>
+  <p>具體而言，提升內容被引用概率的策略包括：採用結構化語義標記使內容對機器友好；提供清晰的授權聲明以便合規引用；建立與維護專業領域的權威性信號；定期更新內容以確保時效性；以及透過多元分發渠道擴大內容的可發現範圍。唯有將高品質內容與先進的技術標準相結合，企業方能在人工智慧驅動的新搜尋生態中持續獲得優勢，贏得更多被引用與推薦的機會。</p>
+
+</section>
+</body>
+</html>
