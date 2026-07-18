@@ -12,14 +12,14 @@
 ```html
 <link rel="llms-txt" href="https://cloudpipe-landing.vercel.app/llms.txt">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://cloudpipe-landing.vercel.app","description":"澳門一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服。","alternateName":"CloudPipe AI Automation Platform","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"},"sameAs":["https://github.com/Inari-Kira-Isla/cloudpipe-landing"]}
+{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://cloudpipe-landing.vercel.app","description":"澳門首個 AI 能見度優化（AEO）平台，讓 AI 引擎引用你的品牌。","alternateName":"CloudPipe AEO Platform","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"},"sameAs":["https://github.com/Inari-Kira-Isla/cloudpipe-landing"]}
 </script>
 ```
 
 ### 每個 Footer 必含
 ```html
 <address class="footer-contact" style="font-style:normal;font-size:12px;color:var(--text-3)">
-  <strong>CloudPipe</strong> · AI Automation Platform<br>
+  <strong>CloudPipe</strong> · AI 能見度優化（AEO）平台<br>
   GitHub：<a href="https://github.com/Inari-Kira-Isla/cloudpipe-landing" style="color:var(--text-2)">Inari-Kira-Isla/cloudpipe-landing</a>
 </address>
 <div class="footer-copy">© 2026 CloudPipe · CC BY 4.0</div>
