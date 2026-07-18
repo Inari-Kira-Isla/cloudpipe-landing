@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>定價方案 — CloudPipe 澳門 AEO 平台</title>
+  <meta name="description" content="CloudPipe 透明定價：監測掃描方案 MOP$29-99/月（AI 引用率基礎監測）、Entity Correction + Citation Playbook 方案 MOP$199-499/月。澳門首個 AI 能見度優化（AEO）平台。">
+  <meta name="robots" content="index, follow">
+  <meta name="google-site-verification" content="9EYAWnIRJ55Ccf3QicIn8s7d4GhYGU1rb9C8etIc200">
+  <link rel="canonical" href="https://cloudpipe-landing.vercel.app/pricing.html">
+  <link rel="llms-txt" href="https://cloudpipe-landing.vercel.app/llms.txt">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://cloudpipe-landing.vercel.app","description":"澳門首個品牌 AI 能見度優化（AEO/GEO）SaaS 平台。","alternateName":"CloudPipe AEO Platform","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"},"sameAs":["https://github.com/Inari-Kira-Isla/cloudpipe-landing"]}</script>
+
+  <meta property="og:title" content="定價方案 — CloudPipe">
+  <meta property="og:description" content="透明定價，從 MOP$29/月起：AI 引用監測同 Entity Correction 兩檔方案，讓 AI 引擎引用你的品牌。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cloudpipe-landing.vercel.app/pricing.html">
+  <meta property="og:locale" content="zh_MO">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"CloudPipe 的方案有哪些？","acceptedAnswer":{"@type":"Answer","text":"兩檔月費方案：監測掃描 MOP$29-99/月（8 大 AI 平台引用率基礎監測）；Entity Correction + Citation Playbook MOP$199-499/月（修正 AI 引擎中的品牌資料 + 引用率提升行動手冊）。企業／多品牌需求另行報價。"}},{"@type":"Question","name":"可以隨時升降方案嗎？","acceptedAnswer":{"@type":"Answer","text":"可以。升級方案立即生效，差額按剩餘天數比例計算。降級方案在下一個計費週期開始時生效，不影響當前服務。"}},{"@type":"Question","name":"有免費試用嗎？","acceptedAnswer":{"@type":"Answer","text":"我們提供 14 天免費試用（基本方案功能）。聯繫我們後，技術團隊會協助完成初始設定，讓你在試用期內體驗真實效果。"}},{"@type":"Question","name":"如何付款？支援哪些方式？","acceptedAnswer":{"@type":"Answer","text":"目前支援銀行轉帳（MOP/HKD）及 PayMe。每月初開立發票，7 天內付款。企業方案可協商季付或年付，享額外折扣。"}}]}</script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ══════ TOKENS (same as index) ══════ */
+    :root {
+      --bg:          #080810;
+      --bg-alt:      #0d0d1a;
+      --bg-card:     #111120;
+      --cyan:        #00e5ff;
+      --cyan-dim:    rgba(0,229,255,0.10);
+      --cyan-border: rgba(0,229,255,0.20);
+      --magenta:     #ff2d7b;
+      --amber:       #ffab00;
+      --green:       #00e676;
+      --text:        #e6e6f0;
+      --text-2:      #7272a0;
+      --text-3:      #404060;
+      --border:      rgba(255,255,255,0.07);
+      --r:           16px;
+      --r-sm:        10px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--bg); color: var(--text);
+      line-height: 1.7; overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* BG */
+    .bg-ambient {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 900px 700px at 10% 20%, rgba(0,229,255,0.04), transparent 60%),
+        radial-gradient(ellipse 700px 900px at 90% 80%, rgba(255,45,123,0.03), transparent 60%);
+    }
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 72px 72px;
+    }
+
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+    section { padding: 80px 0; }
+    .section-alt { background: var(--bg-alt); }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--cyan), var(--magenta));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Sora', sans-serif; font-weight: 600; font-size: 14px;
+      padding: 13px 28px; border-radius: 100px; transition: all 0.2s; border: none;
+    }
+    .btn-primary { background: var(--cyan); color: #080810; }
+    .btn-primary:hover { background: #fff; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,229,255,0.25); }
+    .btn-outline { background: transparent; color: var(--text-2); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+    /* NAVBAR */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      padding: 22px 0; transition: padding 0.3s, background 0.3s, border 0.3s;
+    }
+    .nav.scrolled {
+      background: rgba(8,8,16,0.88); backdrop-filter: blur(20px);
+      padding: 14px 0; border-bottom: 1px solid var(--border);
+    }
+    .nav-inner { display: flex; align-items: center; gap: 32px; }
+    .nav-logo { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.5px; flex-shrink: 0; }
+    .nav-logo .c { color: var(--cyan); }
+    .nav-links { display: flex; gap: 28px; margin: 0 auto; }
+    .nav-links a { font-size: 14px; color: var(--text-2); transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .nav-cta {
+      font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.5px; padding: 10px 22px; border-radius: 100px;
+      background: var(--cyan); color: #080810; transition: all 0.2s; flex-shrink: 0;
+    }
+    .nav-cta:hover { background: #fff; }
+    .nav-burger { display: none; background: none; border: none; color: var(--text-2); cursor: pointer; font-size: 22px; margin-left: auto; padding: 4px; }
+    @media (max-width: 760px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-burger { display: block; }
+      .nav.open .nav-links {
+        display: flex; flex-direction: column; gap: 0;
+        position: absolute; top: 100%; left: 0; right: 0;
+        background: var(--bg-alt); border-bottom: 1px solid var(--border); padding: 8px 0;
+      }
+      .nav.open .nav-links a { padding: 14px 24px; border-bottom: 1px solid var(--border); }
+    }
+
+    /* PAGE HERO */
+    .page-hero {
+      padding: 140px 0 72px; text-align: center;
+      position: relative; z-index: 1;
+    }
+    .eyebrow {
+      font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--magenta); margin-bottom: 14px;
+    }
+    .page-hero h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem); font-weight: 800;
+      letter-spacing: -2.5px; margin-bottom: 20px;
+    }
+    .page-hero p {
+      font-size: 17px; color: var(--text-2); max-width: 520px;
+      margin: 0 auto 12px; line-height: 1.7;
+    }
+
+    /* PRICING GRID */
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; align-items: start;
+    }
+    @media (max-width: 860px) { .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; } }
+
+    .pricing-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 40px 32px;
+      position: relative; transition: all 0.3s;
+    }
+    .pricing-card.popular {
+      border-color: var(--cyan-border);
+      box-shadow: 0 0 60px rgba(0,229,255,0.08), inset 0 0 60px rgba(0,229,255,0.02);
+      margin-top: -16px;
+    }
+    .popular-badge {
+      position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+      font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 1px;
+      background: var(--cyan); color: #080810; font-weight: 700;
+      padding: 5px 18px; border-radius: 100px; white-space: nowrap;
+    }
+    .plan-name {
+      font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px;
+      color: var(--text-2); text-transform: uppercase; margin-bottom: 24px;
+    }
+    .plan-price {
+      font-family: 'Sora', sans-serif; font-size: 56px; font-weight: 800;
+      color: var(--text); line-height: 1; margin-bottom: 4px;
+    }
+    .plan-price sup { font-size: 22px; font-weight: 500; color: var(--text-2); vertical-align: super; }
+    .plan-period { font-size: 13px; color: var(--text-3); margin-bottom: 24px; }
+    .plan-tagline {
+      font-size: 14px; color: var(--text-2); line-height: 1.6;
+      padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid var(--border);
+    }
+    .feature-group { margin-bottom: 24px; }
+    .feature-group-label {
+      font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--text-3); margin-bottom: 10px;
+    }
+    .feature-list { list-style: none; }
+    .feature-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 13px; color: var(--text-2); padding: 6px 0;
+    }
+    .feature-list li .check { color: var(--green); font-size: 12px; margin-top: 2px; flex-shrink: 0; }
+    .feature-list li .dash { color: var(--text-3); font-size: 12px; margin-top: 2px; flex-shrink: 0; }
+    .plan-cta {
+      display: block; text-align: center; padding: 14px 20px;
+      border-radius: var(--r-sm); font-family: 'Sora', sans-serif;
+      font-weight: 600; font-size: 14px; transition: all 0.2s; margin-top: 8px;
+    }
+    .pricing-card.popular .plan-cta { background: var(--cyan); color: #080810; }
+    .pricing-card.popular .plan-cta:hover { background: #fff; }
+    .pricing-card:not(.popular) .plan-cta {
+      background: rgba(255,255,255,0.05); color: var(--text-2);
+      border: 1px solid var(--border);
+    }
+    .pricing-card:not(.popular) .plan-cta:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+
+    /* COMPARISON TABLE */
+    .compare-table-wrap { overflow-x: auto; }
+    .compare-table {
+      width: 100%; border-collapse: separate; border-spacing: 0;
+      font-size: 13px;
+    }
+    .compare-table th {
+      font-family: 'Sora', sans-serif; font-weight: 700; font-size: 14px;
+      padding: 20px 24px; text-align: center; color: var(--text-2);
+      border-bottom: 1px solid var(--border); background: var(--bg-card);
+      position: sticky; top: 0; z-index: 2;
+    }
+    .compare-table th:first-child { text-align: left; }
+    .compare-table th.popular-col { color: var(--cyan); border-color: var(--cyan-border); }
+    .compare-table td {
+      padding: 14px 24px; border-bottom: 1px solid rgba(255,255,255,0.04);
+      text-align: center; color: var(--text-2); vertical-align: middle;
+    }
+    .compare-table td:first-child { text-align: left; color: var(--text); font-weight: 500; }
+    .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .compare-table .group-row td {
+      background: var(--bg-alt); color: var(--text-3);
+      font-family: 'Space Mono', monospace; font-size: 10px;
+      letter-spacing: 2px; text-transform: uppercase; padding: 12px 24px;
+      text-align: left;
+    }
+    .yes { color: var(--green); font-size: 16px; }
+    .no { color: var(--text-3); font-size: 16px; }
+    .tag {
+      display: inline-block; font-family: 'Space Mono', monospace;
+      font-size: 9px; letter-spacing: 0.5px; padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .tag-cyan { background: var(--cyan-dim); color: var(--cyan); border: 1px solid var(--cyan-border); }
+    .tag-amber { background: rgba(255,171,0,0.1); color: var(--amber); border: 1px solid rgba(255,171,0,0.2); }
+    .tag-coming { background: rgba(255,255,255,0.05); color: var(--text-3); border: 1px solid var(--border); }
+
+    /* ADDONS */
+    .addons-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .addon-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 24px 28px;
+    }
+    .addon-card h4 { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .addon-price {
+      font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700;
+      color: var(--cyan); margin-bottom: 8px;
+    }
+    .addon-price span { font-size: 12px; color: var(--text-3); font-weight: 400; }
+    .addon-card p { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+
+    /* FAQ */
+    .section-title {
+      font-family: 'Sora', sans-serif; font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      font-weight: 700; letter-spacing: -1.5px; margin-bottom: 48px;
+    }
+    .faq-wrap { max-width: 720px; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-q {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 0; cursor: pointer;
+      font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 600;
+      color: var(--text); transition: color 0.2s; user-select: none;
+    }
+    .faq-q:hover { color: var(--cyan); }
+    .faq-icon { font-size: 20px; color: var(--text-3); transition: transform 0.3s, color 0.2s; flex-shrink: 0; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--cyan); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; font-size: 14px; color: var(--text-2); line-height: 1.8; }
+    .faq-item.open .faq-a { max-height: 260px; padding-bottom: 20px; }
+
+    /* CTA */
+    .cta-section { padding: 80px 0; }
+    .cta-box {
+      background: linear-gradient(135deg, rgba(0,229,255,0.07), rgba(255,45,123,0.04));
+      border: 1px solid var(--cyan-border); border-radius: 24px;
+      padding: 80px 40px; text-align: center;
+    }
+    .cta-box h2 { font-family: 'Sora', sans-serif; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -1.5px; margin-bottom: 16px; }
+    .cta-box p { font-size: 16px; color: var(--text-2); margin-bottom: 36px; max-width: 440px; margin-left: auto; margin-right: auto; }
+    .cta-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+    /* FOOTER */
+    footer { padding: 48px 0; border-top: 1px solid var(--border); position: relative; z-index: 1; }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
+    .footer-brand { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 17px; }
+    .footer-brand .c { color: var(--cyan); }
+    .footer-sub { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 6px 24px; }
+    .footer-links a { font-size: 13px; color: var(--text-2); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { font-size: 11px; color: var(--text-3); }
+
+    @media (max-width: 768px) {
+      .page-hero { padding: 100px 0 56px; }
+      section { padding: 56px 0; }
+      .cta-box { padding: 56px 24px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 28px; }
+    }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.1s; } .reveal-d2 { transition-delay: 0.2s; } .reveal-d3 { transition-delay: 0.3s; }
+  </style>
+</head>
+<body>
+  <div class="bg-ambient"></div>
+  <div class="bg-grid"></div>
+
+  <!-- NAVBAR -->
+  <nav class="nav" id="nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="index.html" class="nav-logo">Cloud<span class="c">Pipe</span></a>
+        <div class="nav-links" id="navLinks">
+          <a href="/#services">服務</a>
+          <a href="/#how-it-works">運作方式</a>
+          <a href="pricing.html" class="active">定價</a>
+          <a href="/#stack">技術</a>
+          <a href="/#faq">FAQ</a>
+        </div>
+        <a href="/#contact" class="nav-cta">立即諮詢 →</a>
+        <button class="nav-burger" id="navBurger" aria-label="選單">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="container">
+      <p class="eyebrow">// Pricing</p>
+      <h1><span class="gradient-text">簡單透明</span>的定價</h1>
+      <p>兩檔 AEO 方案，適合不同階段的品牌。無隱藏費用，按月計費，隨時調整。</p>
+    </div>
+  </div>
+
+  <!-- PRICING CARDS -->
+  <section style="padding-top: 0;">
+    <div class="container">
+      <div class="pricing-grid">
+
+        <!-- Monitoring -->
+        <div class="pricing-card reveal reveal-d1">
+          <div class="plan-name">監測掃描 · Monitoring</div>
+          <div class="plan-price"><sup>$</sup>29-99</div>
+          <div class="plan-period">MOP / 月</div>
+          <p class="plan-tagline">AI 引用率基礎監測 — 知道 AI 而家點樣講你個品牌</p>
+
+          <div class="feature-group">
+            <div class="feature-group-label">包含</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> 8 大 AI 平台引用監測（ChatGPT / Perplexity / Claude / Gemini / You.com / Copilot / Grok / Apple Intelligence）</li>
+              <li><span class="check">✓</span> 品牌引用記錄追蹤</li>
+              <li><span class="check">✓</span> 引用率變化監測</li>
+            </ul>
+          </div>
+
+          <a href="/#contact" class="plan-cta">立即開始</a>
+        </div>
+
+        <!-- Entity Correction (Popular) -->
+        <div class="pricing-card popular reveal reveal-d2">
+          <div class="popular-badge">🔥 主力方案</div>
+          <div class="plan-name">Entity Correction + Citation Playbook</div>
+          <div class="plan-price"><sup>$</sup>199-499</div>
+          <div class="plan-period">MOP / 月</div>
+          <p class="plan-tagline">唔止監測 — 主動修正 AI 記住嘅品牌資料，提升被引用率</p>
+
+          <div class="feature-group">
+            <div class="feature-group-label">包含監測掃描全部，加上</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> Entity Correction（修正 AI 引擎中的品牌資料）</li>
+              <li><span class="check">✓</span> Citation Playbook（引用率提升行動手冊）</li>
+              <li><span class="check">✓</span> 澳門本地知識圖譜注入（234K+ 帶源 facts）</li>
+              <li><span class="check">✓</span> 中／英／葡三語 AEO 優化</li>
+            </ul>
+          </div>
+
+          <a href="/#contact" class="plan-cta">立即開始</a>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="pricing-card reveal reveal-d3">
+          <div class="plan-name">企業／定製 · Enterprise</div>
+          <div class="plan-price">洽談</div>
+          <div class="plan-period">按需求報價</div>
+          <p class="plan-tagline">多品牌、多市場（澳門／香港／大灣區）AEO 部署</p>
+
+          <div class="feature-group">
+            <div class="feature-group-label">包含</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> 多品牌引用監測與優化</li>
+              <li><span class="check">✓</span> 跨區域知識實體建立</li>
+              <li><span class="check">✓</span> 專屬顧問</li>
+            </ul>
+          </div>
+
+          <a href="/#contact" class="plan-cta">聯繫我們</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AEO SERVICES -->
+  <section class="section-alt" id="aeo-services">
+    <div class="container">
+      <p class="eyebrow reveal">// AEO Website Services</p>
+      <h2 class="section-title reveal">AEO <span class="gradient-text">網站優化</span>服務</h2>
+      <p class="reveal" style="text-align:center;color:var(--text-2);max-width:640px;margin:0 auto 48px;">讓 AI 搜尋引擎（ChatGPT、Perplexity、Google AI）優先引用你的網站。<br>我們已為 27+ 商戶達成 100% A+ 評分。</p>
+      <div class="pricing-grid">
+        <div class="pricing-card reveal reveal-d1">
+          <div class="plan-name">AEO 基礎版</div>
+          <div class="plan-price"><sup>$</sup>800</div>
+          <div class="plan-period">MOP / 一次性建站</div>
+          <p class="plan-tagline">讓 AI 找到你。適合有官網但缺少 AI 優化的商家。</p>
+          <div class="feature-group">
+            <div class="feature-group-label">包含</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> llms.txt AI 爬蟲引導</li>
+              <li><span class="check">✓</span> Schema.org 結構化標記</li>
+              <li><span class="check">✓</span> FAQPage 問答優化 (5 題)</li>
+              <li><span class="check">✓</span> robots.txt AI bot 允許</li>
+              <li><span class="check">✓</span> sitemap.xml 完整索引</li>
+              <li><span class="check">✓</span> AEO 品質評分報告</li>
+            </ul>
+          </div>
+          <a href="/#contact" class="plan-cta">立即諮詢</a>
+        </div>
+
+        <div class="pricing-card popular reveal reveal-d2">
+          <div class="popular-badge">💡 最佳選擇</div>
+          <div class="plan-name">AEO 專業版</div>
+          <div class="plan-price"><sup>$</sup>2,500</div>
+          <div class="plan-period">MOP / 月</div>
+          <p class="plan-tagline">完整 AEO + 內容生成 + 月度報告。適合想被 AI 持續引用的商家。</p>
+          <div class="feature-group">
+            <div class="feature-group-label">包含基礎版全部，加上</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> 每月 10 篇 AI 文章生成</li>
+              <li><span class="check">✓</span> FAQPage 自動更新 (20+ 題)</li>
+              <li><span class="check">✓</span> RSS feed 內容發現</li>
+              <li><span class="check">✓</span> AI 爬蟲追蹤儀表板</li>
+              <li><span class="check">✓</span> 月度 AEO 表現報告</li>
+              <li><span class="check">✓</span> 蜘蛛網跨站互連</li>
+              <li><span class="check">✓</span> 6 大 AI 社群自動發文</li>
+            </ul>
+          </div>
+          <a href="/#contact" class="plan-cta">立即開始</a>
+        </div>
+
+        <div class="pricing-card reveal reveal-d3">
+          <div class="plan-name">AEO 企業版</div>
+          <div class="plan-price"><sup>$</sup>6,000</div>
+          <div class="plan-period">MOP / 月</div>
+          <p class="plan-tagline">完整 AEO + 競品情報 + 百科收錄。適合想主導 AI 搜尋結果的企業。</p>
+          <div class="feature-group">
+            <div class="feature-group-label">包含專業版全部，加上</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span> AutoBIz 競品情報報告 (週)</li>
+              <li><span class="check">✓</span> 百科站收錄 (永久 SEO)</li>
+              <li><span class="check">✓</span> 1.87M 商戶目錄曝光</li>
+              <li><span class="check">✓</span> 多語言 AEO (中/英/葡)</li>
+              <li><span class="check">✓</span> 自定義 AI 品牌語氣</li>
+              <li><span class="check">✓</span> 專屬客戶經理</li>
+            </ul>
+          </div>
+          <a href="/#contact" class="plan-cta">聯繫我們</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING FAQ -->
+  <section class="section-alt">
+    <div class="container">
+      <p class="eyebrow reveal">// FAQ</p>
+      <h2 class="section-title reveal">定價常見問題</h2>
+      <div class="faq-wrap">
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>兩檔方案有咩分別？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">監測掃描（MOP$29-99/月）幫你知道 8 大 AI 平台而家點樣講你個品牌；Entity Correction + Citation Playbook（MOP$199-499/月）就更進一步 — 主動修正 AI 引擎入面嘅品牌資料，並提供引用率提升行動手冊，配合澳門本地知識圖譜注入。</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>可以隨時升降方案嗎？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">可以。升級方案立即生效，差額按剩餘天數比例計算。降級方案在下一個計費週期開始時生效，不影響當前服務。</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>有免費試用嗎？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">我們提供 14 天免費試用（基本方案功能）。聯繫我們後，技術團隊會協助完成初始設定，讓你在試用期內體驗真實效果。</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>點樣量度成效？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">以真實 AI 引用做準：例如客戶稻荷環球食品喺「澳門日本海膽 B2B 供應商」查詢中 absorption score 達 0.943，成為 Perplexity 首要引用源（2026 年 6 月量度）。監測結果按月向你匯報。</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>如何付款？支援哪些方式？</span><span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">目前支援銀行轉帳（MOP/HKD）及 PayMe。每月初開立發票，7 天內付款。企業方案可協商季付或年付，享額外折扣。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-box reveal">
+        <h2>準備好了嗎？<br><span class="gradient-text">14 天免費試用</span></h2>
+        <p>聯繫我們，技術團隊在 24 小時內回覆並安排部署。無需信用卡。</p>
+        <div class="cta-actions">
+          <a href="/#contact" class="btn btn-primary">立即諮詢 →</a>
+          <a href="index.html" class="btn btn-outline">← 回首頁</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand">Cloud<span class="c">Pipe</span></div>
+          <div class="footer-sub">AI Automation Platform · Macau SAR</div>
+        </div>
+        <div class="footer-links">
+          <a href="/#services">服務</a>
+          <a href="/#how-it-works">運作方式</a>
+          <a href="pricing.html">定價</a>
+          <a href="/#stack">技術</a>
+          <a href="/#faq">FAQ</a>
+          <a href="/#contact">聯繫我們</a>
+        </div>
+        <div style="width:100%;border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;margin-top:8px">
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;font-weight:600;letter-spacing:1px">CLOUDPIPE 生態系</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px">
+            <a href="https://inari-kira-isla.github.io/inari-global-foods" target="_blank" style="color:var(--text-2)">稻荷環球食品</a>
+            <a href="https://inari-kira-isla.github.io/sea-urchin-delivery" target="_blank" style="color:var(--text-2)">海膽速遞</a>
+            <a href="https://inari-kira-isla.github.io/after-school-coffee" target="_blank" style="color:var(--text-2)">After School Coffee</a>
+            <a href="https://inari-kira-isla.github.io/yamanakada" target="_blank" style="color:var(--text-2)">山中田 Yamanakada</a>
+            <a href="https://inari-kira-isla.github.io/Openclaw/" target="_blank" style="color:var(--text-2)">AI 學習寶庫</a>
+            <a href="https://cloudpipe-directory.vercel.app" target="_blank" style="color:var(--text-2)">全球企業目錄</a>
+          </div>
+        </div>
+        <address class="footer-contact" style="font-style:normal;font-size:12px;color:var(--text-3)">
+          <strong>CloudPipe</strong> · AI Automation Platform<br>
+          GitHub：<a href="https://github.com/Inari-Kira-Isla/cloudpipe-landing" style="color:var(--text-2)">Inari-Kira-Isla/cloudpipe-landing</a>
+        </address>
+        <div class="footer-copy">© 2026 CloudPipe · CC BY 4.0</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40));
+    document.getElementById('navBurger').addEventListener('click', () => nav.classList.toggle('open'));
+    function toggleFaq(el) { el.closest('.faq-item').classList.toggle('open'); }
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+<img src="https://client-ai-tracker.inariglobal.workers.dev/cloudpipe-landing/pixel.gif?p=/pricing" width="1" height="1" alt="" loading="eager" style="position:absolute;left:-9999px">
+</body>
+</html>

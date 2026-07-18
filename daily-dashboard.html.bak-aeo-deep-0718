@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CloudPipe 每日里程碑 | Daily Dashboard</title>
+<meta name="description" content="CloudPipe 生態系每日指標儀表板 — AI 爬蟲、文章生成、系統健康、升級里程碑一覽">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<link rel="canonical" href="https://cloudpipe-landing.vercel.app/daily-dashboard.html">
+<link rel="llms-txt" href="https://cloudpipe-landing.vercel.app/llms.txt">
+<meta property="og:title" content="CloudPipe 每日里程碑">
+<meta property="og:description" content="CloudPipe 生態系每日指標儀表板">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cloudpipe-landing.vercel.app/daily-dashboard.html">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://cloudpipe-landing.vercel.app","description":"澳門一站式 AI 商業自動化平台","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"這個儀表板顯示什麼？","acceptedAnswer":{"@type":"Answer","text":"CloudPipe 生態系每日指標，包含 AI 爬蟲到訪數據、文章生成統計、系統健康狀態和升級里程碑。"}},{"@type":"Question","name":"數據多久更新一次？","acceptedAnswer":{"@type":"Answer","text":"每日午夜 00:05 自動收集所有指標並重新生成頁面。"}},{"@type":"Question","name":"追蹤了多少個 AI 爬蟲？","acceptedAnswer":{"@type":"Answer","text":"追蹤 28 種 AI 爬蟲，包含 17 種國際 AI（OpenAI、Anthropic、Google 等）和 11 種中國 AI（百度、騰訊、智譜等）。"}},{"@type":"Question","name":"追蹤了多少個網站？","acceptedAnswer":{"@type":"Answer","text":"追蹤 13 個網站，包含澳門商戶百科、品牌官網、AI 學習寶庫等。"}},{"@type":"Question","name":"里程碑記錄什麼？","acceptedAnswer":{"@type":"Answer","text":"記錄系統升級（UI 改善、內容擴充、自動化建設、技術優化、基礎設施）的日期、變更和影響。"}}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#06090f;--card:#0d1117;--card-2:#161b22;--border:#21262d;--text:#e6edf3;--dim:#8b949e;--blue:#58a6ff;--green:#3fb950;--purple:#bc8cff;--gold:#d29922;--red:#f85149;--cyan:#39d2c0;--orange:#f0883e;--pink:#f778ba}
+body{font-family:'Noto Sans TC',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.mono{font-family:'JetBrains Mono',monospace}
+.container{max-width:1200px;margin:0 auto;padding:1.5rem}
+.header{display:flex;align-items:center;justify-content:space-between;padding:1rem 0;margin-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.logo{font-size:1.1rem;font-weight:700;color:var(--cyan)}
+.logo span{color:var(--dim);font-weight:400;font-size:.85rem;margin-left:.5rem}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.75rem;margin-bottom:1.5rem}
+.s-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.85rem}
+.s-card .label{font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem}
+.s-card .value{font-size:1.4rem;font-weight:700;line-height:1}
+.s-card .sub{font-size:.65rem;color:var(--dim);margin-top:.25rem}
+.section{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem}
+.section h2{font-size:.9rem;color:var(--cyan);margin-bottom:1.25rem}
+.bar-row{display:flex;align-items:center;margin-bottom:.6rem}
+.bar-label{width:140px;font-size:.78rem;color:var(--dim);flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{flex:1;height:22px;border-radius:4px;overflow:hidden;display:flex;background:var(--card-2)}
+.bar-segment{height:100%;transition:width .3s;min-width:0}
+.bar-values{width:140px;text-align:right;font-size:.72rem;color:var(--dim);margin-left:.5rem;flex-shrink:0}
+.detail-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.detail-table th{text-align:left;padding:.5rem .75rem;color:var(--dim);font-weight:500;border-bottom:1px solid var(--border);font-size:.72rem;text-transform:uppercase}
+.detail-table td{padding:.5rem .75rem;border-bottom:1px solid var(--border)}
+.detail-table tr:last-child td{border-bottom:none}
+.region-badge{font-size:.65rem;padding:.15rem .4rem;border-radius:4px;font-weight:600}
+.region-cn{background:#f8514915;color:var(--red);border:1px solid #f8514930}
+.region-intl{background:#58a6ff15;color:var(--blue);border:1px solid #58a6ff30}
+.journey-step{display:flex;gap:1rem;position:relative;padding-left:2rem;padding-bottom:1.2rem}
+.journey-step::before{content:'';position:absolute;left:7px;top:18px;width:2px;height:calc(100% - 10px);background:var(--border)}
+.journey-step:last-child::before{display:none}
+.journey-dot{position:absolute;left:0;top:6px;width:16px;height:16px;border-radius:50%;border:2px solid var(--border);background:var(--card)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+footer{text-align:center;padding:2rem 0;border-top:1px solid var(--border);margin-top:2rem}
+footer address{font-style:normal;font-size:.75rem;color:var(--dim)}
+footer a{color:var(--dim)}
+@media(max-width:768px){
+.summary{grid-template-columns:repeat(2,1fr)}
+.grid2{grid-template-columns:1fr}
+.bar-label{width:100px;font-size:.7rem}
+.bar-values{width:100px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<div class="logo">CloudPipe Daily Dashboard<span>每日里程碑</span></div>
+<div style="display:flex;align-items:center;gap:.75rem">
+<span style="font-size:.75rem;color:var(--dim)">Updated: 2026-07-17 22:15</span>
+</div>
+</div>
+
+<!-- Section 1: Summary Cards -->
+<div class="summary"><div class="s-card">
+<div class="label">活躍站點</div>
+<div class="value" style="color:var(--cyan)">0/13</div>
+<div class="sub">有 AI 到訪</div>
+</div><div class="s-card">
+<div class="label">AI 訪問</div>
+<div class="value" style="color:var(--blue)">0</div>
+<div class="sub">今日總計</div>
+</div><div class="s-card">
+<div class="label">🇨🇳 中國 AI</div>
+<div class="value" style="color:var(--red)">0</div>
+<div class="sub">中國 AI bot</div>
+</div><div class="s-card">
+<div class="label">🌏 國際 AI</div>
+<div class="value" style="color:var(--blue)">0</div>
+<div class="sub">國際 AI bot</div>
+</div><div class="s-card">
+<div class="label">文章生成</div>
+<div class="value" style="color:var(--green)">0</div>
+<div class="sub">累積 133</div>
+</div><div class="s-card">
+<div class="label">內容中心</div>
+<div class="value" style="color:var(--purple)">277</div>
+<div class="sub">已發佈</div>
+</div><div class="s-card">
+<div class="label">BNI 會員</div>
+<div class="value" style="color:var(--gold)">30</div>
+<div class="sub">0 轉介</div>
+</div><div class="s-card">
+<div class="label">Cron Jobs</div>
+<div class="value" style="color:var(--cyan)">41</div>
+<div class="sub">6 健康</div>
+</div></div>
+
+<!-- Section 2: AI Crawler 30-day Trend -->
+<div class="section">
+<h2>AI 爬蟲 30 天趨勢 <span style="font-size:.72rem;color:var(--dim);font-weight:400;margin-left:.5rem"><span style="display:inline-block;width:8px;height:8px;background:var(--blue);border-radius:2px;margin-right:3px"></span>國際 <span style="display:inline-block;width:8px;height:8px;background:var(--red);border-radius:2px;margin-right:3px;margin-left:8px"></span>中國</span></h2>
+<div style="display:flex;align-items:flex-end;gap:2px;height:200px;padding-top:20px"><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">06-17</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:3px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:0px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">125</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">06-18</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:0px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:1px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">49</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">06-19</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:2px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:27px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">1079</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">06-20</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:1px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:77px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">2902</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">06-21</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:1px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:0px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">66</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">06-22</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:3px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:86px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">3315</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">06-23</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:2px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:53px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">2059</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">06-24</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:4px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:0px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">170</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">06-25</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:4px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:156px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">5946</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">06-26</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:4px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:87px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">3392</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">06-27</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:3px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:15px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">701</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">06-28</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:2px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:6px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">312</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">06-29</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:0px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:1px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">67</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">06-30</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:1px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:3px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">167</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">07-01</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:1px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:4px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">196</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">07-02</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:1px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:5px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">252</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">07-03</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:1px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:5px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">231</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">07-04</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:0px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:1px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">55</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">07-05</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:0px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:2px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">81</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">07-06</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:0px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:1px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">55</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">07-07</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:0px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:4px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">173</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">07-08</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:0px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:4px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">182</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">07-09</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:0px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:27px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">1006</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">07-10</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:0px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:7px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">271</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">07-11</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:0px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:6px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">230</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">07-12</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:0px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:4px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">175</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">07-13</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:0px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:89px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">3340</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">07-14</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:0px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:3px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">141</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">07-15</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:0px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:3px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">137</div></div><div style="display:flex;flex-direction:column-reverse;align-items:center;flex:1;min-width:0"><div style="font-size:.55rem;color:var(--dim);margin-top:4px;white-space:nowrap">07-16</div><div style="width:100%;display:flex;flex-direction:column-reverse"><div style="height:0px;background:var(--red);border-radius:2px 2px 0 0;min-height:0"></div><div style="height:6px;background:var(--blue);border-radius:2px 2px 0 0;min-height:0"></div></div><div style="font-size:.6rem;color:var(--dim)">230</div></div></div>
+</div>
+
+<!-- Section 3: Sites + Bots -->
+<div class="grid2">
+<div class="section">
+<h2>站點 AI 流量</h2>
+<div style="color:var(--dim);text-align:center;padding:1rem">暫無數據</div>
+</div>
+<div class="section">
+<h2>活躍 Bot 排行</h2>
+<div style="color:var(--dim);text-align:center;padding:1rem">暫無數據</div>
+</div>
+</div>
+
+<!-- Section 4: Article Generation -->
+<div class="grid2">
+<div class="section">
+<h2>文章生成 30 天趨勢</h2>
+<div style="color:var(--dim);text-align:center;padding:2rem">暫無數據</div>
+</div>
+<div class="section">
+<h2>分類分佈 (30 天)</h2>
+<div style="color:var(--dim);text-align:center;padding:1rem">暫無數據</div>
+</div>
+</div>
+
+<!-- Section 5: System Health -->
+<div class="section">
+<h2>系統健康</h2>
+<div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem"><div style="background:var(--card-2);border:1px solid var(--border);border-radius:8px;padding:1rem;flex:1;min-width:120px">
+<div style="font-size:.75rem;color:var(--dim);margin-bottom:.3rem">client-ai-tracker</div>
+<div style="font-size:1.5rem;font-weight:700;color:var(--green)">O 100%</div>
+<div style="font-size:.65rem;color:var(--dim)">157/157 OK</div>
+</div><div style="background:var(--card-2);border:1px solid var(--border);border-radius:8px;padding:1rem;flex:1;min-width:120px">
+<div style="font-size:.75rem;color:var(--dim);margin-bottom:.3rem">cloudpipe-ai-tracker</div>
+<div style="font-size:1.5rem;font-weight:700;color:var(--green)">O 100%</div>
+<div style="font-size:.65rem;color:var(--dim)">157/157 OK</div>
+</div><div style="background:var(--card-2);border:1px solid var(--border);border-radius:8px;padding:1rem;flex:1;min-width:120px">
+<div style="font-size:.75rem;color:var(--dim);margin-bottom:.3rem">openclaw-ai-tracker</div>
+<div style="font-size:1.5rem;font-weight:700;color:var(--green)">O 100%</div>
+<div style="font-size:.65rem;color:var(--dim)">157/157 OK</div>
+</div></div>
+<div style="border-top:1px solid var(--border);padding-top:1rem"><div style="font-weight:600;font-size:.85rem;margin-bottom:.3rem">Cron 排程系統</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-top:.75rem">
+<div><div style="font-size:.65rem;color:var(--dim)">Jobs</div><div style="font-size:1.2rem;font-weight:700">41/136</div></div>
+<div><div style="font-size:.65rem;color:var(--dim)">健康</div><div style="font-size:1.2rem;font-weight:700;color:var(--green)">6</div></div>
+<div><div style="font-size:.65rem;color:var(--dim)">降級</div><div style="font-size:1.2rem;font-weight:700;color:var(--gold)">32</div></div>
+<div><div style="font-size:.65rem;color:var(--dim)">失敗</div><div style="font-size:1.2rem;font-weight:700;color:var(--red)">3</div></div>
+</div>
+<div style="margin-top:.5rem;font-size:.75rem;color:var(--dim)">成功率 29% | Tokens 161K</div></div>
+</div>
+
+<!-- Section 6: Milestones Timeline -->
+<div class="section">
+<h2>升級里程碑</h2>
+<div class="journey-step">
+<div class="journey-dot mid" style="background:var(--dim);border-color:var(--dim)"></div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">
+<span style="font-size:.65rem;padding:.1rem .4rem;border-radius:4px;background:var(--dim)20;color:var(--dim);border:1px solid var(--dim)40;font-weight:600">seo</span>
+<span style="font-size:.72rem;color:var(--dim)">2026-03-19</span>
+<span class="mono" style="font-size:.6rem;color:var(--dim)">a592967</span>
+</div>
+<div style="font-weight:600;font-size:.88rem;margin-bottom:.2rem">IndexNow 累計提交 50,090 URLs (突破 50,000)</div>
+
+<div style="font-size:.72rem;color:var(--green);margin-top:.2rem">搜尋引擎已收到 50,090 個 URL 通知</div>
+</div>
+</div><div class="journey-step">
+<div class="journey-dot mid" style="background:var(--dim);border-color:var(--dim)"></div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">
+<span style="font-size:.65rem;padding:.1rem .4rem;border-radius:4px;background:var(--dim)20;color:var(--dim);border:1px solid var(--dim)40;font-weight:600">seo</span>
+<span style="font-size:.72rem;color:var(--dim)">2026-03-17</span>
+<span class="mono" style="font-size:.6rem;color:var(--dim)">c74fd92</span>
+</div>
+<div style="font-weight:600;font-size:.88rem;margin-bottom:.2rem">IndexNow 累計提交 25,700 URLs (突破 25,000)</div>
+
+<div style="font-size:.72rem;color:var(--green);margin-top:.2rem">搜尋引擎已收到 25,700 個 URL 通知</div>
+</div>
+</div><div class="journey-step">
+<div class="journey-dot mid" style="background:#3fb950;border-color:#3fb950"></div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">
+<span style="font-size:.65rem;padding:.1rem .4rem;border-radius:4px;background:#3fb95020;color:#3fb950;border:1px solid #3fb95040;font-weight:600">content</span>
+<span style="font-size:.72rem;color:var(--dim)">2026-03-17</span>
+<span class="mono" style="font-size:.6rem;color:var(--dim)">c74fd92</span>
+</div>
+<div style="font-weight:600;font-size:.88rem;margin-bottom:.2rem">批次內容生成累計 1002 筆 (突破 1000)</div>
+
+<div style="font-size:.72rem;color:var(--green);margin-top:.2rem">batch-generate 累計處理 1002 個商戶頁面</div>
+</div>
+</div><div class="journey-step">
+<div class="journey-dot mid" style="background:var(--dim);border-color:var(--dim)"></div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">
+<span style="font-size:.65rem;padding:.1rem .4rem;border-radius:4px;background:var(--dim)20;color:var(--dim);border:1px solid var(--dim)40;font-weight:600">seo</span>
+<span style="font-size:.72rem;color:var(--dim)">2026-03-16</span>
+<span class="mono" style="font-size:.6rem;color:var(--dim)">f26868a</span>
+</div>
+<div style="font-weight:600;font-size:.88rem;margin-bottom:.2rem">Googlebot 首次爬取澳門百科</div>
+<div style="font-size:.75rem;color:var(--dim);line-height:1.4">• Google 搜尋爬蟲首次訪問，今日 33 次。累積 8 種 AI bot，2841 次 AI 訪問</div>
+<div style="font-size:.72rem;color:var(--green);margin-top:.2rem">high</div>
+</div>
+</div><div class="journey-step">
+<div class="journey-dot mid" style="background:#3fb950;border-color:#3fb950"></div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">
+<span style="font-size:.65rem;padding:.1rem .4rem;border-radius:4px;background:#3fb95020;color:#3fb950;border:1px solid #3fb95040;font-weight:600">content</span>
+<span style="font-size:.72rem;color:var(--dim)">2026-03-15</span>
+<span class="mono" style="font-size:.6rem;color:var(--dim)">f26868a</span>
+</div>
+<div style="font-weight:600;font-size:.88rem;margin-bottom:.2rem">批次內容生成累計 500 筆 (突破 500)</div>
+
+<div style="font-size:.72rem;color:var(--green);margin-top:.2rem">batch-generate 累計處理 500 個商戶頁面</div>
+</div>
+</div><div class="journey-step">
+<div class="journey-dot mid" style="background:var(--dim);border-color:var(--dim)"></div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">
+<span style="font-size:.65rem;padding:.1rem .4rem;border-radius:4px;background:var(--dim)20;color:var(--dim);border:1px solid var(--dim)40;font-weight:600">seo</span>
+<span style="font-size:.72rem;color:var(--dim)">2026-03-15</span>
+<span class="mono" style="font-size:.6rem;color:var(--dim)">f26868a</span>
+</div>
+<div style="font-weight:600;font-size:.88rem;margin-bottom:.2rem">IndexNow 累計提交 10,285 URLs (突破 10,000)</div>
+
+<div style="font-size:.72rem;color:var(--green);margin-top:.2rem">搜尋引擎已收到 10,285 個 URL 通知</div>
+</div>
+</div><div class="journey-step">
+<div class="journey-dot mid" style="background:var(--dim);border-color:var(--dim)"></div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">
+<span style="font-size:.65rem;padding:.1rem .4rem;border-radius:4px;background:var(--dim)20;color:var(--dim);border:1px solid var(--dim)40;font-weight:600">seo</span>
+<span style="font-size:.72rem;color:var(--dim)">2026-03-15</span>
+<span class="mono" style="font-size:.6rem;color:var(--dim)">f26868a</span>
+</div>
+<div style="font-weight:600;font-size:.88rem;margin-bottom:.2rem">IndexNow 累計提交 5,757 URLs (突破 5,000)</div>
+
+<div style="font-size:.72rem;color:var(--green);margin-top:.2rem">搜尋引擎已收到 5,757 個 URL 通知</div>
+</div>
+</div><div class="journey-step">
+<div class="journey-dot mid" style="background:#3fb950;border-color:#3fb950"></div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">
+<span style="font-size:.65rem;padding:.1rem .4rem;border-radius:4px;background:#3fb95020;color:#3fb950;border:1px solid #3fb95040;font-weight:600">content</span>
+<span style="font-size:.72rem;color:var(--dim)">2026-03-15</span>
+<span class="mono" style="font-size:.6rem;color:var(--dim)">d83ff1b</span>
+</div>
+<div style="font-weight:600;font-size:.88rem;margin-bottom:.2rem">批次內容生成累計 202 筆 (突破 200)</div>
+
+<div style="font-size:.72rem;color:var(--green);margin-top:.2rem">batch-generate 累計處理 202 個商戶頁面</div>
+</div>
+</div><div class="journey-step">
+<div class="journey-dot mid" style="background:#3fb950;border-color:#3fb950"></div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">
+<span style="font-size:.65rem;padding:.1rem .4rem;border-radius:4px;background:#3fb95020;color:#3fb950;border:1px solid #3fb95040;font-weight:600">content</span>
+<span style="font-size:.72rem;color:var(--dim)">2026-03-15</span>
+<span class="mono" style="font-size:.6rem;color:var(--dim)">d83ff1b</span>
+</div>
+<div style="font-weight:600;font-size:.88rem;margin-bottom:.2rem">批次內容生成累計 196 筆 (突破 100)</div>
+
+<div style="font-size:.72rem;color:var(--green);margin-top:.2rem">batch-generate 累計處理 196 個商戶頁面</div>
+</div>
+</div><div class="journey-step">
+<div class="journey-dot mid" style="background:#3fb950;border-color:#3fb950"></div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">
+<span style="font-size:.65rem;padding:.1rem .4rem;border-radius:4px;background:#3fb95020;color:#3fb950;border:1px solid #3fb95040;font-weight:600">content</span>
+<span style="font-size:.72rem;color:var(--dim)">2026-03-15</span>
+<span class="mono" style="font-size:.6rem;color:var(--dim)">d83ff1b</span>
+</div>
+<div style="font-weight:600;font-size:.88rem;margin-bottom:.2rem">批次內容生成累計 50 筆 (突破 50)</div>
+
+<div style="font-size:.72rem;color:var(--green);margin-top:.2rem">batch-generate 累計處理 50 個商戶頁面</div>
+</div>
+</div><div class="journey-step">
+<div class="journey-dot mid" style="background:#3fb950;border-color:#3fb950"></div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">
+<span style="font-size:.65rem;padding:.1rem .4rem;border-radius:4px;background:#3fb95020;color:#3fb950;border:1px solid #3fb95040;font-weight:600">content</span>
+<span style="font-size:.72rem;color:var(--dim)">2026-03-15</span>
+<span class="mono" style="font-size:.6rem;color:var(--dim)">d83ff1b</span>
+</div>
+<div style="font-weight:600;font-size:.88rem;margin-bottom:.2rem">商戶內容覆蓋率突破 85% (實際 87.0%)</div>
+
+<div style="font-size:.72rem;color:var(--green);margin-top:.2rem">940+ 商戶中已有 85% 具備三語 AI 內容</div>
+</div>
+</div><div class="journey-step">
+<div class="journey-dot mid" style="background:#3fb950;border-color:#3fb950"></div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">
+<span style="font-size:.65rem;padding:.1rem .4rem;border-radius:4px;background:#3fb95020;color:#3fb950;border:1px solid #3fb95040;font-weight:600">content</span>
+<span style="font-size:.72rem;color:var(--dim)">2026-03-15</span>
+<span class="mono" style="font-size:.6rem;color:var(--dim)">d83ff1b</span>
+</div>
+<div style="font-weight:600;font-size:.88rem;margin-bottom:.2rem">商戶內容覆蓋率突破 80% (實際 87.0%)</div>
+
+<div style="font-size:.72rem;color:var(--green);margin-top:.2rem">940+ 商戶中已有 80% 具備三語 AI 內容</div>
+</div>
+</div><div class="journey-step">
+<div class="journey-dot mid" style="background:#3fb950;border-color:#3fb950"></div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">
+<span style="font-size:.65rem;padding:.1rem .4rem;border-radius:4px;background:#3fb95020;color:#3fb950;border:1px solid #3fb95040;font-weight:600">content</span>
+<span style="font-size:.72rem;color:var(--dim)">2026-03-15</span>
+<span class="mono" style="font-size:.6rem;color:var(--dim)">d83ff1b</span>
+</div>
+<div style="font-weight:600;font-size:.88rem;margin-bottom:.2rem">商戶內容覆蓋率突破 75% (實際 87.0%)</div>
+
+<div style="font-size:.72rem;color:var(--green);margin-top:.2rem">940+ 商戶中已有 75% 具備三語 AI 內容</div>
+</div>
+</div><div class="journey-step">
+<div class="journey-dot mid" style="background:#3fb950;border-color:#3fb950"></div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">
+<span style="font-size:.65rem;padding:.1rem .4rem;border-radius:4px;background:#3fb95020;color:#3fb950;border:1px solid #3fb95040;font-weight:600">content</span>
+<span style="font-size:.72rem;color:var(--dim)">2026-03-15</span>
+<span class="mono" style="font-size:.6rem;color:var(--dim)">d83ff1b</span>
+</div>
+<div style="font-weight:600;font-size:.88rem;margin-bottom:.2rem">商戶內容覆蓋率突破 70% (實際 87.0%)</div>
+
+<div style="font-size:.72rem;color:var(--green);margin-top:.2rem">940+ 商戶中已有 70% 具備三語 AI 內容</div>
+</div>
+</div><div class="journey-step">
+<div class="journey-dot mid" style="background:#3fb950;border-color:#3fb950"></div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">
+<span style="font-size:.65rem;padding:.1rem .4rem;border-radius:4px;background:#3fb95020;color:#3fb950;border:1px solid #3fb95040;font-weight:600">content</span>
+<span style="font-size:.72rem;color:var(--dim)">2026-03-15</span>
+<span class="mono" style="font-size:.6rem;color:var(--dim)">d83ff1b</span>
+</div>
+<div style="font-weight:600;font-size:.88rem;margin-bottom:.2rem">商戶內容覆蓋率突破 60% (實際 87.0%)</div>
+
+<div style="font-size:.72rem;color:var(--green);margin-top:.2rem">940+ 商戶中已有 60% 具備三語 AI 內容</div>
+</div>
+</div>
+</div>
+
+<!-- Section 7: AEO + CS + BNI -->
+<div class="grid3">
+<div class="section">
+<h2>AEO 分數</h2>
+<div style="text-align:center">
+<div style="font-size:2.5rem;font-weight:700;color:var(--green)">76</div>
+<div style="font-size:.75rem;color:var(--dim)">AEO 平均分 (10011 頁)</div>
+<div style="font-size:.72rem;color:var(--dim);margin-top:.3rem">Min 0 / Max 90</div>
+</div>
+</div>
+<div class="section">
+<h2>客服系統</h2>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem">
+<div><div style="font-size:.65rem;color:var(--dim)">品牌</div><div style="font-size:1.2rem;font-weight:700">7</div></div>
+<div><div style="font-size:.65rem;color:var(--dim)">客戶</div><div style="font-size:1.2rem;font-weight:700">16</div></div>
+<div><div style="font-size:.65rem;color:var(--dim)">對話</div><div style="font-size:1.2rem;font-weight:700">33</div></div>
+</div>
+</div>
+<div class="section">
+<h2>BNI 澳門</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+<div><div style="font-size:.65rem;color:var(--dim)">活躍會員</div><div style="font-size:1.4rem;font-weight:700;color:var(--gold)">30</div></div>
+<div><div style="font-size:.65rem;color:var(--dim)">轉介</div><div style="font-size:1.4rem;font-weight:700">0</div></div>
+</div>
+</div>
+</div>
+
+<footer>
+<address><strong>CloudPipe</strong> &middot; AI Automation Platform<br>
+GitHub: <a href="https://github.com/Inari-Kira-Isla/cloudpipe-landing">Inari-Kira-Isla/cloudpipe-landing</a></address>
+<div style="font-size:.7rem;color:var(--dim);margin-top:.5rem">&copy; 2026 CloudPipe &middot; CC BY 4.0</div>
+</footer>
+</div>
+</body>
+</html>
