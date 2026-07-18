@@ -14,7 +14,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://cloudpipe-landing.vercel.app/intake.html">
   <meta property="og:locale" content="zh_MO">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"CloudPipe 建站服務是免費的嗎？","acceptedAnswer":{"@type":"Answer","text":"是的，Free 方案永久免費，包含 AEO 合規靜態網站、每週審計和 Vercel 子域名。付費方案（Basic MOP$500/月起）提供每日 AI 文章生成和更頻繁的審計。"}},{"@type":"Question","name":"建站需要多長時間？","acceptedAnswer":{"@type":"Answer","text":"AI 自動生成網站內容約需 1-3 分鐘，包含品牌介紹（800+ 字）、7 題 FAQ、40 篇文章主題池，並自動部署到全球 CDN。"}},{"@type":"Question","name":"生成的網站包含哪些 AEO 元素？","acceptedAnswer":{"@type":"Answer","text":"包含 Schema.org JSON-LD（Organization + FAQPage）、llms.txt AI 導覽文件、robots.txt（14 種 AI 爬蟲友善）、sitemap.xml、security.txt（RFC 9116），以及完整的 Meta 標籤。"}},{"@type":"Question","name":"支援哪些行業類型？","acceptedAnswer":{"@type":"Answer","text":"支援 20 種行業：餐廳、咖啡店、烘焙坊、酒吧、外送餐飲、零售、精品、美容、牙科、醫療、法律、金融、地產、教育、旅遊、科技、顧問、非營利、媒體、個人品牌。每種行業自動映射對應的 Schema.org 類型。"}},{"@type":"Question","name":"我需要準備什麼資料？","acceptedAnswer":{"@type":"Answer","text":"必填：品牌名稱（中英文）、行業類別、一句話介紹、地區、聯絡 Email。選填：地址、電話、品牌主色、標語、Logo URL。未填的內容（如關於我們、FAQ）由 AI 自動生成。"}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"CloudPipe 建站服務是免費的嗎？","acceptedAnswer":{"@type":"Answer","text":"是的，Free 方案永久免費，包含 AEO 合規靜態網站、每週審計和 Vercel 子域名。付費方案（Basic 起）提供每日 AI 文章生成和更頻繁的審計，方案定價按需洽談，聯繫我們獲取報價。"}},{"@type":"Question","name":"建站需要多長時間？","acceptedAnswer":{"@type":"Answer","text":"AI 自動生成網站內容約需 1-3 分鐘，包含品牌介紹（800+ 字）、7 題 FAQ、40 篇文章主題池，並自動部署到全球 CDN。"}},{"@type":"Question","name":"生成的網站包含哪些 AEO 元素？","acceptedAnswer":{"@type":"Answer","text":"包含 Schema.org JSON-LD（Organization + FAQPage）、llms.txt AI 導覽文件、robots.txt（14 種 AI 爬蟲友善）、sitemap.xml、security.txt（RFC 9116），以及完整的 Meta 標籤。"}},{"@type":"Question","name":"支援哪些行業類型？","acceptedAnswer":{"@type":"Answer","text":"支援 20 種行業：餐廳、咖啡店、烘焙坊、酒吧、外送餐飲、零售、精品、美容、牙科、醫療、法律、金融、地產、教育、旅遊、科技、顧問、非營利、媒體、個人品牌。每種行業自動映射對應的 Schema.org 類型。"}},{"@type":"Question","name":"我需要準備什麼資料？","acceptedAnswer":{"@type":"Answer","text":"必填：品牌名稱（中英文）、行業類別、一句話介紹、地區、聯絡 Email。選填：地址、電話、品牌主色、標語、Logo URL。未填的內容（如關於我們、FAQ）由 AI 自動生成。"}}]}</script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -445,19 +445,19 @@
             <label class="plan-opt">
               <input type="radio" name="plan_tier" value="basic">
               <div class="plan-name">Basic</div>
-              <div class="plan-price">MOP$500 <small>/月</small></div>
+              <div class="plan-price">按需洽談</div>
               <div class="plan-features">每天 2 篇 AI 文章<br>每日審計<br>Vercel 子域名</div>
             </label>
             <label class="plan-opt">
               <input type="radio" name="plan_tier" value="pro">
               <div class="plan-name">Pro</div>
-              <div class="plan-price">MOP$1,500 <small>/月</small></div>
+              <div class="plan-price">按需洽談</div>
               <div class="plan-features">每天 6 篇 AI 文章<br>每 3 小時審計<br>自定義域名</div>
             </label>
             <label class="plan-opt">
               <input type="radio" name="plan_tier" value="enterprise">
               <div class="plan-name">Enterprise</div>
-              <div class="plan-price">MOP$3,000 <small>/月</small></div>
+              <div class="plan-price">按需洽談</div>
               <div class="plan-features">每天 12 篇 AI 文章<br>每小時審計<br>自定義域名 + 優先支援</div>
             </label>
           </div>
@@ -597,7 +597,7 @@
       tagline: '標語',
       plan_tier: '方案',
     };
-    const PLAN_NAMES = { free: 'Free ($0)', basic: 'Basic (MOP$500/月)', pro: 'Pro (MOP$1,500/月)', enterprise: 'Enterprise (MOP$3,000/月)' };
+    const PLAN_NAMES = { free: 'Free ($0)', basic: 'Basic（按需洽談）', pro: 'Pro（按需洽談）', enterprise: 'Enterprise（按需洽談）' };
     const INDUSTRY_NAMES = {
       restaurant:'餐廳', cafe:'咖啡店', bakery:'烘焙坊', bar:'酒吧', food_delivery:'外送餐飲',
       retail:'零售', luxury:'精品', beauty:'美容', dental:'牙科', medical:'醫療',
