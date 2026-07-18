@@ -1,13 +1,14 @@
-# CloudPipe — AI Automation Platform
+# CloudPipe — AI 能見度優化（AEO）平台
 
 ## Overview
-CloudPipe 是一站式 AI 商業自動化平台，整合 Facebook Messenger、Telegram Bot 及多平台客服。
+CloudPipe 是澳門首個 AI 能見度優化（AEO）平台，讓 AI 引擎引用你的品牌；另以自研 AI 自動化基建（Facebook Messenger、Telegram Bot 多平台客服）支撐內容產線。
 
 ## Key Features
+- AI Search Visibility / Answer Engine Optimization (AEO)
+- Brand Knowledge Graph Injection
+- Entity Correction & Citation Tracking
 - Multi-channel Integration (Facebook, Telegram, WhatsApp)
-- AI-Powered Customer Service
 - Business Automation Workflows
-- Real-time Analytics
 
 ## Content
 - Product Documentation

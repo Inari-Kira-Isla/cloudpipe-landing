@@ -1,7 +1,7 @@
 {
   "name": "CloudPipe",
-  "type": "AI Automation Platform (SaaS)",
-  "description": "一站式 AI 自動化平台，整合 MCP Server、API Proxy、Telegram Bot 及 Facebook 粉專自動化。",
+  "type": "AEO / AI Visibility Platform (SaaS)",
+  "description": "澳門首個 AI 能見度優化（AEO）平台，讓 AI 引擎引用你的品牌；自研 AI 基建（MCP Server、API Proxy、多平台 Bot）支撐內容產線。",
   "location": "Macau SAR",
   "website": "https://cloudpipe-landing.vercel.app",
   "services": [
@@ -35,16 +35,12 @@
     "currency": "MOP",
     "plans": [
       {
-        "name": "基本方案",
-        "price": 500
+        "name": "監測掃描",
+        "price_range": "29-99/月"
       },
       {
-        "name": "專業方案",
-        "price": 1500
-      },
-      {
-        "name": "企業方案",
-        "price": 3000
+        "name": "Entity Correction + Citation Playbook",
+        "price_range": "199-499/月"
       }
     ]
   },

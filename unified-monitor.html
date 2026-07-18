@@ -12,7 +12,7 @@
 <meta property="og:description" content="統一監控 29 個站點的 AI 爬蟲活動 — 6 大分析維度">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://cloudpipe-landing.vercel.app/unified-monitor.html">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://cloudpipe-landing.vercel.app","description":"澳門一站式 AI 商業自動化平台","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CloudPipe","url":"https://cloudpipe-landing.vercel.app","description":"澳門首個 AI 能見度優化（AEO）平台，讓 AI 引擎引用你的品牌。","address":{"@type":"PostalAddress","addressLocality":"Macau","addressRegion":"Macau SAR"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"CloudPipe AI 統一監控中心","description":"統一監控 29 個站點的 AI 爬蟲活動","url":"https://cloudpipe-landing.vercel.app/unified-monitor.html","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"MOP"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"統一監控中心整合了哪些數據源？","acceptedAnswer":{"@type":"Answer","text":"整合三大數據源：Cloudflare Workers KV（即時 bot 計數）、Supabase（Session 重建與頁面分析）、蜘蛛網拓撲（站點間連結分析）。"}},{"@type":"Question","name":"中國 AI 和國際 AI 如何區分？","acceptedAnswer":{"@type":"Answer","text":"透過 User-Agent 偵測 28 種 AI 爬蟲，其中 11 種中國 AI（百度、騰訊混元、智譜 ChatGLM 等）和 17 種國際 AI（OpenAI、Anthropic、Google 等）。"}},{"@type":"Question","name":"爬蟲路徑重建是什麼？","acceptedAnswer":{"@type":"Answer","text":"基於 Supabase 記錄的 Session ID（IP hash + Bot + 日期），還原 AI 爬蟲的完整訪問路徑和頁面順序。"}},{"@type":"Question","name":"蜘蛛網拓撲圖顯示什麼？","acceptedAnswer":{"@type":"Answer","text":"顯示 CloudPipe 生態系 11 個站點之間的互聯拓撲，包含雙向連結、單向連結、連線密度和優化建議。"}},{"@type":"Question","name":"數據更新頻率如何？","acceptedAnswer":{"@type":"Answer","text":"KV 數據每 60 秒自動刷新，Supabase 數據在切換 Tab 時按需加載，拓撲數據每日由 spider_web_health.py 更新。"}}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -328,7 +328,7 @@ footer a{color:var(--cyan);text-decoration:none}
   </div>
 
   <footer>
-    <address style="font-style:normal;font-size:12px;color:var(--dim)"><strong>CloudPipe</strong> &middot; AI Automation Platform &middot; GitHub: <a href="https://github.com/Inari-Kira-Isla/cloudpipe-landing">Inari-Kira-Isla/cloudpipe-landing</a></address>
+    <address style="font-style:normal;font-size:12px;color:var(--dim)"><strong>CloudPipe</strong> &middot; AI 能見度優化（AEO）平台 &middot; GitHub: <a href="https://github.com/Inari-Kira-Isla/cloudpipe-landing">Inari-Kira-Isla/cloudpipe-landing</a></address>
     <div style="margin-top:.5rem"><a href="/">CloudPipe 首頁</a> &middot; <a href="/aeo-monitor.html">舊版監控</a> &middot; <a href="/aeo-score.html">AEO 評分</a></div>
     <div style="margin-top:.5rem">&copy; 2026 CloudPipe &middot; CC BY 4.0</div>
   </footer>
